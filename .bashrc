@@ -8,6 +8,7 @@ alias vimdiff="${MY_VIM} -d"
 
 # Commands
 alias ls='ls -F --color=auto'
+alias grep='grep --color'
 
 # Vars
 CDPATH='~:..:../..:'
