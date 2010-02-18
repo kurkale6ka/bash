@@ -12,3 +12,4 @@ alias grep='grep --color'
 
 # Vars
 CDPATH='~:..:../..:'
+HISTIGNORE=\&
