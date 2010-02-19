@@ -15,7 +15,7 @@ alias cd-='cd -'
 
 color='--color=auto'
 alias l="ls -F $color"
-alias l.="ls -AFd .* $color"
+alias l.="ls -Fd .[^.]* $color"
 alias ls="ls -F $color"
 alias ll="ls -lF $color"
 alias la="ls -AF $color"
