@@ -8,12 +8,12 @@ alias    view="$my_vim -R"
 alias vimdiff="$my_vim -d"
 
 # Change/print directory
-alias   -- .='pwd'
-alias    cd-='cd -'
-alias   -- -='cd -'
-alias   cd..='cd ..'
-alias  -- ..='cd ..'
-alias -- ...='cd ../..'
+alias    .='pwd'
+alias  cd-='cd -'
+alias -- -='cd -'
+alias cd..='cd ..'
+alias   ..='cd ..'
+alias  ...='cd ../..'
 
 # "-p" lets you create a path structure with one command, ex. mkdir -p /a/b/c
 alias md='mkdir -p'
