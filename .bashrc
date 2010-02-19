@@ -37,4 +37,4 @@ alias which='type -a'
 
 # Vars
 CDPATH='~:..:../..:'
-HISTIGNORE='&:..:bg:fg:df:du:g:h:j:l:la:ll:ls:lv:v' # regex?
+HISTIGNORE='&:..:bg:fg:df:du:g:h:j:l:la:ll:ls:lv:pwd:v' # regex?
