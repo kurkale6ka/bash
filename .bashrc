@@ -32,7 +32,7 @@ bak_cyn='\e[46m'   # Cyan
 bak_wht='\e[47m'   # White
 txt_rst='\e[0m'    # Text Reset
 
-PS1="$txt_ylw\D{%a} \A $txt_blu[\j] $txt_grn\w$txt_rst\n\$"
+PS1="$txt_ylw\D{%a} \A $txt_pur\w $txt_red[\j]$txt_rst\n\$"
 
 # Vim
 #my_vim=vimx
@@ -45,6 +45,7 @@ alias vimdiff="$my_vim -d"
 
 # Change/print directory
 alias    .='pwd'
+#alias  cd/='cd /'
 alias  cd-='cd -'
 alias -- -='cd -'
 alias cd..='cd ..'
