@@ -67,6 +67,24 @@ function extract()
     fi
 }
 
+function bak()
+{
+    mv $1 $1.bak
+}
+
+function swap()
+{
+    local tmpfile=tmp.$$ 
+
+    [ $# -ne 2 ] && echo "swap: 2 arguments needed" && return 1
+    [ !  -e $1 ] && echo "swap: $1 does not exist"  && return 1
+    [ !  -e $2 ] && echo "swap: $2 does not exist"  && return 1
+
+    mv "$1" $tmpfile 
+    mv "$2" "$1"
+    mv $tmpfile "$2"
+}
+
 # Vim
 #my_vim=vimx
 my_vim='gvim -v'
