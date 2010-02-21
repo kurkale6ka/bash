@@ -1,3 +1,7 @@
 # c-x c-r reloads this file
 "\e[A": history-search-backward
 "\e[B": history-search-forward
+
+set show-all-if-ambiguous on
+
+set visible-stats on

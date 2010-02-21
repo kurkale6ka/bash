@@ -32,7 +32,40 @@ bak_cyn='\e[46m'   # Cyan
 bak_wht='\e[47m'   # White
 txt_rst='\e[0m'    # Text Reset
 
-PS1="$txt_ylw\D{%a} \A $txt_pur\w $txt_red[\j]$txt_rst\n\$"
+# Motd
+#echo -e "${txt_cyn}bash ${txt_red}${BASH_VERSION%.*}$txt_rst\n"
+#echo    'A song of Ice and Fire'
+##date +"%e %B %Y"
+#
+#function _exit()
+#{
+#    echo -e "${txt_red}Hasta la vista, baby${txt_rst}"
+#}
+#trap _exit EXIT
+
+title="\e]0;[$TERM - \u@\h] \w\a"
+PS1="$title\n$txt_ylw\D{%a} \A $txt_pur\w $txt_red[!\! - %\j]$txt_rst\n\$"
+
+function extract()
+{
+    if [ -f $1 ]
+    then
+        case $1 in
+            *.tar.gz|*.tgz)   tar zxvf   $1 ;;
+            *.tar.bz2|*.tbz2) tar jxvf   $1 ;;
+            *.tar)            tar xvf    $1 ;;
+            *.bz2)            bunzip2    $1 ;;
+            *.gz)             gunzip     $1 ;;
+            *.zip)            unzip      $1 ;;
+            *.rar)            unrar x    $1 ;;
+            *.Z)              uncompress $1 ;;
+            *.7z)             7z x       $1 ;;
+            *)                echo "'$1' cannot be extracted via extract" ;;
+        esac
+    else
+        echo "'$1' is not a valid file"
+    fi
+}
 
 # Vim
 #my_vim=vimx
@@ -45,6 +78,7 @@ alias vimdiff="$my_vim -d"
 
 # Change/print directory
 alias    .='pwd'
+#alias    /='cd /'
 #alias  cd/='cd /'
 alias  cd-='cd -'
 alias -- -='cd -'
@@ -62,8 +96,8 @@ alias e=echo
 alias h=history
 alias j='jobs -l'
 alias m=man
-alias t='tar -zxvf'
 alias f='find . -name $*'
+alias t=extract
 
 # List directory
 color='--color=auto'
@@ -84,10 +118,41 @@ alias grep='grep --color'
 alias     ?='type -a'
 alias which='type -a'
 
+alias so=source
+
 alias cp='cp -i'
 alias mv='mv -i'
 alias rm='rm -i'
 
+shopt -s cdspell
+
 # Vars
-CDPATH='~:..:../..:'
-HISTIGNORE='&:.:..:...:-:bg:cd-:cd..:fg:df:du:h:j:l:l.:la:ll:lr:ls:lv:pwd:v:vi:vim:gvim' # regex?
+export CDPATH='~:..:../..:'
+export EDITOR=$my_vim
+export HISTIGNORE='&:.:..:...:-:[bf]g:cd-:cd..:d[fu]:h:j:l:l.:la:ll:lr:ls:lv:pwd:v:vi:vim:gvim'
+
+shopt -s extglob # Necessary,
+#set +o nounset  # otherwise some completions will fail.
+
+complete -A hostname rsh rcp telnet rlogin r ftp ping disk ssh
+complete -A export   printenv
+complete -A variable export local readonly unset
+complete -A enabled  builtin
+complete -A alias    alias unalias
+complete -A function function
+complete -A user     su mail finger
+
+complete -A helptopic      help # Currently, same as builtins.
+complete -A shopt          shopt
+complete -A stopped -P '%' bg
+complete -A job -P '%'     fg jobs disown
+
+complete -A directory            mkdir rmdir
+complete -A directory -o default cd
+
+# Compression
+complete -f -o default -X '!*.+(zip|ZIP|z|Z|gz|GZ|bz2|BZ2)' extract
+
+complete -f -o default -X '!*.pl' perl
+complete -f -o default -X '!*.py' python
+complete -f -o default -X '!*.rb' ruby
