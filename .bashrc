@@ -84,9 +84,9 @@ function swap()
     [ !  -e $1 ] && echo "swap: $1 does not exist"  && return 1
     [ !  -e $2 ] && echo "swap: $2 does not exist"  && return 1
 
-    mv "$1" $tmpfile
-    mv "$2" "$1"
-    mv $tmpfile "$2"
+    mv $1 $tmpfile
+    mv $2 $1
+    mv $tmpfile $2
 }
 
 # Vim
@@ -97,6 +97,8 @@ alias      vi="$my_vim"
 alias     vim="$my_vim"
 alias    view="$my_vim -R"
 alias vimdiff="$my_vim -d"
+alias      gv=gvim
+alias     gvi=gvim
 
 # Change/print directory
 alias    .='pwd'
@@ -120,6 +122,9 @@ alias j='jobs -l'
 alias m=man
 alias t=extract
 
+alias more='vi -'
+alias   so=source
+
 # List directory
 color='--color=auto'
 alias   l="ls -F  $color"
@@ -141,26 +146,25 @@ alias grep='grep --color'
 alias     ?='type -a'
 alias which='type -a'
 
-alias more='vi -'
-alias so=source
-
 alias cp='cp -i'
 alias mv='mv -i'
 alias rm='rm -i'
 
-alias  bka=bak
-alias gerp=grep
-alias mroe=more
-alias sawp=swap
-alias veiw=view
-alias  vmi=vim
+alias   bka=bak
+alias  gerp=grep
+alias  mroe=more
+alias  sawp=swap
+alias  veiw=view
+alias gveiw=gview
+alias   vmi=vim
+alias  gvmi=gvim
 
 shopt -s cdspell
 
 # Vars
 export CDPATH='~:..:../..:'
 export EDITOR=$my_vim
-export HISTIGNORE='&:.:..:...:-:[bf]g:cd-:cd..:d[fu]:h:j:l:l.:la:ll:lr:ls:lv:pwd:v:vi:vim:gvim'
+export HISTIGNORE='&:.:..:...:-:[bf]g:cd-:cd..:d[fu]:h:j:l:l[.alrsv]:ll[.a]:pwd:v:vi:vim:vmi:gv:gvi:gvim:gvmi'
 
 shopt -s extglob # Necessary,
 #set +o nounset  # otherwise some completions will fail.
