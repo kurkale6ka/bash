@@ -1,35 +1,39 @@
 txt_blk='\e[0;30m' # Black - Regular
-txt_red='\e[0;31m' # Red
-txt_grn='\e[0;32m' # Green
-txt_ylw='\e[0;33m' # Yellow
 txt_blu='\e[0;34m' # Blue
-txt_pur='\e[0;35m' # Purple
 txt_cyn='\e[0;36m' # Cyan
+txt_grn='\e[0;32m' # Green
+txt_pur='\e[0;35m' # Purple
+txt_red='\e[0;31m' # Red
 txt_wht='\e[0;37m' # White
+txt_ylw='\e[0;33m' # Yellow
+#--------------------------------------
 bld_blk='\e[1;30m' # Black - Bold
-bld_red='\e[1;31m' # Red
-bld_grn='\e[1;32m' # Green
-bld_ylw='\e[1;33m' # Yellow
 bld_blu='\e[1;34m' # Blue
-bld_pur='\e[1;35m' # Purple
 bld_cyn='\e[1;36m' # Cyan
+bld_grn='\e[1;32m' # Green
+bld_pur='\e[1;35m' # Purple
+bld_red='\e[1;31m' # Red
 bld_wht='\e[1;37m' # White
+bld_ylw='\e[1;33m' # Yellow
+#--------------------------------------
 und_blk='\e[4;30m' # Black - Underline
-und_red='\e[4;31m' # Red
-und_grn='\e[4;32m' # Green
-und_ylw='\e[4;33m' # Yellow
 und_blu='\e[4;34m' # Blue
-und_pur='\e[4;35m' # Purple
 und_cyn='\e[4;36m' # Cyan
+und_grn='\e[4;32m' # Green
+und_pur='\e[4;35m' # Purple
+und_red='\e[4;31m' # Red
 und_wht='\e[4;37m' # White
+und_ylw='\e[4;33m' # Yellow
+#--------------------------------------
 bak_blk='\e[40m'   # Black - Background
-bak_red='\e[41m'   # Red
-bak_grn='\e[42m'   # Green
-bak_ylw='\e[43m'   # Yellow
 bak_blu='\e[44m'   # Blue
-bak_pur='\e[45m'   # Purple
 bak_cyn='\e[46m'   # Cyan
+bak_grn='\e[42m'   # Green
+bak_pur='\e[45m'   # Purple
+bak_red='\e[41m'   # Red
 bak_wht='\e[47m'   # White
+bak_ylw='\e[43m'   # Yellow
+#--------------------------------------
 txt_rst='\e[0m'    # Text Reset
 
 # Motd
@@ -74,13 +78,13 @@ function bak()
 
 function swap()
 {
-    local tmpfile=tmp.$$ 
+    local tmpfile=tmp.$$
 
     [ $# -ne 2 ] && echo "swap: 2 arguments needed" && return 1
     [ !  -e $1 ] && echo "swap: $1 does not exist"  && return 1
     [ !  -e $2 ] && echo "swap: $2 does not exist"  && return 1
 
-    mv "$1" $tmpfile 
+    mv "$1" $tmpfile
     mv "$2" "$1"
     mv $tmpfile "$2"
 }
@@ -110,22 +114,23 @@ alias rd='rmdir'
 
 # Misc
 alias e=echo
-#alias e$='echo $'
+alias f='find . -name $*'
 alias h=history
 alias j='jobs -l'
 alias m=man
-alias f='find . -name $*'
 alias t=extract
 
 # List directory
 color='--color=auto'
-alias  l="ls -F $color"
-alias l.="ls -Fd .[^.]* $color"
-alias la="ls -FA $color"
-alias ll="ls -Fl $color"
-alias lr="ls -FR $color"
-alias ls="ls -F $color"
-alias lv='ls|vi -'
+alias   l="ls -F  $color"
+alias  ls="ls -F  $color"
+alias  ll="ls -Fl $color"
+alias  l.="ls -Fd  .[^.]* $color"
+alias ll.="ls -Fdl .[^.]* $color"
+alias  la="ls -FA  $color"
+alias lla="ls -FAl $color"
+alias  lr="ls -FR  $color"
+alias  lv='ls|vi -'
 
 alias df='df -h'
 alias du='du -h'
@@ -136,11 +141,19 @@ alias grep='grep --color'
 alias     ?='type -a'
 alias which='type -a'
 
+alias more='vi -'
 alias so=source
 
 alias cp='cp -i'
 alias mv='mv -i'
 alias rm='rm -i'
+
+alias  bka=bak
+alias gerp=grep
+alias mroe=more
+alias sawp=swap
+alias veiw=view
+alias  vmi=vim
 
 shopt -s cdspell
 
