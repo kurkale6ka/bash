@@ -36,18 +36,20 @@ bak_ylw='\e[43m'   # Yellow
 #--------------------------------------
 txt_rst='\e[0m'    # Text Reset
 
-# Motd
-#echo -e "${txt_cyn}bash ${txt_red}${BASH_VERSION%.*}$txt_rst\n"
-#echo    'A song of Ice and Fire'
-##date +"%e %B %Y"
-#
-#function _exit()
-#{
-#    echo -e "${txt_red}Hasta la vista, baby${txt_rst}"
-#}
-#trap _exit EXIT
+if [ -f /etc/bashrc ]; then
+    . /etc/bashrc
+fi
 
-title="\e]0;[$TERM - \u@\h] \w\a"
+# Motd
+echo 'Hi kurkale6ka'
+
+function _exit()
+{
+    echo -e "${txt_red}Hasta la vista, baby${txt_rst}"
+}
+trap _exit EXIT
+
+title="\e]0;\D{%e %B %Y}, bash $BASH_VERSION on $TERM, [\u@\H]\a"
 PS1="$title\n$txt_ylw\D{%a} \A $txt_pur\w $txt_red[!\! - %\j]$txt_rst\n\$"
 
 function extract()
@@ -102,8 +104,6 @@ alias     gvi=gvim
 
 # Change/print directory
 alias    .='pwd'
-#alias    /='cd /'
-#alias  cd/='cd /'
 alias  cd-='cd -'
 alias -- -='cd -'
 alias cd..='cd ..'
@@ -152,6 +152,7 @@ alias rm='rm -i'
 
 alias   bka=bak
 alias  gerp=grep
+alias   mna=man
 alias  mroe=more
 alias  sawp=swap
 alias  veiw=view
@@ -159,15 +160,15 @@ alias gveiw=gview
 alias   vmi=vim
 alias  gvmi=gvim
 
-shopt -s cdspell
-
 # Vars
 export CDPATH='~:..:../..:'
 export EDITOR=$my_vim
-export HISTIGNORE='&:.:..:...:-:[bf]g:cd-:cd..:d[fu]:h:j:l:l[.alrsv]:ll[.a]:pwd:v:vi:vim:vmi:gv:gvi:gvim:gvmi'
+export GIT_PROXY_COMMAND=~/.ssh/proxy_cmd_for_github
+export HISTIGNORE='&:.:..:...:-:[bf]g:cd:cd-:cd..:d[fu]:h:j:l:l[.alrsv]:ll[.a]:pwd:v:vi:vim:vmi:gv:gvi:gvim:gvmi'
 
-shopt -s extglob # Necessary,
-#set +o nounset  # otherwise some completions will fail.
+shopt -s cdspell
+
+set -o notify # about terminated jobs
 
 complete -A hostname rsh rcp telnet rlogin r ftp ping disk ssh
 complete -A export   printenv
@@ -186,7 +187,7 @@ complete -A directory            mkdir rmdir
 complete -A directory -o default cd
 
 # Compression
-complete -f -o default -X '!*.+(zip|ZIP|z|Z|gz|GZ|bz2|BZ2)' extract
+complete -f -o default -X '!*.+(zip|ZIP|z|Z|gz|GZ|bz2|BZ2)' extract t
 
 complete -f -o default -X '!*.pl' perl
 complete -f -o default -X '!*.py' python
