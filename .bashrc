@@ -58,7 +58,7 @@ trap _exit EXIT
 
 function extract()
 {
-    if [[ -f "$1" ]]
+    if [[ -f $1 ]]
     then
         case "$1" in
             *.tar.gz|*.tgz)   tar zxvf   "$1" ;;
@@ -98,9 +98,9 @@ function swap()
 {
     local tmpfile=tmp.$$
 
-    (( 2 !=  $#  )) && echo "swap: 2 arguments needed" && return 1
-    [[ ! -e "$1" ]] && echo "swap: $1 does not exist"  && return 1
-    [[ ! -e "$2" ]] && echo "swap: $2 does not exist"  && return 1
+    (( 2 != $# )) && echo "swap: 2 arguments needed" && return 1
+    [[ ! -e $1 ]] && echo "swap: $1 does not exist"  && return 1
+    [[ ! -e $2 ]] && echo "swap: $2 does not exist"  && return 1
 
     mv "$1"       $tmpfile
     mv "$2"      "$1"
