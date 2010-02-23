@@ -36,10 +36,6 @@ bak_ylw='\e[43m'   # Yellow
 #--------------------------------------
 txt_rst='\e[0m'    # Text Reset
 
-#if [ -f /etc/bashrc ]; then
-#    . /etc/bashrc
-#fi
-
 title="\e]0;\D{%e %B %Y}, bash $BASH_VERSION on $TERM, [\u@\H]\a"
 
 clear
@@ -135,10 +131,12 @@ alias md='mkdir -p'
 alias rd='rmdir'
 
 # Misc
+alias a=awk
 alias e=echo
 alias f='find . -name $*'
 alias h=history
 alias j='jobs -l'
+alias k=kill
 alias m=man
 alias t=extract
 alias z=fg
@@ -171,15 +169,28 @@ alias cp='cp -i'
 alias mv='mv -i'
 alias rm='rm -i'
 
-alias   bka=bak
-alias  gerp=grep
-alias   mna=man
-alias  mroe=more
-alias  sawp=swap
-alias  veiw=view
-alias gveiw=gview
-alias   vmi=vim
-alias  gvmi=gvim
+alias  alais=alias
+alias   bnid=bind
+alias    cta=cat
+alias   ehco=echo
+alias exprot=export
+alias   hlep=help
+alias    mna=man
+alias   mroe=more
+alias   gerp=grep
+alias   klil=kill
+alias  gveiw=gview
+alias   gvmi=gvim
+alias   veiw=view
+alias    vmi=vim
+alias    akw=awk
+alias    sde=sed
+alias   prel=perl
+alias pyhton=python
+alias   rbuy=ruby
+alias    pph=php
+alias    bka=bak
+alias   sawp=swap
 
 # Vars
 export CDPATH='~:..:../..:'
