@@ -36,21 +36,29 @@ bak_ylw='\e[43m'   # Yellow
 #--------------------------------------
 txt_rst='\e[0m'    # Text Reset
 
-if [ -f /etc/bashrc ]; then
-    . /etc/bashrc
-fi
+#if [ -f /etc/bashrc ]; then
+#    . /etc/bashrc
+#fi
 
-# Motd
-echo 'Hi kurkale6ka'
+title="\e]0;\D{%e %B %Y}, bash $BASH_VERSION on $TERM, [\u@\H]\a"
+
+clear
+
+if [ $(id -u) -eq 0 ]; then
+
+    echo 'Hi root'
+    PS1="$title\n$txt_red\D{%a} \A \w [!\! - %\j]\n# $txt_rst"
+else
+    echo 'Hi kurkale6ka'
+    PS1="$title\n$txt_ylw\D{%a} \A $txt_pur\w $txt_red[!\! - %\j]$txt_rst\n\$ "
+fi
 
 function _exit()
 {
+    clear
     echo -e "${txt_red}Hasta la vista, baby${txt_rst}"
 }
 trap _exit EXIT
-
-title="\e]0;\D{%e %B %Y}, bash $BASH_VERSION on $TERM, [\u@\H]\a"
-PS1="$title\n$txt_ylw\D{%a} \A $txt_pur\w $txt_red[!\! - %\j]$txt_rst\n\$"
 
 function extract()
 {
@@ -76,6 +84,18 @@ function extract()
 function bak()
 {
     mv $1 $1.bak
+}
+
+function x()
+{
+    if [[ $- == *x* ]]; then
+
+        echo 'debug off'
+        set +o xtrace
+    else
+        echo 'debug on'
+        set -o xtrace
+    fi
 }
 
 function swap()
@@ -121,6 +141,7 @@ alias h=history
 alias j='jobs -l'
 alias m=man
 alias t=extract
+alias z=fg
 
 alias more='vi -'
 alias   so=source
@@ -164,7 +185,7 @@ alias  gvmi=gvim
 export CDPATH='~:..:../..:'
 export EDITOR=$my_vim
 export GIT_PROXY_COMMAND=~/.ssh/proxy_cmd_for_github
-export HISTIGNORE='&:.:..:...:-:[bf]g:cd:cd-:cd..:d[fu]:h:j:l:l[.alrsv]:ll[.a]:pwd:v:vi:vim:vmi:gv:gvi:gvim:gvmi'
+export HISTIGNORE='&:.:..:...:-:[bf]g:cd:cd-:cd..:d[fu]:h:j:l:l[.alrsv]:ll[.a]:pwd:v:vi:vim:vmi:gv:gvi:gvim:gvmi:z:x'
 
 shopt -s cdspell
 
@@ -189,6 +210,7 @@ complete -A directory -o default cd
 # Compression
 complete -f -o default -X '!*.+(zip|ZIP|z|Z|gz|GZ|bz2|BZ2)' extract t
 
-complete -f -o default -X '!*.pl' perl
-complete -f -o default -X '!*.py' python
-complete -f -o default -X '!*.rb' ruby
+complete -f -o default -X '!*.pl'  perl
+complete -f -o default -X '!*.php' php
+complete -f -o default -X '!*.py'  python
+complete -f -o default -X '!*.rb'  ruby
