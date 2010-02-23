@@ -36,11 +36,11 @@ bak_ylw='\e[43m'   # Yellow
 #--------------------------------------
 txt_rst='\e[0m'    # Text Reset
 
-title="\e]0;\D{%e %B %Y}, bash $BASH_VERSION on $TERM, [\u@\H]\a"
-
 clear
 
-if [[ 0 == $UID ]]; then
+title="\e]0;\D{%e %B %Y}, bash $BASH_VERSION on $TERM, [\u@\H]\a"
+
+if (( 0 == $UID )); then
 
     echo 'Hi root'
     PS1="$title\n$txt_red\D{%a} \A \w [!\! - %\j]\n# $txt_rst"
@@ -58,18 +58,18 @@ trap _exit EXIT
 
 function extract()
 {
-    if [ -f $1 ]
+    if [[ -f "$1" ]]
     then
-        case $1 in
-            *.tar.gz|*.tgz)   tar zxvf   $1 ;;
-            *.tar.bz2|*.tbz2) tar jxvf   $1 ;;
-            *.tar)            tar xvf    $1 ;;
-            *.bz2)            bunzip2    $1 ;;
-            *.gz)             gunzip     $1 ;;
-            *.zip)            unzip      $1 ;;
-            *.rar)            unrar x    $1 ;;
-            *.Z)              uncompress $1 ;;
-            *.7z)             7z x       $1 ;;
+        case "$1" in
+            *.tar.gz|*.tgz)   tar zxvf   "$1" ;;
+            *.tar.bz2|*.tbz2) tar jxvf   "$1" ;;
+            *.tar)            tar xvf    "$1" ;;
+            *.bz2)            bunzip2    "$1" ;;
+            *.gz)             gunzip     "$1" ;;
+            *.zip)            unzip      "$1" ;;
+            *.rar)            unrar x    "$1" ;;
+            *.Z)              uncompress "$1" ;;
+            *.7z)             7z x       "$1" ;;
             *)                echo "'$1' cannot be extracted via extract" ;;
         esac
     else
@@ -79,7 +79,7 @@ function extract()
 
 function bak()
 {
-    mv $1 $1.bak
+    mv "$1" "$1".bak
 }
 
 function x()
@@ -98,13 +98,13 @@ function swap()
 {
     local tmpfile=tmp.$$
 
-    [ $# -ne 2 ] && echo "swap: 2 arguments needed" && return 1
-    [ !  -e $1 ] && echo "swap: $1 does not exist"  && return 1
-    [ !  -e $2 ] && echo "swap: $2 does not exist"  && return 1
+    (( 2 !=  $#  )) && echo "swap: 2 arguments needed" && return 1
+    [[ ! -e "$1" ]] && echo "swap: $1 does not exist"  && return 1
+    [[ ! -e "$2" ]] && echo "swap: $2 does not exist"  && return 1
 
-    mv $1 $tmpfile
-    mv $2 $1
-    mv $tmpfile $2
+    mv "$1"       $tmpfile
+    mv "$2"      "$1"
+    mv  $tmpfile "$2"
 }
 
 # Vim
@@ -218,13 +218,13 @@ complete -A user     su mail finger
 complete -A helptopic      help # Currently, same as builtins.
 complete -A shopt          shopt
 complete -A stopped -P '%' bg
-complete -A job -P '%'     fg jobs disown
+complete -A job -P '%'     fg z j jobs disown
 
-complete -A directory            mkdir rmdir
+complete -A directory            md mkdir rd rmdir
 complete -A directory -o default cd
 
 # Compression
-complete -f -o default -X '!*.+(zip|ZIP|z|Z|gz|GZ|bz2|BZ2)' extract t
+complete -f -o default -X '!*.+(zip|ZIP|z|Z|gz|GZ|bz2|BZ2)' extract t tar
 
 complete -f -o default -X '!*.pl'  perl
 complete -f -o default -X '!*.php' php
