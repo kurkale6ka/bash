@@ -132,12 +132,14 @@ alias rd='rmdir'
 
 # Misc
 alias a=awk
+alias c=cat
 alias e=echo
 alias f='find . -name $*'
 alias h=history
 alias j='jobs -l'
 alias k=kill
 alias m=man
+alias p='ps -aux'
 alias t=extract
 alias z=fg
 
@@ -196,7 +198,7 @@ alias   sawp=swap
 export CDPATH='~:..:../..:'
 export EDITOR=$my_vim
 export GIT_PROXY_COMMAND=~/.ssh/proxy_cmd_for_github
-export HISTIGNORE='&:.:..:...:-:[bf]g:cd:cd-:cd..:d[fu]:h:j:l:l[.alrsv]:ll[.a]:pwd:v:vi:vim:vmi:gv:gvi:gvim:gvmi:z:x'
+export HISTIGNORE='&:.:..:...:-:[bf]g:c:cd:cd-:cd..:d[fu]:h:j:l:l[.alrsv]:ll[.a]:p:pwd:v:vi:vim:vmi:gv:gvi:gvim:gvmi:z:x'
 
 shopt -s cdspell
 
