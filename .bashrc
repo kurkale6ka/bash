@@ -40,7 +40,7 @@ title="\e]0;\D{%e %B %Y}, bash $BASH_VERSION on $TERM, [\u@\H]\a"
 
 clear
 
-if [ $(id -u) -eq 0 ]; then
+if [[ 0 == $UID ]]; then
 
     echo 'Hi root'
     PS1="$title\n$txt_red\D{%a} \A \w [!\! - %\j]\n# $txt_rst"
@@ -139,23 +139,25 @@ alias h=history
 alias j='jobs -l'
 alias k=kill
 alias m=man
+alias o='set -o'
 alias p='ps -aux'
 alias t=extract
 alias z=fg
 
-alias more='vi -'
-alias   so=source
+alias  more='vi -'
+alias set-o='set -o'
+alias    so=source
 
 # List directory
-color='--color=auto'
-alias   l="ls -F  $color"
-alias  ls="ls -F  $color"
-alias  ll="ls -Fl $color"
-alias  l.="ls -Fd  .[^.]* $color"
-alias ll.="ls -Fdl .[^.]* $color"
-alias  la="ls -FA  $color"
-alias lla="ls -FAl $color"
-alias  lr="ls -FR  $color"
+options='--color=auto --dereference-command-line-symlink-to-dir'
+alias   l="ls -F          $options"
+alias  ls="ls -F          $options"
+alias  ll="ls -Fl         $options"
+alias  l.="ls -Fd  .[^.]* $options"
+alias ll.="ls -Fdl .[^.]* $options"
+alias  la="ls -FA         $options"
+alias lla="ls -FAl        $options"
+alias  lr="ls -FR         $options"
 alias  lv='ls|vi -'
 
 alias df='df -h'
@@ -198,9 +200,10 @@ alias   sawp=swap
 export CDPATH='~:..:../..:'
 export EDITOR=$my_vim
 export GIT_PROXY_COMMAND=~/.ssh/proxy_cmd_for_github
-export HISTIGNORE='&:.:..:...:-:[bf]g:c:cd:cd-:cd..:d[fu]:h:j:l:l[.alrsv]:ll[.a]:p:pwd:v:vi:vim:vmi:gv:gvi:gvim:gvmi:z:x'
+export HISTIGNORE='&:.:..:...:-:[bf]g:c:cd:cd-:cd..:d[fu]:h:j:l:l[.alrsv]:ll[.a]:o:p:pwd:v:vi:vim:vmi:gv:gvi:gvim:gvmi:z:x'
 
 shopt -s cdspell
+shopt -s extglob
 
 set -o notify # about terminated jobs
 
