@@ -1,3 +1,4 @@
+# Colors ~\~1
 txt_blk='\e[0;30m' # Black - Regular
 txt_blu='\e[0;34m' # Blue
 txt_cyn='\e[0;36m' # Cyan
@@ -36,6 +37,7 @@ bak_ylw='\e[43m'   # Yellow
 #--------------------------------------
 txt_rst='\e[0m'    # Text Reset
 
+# PS1 + title ~\~1
 clear
 
 title="\e]0;\D{%e %B %Y}, bash $BASH_VERSION on $TERM, [\u@\H]\a"
@@ -49,6 +51,7 @@ else
     PS1="$title\n$txt_ylw\D{%a} \A $txt_pur\w $txt_red[!\! - %\j]$txt_rst\n\$ "
 fi
 
+# Functions: bak, exit, extract, swap, wc, x ~\~1
 function _exit()
 {
     clear
@@ -84,8 +87,11 @@ function bak()
 
 function my_wc()
 {
-    counts=($(\wc -lwc "$1"))
-    echo "${counts[0]} lines, ${counts[1]} words and ${counts[2]} characters"
+    for file in "$@"; do
+
+        counts=($(\wc -lwm "$file"))
+        echo "${counts[0]} lines, ${counts[1]} words and ${counts[2]} characters: ${counts[3]}"
+    done
 }
 
 function x()
@@ -113,7 +119,9 @@ function swap()
     mv  $tmpfile "$2"
 }
 
-# Vim
+# Aliases ~\~1
+
+# Vim ~\~2
 #my_vim=vimx
 my_vim='gvim -v'
 alias       v="$my_vim"
@@ -124,42 +132,7 @@ alias vimdiff="$my_vim -d"
 alias      gv=gvim
 alias     gvi=gvim
 
-# Change/print directory
-alias    .='pwd'
-alias  cd-='cd -'
-alias -- -='cd -'
-alias    1='cd ..'
-alias    2='cd ../..'
-alias    3='cd ../../..'
-alias    4='cd ../../../..'
-alias cd..='cd ..'
-alias   ..='cd ..'
-alias  ...='cd ../..'
-
-# "-p" lets you create a path structure with one command, ex. mkdir -p /a/b/c
-alias md='mkdir -p'
-alias rd='rmdir'
-
-# Misc
-alias a=awk
-alias c=cat
-alias e=echo
-alias f='find . -name $*'
-alias h=history
-alias j='jobs -l'
-alias k=kill
-alias m=man
-alias o='set -o'
-alias p='ps -aux'
-alias t=extract
-alias z=fg
-
-alias  more='vi -'
-alias set-o='set -o'
-alias    so=source
-alias    wc=my_wc
-
-# List directory
+# List directory contents ~\~2
 options='--color=auto --dereference-command-line-symlink-to-dir'
 alias   l="ls -F          $options"
 alias  ls="ls -F          $options"
@@ -171,19 +144,61 @@ alias lla="ls -FAl        $options"
 alias  lr="ls -FR         $options"
 alias  lv='ls|vi -'
 
+# Change directory ~\~2
+alias  cd-='cd -'
+alias -- -='cd -'
+alias    1='cd ..'
+alias    2='cd ../..'
+alias    3='cd ../../..'
+alias    4='cd ../../../..'
+alias cd..='cd ..'
+alias   ..='cd ..'
+alias  ...='cd ../..'
+
+# Help ~\~2
+alias b=help # builtin
+alias i=info
+alias m=man
+
+# Misc ~\~2
+alias  .='pwd'
+alias  a=awk
+alias  c='cat -ns'
+alias  e=echo
+alias  f='find . -name $*'
+alias  h=history
+alias  j='jobs -l'
+alias  k=kill
+alias  p='ps -aux'
+alias  t=extract
+alias  z=fg
+alias so=source
+alias wc=my_wc
+
+alias less='vi -'
+alias more='vi -'
+
+alias     o='set -o'
+alias set-o='set -o'
+
+alias     ?='type -a'
+alias which='type -a'
+
 alias df='df -h'
 alias du='du -h'
 
 alias    g='grep --color'
 alias grep='grep --color'
 
-alias     ?='type -a'
-alias which='type -a'
-
 alias cp='cp -i'
 alias mv='mv -i'
 alias rm='rm -i'
 
+# -p lets you create a path structure, ex: mkdir -p /a/b/c
+alias md='mkdir -p'
+alias rd='rmdir'
+
+# Spelling typos ~\~2
 alias  alais=alias
 alias   bnid=bind
 alias    cta=cat
@@ -206,18 +221,21 @@ alias   rbuy=ruby
 alias    pph=php
 alias    bka=bak
 alias   sawp=swap
+# ~/~2
 
-# Vars
+# Vars ~\~1
 export CDPATH='~:..:../..:'
 export EDITOR=$my_vim
 export GIT_PROXY_COMMAND=~/.ssh/proxy_cmd_for_github
 export HISTIGNORE='&:.:..:...:-:[bf]g:c:cd:cd-:cd..:d[fu]:h:j:l:l[.alrsv]:ll[.a]:o:p:pwd:v:vi:vim:vmi:gv:gvi:gvim:gvmi:z:x'
 
+# Shell options ~\~1
 shopt -s cdspell
 shopt -s extglob
 
 set -o notify # about terminated jobs
 
+# Programmable completion ~\~1
 complete -A hostname rsh rcp telnet rlogin r ftp ping disk ssh
 complete -A export   printenv
 complete -A variable export local readonly unset
