@@ -200,35 +200,39 @@ alias md='mkdir -p'
 alias rd=rmdir
 
 # Spelling typos ~\~2
-alias  alais=alias
-alias   bnid=bind
-alias    cta=cat
-alias   ehco=echo
-alias exprot=export
-alias   hlep=help
-alias    mna=man
-alias   mroe=more
-alias   gerp=grep
-alias   klil=kill
-alias  gveiw=gview
-alias   gvmi=gvim
-alias   veiw=view
-alias    vmi=vim
-alias    akw=awk
-alias    sde=sed
-alias   prel=perl
-alias pyhton=python
-alias   rbuy=ruby
-alias    pph=php
-alias    bka=bak
-alias   sawp=swap
+alias   alais=alias
+alias    bnid=bind
+alias     cta=cat
+alias    ehco=echo
+alias  exprot=export
+alias hsitory=history
+alias histroy=history
+alias    hlep=help
+alias    jbos=jobs
+alias     mna=man
+alias    mroe=more
+alias     pdw=pwd
+alias    gerp=grep
+alias    klil=kill
+alias   gveiw=gview
+alias    gvmi=gvim
+alias    veiw=view
+alias     vmi=vim
+alias     akw=awk
+alias     sde=sed
+alias    prel=perl
+alias  pyhton=python
+alias    rbuy=ruby
+alias     pph=php
+alias     bka=bak
+alias    sawp=swap
 # ~/~2
 
 # Vars ~\~1
 export CDPATH='~:..:../..:'
 export EDITOR=$my_vim
 export GIT_PROXY_COMMAND=~/.ssh/proxy_cmd_for_github
-export HISTIGNORE='&:.:..:...:-:[bf]g:c:cd:cd-:cd..:d[fu]:h:j:l:l[.alrsv]:ll[.a]:o:p:pwd:v:vi:vim:vmi:gv:gvi:gvim:gvmi:z:x'
+export HISTIGNORE='&:.:..:...:-:1:2:3:4:cd:cd-:cd..:b:help:hlep:i:[bf]g:z:c:cat:cta:d[fu]:h:hsitory:histroy:history:j:jobs:jbos:l:l[.alrsv]:ll[.a]:o:set-o:p:pwd:pdw:v:vi:vim:vmi:gv:gvi:gvim:gvmi:x'
 
 # Shell options ~\~1
 shopt -s cdspell
