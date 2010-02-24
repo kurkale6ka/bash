@@ -82,6 +82,12 @@ function bak()
     mv "$1" "$1".bak
 }
 
+function my_wc()
+{
+    counts=($(\wc -lwc "$1"))
+    echo "${counts[0]} lines, ${counts[1]} words and ${counts[2]} characters"
+}
+
 function x()
 {
     if [[ $- == *x* ]]; then
@@ -147,6 +153,7 @@ alias z=fg
 alias  more='vi -'
 alias set-o='set -o'
 alias    so=source
+alias    wc=my_wc
 
 # List directory
 options='--color=auto --dereference-command-line-symlink-to-dir'
