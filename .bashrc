@@ -133,15 +133,14 @@ alias      gv=gvim
 alias     gvi=gvim
 
 # List directory contents ~\~2
-options='--color=auto --dereference-command-line-symlink-to-dir'
-alias   l="ls -F          $options"
-alias  ls="ls -F          $options"
-alias  ll="ls -Fl         $options"
-alias  l.="ls -Fd  .[^.]* $options"
-alias ll.="ls -Fdl .[^.]* $options"
-alias  la="ls -FA         $options"
-alias lla="ls -FAl        $options"
-alias  lr="ls -FR         $options"
+alias   l=ls
+alias  ls='ls -F --color=auto --dereference-command-line-symlink-to-dir'
+alias  ll='ls -l'
+alias  l.='ls -d  .[^.]*'
+alias ll.='ls -dl .[^.]*'
+alias  la='ls -A'
+alias lla='ls -Al'
+alias  lr='ls -R'
 alias  lv='ls|vi -'
 
 # Change directory ~\~2
@@ -161,7 +160,7 @@ alias i=info
 alias m=man
 
 # Misc ~\~2
-alias  .='pwd'
+alias  .=pwd
 alias  a=awk
 alias  e=echo
 alias  f='find . -name $*'
@@ -174,8 +173,8 @@ alias  z=fg
 alias so=source
 alias wc=my_wc
 
-alias   c='cat -ns'
-alias cat='cat -ns'
+alias   c=cat
+alias cat='cat -n'
 
 alias less='vi -'
 alias more='vi -'
@@ -189,7 +188,7 @@ alias which='type -a'
 alias df='df -h'
 alias du='du -h'
 
-alias    g='grep --color'
+alias    g=grep
 alias grep='grep --color'
 
 alias cp='cp -i'
@@ -198,7 +197,7 @@ alias rm='rm -i'
 
 # -p lets you create a path structure, ex: mkdir -p /a/b/c
 alias md='mkdir -p'
-alias rd='rmdir'
+alias rd=rmdir
 
 # Spelling typos ~\~2
 alias  alais=alias
