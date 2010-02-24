@@ -163,7 +163,6 @@ alias m=man
 # Misc ~\~2
 alias  .='pwd'
 alias  a=awk
-alias  c='cat -ns'
 alias  e=echo
 alias  f='find . -name $*'
 alias  h=history
@@ -174,6 +173,9 @@ alias  t=extract
 alias  z=fg
 alias so=source
 alias wc=my_wc
+
+alias   c='cat -ns'
+alias cat='cat -ns'
 
 alias less='vi -'
 alias more='vi -'
