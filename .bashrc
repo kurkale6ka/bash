@@ -37,7 +37,7 @@ bak_ylw='\e[43m'   # Yellow
 #--------------------------------------
 txt_rst='\e[0m'    # Text Reset
 
-# PS1 + title ~\~1
+# PS1 and title ~\~1
 clear
 
 title="\e]0;\D{%e %B %Y}, bash $BASH_VERSION on $TERM, [\u@\H]\a"
@@ -87,11 +87,8 @@ function bak()
 
 function my_wc()
 {
-    for file in "$@"; do
-
-        counts=($(\wc -lwm "$file"))
-        echo "${counts[0]} lines, ${counts[1]} words and ${counts[2]} characters: ${counts[3]}"
-    done
+    counts=($(\wc -lwm "$1"))
+    echo "${counts[0]} lines, ${counts[1]} words and ${counts[2]} characters"
 }
 
 function x()
@@ -155,35 +152,39 @@ alias   ..='cd ..'
 alias  ...='cd ../..'
 
 # Help ~\~2
-alias b=help # builtin
-alias i=info
-alias m=man
+alias     h=help
+alias     i=info
+alias     m=man
+alias     ?='type -a'
+alias which='type -a'
 
 # Misc ~\~2
 alias  .=pwd
-alias  a=awk
+alias  a=alias
+alias  b='bind -p'
 alias  e=echo
 alias  f='find . -name $*'
-alias  h=history
 alias  j='jobs -l'
 alias  k=kill
 alias  p='ps -aux'
 alias  t=extract
 alias  z=fg
+alias ln='ln -s'
+alias hi=history
 alias so=source
 alias wc=my_wc
 
+alias    n=nslookup
+alias ping='ping -c3'
+
 alias   c=cat
-alias cat='cat -n'
+alias  cn='cat -n'
 
 alias less='vi -'
 alias more='vi -'
 
 alias     o='set -o'
 alias set-o='set -o'
-
-alias     ?='type -a'
-alias which='type -a'
 
 alias df='df -h'
 alias du='du -h'
@@ -200,39 +201,43 @@ alias md='mkdir -p'
 alias rd=rmdir
 
 # Spelling typos ~\~2
-alias   alais=alias
-alias    bnid=bind
-alias     cta=cat
-alias    ehco=echo
-alias  exprot=export
-alias hsitory=history
-alias histroy=history
-alias    hlep=help
-alias    jbos=jobs
-alias     mna=man
-alias    mroe=more
-alias     pdw=pwd
-alias    gerp=grep
-alias    klil=kill
-alias   gveiw=gview
-alias    gvmi=gvim
-alias    veiw=view
-alias     vmi=vim
-alias     akw=awk
-alias     sde=sed
-alias    prel=perl
-alias  pyhton=python
-alias    rbuy=ruby
-alias     pph=php
-alias     bka=bak
-alias    sawp=swap
+alias      bka=bak
+alias      cta=cat
+alias      mna=man
+alias      pdw=pwd
+alias     bnid=bind
+alias     ehco=echo
+alias     hlep=help
+alias     jbos=jobs
+alias     klil=kill
+alias     mroe=more
+alias     pnig=ping
+alias     sawp=swap
+alias    alais=alias
+alias   exprot=export
+alias  histroy=history
+alias  hsitory=history
+alias snlookup=nslookup
+# Vim
+alias   vmi=vim
+alias  gvmi=gvim
+alias  veiw=view
+alias gveiw=gview
+# languages and tools
+alias    akw=awk
+alias    pph=php
+alias    sde=sed
+alias   gerp=grep
+alias   prel=perl
+alias   rbuy=ruby
+alias pyhton=python
 # ~/~2
 
 # Vars ~\~1
 export CDPATH='~:..:../..:'
 export EDITOR=$my_vim
 export GIT_PROXY_COMMAND=~/.ssh/proxy_cmd_for_github
-export HISTIGNORE='&:.:..:...:-:1:2:3:4:cd:cd-:cd..:b:help:hlep:i:[bf]g:z:c:cat:cta:d[fu]:h:hsitory:histroy:history:j:jobs:jbos:l:l[.alrsv]:ll[.a]:o:set-o:p:pwd:pdw:v:vi:vim:vmi:gv:gvi:gvim:gvmi:x'
+export HISTIGNORE='&:.:..:...:-:1:2:3:4:cd:cd-:cd..:a:b:h:help:hlep:i:[bf]g:z:c:cat:cta:d[fu]:hi:hsitory:histroy:j:jobs:jbos:l:l[.alrsv]:ll[.a]:o:set-o:p:pwd:pdw:v:vi:vim:vmi:gv:gvi:gvim:gvmi:x'
 
 # Shell options ~\~1
 shopt -s cdspell
@@ -245,14 +250,14 @@ complete -A hostname rsh rcp telnet rlogin r ftp ping disk ssh
 complete -A export   printenv
 complete -A variable export local readonly unset
 complete -A enabled  builtin
-complete -A alias    alias unalias
+complete -A alias    a alias alais unalias
 complete -A function function
 complete -A user     su mail finger
 
-complete -A helptopic      help # Currently, same as builtins.
+complete -A helptopic      h help # Currently, same as builtins.
 complete -A shopt          shopt
 complete -A stopped -P '%' bg
-complete -A job -P '%'     fg z j jobs disown
+complete -A job -P '%'     j z fg jobs disown
 
 complete -A directory            md mkdir rd rmdir
 complete -A directory -o default cd
@@ -260,7 +265,7 @@ complete -A directory -o default cd
 # Compression
 complete -f -o default -X '!*.+(zip|ZIP|z|Z|gz|GZ|bz2|BZ2)' extract t tar
 
-complete -f -o default -X '!*.pl'  perl
-complete -f -o default -X '!*.php' php
-complete -f -o default -X '!*.py'  python
-complete -f -o default -X '!*.rb'  ruby
+complete -f -o default -X '!*.pl'  perl   prel
+complete -f -o default -X '!*.php' php    pph
+complete -f -o default -X '!*.py'  python pyhton
+complete -f -o default -X '!*.rb'  ruby   rbuy
