@@ -170,15 +170,17 @@ alias  p='ps -aux'
 alias  t=extract
 alias  z=fg
 alias ln='ln -s'
-alias hi=history
 alias so=source
 alias wc=my_wc
+
+alias  hi=history
+alias hgg='history|grep'
 
 alias    n=nslookup
 alias ping='ping -c3'
 
-alias   c=cat
-alias  cn='cat -n'
+alias  c=cat
+alias cn='cat -n'
 
 alias less='vi -'
 alias more='vi -'
@@ -237,7 +239,7 @@ alias pyhton=python
 export CDPATH='~:..:../..:'
 export EDITOR=$my_vim
 export GIT_PROXY_COMMAND=~/.ssh/proxy_cmd_for_github
-export HISTIGNORE='&:.:..:...:-:1:2:3:4:cd:cd-:cd..:a:b:h:help:hlep:i:[bf]g:z:c:cat:cta:d[fu]:hi:hsitory:histroy:j:jobs:jbos:l:l[.alrsv]:ll[.a]:o:set-o:p:pwd:pdw:v:vi:vim:vmi:gv:gvi:gvim:gvmi:x'
+export HISTIGNORE='&:.:..:...:-:1:2:3:4:cd:cd-:cd..:a:b:h:help:hlep:i:[bf]g:z:c:cat:cta:d[fu]:hi:hsitory:histroy:history:j:jobs:jbos:l:l[.alrsv]:ll[.a]:o:set-o:p:pwd:pdw:v:vi:vim:vmi:gv:gvi:gvim:gvmi:x'
 
 # Shell options ~\~1
 shopt -s cdspell
