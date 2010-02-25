@@ -93,8 +93,7 @@ function my_wc()
 
 function s()
 {
-    !!:gs/"$1"/"$2"/
-    #var=$(fc -ln -1);eval "${var//$1/$2}"
+    fc -s "$1=$2"
 }
 
 function x()
