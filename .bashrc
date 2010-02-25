@@ -161,7 +161,6 @@ alias which='type -a'
 # Misc ~\~2
 alias  .=pwd
 alias  a=alias
-alias  b='bind -p'
 alias  e=echo
 alias  f='find . -name $*'
 alias  j='jobs -l'
@@ -172,6 +171,9 @@ alias  z=fg
 alias ln='ln -s'
 alias so=source
 alias wc=my_wc
+
+alias  b='bind -p'
+alias bg='bind -p|grep'
 
 alias  hi=history
 alias hgg='history|grep'
