@@ -91,6 +91,11 @@ function my_wc()
     echo "${counts[0]} lines, ${counts[1]} words and ${counts[2]} characters"
 }
 
+function s()
+{
+    !!:gs/"$1"/"$2"/
+}
+
 function x()
 {
     if [[ $- == *x* ]]; then
@@ -133,6 +138,8 @@ alias     gvi=gvim
 alias   l=ls
 alias  ls='ls -F --color=auto --dereference-command-line-symlink-to-dir'
 alias  ll='ls -l'
+alias  ld='ls -d'
+alias lld='ls -dl'
 alias  l.='ls -d  .[^.]*'
 alias ll.='ls -dl .[^.]*'
 alias  la='ls -A'
@@ -160,7 +167,6 @@ alias which='type -a'
 
 # Misc ~\~2
 alias  .=pwd
-alias  a=alias
 alias  e=echo
 alias  f='find . -name $*'
 alias  j='jobs -l'
@@ -171,6 +177,9 @@ alias  z=fg
 alias ln='ln -s'
 alias so=source
 alias wc=my_wc
+
+alias  a=alias
+alias ag='alias|grep'
 
 alias  b='bind -p'
 alias bg='bind -p|grep'
@@ -238,7 +247,7 @@ alias pyhton=python
 # ~/~2
 
 # Vars ~\~1
-export CDPATH='~:..:../..:'
+export CDPATH=~:..:../..:
 export EDITOR=$my_vim
 export GIT_PROXY_COMMAND=~/.ssh/proxy_cmd_for_github
 export HISTIGNORE='&:.:..:...:-:1:2:3:4:cd:cd-:cd..:a:b:h:help:hlep:i:[bf]g:z:c:cat:cta:d[fu]:hi:hsitory:histroy:history:j:jobs:jbos:l:l[.alrsv]:ll[.a]:o:set-o:p:pwd:pdw:v:vi:vim:vmi:gv:gvi:gvim:gvmi:x'
