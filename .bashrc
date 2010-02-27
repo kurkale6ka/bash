@@ -166,7 +166,6 @@ alias     ?='type -a'
 alias which='type -a'
 
 # Misc ~\~2
-alias  .=pwd
 alias  e=echo
 alias  f='find . -name $*'
 alias  j='jobs -l'
@@ -175,6 +174,7 @@ alias  p='ps -aux'
 alias  t=extract
 alias  z=fg
 alias ln='ln -s'
+alias pw=pwd
 alias so=source
 alias wc=my_wc
 
@@ -203,7 +203,7 @@ alias df='df -h'
 alias du='du -h'
 
 alias    g=grep
-alias grep='grep --color'
+alias grep='grep -i --color'
 
 alias cp='cp -i'
 alias mv='mv -i'
@@ -250,7 +250,7 @@ alias pyhton=python
 export CDPATH=~:..:../..:
 export EDITOR=$my_vim
 export GIT_PROXY_COMMAND=~/.ssh/proxy_cmd_for_github
-export HISTIGNORE='&:.:..:...:-:1:2:3:4:cd:cd-:cd..:a:b:h:help:hlep:i:[bf]g:z:c:cat:cta:d[fu]:hi:hsitory:histroy:history:j:jobs:jbos:l:l[.alrsv]:ll[.a]:o:set-o:p:pwd:pdw:v:vi:vim:vmi:gv:gvi:gvim:gvmi:x'
+export HISTIGNORE='&:..:...:-:1:2:3:4:cd:cd-:cd..:a:b:h:help:hlep:i:[bf]g:z:c:cat:cta:d[fu]:hi:hsitory:histroy:history:j:jobs:jbos:l:l[.alrsv]:ll[.a]:o:set-o:p:pwd:pdw:v:vi:vim:vmi:gv:gvi:gvim:gvmi:x'
 
 # Shell options ~\~1
 shopt -s cdspell
