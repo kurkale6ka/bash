@@ -130,6 +130,7 @@ alias       v="$my_vim"
 alias      vi="$my_vim"
 alias     vim="$my_vim"
 alias    view="$my_vim -R"
+alias      vd="$my_vim -d"
 alias vimdiff="$my_vim -d"
 alias      gv=gvim
 alias     gvi=gvim
@@ -167,7 +168,7 @@ alias which='type -a'
 
 # Misc ~\~2
 alias  e=echo
-alias  f='find . -name $*'
+alias  f='find . -iname $*'
 alias  j='jobs -l'
 alias  k=kill
 alias  p='ps -aux'
@@ -181,14 +182,24 @@ alias pw=pwd
 alias so=source
 alias wc=my_wc
 
+alias    g=grep
+alias grep='grep -i --color'
+
+alias less='vi -'
+alias more='vi -'
+alias mo=more
+
 alias  a=alias
 alias ag='alias|grep'
+alias am='alias|vi -'
 
 alias  b='bind -p'
 alias bg='bind -p|grep'
+alias bm='bind -p|vi -'
 
 alias  hi=history
-alias hgg='history|grep'
+alias  hm='history|vi -'
+alias hgg='history|grep' # because of mercurial
 
 alias    n=nslookup
 alias ping='ping -c3'
@@ -196,18 +207,11 @@ alias ping='ping -c3'
 alias  c=cat
 alias cn='cat -n'
 
-alias less='vi -'
-alias more='vi -'
-alias mo=more
-
 alias     o='set -o'
 alias set-o='set -o'
 
 alias df='df -h'
 alias du='du -h'
-
-alias    g=grep
-alias grep='grep -i --color'
 
 alias cp='cp -i'
 alias mv='mv -i'
@@ -254,7 +258,7 @@ alias pyhton=python
 export CDPATH=~:..:../..:
 export EDITOR=$my_vim
 export GIT_PROXY_COMMAND=~/.ssh/proxy_cmd_for_github
-export HISTIGNORE='&:..:...:-:1:2:3:4:cd:cd-:cd..:a:b:h:help:hlep:i:[bf]g:z:c:cat:cta:d[fu]:hi:hsitory:histroy:history:j:jobs:jbos:l:l[.alrsv]:ll[.a]:o:set-o:p:pwd:pdw:v:vi:vim:vmi:gv:gvi:gvim:gvmi:x'
+export HISTIGNORE='&:..:...:-:1:2:3:4:am:bm:hm:cd:cd-:cd..:a:b:h:help:hlep:i:[bf]g:z:c:cat:cta:d[fu]:hi:hsitory:histroy:history:j:jobs:jbos:l:l[.alrsv]:ll[.a]:o:set-o:p:pwd:pdw:v:vi:vim:vmi:gv:gvi:gvim:gvmi:x'
 
 # Shell options ~\~1
 shopt -s cdspell
