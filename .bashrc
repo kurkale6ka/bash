@@ -52,14 +52,14 @@ else
 fi
 
 # Functions: bak, exit, extract, swap, wc, x ~\~1
-function _exit()
+_exit()
 {
     clear
     echo -e "${txt_red}Hasta la vista, baby${txt_rst}"
 }
 trap _exit EXIT
 
-function extract()
+extract()
 {
     if [[ -f $1 ]]
     then
@@ -80,23 +80,23 @@ function extract()
     fi
 }
 
-function bak()
+bak()
 {
-    mv "$1" "$1".bak
+    mv -- "$1" "$1".bak
 }
 
-function my_wc()
+my_wc()
 {
     counts=($(\wc -lwm "$1"))
     echo "${counts[0]} lines, ${counts[1]} words and ${counts[2]} characters"
 }
 
-function s()
+s()
 {
-    fc -s "$1=$2"
+    fc -s $1=$2
 }
 
-function x()
+x()
 {
     if [[ $- == *x* ]]; then
 
@@ -108,17 +108,17 @@ function x()
     fi
 }
 
-function swap()
+swap()
 {
     local tmpfile=tmp.$$
 
-    (( 2 != $# )) && echo "swap: 2 arguments needed" && return 1
+    (( 2 != $# )) && echo 'swap: 2 arguments needed' && return 1
     [[ ! -e $1 ]] && echo "swap: $1 does not exist"  && return 1
     [[ ! -e $2 ]] && echo "swap: $2 does not exist"  && return 1
 
-    mv "$1"       $tmpfile
-    mv "$2"      "$1"
-    mv  $tmpfile "$2"
+    mv -- "$1"       $tmpfile
+    mv -- "$2"      "$1"
+    mv --  $tmpfile "$2"
 }
 
 # Aliases ~\~1
@@ -255,9 +255,9 @@ alias pyhton=python
 # ~/~2
 
 # Vars ~\~1
-export CDPATH=~:..:../..:
+export CDPATH="$HOME":..:../..:
 export EDITOR=$my_vim
-export GIT_PROXY_COMMAND=~/.ssh/proxy_cmd_for_github
+export GIT_PROXY_COMMAND="$HOME"/.ssh/proxy_cmd_for_github
 export HISTIGNORE='&:..:...:-:1:2:3:4:am:bm:hm:cd:cd-:cd..:a:b:h:help:hlep:i:[bf]g:z:c:cat:cta:d[fu]:hi:hsitory:histroy:history:j:jobs:jbos:l:l[.alrsv]:ll[.a]:o:set-o:p:pwd:pdw:v:vi:vim:vmi:gv:gvi:gvim:gvmi:x'
 
 # Shell options ~\~1
@@ -290,3 +290,5 @@ complete -f -o default -X '!*.pl'  perl   prel
 complete -f -o default -X '!*.php' php    pph
 complete -f -o default -X '!*.py'  python pyhton
 complete -f -o default -X '!*.rb'  ruby   rbuy
+
+# Source business specific...
