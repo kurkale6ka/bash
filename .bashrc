@@ -172,8 +172,11 @@ alias  j='jobs -l'
 alias  k=kill
 alias  p='ps -aux'
 alias  t=extract
+alias  u=unset
 alias  z=fg
+alias cm=chmod
 alias ln='ln -s'
+alias mn=mount
 alias pw=pwd
 alias so=source
 alias wc=my_wc
@@ -195,6 +198,7 @@ alias cn='cat -n'
 
 alias less='vi -'
 alias more='vi -'
+alias mo=more
 
 alias     o='set -o'
 alias set-o='set -o'
