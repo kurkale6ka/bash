@@ -86,6 +86,26 @@ my_wc()
     echo "${counts[0]} lines, ${counts[1]} words and ${counts[2]} characters"
 }
 
+# 'help arg' if it is a builtin, 'man arg' elsewise
+# If mixing both types, as in 'h [ cat', only 'h [' will show
+h() {
+
+    local t="$(type -at "$@")"
+
+    if [[ "$t" == *builtin* || "$t" == *keyword* ]]; then
+
+        if [[ "$*" == *[* && "$*" != *[[* || "$*" == *test* ]]; then
+
+            # If I ask for [ or test, I want them both
+            help [ test | $my_vim -
+        else
+            help "$@"
+        fi
+    else
+        man  "$@"
+    fi
+}
+
 x() {
 
     if [[ $- == *x* ]]; then
@@ -140,7 +160,7 @@ alias ll.='ls -dl .[^.]*'
 alias  la='ls -A'
 alias lla='ls -Al'
 alias  lr='ls -R'
-alias  lv='ls|vi -'
+alias  lv="ls|$my_vim -"
 
 # Change directory ~\~2
 alias  cd-='cd -'
@@ -154,7 +174,6 @@ alias   ..='cd ..'
 alias  ...='cd ../..'
 
 # Help ~\~2
-alias     h=help
 alias     i=info
 alias     m=man
 alias     ?='type -a'
@@ -181,20 +200,20 @@ alias wc=my_wc
 alias    g=grep
 alias grep='grep -i --color'
 
-alias less='vi -'
-alias more='vi -'
+alias less="$my_vim -"
+alias more="$my_vim -"
 alias mo=more
 
 alias  a=alias
 alias ag='alias|grep'
-alias am='alias|vi -'
+alias am="alias|$my_vim -"
 
 alias  b='bind -p'
 alias bg='bind -p|grep'
-alias bm='bind -p|vi -'
+alias bm="bind -p|$my_vim -"
 
 alias  hi=history
-alias  hm='history|vi -'
+alias  hm="history|$my_vim -"
 alias hgg='history|grep' # because of mercurial
 
 alias    n=nslookup
