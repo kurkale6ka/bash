@@ -98,7 +98,7 @@ x() {
     fi
 }
 
-swap() {
+sw() {
 
     local tmpfile=tmp.$$
 
@@ -172,7 +172,9 @@ alias  z=fg
 alias cm=chmod
 alias ln='ln -s'
 alias mn=mount
+alias pf=printf
 alias pw=pwd
+alias se=set
 alias so=source
 alias wc=my_wc
 
@@ -212,6 +214,7 @@ alias mv='mv -i'
 alias rm='rm -i'
 
 # -p lets you create a path structure, ex: mkdir -p /a/b/c
+alias mf=mkfifo
 alias md='mkdir -p'
 alias rd=rmdir
 
@@ -227,7 +230,6 @@ alias     jbos=jobs
 alias     klil=kill
 alias     mroe=more
 alias     pnig=ping
-alias     sawp=swap
 alias    alais=alias
 alias   exprot=export
 alias  histroy=history
@@ -252,7 +254,7 @@ alias pyhton=python
 export CDPATH="$HOME":..:../..:
 export EDITOR=$my_vim
 export GIT_PROXY_COMMAND="$HOME"/.ssh/proxy_cmd_for_github
-export HISTIGNORE='&:..:...:-:1:2:3:4:am:bm:hm:cd:cd-:cd..:a:b:h:help:hlep:i:[bf]g:z:c:cat:cta:d[fu]:hi:hsitory:histroy:history:j:jobs:jbos:l:l[.alrsv]:ll[.a]:o:set-o:p:pwd:pdw:v:vi:vim:vmi:gv:gvi:gvim:gvmi:x'
+export HISTIGNORE='&:..:...:-:1:2:3:4:am:bm:hm:cd:cd-:cd..:a:b:h:help:hlep:i:[bf]g:z:c:cat:cta:d[fu]:hi:hsitory:histroy:history:j:jobs:jbos:l:l[.alrsv]:ll[.a]:o:set-o:se:set:p:pwd:pdw:v:vi:vim:vmi:gv:gvi:gvim:gvmi:x'
 
 # Shell options ~\~1
 shopt -s cdspell
