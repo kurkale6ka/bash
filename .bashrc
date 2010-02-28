@@ -52,15 +52,15 @@ else
 fi
 
 # Functions: bak, exit, extract, swap, wc, x ~\~1
-_exit()
-{
+_exit() {
+
     clear
     echo -e "${txt_red}Hasta la vista, baby${txt_rst}"
 }
 trap _exit EXIT
 
-extract()
-{
+extract() {
+
     if [[ -f $1 ]]
     then
         case "$1" in
@@ -80,24 +80,14 @@ extract()
     fi
 }
 
-bak()
-{
-    mv -- "$1" "$1".bak
-}
-
 my_wc()
 {
     counts=($(\wc -lwm "$1"))
     echo "${counts[0]} lines, ${counts[1]} words and ${counts[2]} characters"
 }
 
-s()
-{
-    fc -s $1=$2
-}
+x() {
 
-x()
-{
     if [[ $- == *x* ]]; then
 
         echo 'debug off'
@@ -108,8 +98,8 @@ x()
     fi
 }
 
-swap()
-{
+swap() {
+
     local tmpfile=tmp.$$
 
     (( 2 != $# )) && echo 'swap: 2 arguments needed' && return 1
@@ -120,6 +110,10 @@ swap()
     mv -- "$2"      "$1"
     mv --  $tmpfile "$2"
 }
+
+bak() { mv -- "$1" "$1".bak; }
+
+s() { fc -s $1=$2; }
 
 # Aliases ~\~1
 
