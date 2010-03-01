@@ -197,6 +197,8 @@ alias se=set
 alias so=source
 alias wc=my_wc
 
+alias date="date '+%A -%e %B %Y, %H:%M %Z'"
+
 alias    g=grep
 alias grep='grep -i --color'
 
