@@ -152,13 +152,13 @@ alias     gvi=gvim
 # List directory contents ~\~2
 alias   l=ls
 alias  ls='ls -F --color=auto --dereference-command-line-symlink-to-dir'
-alias  ll='ls -l'
+alias  ll='ls -hl'
 alias  ld='ls -d'
-alias lld='ls -dl'
+alias lld='ls -dhl'
 alias  l.='ls -d  .[^.]*'
-alias ll.='ls -dl .[^.]*'
+alias ll.='ls -dhl .[^.]*'
 alias  la='ls -A'
-alias lla='ls -Al'
+alias lla='ls -Ahl'
 alias  lr='ls -R'
 alias  lv="ls|$my_vim -"
 
