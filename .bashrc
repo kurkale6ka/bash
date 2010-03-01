@@ -272,7 +272,7 @@ alias pyhton=python
 # ~/~2
 
 # Vars ~\~1
-export CDPATH="$HOME":..:../..:
+export CDPATH="$HOME":/cygdrive/c:/cygdrive/d:..:../..:
 export EDITOR=$my_vim
 export GIT_PROXY_COMMAND="$HOME"/.ssh/proxy_cmd_for_github
 export HISTIGNORE='&:..:...:-:1:2:3:4:am:bm:hm:cd:cd-:cd..:a:b:h:help:hlep:i:[bf]g:z:c:cat:cta:d[fu]:hi:hsitory:histroy:history:j:jobs:jbos:l:l[.alrsv]:ll[.a]:o:set-o:se:set:p:pwd:pdw:v:vi:vim:vmi:gv:gvi:gvim:gvmi:x'
