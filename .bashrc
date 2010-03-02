@@ -42,7 +42,7 @@ clear
 
 title="\e]0;\D{%e %B %Y}, bash $BASH_VERSION on $TERM, [\u@\H]\a"
 
-if (( 0 == $UID )); then
+if (( 0 == UID )); then
 
     echo 'Hi root'
     PS1="$title\n$txt_red\D{%a} \A \w [!\! - %\j]\n# $txt_rst"
@@ -139,7 +139,7 @@ sw() {
 bak() { mv -- "$1" "$1".bak; }
 
 # Usage: s old new [optional cmd number in history]
-s() { fc -s $1=$2 $3; }
+s() { fc -s "$1"="$2" "$3"; }
 
 # Aliases ~\~1
 
