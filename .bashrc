@@ -59,6 +59,7 @@ _exit() {
 }
 trap _exit EXIT
 
+# Usage: t my_archive.tar.gz => my_archive/
 extract() {
 
     if [[ -f $1 ]]
@@ -80,6 +81,7 @@ extract() {
     fi
 }
 
+# Usage : wc my_file => 124 lines, 578 words and 1654 characters
 my_wc()
 {
     counts=($(\wc -lwm "$1"))
@@ -106,6 +108,7 @@ h() {
     fi
 }
 
+# Toggle debugging on/off
 x() {
 
     if [[ $- == *x* ]]; then
@@ -118,6 +121,7 @@ x() {
     fi
 }
 
+# Usage: my_file.c.bak <=> my_file.c
 sw() {
 
     local tmpfile=tmp.$$
@@ -131,9 +135,11 @@ sw() {
     mv --  $tmpfile "$2"
 }
 
+# Usage: bak my_file.c => my_file.c.bak
 bak() { mv -- "$1" "$1".bak; }
 
-s() { fc -s $1=$2; }
+# Usage: s old new [optional cmd number in history]
+s() { fc -s $1=$2 $3; }
 
 # Aliases ~\~1
 
