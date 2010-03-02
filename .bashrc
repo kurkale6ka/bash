@@ -183,7 +183,6 @@ alias which='type -a'
 alias  e=echo
 alias  f='find . -iname $*'
 alias  j='jobs -l'
-alias  k=kill
 alias  p='ps -aux'
 alias  t=extract
 alias  u=unset
@@ -198,6 +197,9 @@ alias se=set
 alias so=source
 alias to=touch
 alias wc=my_wc
+
+alias  k=kill
+alias ka=killall
 
 alias  cal='cal -3'
 alias date="date '+%A -%e %B %Y, %H:%M %Z'"
@@ -298,7 +300,7 @@ set -o notify # about terminated jobs
 # Programmable completion ~\~1
 complete -A alias          a alias alais unalias
 complete -A binding        b bind bnid
-complete -A command        ? which type
+complete -A command        ? which wihch type tpye
 #complete -A builtin        builtin
 complete -A enabled        builtin
 complete -A export         printenv
@@ -308,6 +310,7 @@ complete -A user           chage chfn finger groups mail passwd slay su userdel 
 complete -A variable       export local readonly unset
 
 complete -A helptopic      h help # Currently, same as builtins.
+complete -A signal         k kill klil
 complete -A job     -P '%' j z fg jobs disown
 complete -A stopped -P '%' bg
 complete -A setopt         set o se-o set-o no se+o set+o
