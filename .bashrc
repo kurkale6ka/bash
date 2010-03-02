@@ -251,6 +251,8 @@ alias rd=rmdir
 alias      bka=bak
 alias      cta=cat
 alias      mna=man
+alias      otp=opt
+alias    shotp=shopt
 alias      pdw=pwd
 alias     bnid=bind
 alias     ehco=echo
@@ -283,7 +285,7 @@ alias pyhton=python
 export CDPATH="$HOME":/cygdrive/c:/cygdrive/d:..:../..:
 export EDITOR=$my_vim
 export GIT_PROXY_COMMAND="$HOME"/.ssh/proxy_cmd_for_github
-export HISTIGNORE='&:..:...:-:1:2:3:4:a:am:b:bm:cd:cd-:cd..:cal:i:h:help:hlep:hm:bg:fg:z:c:cat:cta:df:du:hi:hsitory:histroy:history:j:jobs:jbos:l:l.:la:ll:lr:ls:lv:ll.:lla:o:se-o:set-o:no:se+o:set+o:se:set:p:pwd:pdw:v:vi:vim:vmi:gv:gvi:gvim:gvmi:x'
+export HISTIGNORE='&:..:...:-:1:2:3:4:a:am:b:bm:cd:cd-:cd..:cal:i:h:help:hlep:hm:bg:fg:z:c:cat:cta:df:du:hi:hsitory:histroy:history:j:jobs:jbos:l:l.:la:ll:lr:ls:lv:ll.:lla:o:se-o:set-o:no:se+o:set+o:se:set:opt:otp:shopt:shotp:p:pwd:pdw:v:vi:vim:vmi:gv:gvi:gvim:gvmi:x'
 
 # Shell options ~\~1
 shopt -s cdspell
@@ -310,11 +312,11 @@ complete -A directory      cd
 complete -A directory      md mkdir rd rmdir
 
 # eXclude what not(!) matched by the pattern
-complete -f -o default -X !*.@(zip|ZIP|z|Z|gz|GZ|bz2|BZ2) extract t tar
+complete -f -o default -X '!*.@(zip|ZIP|z|Z|gz|GZ|bz2|BZ2)' extract t tar
 
-complete -f -o default -X !*.php php    pph
-complete -f -o default -X !*.pl  perl   prel
-complete -f -o default -X !*.py  python pyhton
-complete -f -o default -X !*.rb  ruby   rbuy
+complete -f -o default -X '!*.php' php    pph
+complete -f -o default -X '!*.pl'  perl   prel
+complete -f -o default -X '!*.py'  python pyhton
+complete -f -o default -X '!*.rb'  ruby   rbuy
 
 # Source business specific...
