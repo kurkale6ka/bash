@@ -261,7 +261,9 @@ alias     jbos=jobs
 alias     klil=kill
 alias     mroe=more
 alias     pnig=ping
+alias     tpye=type
 alias    alais=alias
+alias    wihch=which
 alias   exprot=export
 alias  histroy=history
 alias  hsitory=history
@@ -285,7 +287,7 @@ alias pyhton=python
 export CDPATH="$HOME":/cygdrive/c:/cygdrive/d:..:../..:
 export EDITOR=$my_vim
 export GIT_PROXY_COMMAND="$HOME"/.ssh/proxy_cmd_for_github
-export HISTIGNORE='&:..:...:-:1:2:3:4:a:am:b:bm:cd:cd-:cd..:cal:i:h:help:hlep:hm:bg:fg:z:c:cat:cta:df:du:hi:hsitory:histroy:history:j:jobs:jbos:l:l.:la:ll:lr:ls:lv:ll.:lla:o:se-o:set-o:no:se+o:set+o:se:set:opt:otp:shopt:shotp:p:pwd:pdw:v:vi:vim:vmi:gv:gvi:gvim:gvmi:x'
+export HISTIGNORE='&:..:...:-:1:2:3:4:a:am:b:bm:cd:cd-:cd..:cal:i:h:help:hlep:hm:bg:fg:z:c:cat:cta:df:du:hi:hsitory:histroy:history:j:jobs:jbos:l:l.:la:ll:lr:ls:lv:ll.:lla:o:se-o:set-o:no:se+o:set+o:se:set:opt:otp:shopt:shotp:p:pw:pwd:pdw:v:vi:vim:vmi:gv:gvi:gvim:gvmi:x'
 
 # Shell options ~\~1
 shopt -s cdspell
@@ -295,11 +297,14 @@ set -o notify # about terminated jobs
 
 # Programmable completion ~\~1
 complete -A alias          a alias alais unalias
+complete -A binding        b bind bnid
+complete -A command        ? which type
+#complete -A builtin        builtin
 complete -A enabled        builtin
 complete -A export         printenv
 complete -A function       function
 complete -A hostname       rsh rcp telnet rlogin r ftp ping disk ssh
-complete -A user           su mail finger
+complete -A user           chage chfn finger groups mail passwd slay su userdel usermod w write
 complete -A variable       export local readonly unset
 
 complete -A helptopic      h help # Currently, same as builtins.
@@ -320,3 +325,8 @@ complete -f -o default -X '!*.py'  python pyhton
 complete -f -o default -X '!*.rb'  ruby   rbuy
 
 # Source business specific...
+
+complete -W '--noplugins check-update clean deplist erase grouperase groupinfo
+groupinstall grouplist groupremove groupupdate info install list localinstall
+localupdate makecache provides remove repolist resolvedep search shell update
+upgrade whatprovides' yum
