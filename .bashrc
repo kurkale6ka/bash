@@ -1,3 +1,8 @@
+# Author: Dimitar Dimitrov: mitkofr@yahoo.fr, kurkale6ka
+#
+#    Vim: zR to unfold everything, then :help folding
+# ------------------------------------------------------
+
 # Colors ~\~1
 txt_blk='\e[0;30m' # Black - Regular
 txt_blu='\e[0;34m' # Blue
