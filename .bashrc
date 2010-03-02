@@ -188,6 +188,7 @@ alias  p='ps -aux'
 alias  t=extract
 alias  u=unset
 alias  z=fg
+alias cg=compgen
 alias cm=chmod
 alias ln='ln -s'
 alias mn=mount
@@ -195,6 +196,7 @@ alias pf=printf
 alias pw=pwd
 alias se=set
 alias so=source
+alias to=touch
 alias wc=my_wc
 
 alias  cal='cal -3'
@@ -226,7 +228,12 @@ alias  c=cat
 alias cn='cat -n'
 
 alias     o='set -o'
+alias  se-o='set -o'
 alias set-o='set -o'
+alias    no='set +o'
+alias  se+o='set +o'
+alias set+o='set +o'
+alias   opt=shopt
 
 alias df='df -h'
 alias du='du -h'
@@ -276,7 +283,7 @@ alias pyhton=python
 export CDPATH="$HOME":/cygdrive/c:/cygdrive/d:..:../..:
 export EDITOR=$my_vim
 export GIT_PROXY_COMMAND="$HOME"/.ssh/proxy_cmd_for_github
-export HISTIGNORE='&:..:...:-:1:2:3:4:a:am:b:bm:cd:cd-:cd..:cal:i:h:help:hlep:hm:bg:fg:z:c:cat:cta:df:du:hi:hsitory:histroy:history:j:jobs:jbos:l:l.:la:ll:lr:ls:lv:ll.:lla:o:set-o:se:set:p:pwd:pdw:v:vi:vim:vmi:gv:gvi:gvim:gvmi:x'
+export HISTIGNORE='&:..:...:-:1:2:3:4:a:am:b:bm:cd:cd-:cd..:cal:i:h:help:hlep:hm:bg:fg:z:c:cat:cta:df:du:hi:hsitory:histroy:history:j:jobs:jbos:l:l.:la:ll:lr:ls:lv:ll.:lla:o:se-o:set-o:no:se+o:set+o:se:set:p:pwd:pdw:v:vi:vim:vmi:gv:gvi:gvim:gvmi:x'
 
 # Shell options ~\~1
 shopt -s cdspell
@@ -285,28 +292,29 @@ shopt -s extglob
 set -o notify # about terminated jobs
 
 # Programmable completion ~\~1
-complete -A hostname rsh rcp telnet rlogin r ftp ping disk ssh
-complete -A export   printenv
-complete -A variable export local readonly unset
-complete -A enabled  builtin
-complete -A alias    a alias alais unalias
-complete -A function function
-complete -A user     su mail finger
+complete -A alias          a alias alais unalias
+complete -A enabled        builtin
+complete -A export         printenv
+complete -A function       function
+complete -A hostname       rsh rcp telnet rlogin r ftp ping disk ssh
+complete -A user           su mail finger
+complete -A variable       export local readonly unset
 
 complete -A helptopic      h help # Currently, same as builtins.
-complete -A shopt          shopt
+complete -A job     -P '%' j z fg jobs disown
 complete -A stopped -P '%' bg
-complete -A job -P '%'     j z fg jobs disown
+complete -A setopt         set o se-o set-o no se+o set+o
+complete -A shopt          shopt opt
 
-complete -A directory            md mkdir rd rmdir
-complete -A directory -o default cd
+complete -A directory      cd
+complete -A directory      md mkdir rd rmdir
 
-# Compression
-complete -f -o default -X '!*.+(zip|ZIP|z|Z|gz|GZ|bz2|BZ2)' extract t tar
+# eXclude what not(!) matched by the pattern
+complete -f -o default -X !*.@(zip|ZIP|z|Z|gz|GZ|bz2|BZ2) extract t tar
 
-complete -f -o default -X '!*.pl'  perl   prel
-complete -f -o default -X '!*.php' php    pph
-complete -f -o default -X '!*.py'  python pyhton
-complete -f -o default -X '!*.rb'  ruby   rbuy
+complete -f -o default -X !*.php php    pph
+complete -f -o default -X !*.pl  perl   prel
+complete -f -o default -X !*.py  python pyhton
+complete -f -o default -X !*.rb  ruby   rbuy
 
 # Source business specific...
