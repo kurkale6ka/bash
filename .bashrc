@@ -185,19 +185,20 @@ alias   ..='cd ..'
 alias  ...='cd ../..'
 
 # Help ~\~2
+alias    ap=apropos # makewhatis ?!
 alias     i=info
 alias     m=man
-alias     ?='type -a'
+alias     ?='type -a' # add whereis ?!
 alias which='type -a'
 
 # Misc ~\~2
 alias  e=echo
 alias  f='find . -iname $*'
 alias  j='jobs -l'
-alias  p='ps -aux'
 alias  t=extract
 alias  u=unset
 alias  z=fg
+alias ex=export
 alias cg=compgen
 alias cm=chmod
 alias ln='ln -s'
@@ -211,8 +212,12 @@ alias wc=my_wc
 
 alias shutdown='shutdown -h now'
 
+alias  p='ps -aux'
+alias pg=pgrep
+
 alias  k=kill
 alias ka=killall
+alias pk=pkill
 
 alias  cal='cal -3'
 alias date="date '+%A -%e %B %Y, %H:%M %Z'"
