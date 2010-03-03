@@ -56,7 +56,7 @@ else
     PS1="$title\n$txt_ylw\D{%a} \A $txt_pur\w $txt_red[!\! - %\j]$txt_rst\n\$ "
 fi
 
-# Functions: bak, exit, extract, swap, wc, x ~\~1
+# Functions: ~\~1
 _exit() {
 
     clear
