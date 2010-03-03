@@ -209,6 +209,8 @@ alias so=source
 alias to=touch
 alias wc=my_wc
 
+alias shutdown='shutdown -h now'
+
 alias  k=kill
 alias ka=killall
 
