@@ -302,8 +302,9 @@ alias pyhton=python
 export CDPATH="$HOME":/cygdrive/c:/cygdrive/d:..:../..:
 export EDITOR=$my_vim
 export GIT_PROXY_COMMAND="$HOME"/.ssh/proxy_cmd_for_github
-# -i ignore case, -M ruler, -F quit if 1 screen
-export LESS='-i -M -F' # check prompt options
+# -i ignore case, -M ruler, -F quit if 1 screen, -PM long prompt
+# ?test ok:else:else. The . ends the test
+export LESS='-i -M -F -PM?f%f - :stdin - .?L%L lines, :.?ltL\:%lt:.?pB, %pB\% : .?e(Bottom).%t'
 export HISTIGNORE='&:..:...:-:1:2:3:4:a:am:b:bm:cd:cd-:cd..:cal:i:h:help:hlep:hm:bg:fg:z:c:cat:cta:df:du:hi:hsitory:histroy:history:j:jobs:jbos:l:l.:la:ll:lr:ls:lv:ll.:lla:o:se-o:set-o:no:se+o:set+o:se:set:opt:otp:shopt:shotp:p:pw:pwd:pdw:v:vi:vim:vmi:gv:gvi:gvim:gvmi:x'
 
 # Shell options ~\~1
