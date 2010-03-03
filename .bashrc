@@ -143,7 +143,7 @@ sw() {
 # Usage: bak my_file.c => my_file.c.bak
 bak() { mv -- "$1" "$1".bak; }
 
-# Usage: s old new [optional cmd number in history]
+# Usage: s old new [optional cmd number/string in history]
 s() { fc -s "$1"="$2" "$3"; }
 
 # Aliases ~\~1
@@ -302,6 +302,8 @@ alias pyhton=python
 export CDPATH="$HOME":/cygdrive/c:/cygdrive/d:..:../..:
 export EDITOR=$my_vim
 export GIT_PROXY_COMMAND="$HOME"/.ssh/proxy_cmd_for_github
+# -i ignore case, -M ruler, -F quit if 1 screen
+export LESS='-i -M -F' # check prompt options
 export HISTIGNORE='&:..:...:-:1:2:3:4:a:am:b:bm:cd:cd-:cd..:cal:i:h:help:hlep:hm:bg:fg:z:c:cat:cta:df:du:hi:hsitory:histroy:history:j:jobs:jbos:l:l.:la:ll:lr:ls:lv:ll.:lla:o:se-o:set-o:no:se+o:set+o:se:set:opt:otp:shopt:shotp:p:pw:pwd:pdw:v:vi:vim:vmi:gv:gvi:gvim:gvmi:x'
 
 # Shell options ~\~1
