@@ -1,6 +1,8 @@
 "\e[A": history-search-backward
 "\e[B": history-search-forward
 
+"\ex": kill-whole-line
+
 set show-all-if-ambiguous on
 
 set visible-stats on

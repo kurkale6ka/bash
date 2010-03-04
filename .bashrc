@@ -124,7 +124,7 @@ my_which() {
     fi
 }
 
-# Usage: my_file.c.bak <=> my_file.c
+# Usage: my_file.c~ <=> my_file.c
 sw() {
 
     local tmpfile=tmp.$$
@@ -151,8 +151,8 @@ x() {
     fi
 }
 
-# Usage: bak my_file.c => my_file.c.bak
-bak() { mv -- "$1" "$1".bak; }
+# Usage: bak my_file.c => my_file.c~
+bak() { cp -- "$1" "$1"~; }
 
 # Usage: cg arg - computes a completion list for arg (help complete)
 cg () { compgen -A "$1" | column; }
@@ -179,7 +179,7 @@ alias     gvi=gvim
 
 # List directory contents ~\~2
 alias   l=ls
-alias  ls='ls -F --color=auto --dereference-command-line-symlink-to-dir'
+alias  ls='ls -FB --color=auto --dereference-command-line-symlink-to-dir'
 alias  ll='ls -hl'
 alias  ld='ls -d'
 alias lld='ls -dhl'
@@ -188,6 +188,11 @@ alias ll.='ls -dhl .[^.]*'
 alias  la='ls -A'
 alias lla='ls -Ahl'
 alias  lr='ls -R'
+alias llr='ls -Rhl'
+alias  lk='ls -Sr'
+alias llk='ls -Srl'
+alias  lx='ls -X'
+alias llx='ls -Xl'
 alias  lv="ls|$my_vim -"
 
 # Change directory ~\~2
