@@ -64,16 +64,6 @@ _exit() {
 }
 trap _exit EXIT
 
-my_which() {
-
-    type -a "$1"
-
-    if [[ $(whereis "$1") != *: ]]; then
-
-        whereis "$1"
-    fi
-}
-
 # Usage: t my_archive.tar.gz => my_archive/
 extract() {
 
@@ -96,14 +86,7 @@ extract() {
     fi
 }
 
-# Usage : wc my_file => 124 lines, 578 words and 1654 characters
-my_wc()
-{
-    counts=($(\wc -lwm "$1"))
-    echo "${counts[0]} lines, ${counts[1]} words and ${counts[2]} characters"
-}
-
-# 'help arg' if it is a builtin, 'man arg' elsewise
+# Usage: h arg - 'help arg' if it is a builtin, 'man arg' otherwise
 # If mixing both types, as in 'h [ cat', only 'h [' will show
 h() {
 
@@ -123,16 +106,21 @@ h() {
     fi
 }
 
-# Toggle debugging on/off
-x() {
+# Usage: wc my_file => 124 lines, 578 words and 1654 characters
+my_wc()
+{
+    counts=($(\wc -lwm "$1"))
+    echo "${counts[0]} lines, ${counts[1]} words and ${counts[2]} characters"
+}
 
-    if [[ $- == *x* ]]; then
+# Usage: ? arg - show how arg would be interpreted
+my_which() {
 
-        echo 'debug off'
-        set +o xtrace
-    else
-        echo 'debug on'
-        set -o xtrace
+    type -a "$1"
+
+    if [[ $(whereis "$1") != *: ]]; then
+
+        whereis "$1"
     fi
 }
 
@@ -150,11 +138,27 @@ sw() {
     mv --  $tmpfile "$2"
 }
 
-# Usage: cg blabla - computes all completion words (help complete)
-cg () { compgen -A "$1" | column; }
+# Usage: x - toggle debugging on/off
+x() {
+
+    if [[ $- == *x* ]]; then
+
+        echo 'debug off'
+        set +o xtrace
+    else
+        echo 'debug on'
+        set -o xtrace
+    fi
+}
 
 # Usage: bak my_file.c => my_file.c.bak
 bak() { mv -- "$1" "$1".bak; }
+
+# Usage: cg arg - computes a completion list for arg (help complete)
+cg () { compgen -A "$1" | column; }
+
+# Usage: fr '*.swp' - remove all those files
+fr() { find . -name "$1" -exec rm -i {} +; }
 
 # Usage: s old new [optional cmd number/string in history] (help fc)
 s() { fc -s "$1"="$2" "$3"; }
