@@ -102,7 +102,28 @@ h() {
             help "$@"
         fi
     else
-        man  "$@"
+        man "$@"
+    fi
+}
+
+# Usage: sw my_file.c [my_file.c~] - my_file.c <=> my_file.c~
+# the second arg is optional if it is the same arg with a '~' appended to it
+sw() {
+
+    local tmpfile=tmp.$$
+
+    [[ ! -e $1 ]]            && echo "swap: $1 does not exist" && return 1
+    [[ 2 == $# && ! -e $2 ]] && echo "swap: $2 does not exist" && return 1
+
+    if (( 2 == $# )); then
+
+        mv -- "$1"       $tmpfile
+        mv -- "$2"      "$1"
+        mv --  $tmpfile "$2"
+    else
+        mv -- "$1"       $tmpfile
+        mv -- "$1"~     "$1"
+        mv --  $tmpfile "$1"~
     fi
 }
 
@@ -124,20 +145,6 @@ my_which() {
     fi
 }
 
-# Usage: my_file.c~ <=> my_file.c
-sw() {
-
-    local tmpfile=tmp.$$
-
-    (( 2 != $# )) && echo 'swap: 2 arguments needed' && return 1
-    [[ ! -e $1 ]] && echo "swap: $1 does not exist"  && return 1
-    [[ ! -e $2 ]] && echo "swap: $2 does not exist"  && return 1
-
-    mv -- "$1"       $tmpfile
-    mv -- "$2"      "$1"
-    mv --  $tmpfile "$2"
-}
-
 # Usage: x - toggle debugging on/off
 x() {
 
@@ -157,7 +164,7 @@ bak() { cp -- "$1" "$1"~; }
 # Usage: cg arg - computes a completion list for arg (help complete)
 cg () { compgen -A "$1" | column; }
 
-# Usage: fr '*.swp' - remove all those files
+# Usage: fr '*~' - remove all those files
 fr() { find . -name "$1" -exec rm -i {} +; }
 
 # Usage: s old new [optional cmd number/string in history] (help fc)
@@ -183,7 +190,7 @@ alias  ls='ls -FB --color=auto --dereference-command-line-symlink-to-dir'
 alias  ll='ls -hl'
 alias  ld='ls -d'
 alias lld='ls -dhl'
-alias  l.='ls -d  .[^.]*'
+alias  l.='ls -d .[^.]*'
 alias ll.='ls -dhl .[^.]*'
 alias  la='ls -A'
 alias lla='ls -Ahl'
@@ -219,18 +226,26 @@ alias  e=echo
 alias  f='find . -iname $*'
 alias  j='jobs -l'
 alias  t=extract
-alias  u=unset
 alias  z=fg
 alias ex=export
 alias cm=chmod
 alias ln='ln -s'
-alias mn=mount
 alias pf=printf
 alias pw=pwd
-alias se=set
 alias so=source
 alias to=touch
 alias wc=my_wc
+
+alias ag='alias|grep'
+alias am="alias|$my_vim -"
+alias  a=alias
+alias ua=unalias
+
+alias se=set
+alias  u=unset
+
+alias  mn=mount
+alias umn=umount
 
 alias shutdown='shutdown -h now'
 
@@ -250,11 +265,6 @@ alias grep='grep -i --color'
 alias less="$my_vim -"
 alias more="$my_vim -"
 alias mo=more
-
-alias  a=alias
-alias ag='alias|grep'
-alias am="alias|$my_vim -"
-alias ua=unalias
 
 alias  b='bind -p'
 alias bg='bind -p|grep'
