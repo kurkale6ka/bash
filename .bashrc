@@ -161,8 +161,8 @@ x() {
 # Usage: bak my_file.c => my_file.c~
 bak() { cp -- "$1" "$1"~; }
 
-# Usage: cg arg - computes a completion list for arg (help complete)
-cg () { compgen -A "$1" | column; }
+# Usage: cl arg - computes a completion list for arg (help complete)
+cl () { compgen -A "$1" | column; }
 
 # Usage: fr '*~' - remove all those files
 fr() { find . -name "$1" -exec rm -i {} +; }
@@ -172,14 +172,6 @@ s() { fc -s "$1"="$2" "$3"; }
 
 # Usage: warn 'message' - print a message to stderr
 warn() { echo "$@" >&2; }
-
-# Usage: some_command || die "message"
-die() {
-
-    local status="$?"
-    warn "$@"
-    exit "$status"
-}
 
 # Aliases ~\~1
 
@@ -232,19 +224,23 @@ alias ap=apropos
 alias mw=makewhatis
 
 # Misc ~\~2
-alias   e=echo
-alias   f='find . -iname $*'
-alias   j='jobs -l'
-alias   t=extract
-alias   z=fg
-alias  ex=export
-alias  cm=chmod
-alias  ln='ln -s'
-alias  pf=printf
-alias  pw=pwd
-alias  so=source
-alias  to=touch
-alias cmd=command
+alias     e=echo
+alias     f='find . -iname "$@"'
+alias     j='jobs -l'
+alias     t=extract
+alias     z=fg
+alias    ej=eject
+alias    en=enable
+alias    ex=export
+alias    ln='ln -s'
+alias    pf=printf
+alias    pw=pwd
+alias    so=source
+alias    to=touch
+alias   cmd=command
+alias   msg=dmsg
+alias  whoi=whoami
+alias uname='uname -a' # function? os() - print all sys info...
 
 alias ag='alias|grep'
 alias am="alias|$my_vim -"
@@ -257,9 +253,14 @@ alias  u=unset
 alias  mn=mount
 alias umn=umount
 
+alias cg=chgrp
+alias cm=chmod
+alias co=chown
+alias cr=chroot
+
 alias shutdown='shutdown -h now'
 
-alias  p='ps -aux'
+alias ps='ps -aux'
 alias pg=pgrep
 
 alias  k=kill
@@ -267,6 +268,7 @@ alias ka=killall
 alias pk=pkill
 
 alias  cal='cal -3'
+alias call='cal -y'
 alias date="date '+%A -%e %B %Y, %H:%M %Z'"
 
 alias    g=grep
@@ -284,8 +286,9 @@ alias  hi=history
 alias  hm="history|$my_vim -"
 alias hgg='history|grep' # because of mercurial
 
-alias    n=nslookup
-alias ping='ping -c3'
+alias d=dig
+alias n=nslookup
+alias p='ping -c3'
 
 alias  c=cat
 alias cn='cat -n'
@@ -394,7 +397,7 @@ complete -f -o default -X '!*.rb'  ruby   rbuy
 
 complete -W 'alias arrayvar binding builtin command directory disabled enabled
 export file function group helptopic hostname job keyword running service
-setopt shopt signal stopped user variable' cg compgen
+setopt shopt signal stopped user variable' cl compgen
 
 # Source business specific...
 
