@@ -162,7 +162,7 @@ x() {
 bak() { cp -- "$1" "$1"~; }
 
 # Usage: cl arg - computes a completion list for arg (help complete)
-cl () { compgen -A "$1" | column; }
+cl () { compgen -A "$1" | column; } # pb with cl job!
 
 # Usage: fr '*~' - remove all those files
 fr() { find . -name "$1" -exec rm -i {} +; }
@@ -260,7 +260,7 @@ alias cr=chroot
 
 alias shutdown='shutdown -h now'
 
-alias ps='ps -aux'
+alias ps='ps -ef'
 alias pg=pgrep
 
 alias  k=kill
@@ -278,9 +278,9 @@ alias less="$my_vim -"
 alias more="$my_vim -"
 alias mo=more
 
-alias  b='bind -p'
-alias bg='bind -p|grep'
-alias bm="bind -p|$my_vim -"
+alias   b='bind -p'
+alias bgg='bind -p|grep'
+alias  bm="bind -p|$my_vim -"
 
 alias  hi=history
 alias  hm="history|$my_vim -"
