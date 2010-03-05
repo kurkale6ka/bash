@@ -67,8 +67,8 @@ trap _exit EXIT
 # Usage: t my_archive.tar.gz => my_archive/
 extract() {
 
-    if [[ -f $1 ]]
-    then
+    if [[ -f $1 ]]; then
+
         case "$1" in
             *.tar.gz|*.tgz)   tar zxvf   "$1" ;;
             *.tar.bz2|*.tbz2) tar jxvf   "$1" ;;
@@ -79,10 +79,10 @@ extract() {
             *.rar)            unrar x    "$1" ;;
             *.Z)              uncompress "$1" ;;
             *.7z)             7z x       "$1" ;;
-            *)                echo "'$1' cannot be extracted via extract" ;;
+            *)                warn "'$1' cannot be extracted via extract" ;;
         esac
     else
-        echo "'$1' is not a valid file"
+        warn "'$1' is not a valid file"
     fi
 }
 
@@ -110,10 +110,10 @@ h() {
 # the second arg is optional if it is the same arg with a '~' appended to it
 sw() {
 
-    local tmpfile=tmp.$$
+    [[ ! -e $1 ]]            && warn "swap: $1 does not exist" && return 1
+    [[ 2 == $# && ! -e $2 ]] && warn "swap: $2 does not exist" && return 1
 
-    [[ ! -e $1 ]]            && echo "swap: $1 does not exist" && return 1
-    [[ 2 == $# && ! -e $2 ]] && echo "swap: $2 does not exist" && return 1
+    local tmpfile=tmp.$$
 
     if (( 2 == $# )); then
 
@@ -128,14 +128,14 @@ sw() {
 }
 
 # Usage: wc my_file => 124 lines, 578 words and 1654 characters
-my_wc()
+wc()
 {
-    counts=($(\wc -lwm "$1"))
+    counts=($(command wc -lwm "$1"))
     echo "${counts[0]} lines, ${counts[1]} words and ${counts[2]} characters"
 }
 
 # Usage: ? arg - show how arg would be interpreted
-my_which() {
+which() {
 
     type -a "$1"
 
@@ -169,6 +169,17 @@ fr() { find . -name "$1" -exec rm -i {} +; }
 
 # Usage: s old new [optional cmd number/string in history] (help fc)
 s() { fc -s "$1"="$2" "$3"; }
+
+# Usage: warn 'message' - print a message to stderr
+warn() { echo "$@" >&2; }
+
+# Usage: some_command || die "message"
+die() {
+
+    local status="$?"
+    warn "$@"
+    exit "$status"
+}
 
 # Aliases ~\~1
 
@@ -214,27 +225,26 @@ alias   ..='cd ..'
 alias  ...='cd ../..'
 
 # Help ~\~2
-alias     ?=my_which
-alias which=my_which
-alias     i=info
-alias     m=man
-alias    ap=apropos
-alias    mw=makewhatis
+alias  ?=which
+alias  i=info
+alias  m=man
+alias ap=apropos
+alias mw=makewhatis
 
 # Misc ~\~2
-alias  e=echo
-alias  f='find . -iname $*'
-alias  j='jobs -l'
-alias  t=extract
-alias  z=fg
-alias ex=export
-alias cm=chmod
-alias ln='ln -s'
-alias pf=printf
-alias pw=pwd
-alias so=source
-alias to=touch
-alias wc=my_wc
+alias   e=echo
+alias   f='find . -iname $*'
+alias   j='jobs -l'
+alias   t=extract
+alias   z=fg
+alias  ex=export
+alias  cm=chmod
+alias  ln='ln -s'
+alias  pf=printf
+alias  pw=pwd
+alias  so=source
+alias  to=touch
+alias cmd=command
 
 alias ag='alias|grep'
 alias am="alias|$my_vim -"
@@ -301,48 +311,49 @@ alias md='mkdir -p'
 alias rd=rmdir
 
 # Spelling typos ~\~2
+alias      akw=awk
+alias    alais=alias
 alias      bka=bak
-alias      cta=cat
-alias      mna=man
-alias      otp=opt
-alias    shotp=shopt
-alias      pdw=pwd
 alias     bnid=bind
+alias      cdm=cmd
+alias      cta=cat
 alias     ehco=echo
+alias   exprot=export
+alias     gerp=grep
+alias    gveiw=gview
+alias     gvmi=gvim
+alias  histroy=history
 alias     hlep=help
+alias  hsitory=history
 alias     jbos=jobs
 alias     klil=kill
+alias      mna=man
 alias     mroe=more
+alias      otp=opt
+alias      pdw=pwd
 alias     pnig=ping
-alias     tpye=type
-alias    alais=alias
-alias    wihch=which
-alias   exprot=export
-alias  histroy=history
-alias  hsitory=history
+alias      pph=php
+alias     prel=perl
+alias   pyhton=python
+alias     rbuy=ruby
+alias      sde=sed
+alias    shotp=shopt
 alias snlookup=nslookup
-# Vim
-alias   vmi=vim
-alias  gvmi=gvim
-alias  veiw=view
-alias gveiw=gview
-# languages and tools
-alias    akw=awk
-alias    pph=php
-alias    sde=sed
-alias   gerp=grep
-alias   prel=perl
-alias   rbuy=ruby
-alias pyhton=python
+alias     tpye=type
+alias     veiw=view
+alias      vmi=vim
+alias    wihch=which
 # ~/~2
 
 # Vars ~\~1
 export CDPATH="$HOME":/cygdrive/c:/cygdrive/d:..:../..:
 export EDITOR=$my_vim
 export GIT_PROXY_COMMAND="$HOME"/.ssh/proxy_cmd_for_github
+
 # -i ignore case, -M ruler, -F quit if 1 screen, -PM long prompt
 # ?test ok:else:else. The . ends the test
 export LESS='-i -M -F -PM?f%f - :.?L%L lines, :.?ltL\:%lt:.?pB, %pB\% : .?e(Bottom)%t'
+
 export HISTIGNORE='&:..:...:-:1:2:3:4:a:am:b:bm:cd:cd-:cd..:cal:i:h:help:hlep:hm:bg:fg:z:c:cat:cta:df:du:hi:hsitory:histroy:history:j:jobs:jbos:l:l.:la:ll:lr:ls:lv:ll.:lla:o:se-o:set-o:no:se+o:set+o:se:set:opt:otp:shopt:shotp:p:pw:pwd:pdw:v:vi:vim:vmi:gv:gvi:gvim:gvmi:x'
 
 # Shell options ~\~1
@@ -373,7 +384,7 @@ complete -A shopt          shopt opt
 complete -A directory      cd
 complete -A directory      md mkdir rd rmdir
 
-# eXclude what not(!) matched by the pattern
+# eXclude what is not(!) matched by the pattern
 complete -f -o default -X '!*.@(zip|ZIP|z|Z|gz|GZ|bz2|BZ2)' extract t tar
 
 complete -f -o default -X '!*.php' php    pph
