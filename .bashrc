@@ -45,15 +45,15 @@ txt_rst='\e[0m'    # Text Reset
 # PS1 and title ~\~1
 clear
 
-title="\e]0;\D{%e %B %Y}, bash $BASH_VERSION on $TERM, [\u@\H]\a"
+title="\e]2;\D{%e %B %Y}, bash $BASH_VERSION on $TERM, [\u@\H]\a" # \e]2; TITLE \a
 
 if (( 0 == UID )); then
 
     echo 'Hi root'
-    PS1="$title\n$txt_red\D{%a} \A \w [!\! - %\j]\n# $txt_rst"
+    PS1="$title\n\[$txt_red\]\D{%a} \A \w [!\! - %\j]\n# \[$txt_rst\]"
 else
     echo 'Hi kurkale6ka'
-    PS1="$title\n$txt_ylw\D{%a} \A $txt_pur\w $txt_red[!\! - %\j]$txt_rst\n\$ "
+    PS1="$title\n\[$txt_ylw\]\D{%a} \A \[$txt_pur\]\w \[$txt_red\][!\! - %\j]\[$txt_rst\]\n\$ "
 fi
 
 # Functions ~\~1
@@ -110,8 +110,8 @@ h() {
 # the second arg is optional if it is the same arg with a '~' appended to it
 sw() {
 
-    [[ ! -e $1 ]]            && warn "swap: $1 does not exist" && return 1
-    [[ 2 == $# && ! -e $2 ]] && warn "swap: $2 does not exist" && return 1
+    [[ ! -e $1 ]]            && warn "file '$1' does not exist" && return 1
+    [[ 2 == $# && ! -e $2 ]] && warn "file '$2' does not exist" && return 1
 
     local tmpfile=tmp.$$
 
