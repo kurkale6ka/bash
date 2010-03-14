@@ -97,7 +97,7 @@ h() {
         if [[ "$*" == *[* && "$*" != *[[* || "$*" == *test* ]]; then
 
             # If I ask for [ or test, I want them both
-            help [ test | $my_vim -
+            help [ test | $MY_VIM -
         else
             help "$@"
         fi
@@ -176,34 +176,34 @@ warn() { echo "$@" >&2; }
 # Aliases ~\~1
 
 # Vim ~\~2
-#my_vim=vimx
-my_vim='gvim -v'
-alias       v="$my_vim"
-alias      vi="$my_vim"
-alias     vim="$my_vim"
-alias    view="$my_vim -R"
-alias      vd="$my_vim -d"
-alias vimdiff="$my_vim -d"
+#export MY_VIM=vimx
+export MY_VIM='gvim -v'
+alias       v="$MY_VIM"
+alias      vi="$MY_VIM"
+alias     vim="$MY_VIM"
+alias    view="$MY_VIM -R"
+alias      vd="$MY_VIM -d"
+alias vimdiff="$MY_VIM -d"
 alias      gv=gvim
 alias     gvi=gvim
 
 # List directory contents ~\~2
 alias   l=ls
 alias  ls='ls -FB --color=auto --dereference-command-line-symlink-to-dir'
-alias  ll='ls -hl'
+alias  ll='ls -hl --time-style="+(%d/%m/%Y - %H:%M)"'
 alias  ld='ls -d'
-alias lld='ls -dhl'
+alias lld='ls -dhl --time-style="+(%d/%m/%Y - %H:%M)"'
 alias  l.='ls -d .[^.]*'
-alias ll.='ls -dhl .[^.]*'
+alias ll.='ls -dhl --time-style="+(%d/%m/%Y - %H:%M)" .[^.]*'
 alias  la='ls -A'
-alias lla='ls -Ahl'
+alias lla='ls -Ahl --time-style="+(%d/%m/%Y - %H:%M)"'
 alias  lr='ls -R'
-alias llr='ls -Rhl'
+alias llr='ls -Rhl --time-style="+(%d/%m/%Y - %H:%M)"'
 alias  lk='ls -Sr'
-alias llk='ls -Srl'
+alias llk='ls -Srl --time-style="+(%d/%m/%Y - %H:%M)"'
 alias  lx='ls -X'
-alias llx='ls -Xl'
-alias  lv="ls|$my_vim -"
+alias llx='ls -Xl --time-style="+(%d/%m/%Y - %H:%M)"'
+alias  lv="ls|$MY_VIM -"
 
 # Change directory ~\~2
 alias  cd-='cd -'
@@ -236,14 +236,19 @@ alias    ln='ln -s'
 alias    pf=printf
 alias    pw=pwd
 alias    so=source
+alias  env-='env -i'
 alias    to=touch
 alias   cmd=command
 alias   msg=dmsg
 alias  whoi=whoami
 alias uname='uname -a' # function? os() - print all sys info...
 
+alias pl=perl
+alias py=python
+alias rb=ruby
+
 alias ag='alias|grep'
-alias am="alias|$my_vim -"
+alias am="alias|$MY_VIM -"
 alias  a=alias
 alias ua=unalias
 
@@ -255,6 +260,7 @@ alias umn=umount
 
 alias cg=chgrp
 alias cm=chmod
+alias cx='chmod u+x'
 alias co=chown
 alias cr=chroot
 
@@ -269,21 +275,21 @@ alias pk=pkill
 
 alias  cal='cal -3'
 alias call='cal -y'
-alias date="date '+%A -%e %B %Y, %H:%M %Z'"
+alias date="date '+%d %B %Y, %H:%M %Z (%A)'"
 
 alias    g=grep
 alias grep='grep -i --color'
 
-alias less="$my_vim -"
-alias more="$my_vim -"
+alias less="$MY_VIM -"
+alias more="$MY_VIM -"
 alias mo=more
 
 alias   b='bind -p'
 alias bgg='bind -p|grep'
-alias  bm="bind -p|$my_vim -"
+alias  bm="bind -p|$MY_VIM -"
 
 alias  hi=history
-alias  hm="history|$my_vim -"
+alias  hm="history|$MY_VIM -"
 alias hgg='history|grep' # because of mercurial
 
 alias d=dig
@@ -350,7 +356,7 @@ alias    wihch=which
 
 # Vars ~\~1
 export CDPATH="$HOME":/cygdrive/c:/cygdrive/d:..:../..:
-export EDITOR=$my_vim
+export EDITOR=$MY_VIM
 export GIT_PROXY_COMMAND="$HOME"/.ssh/proxy_cmd_for_github
 
 # -i ignore case, -M ruler, -F quit if 1 screen, -PM long prompt
@@ -391,9 +397,9 @@ complete -A directory      md mkdir rd rmdir
 complete -f -o default -X '!*.@(zip|ZIP|z|Z|gz|GZ|bz2|BZ2)' extract t tar
 
 complete -f -o default -X '!*.php' php    pph
-complete -f -o default -X '!*.pl'  perl   prel
-complete -f -o default -X '!*.py'  python pyhton
-complete -f -o default -X '!*.rb'  ruby   rbuy
+complete -f -o default -X '!*.pl'  perl   prel   pl
+complete -f -o default -X '!*.py'  python pyhton py
+complete -f -o default -X '!*.rb'  ruby   rbuy   rb
 
 complete -W 'alias arrayvar binding builtin command directory disabled enabled
 export file function group helptopic hostname job keyword running service
