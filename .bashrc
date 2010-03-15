@@ -278,7 +278,7 @@ alias call='cal -y'
 alias date="date '+%d %B %Y, %H:%M %Z (%A)'"
 
 alias    g=grep
-alias grep='grep -i --color'
+alias grep='grep -iE --color' # E for ERE
 
 alias less="$MY_VIM -"
 alias more="$MY_VIM -"
