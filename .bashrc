@@ -199,25 +199,25 @@ alias  la='ls -A'
 alias lla='ls -Ahl --time-style="+(%d/%m/%Y - %H:%M)"'
 alias  lr='ls -R'
 alias llr='ls -Rhl --time-style="+(%d/%m/%Y - %H:%M)"'
-alias  lk='ls -Sr'
-alias llk='ls -Srhl --time-style="+(%d/%m/%Y - %H:%M)"'
+alias  lk='ls -S'
+alias llk='ls -Shl --time-style="+(%d/%m/%Y - %H:%M)"'
 alias  lx='ls -X'
 alias llx='ls -Xhl --time-style="+(%d/%m/%Y - %H:%M)"'
 alias  lv="ls|$MY_VIM -"
 
-lc() { echo -n 'Sorted by change date: '; ls -tc; }
+lc() { echo -e "${und_pur}Sorted by change date:$txt_rst "; ls -tc; }
 
 llc() {
 
-    echo -n 'Sorted by change date: '
+    echo -en "${und_pur}Sorted by change date:$txt_rst "
     ls -tchl --time-style='+(%d/%m/%Y - %H:%M)'
 }
 
-lu() { echo -n 'Sorted by access date: '; ls -tu; }
+lu() { echo -e "${und_pur}Sorted by access date:$txt_rst "; ls -tu; }
 
 llu() {
 
-    echo -n 'Sorted by access date: '
+    echo -en "${und_pur}Sorted by access date:$txt_rst "
     ls -tuhl --time-style='+(%d/%m/%Y - %H:%M)'
 }
 
