@@ -161,13 +161,13 @@ x() {
 # Usage: bak my_file.c => my_file.c~
 bak() { cp -- "$1" "$1"~; }
 
-# Usage: cl arg - computes a completion list for arg (help complete)
-cl () { compgen -A "$1" | column; } # pb with cl job!
+# Usage: cl arg - computes a completion list for arg (pb with cl job!)
+cl () { compgen -A "$1" | column; }
 
 # Usage: fr '*~' - remove all those files
 fr() { find . -name "$1" -exec rm -i {} +; }
 
-# Usage: s old new [optional cmd number/string in history] (help fc)
+# Usage: s old new [optional cmd number/string in history]
 s() { fc -s "$1"="$2" "$3"; }
 
 # Usage: warn 'message' - print a message to stderr
@@ -200,10 +200,26 @@ alias lla='ls -Ahl --time-style="+(%d/%m/%Y - %H:%M)"'
 alias  lr='ls -R'
 alias llr='ls -Rhl --time-style="+(%d/%m/%Y - %H:%M)"'
 alias  lk='ls -Sr'
-alias llk='ls -Srl --time-style="+(%d/%m/%Y - %H:%M)"'
+alias llk='ls -Srhl --time-style="+(%d/%m/%Y - %H:%M)"'
 alias  lx='ls -X'
-alias llx='ls -Xl --time-style="+(%d/%m/%Y - %H:%M)"'
+alias llx='ls -Xhl --time-style="+(%d/%m/%Y - %H:%M)"'
 alias  lv="ls|$MY_VIM -"
+
+lc() { echo -n 'Sorted by change date: '; ls -tc; }
+
+llc() {
+
+    echo -n 'Sorted by change date: '
+    ls -tchl --time-style='+(%d/%m/%Y - %H:%M)'
+}
+
+lu() { echo -n 'Sorted by access date: '; ls -tu; }
+
+llu() {
+
+    echo -n 'Sorted by access date: '
+    ls -tuhl --time-style='+(%d/%m/%Y - %H:%M)'
+}
 
 # Change directory ~\~2
 alias  cd-='cd -'
