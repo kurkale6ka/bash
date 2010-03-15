@@ -206,6 +206,8 @@ alias llx='ls -Xhl --time-style="+(%d/%m/%Y - %H:%M)"'
 alias  lv="ls|$MY_VIM -"
 
 lc() { echo -e "${und_pur}Sorted by change date:$txt_rst "; ls -tc; }
+lm() { echo -e "${und_pur}Sorted by modification date:$txt_rst "; ls -t; }
+lu() { echo -e "${und_pur}Sorted by access date:$txt_rst "; ls -tu; }
 
 llc() {
 
@@ -213,7 +215,11 @@ llc() {
     ls -tchl --time-style='+(%d/%m/%Y - %H:%M)'
 }
 
-lu() { echo -e "${und_pur}Sorted by access date:$txt_rst "; ls -tu; }
+llm() {
+
+    echo -en "${und_pur}Sorted by modification date:$txt_rst "
+    ls -thl --time-style='+(%d/%m/%Y - %H:%M)'
+}
 
 llu() {
 
