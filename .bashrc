@@ -10,10 +10,11 @@ txt_cyn='\e[0;36m' # Cyan
 txt_grn='\e[0;32m' # Green
 txt_pur='\e[0;35m' # Purple
 txt_red='\e[0;31m' # Red
-txt_wht='\e[0;37m' # White
+txt_wht='\e[0;37m' # light grey !
 txt_ylw='\e[0;33m' # Yellow
 #--------------------------------------
-bld_blk='\e[1;30m' # Black - Bold
+bld_blk='\e[1m'    # Black - Bold
+bld_gry='\e[1;30m' # Grey
 bld_blu='\e[1;34m' # Blue
 bld_cyn='\e[1;36m' # Cyan
 bld_grn='\e[1;32m' # Green
