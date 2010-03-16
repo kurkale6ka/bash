@@ -68,23 +68,29 @@ trap _exit EXIT
 # Usage: t my_archive.tar.gz => my_archive/
 extract() {
 
-    if [[ -f $1 ]]; then
+    for arg in "$@"; do
 
-        case "$1" in
-            *.tar.gz|*.tgz)   tar zxvf   "$1" ;;
-            *.tar.bz2|*.tbz2) tar jxvf   "$1" ;;
-            *.tar)            tar xvf    "$1" ;;
-            *.bz2)            bunzip2    "$1" ;;
-            *.gz)             gunzip     "$1" ;;
-            *.zip)            unzip      "$1" ;;
-            *.rar)            unrar x    "$1" ;;
-            *.Z)              uncompress "$1" ;;
-            *.7z)             7z x       "$1" ;;
-            *)                warn "'$1' cannot be extracted via extract" ;;
-        esac
-    else
-        warn "'$1' is not a valid file"
-    fi
+        if [[ -f $arg ]]; then
+
+            case "$arg" in
+
+                *.tar.gz|*.tgz)   tar zxvf   "$arg" ;;
+                *.tar.bz2|*.tbz2) tar jxvf   "$arg" ;;
+                *.tar)            tar xvf    "$arg" ;;
+                *.bz2)            bunzip2    "$arg" ;;
+                *.gz)             gunzip     "$arg" ;;
+                *.zip)            unzip      "$arg" ;;
+                *.rar)            unrar x    "$arg" ;;
+                *.Z)              uncompress "$arg" ;;
+                *.7z)             7z x       "$arg" ;;
+
+                *) warn "'$arg' cannot be extracted via extract" ;;
+            esac
+        else
+            warn "'$arg' is not a valid file"
+        fi
+
+    done
 }
 
 # Usage: h arg - 'help arg' if it is a builtin, 'man arg' otherwise
@@ -131,19 +137,29 @@ sw() {
 # Usage: wc my_file => 124 lines, 578 words and 1654 characters
 wc() {
 
-    counts=($(command wc -lwm "$1"))
-    echo "${counts[0]} lines, ${counts[1]} words and ${counts[2]} characters"
+    for arg in "$@"; do
+
+        counts=($(command wc -lwm "$arg"))
+        echo "${counts[0]} lines, ${counts[1]} words and ${counts[2]} characters"
+
+    done
 }
 
 # Usage: ? arg - show how arg would be interpreted
 _which() {
 
-    type -a "$1"
+    for arg in "$@"; do
 
-    if [[ $(whereis "$1") != *: ]]; then
+        type -a "$arg"
 
-        whereis "$1"
-    fi
+        if [[ $(whereis "$arg") != *: ]]; then
+
+            whereis "$arg"
+        fi
+
+        echo
+
+    done
 }
 
 # Usage: x - toggle debugging on/off
@@ -160,13 +176,21 @@ x() {
 }
 
 # Usage: bak my_file.c => my_file.c~
-bak() { cp -- "$1" "$1"~; }
+bak() { for arg; do cp -- "$arg" "$arg"~; done; }
 
 # Usage: cl arg - computes a completion list for arg (pb with cl job!)
 cl() { compgen -A "$1" | column; }
 
 # Usage: fr '*~' - remove all those files
-fr() { find . -name "$1" -exec rm -i {} +; }
+fr() {
+
+    if (( 0 == $# )); then
+
+        warn "Usage: $FUNCNAME '*~'"
+    else
+        find . -name "$1" -exec rm -i {} +
+    fi
+}
 
 # Usage: s old new [optional cmd number/string in history]
 s() { fc -s "$1"="$2" "$3"; }
