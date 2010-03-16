@@ -129,14 +129,14 @@ sw() {
 }
 
 # Usage: wc my_file => 124 lines, 578 words and 1654 characters
-wc()
-{
+wc() {
+
     counts=($(command wc -lwm "$1"))
     echo "${counts[0]} lines, ${counts[1]} words and ${counts[2]} characters"
 }
 
 # Usage: ? arg - show how arg would be interpreted
-which() {
+_which() {
 
     type -a "$1"
 
@@ -163,7 +163,7 @@ x() {
 bak() { cp -- "$1" "$1"~; }
 
 # Usage: cl arg - computes a completion list for arg (pb with cl job!)
-cl () { compgen -A "$1" | column; }
+cl() { compgen -A "$1" | column; }
 
 # Usage: fr '*~' - remove all those files
 fr() { find . -name "$1" -exec rm -i {} +; }
@@ -240,7 +240,8 @@ alias   ..='cd ..'
 alias  ...='cd ../..'
 
 # Help ~\~2
-alias  ?=which
+alias which=_which
+alias  ?=_which
 alias  i=info
 alias  m=man
 alias ap=apropos
@@ -374,7 +375,7 @@ alias snlookup=nslookup
 alias     tpye=type
 alias     veiw=view
 alias      vmi=vim
-alias    wihch=which
+alias    wihch=_which
 # ~/~2
 
 # Vars ~\~1
