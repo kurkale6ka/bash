@@ -176,12 +176,6 @@ x() {
     fi
 }
 
-# Usage: bak my_file.c => my_file.c~
-bak() { for arg; do cp -- "$arg" "$arg"~; done; }
-
-# Usage: cl arg - computes a completion list for arg (pb with cl job!)
-cl() { compgen -A "$1" | column; }
-
 # Usage: fr '*~' - remove all those files
 fr() {
 
@@ -192,6 +186,12 @@ fr() {
         find . -name "$1" -exec rm -i {} +
     fi
 }
+
+# Usage: bak my_file.c => my_file.c~
+bak() { for arg; do cp -- "$arg" "$arg"~; done; }
+
+# Usage: cl arg - computes a completion list for arg (pb with cl job!)
+cl() { compgen -A "$1" | column; }
 
 # Usage: s old new [optional cmd number/string in history]
 s() { fc -s "$1"="$2" "$3"; }
@@ -266,11 +266,11 @@ alias  ...='cd ../..'
 
 # Help ~\~2
 alias which=_which
-alias  ?=_which
-alias  i=info
-alias  m=man
-alias ap=apropos
-alias mw=makewhatis
+alias     ?=_which
+alias     i=info
+alias     m=man
+alias    ap=apropos
+alias    mw=makewhatis
 
 # Misc ~\~2
 alias     e=echo
