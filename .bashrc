@@ -157,7 +157,8 @@ _which() {
             whereis "$arg"
         fi
 
-        echo
+        (( i++ ))
+        [[ $# > 1 && $i != $# ]] && echo
 
     done
 }
