@@ -259,10 +259,11 @@ alias    ln='ln -s'
 alias    pf=printf
 alias    pw=pwd
 alias    so=source
-alias  env-='env -i'
 alias    to=touch
+alias    tp=tput
 alias   cmd=command
 alias   msg=dmsg
+alias  env-='env -i'
 alias  whoi=whoami
 alias uname='uname -a' # function? os() - print all sys info...
 
