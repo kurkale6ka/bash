@@ -3,45 +3,19 @@
 #    Vim: zR to unfold everything, then :help folding
 # ------------------------------------------------------
 
-# Colors ~\~1
-txt_blk='\e[0;30m' # Black - Regular
-txt_blu='\e[0;34m' # Blue
-txt_cyn='\e[0;36m' # Cyan
-txt_grn='\e[0;32m' # Green
-txt_pur='\e[0;35m' # Purple
-txt_red='\e[0;31m' # Red
-txt_wht='\e[0;37m' # light grey !
-txt_ylw='\e[0;33m' # Yellow
-#--------------------------------------
-bld_blk='\e[1m'    # Black - Bold
-bld_gry='\e[1;30m' # Grey
-bld_blu='\e[1;34m' # Blue
-bld_cyn='\e[1;36m' # Cyan
-bld_grn='\e[1;32m' # Green
-bld_pur='\e[1;35m' # Purple
-bld_red='\e[1;31m' # Red
-bld_wht='\e[1;37m' # White
-bld_ylw='\e[1;33m' # Yellow
-#--------------------------------------
-und_blk='\e[4;30m' # Black - Underline
-und_blu='\e[4;34m' # Blue
-und_cyn='\e[4;36m' # Cyan
-und_grn='\e[4;32m' # Green
-und_pur='\e[4;35m' # Purple
-und_red='\e[4;31m' # Red
-und_wht='\e[4;37m' # White
-und_ylw='\e[4;33m' # Yellow
-#--------------------------------------
-bak_blk='\e[40m'   # Black - Background
-bak_blu='\e[44m'   # Blue
-bak_cyn='\e[46m'   # Cyan
-bak_grn='\e[42m'   # Green
-bak_pur='\e[45m'   # Purple
-bak_red='\e[41m'   # Red
-bak_wht='\e[47m'   # White
-bak_ylw='\e[43m'   # Yellow
-#--------------------------------------
-txt_rst='\e[0m'    # Text Reset
+# Colors: set[af|ab] (ANSI [fore|back]ground) ~\~1
+# black=$(tput setaf 0)
+    red=$(tput setaf 1)
+# green=$(tput setaf 2)
+ yellow=$(tput setaf 3)
+#  blue=$(tput setaf 4)
+magenta=$(tput setaf 5)
+#  cyan=$(tput setaf 6)
+# white=$(tput setaf 7)
+
+#    bold=$(tput bold)
+underline=$(tput smul)
+    reset=$(tput sgr0)
 
 # PS1 and title ~\~1
 clear
@@ -51,17 +25,17 @@ title="\e]2;\D{%e %B %Y}, bash $BASH_VERSION on $TERM, [\u@\H]\a" # \e]2; TITLE 
 if (( 0 == UID )); then
 
     echo 'Hi root'
-    PS1="$title\n\[$txt_red\]\D{%a} \A \w [!\! - %\j]\n# \[$txt_rst\]"
+    PS1="$title\n\[$red\]\D{%a} \A \w [!\! - %\j]\n# \[$reset\]"
 else
     echo 'Hi kurkale6ka'
-    PS1="$title\n\[$txt_ylw\]\D{%a} \A \[$txt_pur\]\w \[$txt_red\][!\! - %\j]\[$txt_rst\]\n\$ "
+    PS1="$title\n\[$yellow\]\D{%a} \A \[$magenta\]\w \[$red\][!\! - %\j]\[$reset\]\n\$ "
 fi
 
 # Functions ~\~1
 _exit() {
 
     clear
-    echo -e "${txt_red}Hasta la vista, baby${txt_rst}"
+    echo -e "${red}Hasta la vista, baby$reset"
 }
 trap _exit EXIT
 
@@ -231,25 +205,25 @@ alias  lx='ls -X'
 alias llx='ls -Xhl --time-style="+(%d/%m/%Y - %H:%M)"'
 alias  lv="ls|$MY_VIM -"
 
-lc() { echo -e "${und_pur}Sorted by change date:$txt_rst "; ls -tc; }
-lm() { echo -e "${und_pur}Sorted by modification date:$txt_rst "; ls -t; }
-lu() { echo -e "${und_pur}Sorted by access date:$txt_rst "; ls -tu; }
+lc() { echo -e "$magenta${underline}Sorted by change date:$reset "; ls -tc; }
+lm() { echo -e "$magenta${underline}Sorted by modification date:$reset "; ls -t; }
+lu() { echo -e "$magenta${underline}Sorted by access date:$reset "; ls -tu; }
 
 llc() {
 
-    echo -en "${und_pur}Sorted by change date:$txt_rst "
+    echo -en "$magenta${underline}Sorted by change date:$reset "
     ls -tchl --time-style='+(%d/%m/%Y - %H:%M)'
 }
 
 llm() {
 
-    echo -en "${und_pur}Sorted by modification date:$txt_rst "
+    echo -en "$magenta${underline}Sorted by modification date:$reset "
     ls -thl --time-style='+(%d/%m/%Y - %H:%M)'
 }
 
 llu() {
 
-    echo -en "${und_pur}Sorted by access date:$txt_rst "
+    echo -en "$magenta${underline}Sorted by access date:$reset "
     ls -tuhl --time-style='+(%d/%m/%Y - %H:%M)'
 }
 
