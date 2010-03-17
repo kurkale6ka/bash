@@ -1,0 +1,59 @@
+#! /usr/bin/env bash
+(IFS=. read -a ip_elements <<< "127.0.0.1"; echo ${ip_elements[*]})
+
+files=()
+while read -r -d $'\0'; do
+    files+=("$REPLY")
+done < <(find /foo -print0)
+
+test_colors() {
+
+    tput bold; echo 'Colors Table:'; tput sgr0
+
+    for el in {0..7}; do
+
+        tput setaf $el; echo -n "${el}- "
+
+        tput bold; echo -n "${el}- "; tput sgr0
+
+        tput setaf $el
+
+        tput smul; echo -n "${el}- "; tput sgr0
+
+        for el2 in {0..7}; do
+
+            tput setaf $el
+
+            tput setab $el2; echo -n "${el}$el2 "
+
+            tput bold; echo -n "${el}$el2 "; tput sgr0
+
+            tput setaf $el
+
+            tput setab $el2
+
+            tput smul; echo -n "${el}$el2 "; tput sgr0
+
+        done
+
+        tput sgr0
+
+        echo
+
+    done
+}
+
+# Usage: L, C (see test_colors()), [weight]
+test_style() {
+
+    [[ $3 == b ]] && tput bold;
+    [[ $3 == r ]] && tput rev;
+    [[ $3 == u ]] && tput smul;
+
+    tput setaf "$1"
+    [[ $2 != - ]] && tput setab "$2"
+
+    echo 'This is an amazing color test!'
+
+    tput sgr0
+}
