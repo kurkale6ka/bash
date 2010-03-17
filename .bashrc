@@ -267,6 +267,9 @@ alias  env-='env -i'
 alias  whoi=whoami
 alias uname='uname -a' # function? os() - print all sys info...
 
+alias gc='git commit -a'
+alias gp='git push origin master'
+
 alias pl=perl
 alias py=python
 alias rb=ruby
