@@ -367,6 +367,7 @@ alias      pdw=pwd
 alias     pnig=ping
 alias      pph=php
 alias     prel=perl
+alias       pt=tput
 alias   pyhton=python
 alias     rbuy=ruby
 alias      sde=sed
@@ -450,6 +451,8 @@ complete -f -o default -X '!*.rb'  ruby   rbuy   rb
 #}
 #
 #complete -o default -F longopts ls git
+
+complete -W 'bold dim rev setab setaf sgr0 smul' tp pt tput
 
 complete -W 'alias arrayvar binding builtin command directory disabled enabled
 export file function group helptopic hostname job keyword running service
