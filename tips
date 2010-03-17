@@ -43,7 +43,7 @@ test_colors() {
     done
 }
 
-# Usage: L, C (see test_colors()), [weight]
+# Usage: L, C (see test_colors()), [face]
 test_style() {
 
     [[ $3 == b ]] && tput bold;
