@@ -139,7 +139,7 @@ wc() {
 
     for arg in "$@"; do
 
-        counts=($(command wc -lwm "$arg"))
+        local counts=($(command wc -lwm "$arg"))
         echo "${counts[0]} lines, ${counts[1]} words and ${counts[2]} characters"
 
     done
@@ -449,6 +449,32 @@ complete -f -o default -X '!*.php' php    pph
 complete -f -o default -X '!*.pl'  perl   prel   pl
 complete -f -o default -X '!*.py'  python pyhton py
 complete -f -o default -X '!*.rb'  ruby   rbuy   rb
+
+#longopts() {
+#
+#    COMP_WORDBREAKS=${COMP_WORDBREAKS/=/}
+#
+#    local cur=${COMP_WORDS[COMP_CWORD]}
+#
+#    [[ ! $cur ]] && return
+#
+#    COMPREPLY=($(
+#
+#    "$1" --help    | grep -oe '--[[:alpha:]][[:alpha:]-]+\[?=?([[:alpha:]-]|_)+\]?' |
+#    grep -e "$cur" | sort -u
+#
+#    ))
+#
+#    for reply in "${COMPREPLY[@]}"; do
+#
+#        if [[ $reply == *[* ]]; then
+#
+#            reply=${reply%]}
+#        fi
+#    done
+#}
+#
+#complete -o default -F longopts ls git
 
 complete -W 'alias arrayvar binding builtin command directory disabled enabled
 export file function group helptopic hostname job keyword running service
