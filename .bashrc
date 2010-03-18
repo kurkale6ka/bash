@@ -258,6 +258,7 @@ alias    ex=export
 alias    ln='ln -s'
 alias    pf=printf
 alias    pw=pwd
+alias    sc=screen
 alias    so=source
 alias    to=touch
 alias    tp=tput
