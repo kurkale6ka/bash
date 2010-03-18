@@ -18,21 +18,26 @@ test_colors() {
 
         tput setaf $el
 
-        tput smul; echo -n "${el}- "; tput sgr0
+        tput smul; echo -n "${el}-"; tput sgr0
+
+        tput setaf $el; echo -n ' '; tput sgr0
 
         for el2 in {0..7}; do
 
             tput setaf $el
-
             tput setab $el2; echo -n "${el}$el2 "
 
             tput bold; echo -n "${el}$el2 "; tput sgr0
 
             tput setaf $el
-
             tput setab $el2
 
-            tput smul; echo -n "${el}$el2 "; tput sgr0
+            tput smul; echo -n "${el}$el2"; tput sgr0
+
+            tput setaf $el
+            tput setab $el2
+
+            echo -n ' '; tput sgr0
 
         done
 
