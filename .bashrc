@@ -264,6 +264,7 @@ alias    to=touch
 alias    tp=tput
 alias   cmd=command
 alias   msg=dmsg
+alias   sed='sed -r' # ERE (Extended regex)
 alias  env-='env -i'
 alias  whoi=whoami
 alias uname='uname -a' # function? os() - print all sys info...
@@ -306,7 +307,7 @@ alias call='cal -y'
 alias date="date '+%d %B %Y, %H:%M %Z (%A)'"
 
 alias    g=grep
-alias grep='grep -iE --color' # E for ERE
+alias grep='grep -iE --color' # ERE (Extended regex)
 
 alias less="$MY_VIM -"
 alias more="$MY_VIM -"
