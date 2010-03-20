@@ -1,0 +1,19 @@
+Bash configuration files:
+
+    .bashrc
+
+    - Colors
+    - PS1
+    - Functions
+    - Aliases
+    - Environment variables
+    - Shell options
+    - Completion
+
+    .inputrc
+
+    GNU Readline settings
+
+Author:
+
+    Dimitar Dimitrov: mitkofr@yahoo.fr, kurkale6ka
