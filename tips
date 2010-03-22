@@ -1,11 +1,21 @@
-#! /usr/bin/env bash
+# 1. =>  #! /usr/bin/env bash
+
+# 2.    VAR=VAL cmd <=>
+#   env VAR=VAL cmd
 (IFS=. read -a ip_elements <<< "127.0.0.1"; echo ${ip_elements[*]})
 
+# 3.
 files=()
 while read -r -d $'\0'; do
     files+=("$REPLY")
 done < <(find /foo -print0)
 
+# 4.
+find . -print0 | while IFS= read -r -d $'\0' file; do
+    mv "$file" "${file// /_}"
+done
+
+# Misc
 test_colors() {
 
     tput bold; echo 'Colors Table:'; tput sgr0
