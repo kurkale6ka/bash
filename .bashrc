@@ -249,7 +249,6 @@ alias    mw=makewhatis
 # Misc ~\~2
 alias     e=echo
 alias     f='find . -iname "$@"'
-alias     j='jobs -l'
 alias     t=extract
 alias     z=fg
 alias    ej=eject
@@ -268,6 +267,9 @@ alias   sed='sed -r' # ERE (Extended regex)
 alias  env-='env -i'
 alias  whoi=whoami
 alias uname='uname -a' # function? os() - print all sys info...
+
+alias     j='jobs -l'
+alias -- --='fg %-'
 
 alias gc='git commit -a'
 alias gp='git push origin master'
