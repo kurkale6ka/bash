@@ -176,8 +176,6 @@ warn() { echo "$@" >&2; }
 # Aliases ~\~1
 
 # Vim ~\~2
-#export MY_VIM=vimx
-export MY_VIM='gvim -v'
 alias       v="$MY_VIM"
 alias      vi="$MY_VIM"
 alias     vim="$MY_VIM"
@@ -385,17 +383,6 @@ alias     veiw=view
 alias      vmi=vim
 alias    wihch=_which
 # ~/~2
-
-# Vars ~\~1
-export CDPATH="$HOME":/cygdrive/c:/cygdrive/d:..:../..:
-export EDITOR=$MY_VIM
-export GIT_PROXY_COMMAND="$HOME"/.ssh/proxy_cmd_for_github
-
-# -i ignore case, -M ruler, -F quit if 1 screen, -PM long prompt
-# ?test ok:else:else. The . ends the test
-export LESS='-i -M -F -PM?f%f - :.?L%L lines, :.?ltL\:%lt:.?pB, %pB\% : .?e(Bottom)%t'
-
-export HISTIGNORE='&:..:...:-:--:1:2:3:4:a:am:b:bm:cd:cd-:cd..:cal:i:h:help:hlep:hm:bg:fg:z:c:cat:cta:df:du:en:env:hi::j:jobs:jbos:l:l.:la:ll:lr:ls:lv:ll.:lla:o:se-o:set-o:no:se+o:set+o:se:set:opt:otp:shopt:shotp:p:pw:pwd:pdw:v:vi:vim:vmi:gc:gp:gv:gvi:gvim:gvmi:su:x'
 
 # Shell options ~\~1
 shopt -s cdspell
