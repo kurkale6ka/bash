@@ -250,7 +250,6 @@ alias     f='find . -iname "$@"'
 alias     t=extract
 alias     z=fg
 alias    ej=eject
-alias    en=enable
 alias    ex=export
 alias    ln='ln -s'
 alias    pf=printf
@@ -265,6 +264,9 @@ alias   sed='sed -r' # ERE (Extended regex)
 alias  env-='env -i'
 alias  whoi=whoami
 alias uname='uname -a' # function? os() - print all sys info...
+
+alias en=enable
+alias di='enable -n'
 
 alias     j='jobs -l'
 alias -- --='fg %-'
