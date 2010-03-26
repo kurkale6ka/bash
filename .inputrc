@@ -1,12 +1,17 @@
+# <up> and <down>
 "\e[A": history-search-backward
 "\e[B": history-search-forward
 
-# Allow the use of the Home/End keys
+# Allow the use of the <Home>/<End> keys
 "\e[1~": beginning-of-line
 "\e[4~": end-of-line
 
+# Alt + x
 "\ex": kill-whole-line
 
-set show-all-if-ambiguous on
-
+# link@, dir/...
 set visible-stats on
+
+set bell-style none
+
+set show-all-if-ambiguous on
