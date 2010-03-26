@@ -411,7 +411,7 @@ complete -A disabled       en enable
 complete -A enabled        di builtin
 complete -A export         printenv
 complete -A function       function
-complete -A hostname       rsh rcp telnet rlogin r ftp ping disk ssh
+complete -A hostname       d dig n nslookup snlookup p ping pnig ssh
 complete -A user           chage chfn finger groups mail passwd slay su userdel usermod w write
 complete -A variable       export local readonly unset
 
