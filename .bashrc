@@ -20,7 +20,10 @@ underline=$(tput smul)
 # PS1 and title ~\~1
 clear
 
-title="\e]2;\D{%e %B %Y}, bash $BASH_VERSION on $TERM, [\u@\H]\a" # \e]2; TITLE \a
+if [[ linux != $TERM ]]; then
+
+    title="\e]2;\D{%e %B %Y}, bash $BASH_VERSION on $TERM, [\u@\H]\a" # \e]2; TITLE \a
+fi
 
 if (( 0 == UID )); then
 
