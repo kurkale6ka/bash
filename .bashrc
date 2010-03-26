@@ -111,12 +111,19 @@ sw() {
 # Usage: wc my_file => 124 lines, 578 words and 1654 characters
 wc() {
 
-    for arg in "$@"; do
+    if [[ 0 == $# ]]; then
 
-        local counts=($(command wc -lwm "$arg"))
-        echo "${counts[0]} lines, ${counts[1]} words and ${counts[2]} characters"
+        find . -exec printf '.' | wc -c
 
-    done
+    else
+
+        for arg in "$@"; do
+
+            local counts=($(command wc -lwm "$arg"))
+            echo "${counts[0]} lines, ${counts[1]} words and ${counts[2]} characters"
+
+        done
+    fi
 }
 
 # Usage: ? arg - show how arg would be interpreted
@@ -397,15 +404,15 @@ set -o notify # about terminated jobs
 complete -A alias          a alias alais unalias
 complete -A binding        b bind bnid
 complete -A command        ? which wihch type tpye
-#complete -A builtin        builtin
-complete -A enabled        builtin
+complete -A disabled       en enable
+complete -A enabled        di builtin
 complete -A export         printenv
 complete -A function       function
 complete -A hostname       rsh rcp telnet rlogin r ftp ping disk ssh
 complete -A user           chage chfn finger groups mail passwd slay su userdel usermod w write
 complete -A variable       export local readonly unset
 
-complete -A helptopic      h help # Currently, same as builtins.
+complete -A helptopic      h help # Currently, same as builtin
 complete -A signal         k kill klil
 complete -A job     -P '%' j z fg jobs disown
 complete -A stopped -P '%' bg
