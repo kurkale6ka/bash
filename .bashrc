@@ -440,29 +440,37 @@ complete -f -o default -X '!*.rb'  ruby   rbuy   rb
 
 longopts() {
 
-    COMP_WORDBREAKS=${COMP_WORDBREAKS/=/}
+    COMP_WORDBREAKS="${COMP_WORDBREAKS/=/}"
 
-    local cur=${COMP_WORDS[COMP_CWORD]}
+    local cur="${COMP_WORDS[COMP_CWORD]}"
 
-    [[ ! $cur ]] && return
+    [[ ! $cur || $cur != -* ]] && return
 
-    COMPREPLY=($(
+    prog="$1"
 
-    "$1" --help    | grep -oe '--[[:alpha:]][[:alpha:]-]+\[?=?([[:alpha:]-]|_)+\]?' |
-    grep -e "$cur" | sort -u
+    [[ $prog == @(v|vmi|gv|gvi|gvmi) ]] && prog=gvim
+    [[ $prog == @(l|ll|ld|lld|l.|ll.|la|lla|lr|llr|lk|llk|lx|llx|lv|lc|llc|lm|llm|lu|llu) ]] && prog=ls
 
+    COMPREPLY=($(\
+    \
+    "$prog" --help |\
+    grep -oe '--[[:alpha:]][[:alpha:]-]+\[?=?([[:alpha:]-]|_)+\]?' |\
+    grep -e "$cur" |\
+    sort -u\
     ))
 
     for i in "${!COMPREPLY[@]}"; do
 
         if [[ ${COMPREPLY[i]} != *[* ]]; then
 
-            COMPREPLY[i]=${COMPREPLY[i]%]}
+            COMPREPLY[i]="${COMPREPLY[i]%]}"
         fi
     done
 }
 
-complete -o default -F longopts ls find git
+# bash, git, ls, vim
+complete -o default -F longopts bash git ls l ll ld lld l. ll. la lla lr llr lk\
+llk lx llx lv lc llc lm llm lu llu v vi vim vmi gv gvi gvim gvmi
 
 complete -W 'bold dim rev setab setaf sgr0 smul' tp pt tput
 
