@@ -116,7 +116,9 @@ wc() {
 
     if [[ 0 == $# ]]; then
 
-        find . -exec printf '.' | wc -c
+        # Find all not dot files (count the number of dots printf prints)
+        # Rem: I must also exclude those: ./.git/file (not a dot file!)
+        find . -name '[!.]*' -exec printf '.' \; | command wc -c
 
     else
 
@@ -128,6 +130,9 @@ wc() {
         done
     fi
 }
+
+alias wcc="find . -exec printf '.' \; | command wc -c"
+alias wc.="find . -name '.*' \! -name '.' -not -name '..' -exec printf '.' ';' | command wc -c"
 
 # Usage: ? arg - show how arg would be interpreted
 _which() {
