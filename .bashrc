@@ -427,7 +427,8 @@ complete -A stopped -P '%' bg
 complete -A setopt         set o se-o set-o no se+o set+o
 complete -A shopt          shopt opt
 
-complete -A directory      cd
+# complete -F _cd            cd
+complete -A directory -u   cd
 complete -A directory      md mkdir rd rmdir
 
 # eXclude what is not(!) matched by the pattern
@@ -438,7 +439,24 @@ complete -f -o default -X '!*.pl'  perl   prel   pl
 complete -f -o default -X '!*.py'  python pyhton py
 complete -f -o default -X '!*.rb'  ruby   rbuy   rb
 
-longopts() {
+# # Completion of directories or user names
+# _cd() {
+#
+#     local cur="${COMP_WORDS[COMP_CWORD]}"
+#
+#     # ex: ~user, not ~/dev
+#     if [[ $2 == ~[!/]* ]]; then
+#
+#         # use find for finding user names ???
+#         COMPREPLY=($(compgen -A user -- "$cur"))
+#     else
+#         COMPREPLY=($(compgen -A directory -- "$cur"))
+#         # combine with find
+#         # IFS=$'\n' read -r -d $'\0' -a myarray < <(find . -type f)
+#     fi
+# }
+
+_longopts() {
 
     COMP_WORDBREAKS="${COMP_WORDBREAKS/=/}"
 
@@ -469,8 +487,8 @@ longopts() {
 }
 
 # bash, git, ls, vim
-complete -o default -F longopts bash git ls l ll ld lld l. ll. la lla lr llr lk\
-llk lx llx lv lc llc lm llm lu llu v vi vim vmi gv gvi gvim gvmi
+complete -o default -F _longopts bash git ls l ll ld lld l. ll. la lla lr llr lk\
+llk lx llx lv lc llc lm llm lu llu v vi vim vmi gv gvi gvim gvmi yum
 
 complete -W 'bold dim rev setab setaf sgr0 smul' tp pt tput
 
