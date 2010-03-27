@@ -438,31 +438,31 @@ complete -f -o default -X '!*.pl'  perl   prel   pl
 complete -f -o default -X '!*.py'  python pyhton py
 complete -f -o default -X '!*.rb'  ruby   rbuy   rb
 
-#longopts() {
-#
-#    COMP_WORDBREAKS=${COMP_WORDBREAKS/=/}
-#
-#    local cur=${COMP_WORDS[COMP_CWORD]}
-#
-#    [[ ! $cur ]] && return
-#
-#    COMPREPLY=($(
-#
-#    "$1" --help    | grep -oe '--[[:alpha:]][[:alpha:]-]+\[?=?([[:alpha:]-]|_)+\]?' |
-#    grep -e "$cur" | sort -u
-#
-#    ))
-#
-#    for reply in "${COMPREPLY[@]}"; do
-#
-#        if [[ $reply == *[* ]]; then
-#
-#            reply=${reply%]}
-#        fi
-#    done
-#}
-#
-#complete -o default -F longopts ls git
+longopts() {
+
+    COMP_WORDBREAKS=${COMP_WORDBREAKS/=/}
+
+    local cur=${COMP_WORDS[COMP_CWORD]}
+
+    [[ ! $cur ]] && return
+
+    COMPREPLY=($(
+
+    "$1" --help    | grep -oe '--[[:alpha:]][[:alpha:]-]+\[?=?([[:alpha:]-]|_)+\]?' |
+    grep -e "$cur" | sort -u
+
+    ))
+
+    for i in "${!COMPREPLY[@]}"; do
+
+        if [[ ${COMPREPLY[i]} != *[* ]]; then
+
+            COMPREPLY[i]=${COMPREPLY[i]%]}
+        fi
+    done
+}
+
+complete -o default -F longopts ls find git
 
 complete -W 'bold dim rev setab setaf sgr0 smul' tp pt tput
 
