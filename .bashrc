@@ -177,8 +177,8 @@ fr() {
 # Usage: bak my_file1.c, my_file2.c => my_file1.c~, my_file2.c~
 bak() { for arg in "$@"; do cp -- "$arg" "$arg"~; done; }
 
-# Usage: cl arg - computes a completion list for arg (pb with cl job!)
-cl() { compgen -A "$1" | column; }
+# Usage: cl arg - computes a completion list for arg
+cl() { column <(compgen -A "$1"); }
 
 # Usage: ee array1, array2 - prints arrays in columns
 ee() {
