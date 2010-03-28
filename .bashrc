@@ -22,7 +22,7 @@ clear
 
 if [[ linux != $TERM ]]; then
 
-    title="\e]2;\D{%e %B %Y}, bash $BASH_VERSION on $TERM, [\u@\H]\a" # \e]2; TITLE \a
+    title="\e]2;\D{%e %B %Y (%A)}, bash $BASH_VERSION on $TERM\a" # \e]2; TITLE \a
 fi
 
 # $(dir=$(dirs +0); echo "${dir/#~/~$LOGNAME}")
@@ -30,10 +30,10 @@ fi
 if (( 0 == UID )); then
 
     echo 'Hi root'
-    PS1="$title\n\[$red\]\D{%a} \A \w [!\! - %\j]\n# \[$reset\]"
+    PS1="$title\n\[$red\][\u@\H] \w (!\! - %\j, \A)\n# \[$reset\]"
 else
     echo 'Hi kurkale6ka'
-    PS1="$title\n\[$yellow\]\D{%a} \A \[$magenta\]\w \[$red\][!\! - %\j]\[$reset\]\n\$ "
+    PS1="$title\n\[$yellow\][\u@\H] \[$magenta\]\w \[$red\](!\! - %\j, \A)\[$reset\]\n\$ "
 fi
 
 # Functions ~\~1
