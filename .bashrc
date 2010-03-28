@@ -441,8 +441,9 @@ complete -A stopped -P '%' bg
 complete -A setopt         set o se-o set-o no se+o set+o
 complete -A shopt          shopt opt
 
-complete -F _cd            cd
-complete -A directory      md mkdir rd rmdir
+#complete -o nospace -F _cd cd
+complete -A directory -u   cd
+complete -A directory      md mkdir rd rmdir # cd
 
 # eXclude what is not(!) matched by the pattern
 complete -f -o default -X '!*.@(zip|ZIP|z|Z|gz|GZ|bz2|BZ2)' extract t tar
@@ -452,21 +453,45 @@ complete -f -o default -X '!*.pl'  perl   prel   pl
 complete -f -o default -X '!*.py'  python pyhton py
 complete -f -o default -X '!*.rb'  ruby   rbuy   rb
 
-# Completion of directories or user names (will fail if a directory contains )
-_cd() {
-
-    local cur="${COMP_WORDS[COMP_CWORD]}"
-
-    # ex: ~user, not ~/dev
-    if [[ $2 == ~[!/]* ]]; then
-
-        # the default delimiter is \n, IFS '' - read reads several lines
-        # [dir1 \n dir2 \n ... dirn \0 ]      - read reads one line
-        IFS=$'\n' read -r -d $'\0' -a COMPREPLY < <(compgen -A user -- "$cur")
-    else
-        IFS=$'\n' read -r -d $'\0' -a COMPREPLY < <(compgen -A directory -- "$cur")
-    fi
-}
+# # Completion of directories or user names (will fail if a directory contains )
+# _cd() {
+#
+#     local cur="${COMP_WORDS[COMP_CWORD]}"
+#     local dirlist
+#     local userlist
+#     local res
+#
+#     # ex: ~user, not ~/dev
+#     if [[ $2 == ~[!/]* ]]; then
+#
+#         # the default delimiter is \n, IFS '' - read reads several lines
+#         # [dir1 \n dir2 \n ... dirn \0 ]      - read reads one line
+#         IFS=$'\n' read -r -d $'\0' -a userlist < <(compgen -A user -- "$cur")
+#
+#         if [[ $userlist ]]; then
+#
+#             IFS=$'\n' read -r -d $'\0' -a COMPREPLY < <(printf "%q\n" "${userlist[@]}")
+#         fi
+#     else
+#         IFS=$'\n' read -r -d $'\0' -a dirlist < <(compgen -A directory -- "$cur")
+#
+#         if [[ $dirlist ]]; then
+#
+#             IFS=$'\n' read -r -d $'\0' -a res < <(printf "%q\n" "${dirlist[@]}")
+#
+#             for item in "${res[@]}"; do
+#
+#                 # after removing the first /, there are still /s
+#                 if [[ ${item#/} == */* ]]; then
+#
+#                     COMPREPLY+=("${item##*/}"/)
+#                 else
+#                     COMPREPLY+=("$item"/)
+#                 fi
+#             done
+#         fi
+#     fi
+# }
 
 _longopts() {
 
@@ -510,7 +535,7 @@ complete -W 'bold dim rev setab setaf sgr0 smul' tp pt tput
 
 complete -W 'alias arrayvar binding builtin command directory disabled enabled
 export file function group helptopic hostname job keyword running service
-setopt shopt signal stopped user variable' cl compgen
+setopt shopt signal stopped user variable' cl compgen complete
 
 complete -F _longopts -W 'add bisect branch checkout clone commit diff fetch
 grep init log merge mv pull push rebase reset rm show status tag' git
