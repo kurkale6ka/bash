@@ -25,6 +25,8 @@ if [[ linux != $TERM ]]; then
     title="\e]2;\D{%e %B %Y}, bash $BASH_VERSION on $TERM, [\u@\H]\a" # \e]2; TITLE \a
 fi
 
+# $(dir=$(dirs +0); echo "${dir/#~/~$LOGNAME}")
+
 if (( 0 == UID )); then
 
     echo 'Hi root'
@@ -467,6 +469,7 @@ _longopts() {
     prog="$1"
 
     [[ $prog == @(v|vmi|gv|gvi|gvmi) ]] && prog=gvim
+    [[ $prog == @(m|man|mna) ]]         && prog=man
     [[ $prog == @(l|ll|ld|lld|l.|ll.|la|lla|lr|llr|lk|llk|lx|llx|lv|lc|llc|lm|llm|lu|llu) ]] && prog=ls
 
     COMPREPLY=($(\
@@ -487,8 +490,13 @@ _longopts() {
 }
 
 # bash, git, ls, vim
-complete -o default -F _longopts bash git ls l ll ld lld l. ll. la lla lr llr lk\
-llk lx llx lv lc llc lm llm lu llu v vi vim vmi gv gvi gvim gvmi yum
+complete -o default -F _longopts bash ls l ll ld lld l. ll. la lla lr llr lk\
+llk lx llx lv lc llc lm llm lu llu v vi vim vmi gv gvi gvim gvmi
+
+complete -F _longopts git
+
+# commands and long options
+complete -c -F _longopts m man mna
 
 complete -W 'bold dim rev setab setaf sgr0 smul' tp pt tput
 
@@ -498,7 +506,7 @@ setopt shopt signal stopped user variable' cl compgen
 
 # Source business specific...
 
-complete -W '--noplugins check-update clean deplist erase grouperase groupinfo
-groupinstall grouplist groupremove groupupdate info install list localinstall
-localupdate makecache provides remove repolist resolvedep search shell update
-upgrade whatprovides' yum
+complete -F _longopts -W '--noplugins check-update clean deplist erase
+grouperase groupinfo groupinstall grouplist groupremove groupupdate info
+install list localinstall localupdate makecache provides remove repolist
+resolvedep search shell update upgrade whatprovides' yum
