@@ -489,11 +489,9 @@ _longopts() {
     done
 }
 
-# bash, git, ls, vim
+# bash, ls, vim
 complete -o default -F _longopts bash ls l ll ld lld l. ll. la lla lr llr lk\
 llk lx llx lv lc llc lm llm lu llu v vi vim vmi gv gvi gvim gvmi
-
-complete -F _longopts git
 
 # commands and long options
 complete -c -F _longopts m man mna
@@ -503,6 +501,9 @@ complete -W 'bold dim rev setab setaf sgr0 smul' tp pt tput
 complete -W 'alias arrayvar binding builtin command directory disabled enabled
 export file function group helptopic hostname job keyword running service
 setopt shopt signal stopped user variable' cl compgen
+
+complete -F _longopts -W 'add bisect branch checkout clone commit diff fetch
+grep init log merge mv pull push rebase reset rm show status tag' git
 
 # Source business specific...
 
