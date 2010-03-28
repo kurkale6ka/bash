@@ -25,8 +25,6 @@ if [[ linux != $TERM ]]; then
     title="\e]2;\D{%e %B %Y (%A)}, bash $BASH_VERSION on $TERM\a" # \e]2; TITLE \a
 fi
 
-# $(dir=$(dirs +0); echo "${dir/#~/~$LOGNAME}")
-
 if (( 0 == UID )); then
 
     echo 'Hi root'
@@ -68,7 +66,6 @@ extract() {
         else
             warn "'$arg' is not a valid file"
         fi
-
     done
 }
 
@@ -128,7 +125,6 @@ wc() {
 
             local counts=($(command wc -lwm "$arg"))
             echo "${counts[0]} lines, ${counts[1]} words and ${counts[2]} characters"
-
         done
     fi
 }
@@ -139,18 +135,18 @@ alias wc.="find . -name '.*' \! -name '.' -not -name '..' -exec printf '.' ';' |
 # Usage: ? arg - show how arg would be interpreted
 _which() {
 
+    local i
+
     for arg in "$@"; do
 
         type -a "$arg"
 
-        if [[ $(whereis "$arg") != *: ]]; then
-
-            whereis "$arg"
-        fi
+        [[ $(whereis -b "$arg") != *: ]] && { echo Binaries:; whereis -b "$arg"; }
+        [[ $(whereis -s "$arg") != *: ]] && { echo Sources:;  whereis -s "$arg"; }
+        [[ $(whereis -m "$arg") != *: ]] && { echo Sections:; whereis -m "$arg"; }
 
         (( i++ ))
         [[ $# > 1 && $i != $# ]] && echo
-
     done
 }
 
@@ -178,11 +174,27 @@ fr() {
     fi
 }
 
-# Usage: bak my_file.c => my_file.c~
-bak() { for arg; do cp -- "$arg" "$arg"~; done; }
+# Usage: bak my_file1.c, my_file2.c => my_file1.c~, my_file2.c~
+bak() { for arg in "$@"; do cp -- "$arg" "$arg"~; done; }
 
 # Usage: cl arg - computes a completion list for arg (pb with cl job!)
 cl() { compgen -A "$1" | column; }
+
+# Usage: ee array1, array2 - prints arrays in columns
+ee() {
+
+    local i
+
+    for arg in "$@"; do
+
+        local arr="$arg[@]" # no {} ?
+
+        printf "%s\n" "${!arr}" | column
+
+        (( i++ ))
+        [[ $# > 1 && $i != $# ]] && echo
+    done
+}
 
 # Usage: s old new [optional cmd number/string in history]
 s() { fc -s "$1"="$2" "$3"; }
