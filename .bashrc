@@ -232,9 +232,9 @@ alias  lx='ls -X'
 alias llx='ls -Xhl --time-style="+(%d/%m/%Y - %H:%M)"'
 alias  lv="ls|$MY_VIM -"
 
-lc() { echo -e "$magenta${underline}Sorted by change date:$reset "; ls -tc; }
-lm() { echo -e "$magenta${underline}Sorted by modification date:$reset "; ls -t; }
-lu() { echo -e "$magenta${underline}Sorted by access date:$reset "; ls -tu; }
+lc() { echo -e "$magenta${underline}Sorted by change date:$reset ";       ls -tc; }
+lm() { echo -e "$magenta${underline}Sorted by modification date:$reset "; ls -t;  }
+lu() { echo -e "$magenta${underline}Sorted by access date:$reset ";       ls -tu; }
 
 llc() {
 
@@ -441,8 +441,7 @@ complete -A stopped -P '%' bg
 complete -A setopt         set o se-o set-o no se+o set+o
 complete -A shopt          shopt opt
 
-# complete -F _cd            cd
-complete -A directory -u   cd
+complete -F _cd            cd
 complete -A directory      md mkdir rd rmdir
 
 # eXclude what is not(!) matched by the pattern
@@ -453,22 +452,21 @@ complete -f -o default -X '!*.pl'  perl   prel   pl
 complete -f -o default -X '!*.py'  python pyhton py
 complete -f -o default -X '!*.rb'  ruby   rbuy   rb
 
-# # Completion of directories or user names
-# _cd() {
-#
-#     local cur="${COMP_WORDS[COMP_CWORD]}"
-#
-#     # ex: ~user, not ~/dev
-#     if [[ $2 == ~[!/]* ]]; then
-#
-#         # use find for finding user names ???
-#         COMPREPLY=($(compgen -A user -- "$cur"))
-#     else
-#         COMPREPLY=($(compgen -A directory -- "$cur"))
-#         # combine with find
-#         # IFS=$'\n' read -r -d $'\0' -a myarray < <(find . -type f)
-#     fi
-# }
+# Completion of directories or user names (will fail if a directory contains )
+_cd() {
+
+    local cur="${COMP_WORDS[COMP_CWORD]}"
+
+    # ex: ~user, not ~/dev
+    if [[ $2 == ~[!/]* ]]; then
+
+        # the default delimiter is \n, IFS '' - read reads several lines
+        # [dir1 \n dir2 \n ... dirn \0 ]      - read reads one line
+        IFS=$'\n' read -r -d $'\0' -a COMPREPLY < <(compgen -A user -- "$cur")
+    else
+        IFS=$'\n' read -r -d $'\0' -a COMPREPLY < <(compgen -A directory -- "$cur")
+    fi
+}
 
 _longopts() {
 
