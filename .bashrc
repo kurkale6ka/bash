@@ -506,7 +506,7 @@ setopt shopt signal stopped user variable' cl compgen
 
 # Source business specific...
 
-complete -F _longopts -W '--noplugins check-update clean deplist erase
-grouperase groupinfo groupinstall grouplist groupremove groupupdate info
-install list localinstall localupdate makecache provides remove repolist
-resolvedep search shell update upgrade whatprovides' yum
+complete -F _longopts -W 'check-update clean deplist erase grouperase groupinfo
+groupinstall grouplist groupremove groupupdate info install list localinstall
+localupdate makecache provides remove repolist resolvedep search shell update
+upgrade whatprovides' yum
