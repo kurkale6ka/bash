@@ -527,7 +527,7 @@ _longopts() {
 
 # bash, ls, vim
 complete -o default -F _longopts bash ls l ll ld lld l. ll. la lla lr llr lk\
-llk lx llx lv lc llc lm llm lu llu v vi vim vmi gv gvi gvim gvmi
+llk lx llx lv lc llc lm llm lu llu v vi vim vmi gv gvi gvim gvmi rpm
 
 # commands and long options
 complete -c -F _longopts m man mna
