@@ -507,10 +507,11 @@ _longopts() {
     [[ $prog == @(m|man|mna) ]]         && prog=man
     [[ $prog == @(l|ll|ld|lld|l.|ll.|la|lla|lr|llr|lk|llk|lx|llx|lv|lc|llc|lm|llm|lu|llu) ]] && prog=ls
 
+    # [\[=]? instead of (\[|=)? ???
     COMPREPLY=($(\
     \
     "$prog" --help |\
-    grep -oe '--[[:alpha:]][[:alpha:]-]+\[?=?([[:alpha:]-]|_)+\]?' |\
+    grep -oe '--[[:alpha:]][[:alpha:]-]+(\[|=){0,2}([[:alpha:]-]|_)+\]?' |\
     grep -e "$cur" |\
     sort -u\
     ))
