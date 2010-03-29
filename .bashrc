@@ -291,6 +291,7 @@ alias    tp=tput
 alias   cmd=command
 alias   msg=dmesg
 alias   sed='sed -r' # ERE (Extended regex)
+alias   yum='yum --disableplugin=fastmirrors'
 alias  env-='env -i'
 alias  whoi=whoami
 alias uname='uname -a' # function? os() - print all sys info...
@@ -507,11 +508,10 @@ _longopts() {
     [[ $prog == @(m|man|mna) ]]         && prog=man
     [[ $prog == @(l|ll|ld|lld|l.|ll.|la|lla|lr|llr|lk|llk|lx|llx|lv|lc|llc|lm|llm|lu|llu) ]] && prog=ls
 
-    # [\[=]? instead of (\[|=)? ???
     COMPREPLY=($(\
     \
     "$prog" --help |\
-    grep -oe '--[[:alpha:]][[:alpha:]-]+(\[|=){0,2}([[:alpha:]-]|_)+\]?' |\
+    grep -oe '--[[:alpha:]][[:alpha:]-]+[=[]{0,2}[[:alpha:]_-]+]?' |\
     grep -e "$cur" |\
     sort -u\
     ))
