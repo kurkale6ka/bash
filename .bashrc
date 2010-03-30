@@ -442,9 +442,8 @@ complete -A stopped -P '%' bg
 complete -A setopt         set o se-o set-o no se+o set+o
 complete -A shopt          shopt opt
 
-#complete -o nospace -F _cd cd
-complete -A directory -u   cd
-complete -A directory      md mkdir rd rmdir # cd
+complete -A directory -F _cd cd
+complete -A directory        md mkdir rd rmdir
 
 # eXclude what is not(!) matched by the pattern
 complete -f -o default -X '!*.@(zip|ZIP|z|Z|gz|GZ|bz2|BZ2)' extract t tar
@@ -454,45 +453,25 @@ complete -f -o default -X '!*.pl'  perl   prel   pl
 complete -f -o default -X '!*.py'  python pyhton py
 complete -f -o default -X '!*.rb'  ruby   rbuy   rb
 
-# # Completion of directories or user names (will fail if a directory contains )
-# _cd() {
-#
-#     local cur="${COMP_WORDS[COMP_CWORD]}"
-#     local dirlist
-#     local userlist
-#     local res
-#
-#     # ex: ~user, not ~/dev
-#     if [[ $2 == ~[!/]* ]]; then
-#
-#         # the default delimiter is \n, IFS '' - read reads several lines
-#         # [dir1 \n dir2 \n ... dirn \0 ]      - read reads one line
-#         IFS=$'\n' read -r -d $'\0' -a userlist < <(compgen -A user -- "$cur")
-#
-#         if [[ $userlist ]]; then
-#
-#             IFS=$'\n' read -r -d $'\0' -a COMPREPLY < <(printf "%q\n" "${userlist[@]}")
-#         fi
-#     else
-#         IFS=$'\n' read -r -d $'\0' -a dirlist < <(compgen -A directory -- "$cur")
-#
-#         if [[ $dirlist ]]; then
-#
-#             IFS=$'\n' read -r -d $'\0' -a res < <(printf "%q\n" "${dirlist[@]}")
-#
-#             for item in "${res[@]}"; do
-#
-#                 # after removing the first /, there are still /s
-#                 if [[ ${item#/} == */* ]]; then
-#
-#                     COMPREPLY+=("${item##*/}"/)
-#                 else
-#                     COMPREPLY+=("$item"/)
-#                 fi
-#             done
-#         fi
-#     fi
-# }
+# Completion of user names
+_cd() {
+
+    local cur="${COMP_WORDS[COMP_CWORD]}"
+    local userlist
+
+    # ex: ~user, not ~/dev
+    if [[ $2 == ~[!/]* || '~' == $2 ]]; then
+
+        # the default delimiter is \n, IFS '' - read reads several lines
+        # [dir1 \n dir2 \n ... dirn \0 ]      - read reads one line
+        IFS=$'\n' read -r -d $'\0' -a userlist < <(compgen -A user -- "$cur")
+
+        if [[ $userlist ]]; then
+
+            IFS=$'\n' read -r -d $'\0' -a COMPREPLY < <(printf "%q\n" "${userlist[@]}")
+        fi
+    fi
+}
 
 _longopts() {
 
@@ -525,12 +504,12 @@ _longopts() {
     done
 }
 
-# bash, ls, vim
+# Complete long options for: bash, ls, vim
 complete -o default -F _longopts bash ls l ll ld lld l. ll. la lla lr llr lk\
 llk lx llx lv lc llc lm llm lu llu v vi vim vmi gv gvi gvim gvmi rpm
 
-# commands and long options
-complete -c -F _longopts m man mna
+# Complete commands and long options for: man
+complete -A command -F _longopts m man mna
 
 complete -W 'bold dim rev setab setaf sgr0 smul' tp pt tput
 
