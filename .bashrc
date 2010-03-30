@@ -291,7 +291,7 @@ alias    tp=tput
 alias   cmd=command
 alias   msg=dmesg
 alias   sed='sed -r' # ERE (Extended regex)
-alias   yum='yum --disableplugin=fastmirrors'
+alias   yum='yum --disableplugin=fastestmirror'
 alias  env-='env -i'
 alias  whoi=whoami
 alias uname='uname -a' # function? os() - print all sys info...
@@ -483,8 +483,8 @@ _longopts() {
 
     prog="$1"
 
-    [[ $prog == @(v|vmi|gv|gvi|gvmi) ]] && prog=gvim
-    [[ $prog == @(m|man|mna) ]]         && prog=man
+    [[ $prog == @(v|vi|vim|vmi|vimx|gv|gvi|gvmi) ]] && prog=gvim
+    [[ $prog == @(m|man|mna) ]]                     && prog=man
     [[ $prog == @(l|ll|ld|lld|l.|ll.|la|lla|lr|llr|lk|llk|lx|llx|lv|lc|llc|lm|llm|lu|llu) ]] && prog=ls
 
     COMPREPLY=($(\
@@ -506,7 +506,7 @@ _longopts() {
 
 # Complete long options for: bash, ls, vim
 complete -o default -F _longopts bash ls l ll ld lld l. ll. la lla lr llr lk\
-llk lx llx lv lc llc lm llm lu llu v vi vim vmi gv gvi gvim gvmi rpm
+llk lx llx lv lc llc lm llm lu llu v vi vim vmi vimx gv gvi gvim gvmi rpm
 
 # Complete commands and long options for: man
 complete -A command -F _longopts m man mna
