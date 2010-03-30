@@ -479,6 +479,7 @@ _longopts() {
 
     local cur="${COMP_WORDS[COMP_CWORD]}"
 
+    # Do not complete if 'cur' doesn't begin with a '-'
     [[ ! $cur || $cur != -* ]] && return
 
     prog="$1"
