@@ -1,7 +1,8 @@
-clear; fortune
+clear
+[[ command -v fortune >/dev/null 2>&1 ]] && fortune
 
 # If vimx is found in $PATH, store it in the hash...
-if hash vimx >/dev/null 2>&1; then
+if command -v vimx >/dev/null 2>&1; then
 
     export MY_VIM=vimx
 else
