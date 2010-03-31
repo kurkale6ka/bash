@@ -18,8 +18,6 @@ underline=$(tput smul)
     reset=$(tput sgr0)
 
 # PS1 and title ~\~1
-clear
-
 if [[ linux != $TERM ]]; then
 
     title="\e]2;\D{%e %B %Y (%A)}, bash $BASH_VERSION on $TERM\a" # \e]2; TITLE \a
@@ -27,10 +25,8 @@ fi
 
 if (( 0 == UID )); then
 
-    echo 'Hi root'
     PS1="$title\n\[$red\][\u@\H] \w (!\! - %\j, \A)\n# \[$reset\]"
 else
-    echo 'Hi kurkale6ka'
     PS1="$title\n\[$yellow\][\u@\H] \[$magenta\]\w \[$red\](!\! - %\j, \A)\[$reset\]\n\$ "
 fi
 
