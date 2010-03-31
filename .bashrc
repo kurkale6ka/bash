@@ -278,7 +278,8 @@ alias    ej=eject
 alias    ex=export
 alias    ln='ln -s'
 alias    pf=printf
-alias    pp='(IFS=:; printf "%s\n" $PATH)'
+alias    pp='printf "%s\n"'
+alias    pa='(IFS=:; printf "%s\n" $PATH)'
 alias    pw=pwd
 alias    sc=screen
 alias    so=source
