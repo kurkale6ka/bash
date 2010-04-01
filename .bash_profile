@@ -1,5 +1,5 @@
 clear
-command -v fortune >/dev/null 2>&1 && fortune
+hash fortune >/dev/null 2>&1 && fortune
 
 # If vimx is found in $PATH, store it in the hash...
 if command -v vimx >/dev/null 2>&1; then
