@@ -228,7 +228,49 @@ alias  lx='ls -X'
 alias llx='ls -Xhl --time-style="+(%d/%m/%Y - %H:%M)"'
 alias  lv="ls|$MY_VIM -"
 
-lc() { echo -e "$magenta${underline}Sorted by change date:$reset ";       ls -tc; }
+# List all links in a set of directories
+lll() {
+
+    for file in * .*; do
+
+        [[ -h $f ]] && ls -l --color "$file"
+    done
+}
+
+# # Usage: _l (change|modif|access) options
+# _l() {
+#
+#     local i
+#
+#     printf "$magenta${underline}Sorted by $1 date:$reset \n"
+#
+#     # Caller's $@!!!!
+#     for arg in "$@"; do
+#
+#         [[ $# > 1 ]] && printf "$arg:\n"
+#         ls "$opt" "$arg"
+#
+#         (( i++ ))
+#         [[ $# > 1 && $i != $# ]] && echo
+#     done
+# }
+
+lc() {
+
+    local i
+
+    printf "$magenta${underline}Sorted by change date:$reset \n"
+
+    for arg in "$@"; do
+
+        [[ $# > 1 ]] && printf "$arg:\n"
+        ls -tc "$arg"
+
+        (( i++ ))
+        [[ $# > 1 && $i != $# ]] && echo
+    done
+}
+
 lm() { echo -e "$magenta${underline}Sorted by modification date:$reset "; ls -t;  }
 lu() { echo -e "$magenta${underline}Sorted by access date:$reset ";       ls -tu; }
 
