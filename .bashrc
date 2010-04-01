@@ -237,60 +237,33 @@ lll() {
     done
 }
 
-# # Usage: _l (change|modif|access) options
-# _l() {
-#
-#     local i
-#
-#     printf "$magenta${underline}Sorted by $1 date:$reset \n"
-#
-#     # Caller's $@!!!!
-#     for arg in "$@"; do
-#
-#         [[ $# > 1 ]] && printf "$arg:\n"
-#         ls "$opt" "$arg"
-#
-#         (( i++ ))
-#         [[ $# > 1 && $i != $# ]] && echo
-#     done
-# }
-
-lc() {
+# Usage: _l (change|modif|access) options (all other arguments)
+_l() {
 
     local i
 
-    printf "$magenta${underline}Sorted by change date:$reset \n"
+    printf "$magenta${underline}Sorted by $1 date:$reset \n"
 
-    for arg in "$@"; do
+    (( 2 == $# )) && ls "$2" && return
 
-        [[ $# > 1 ]] && printf "$arg:\n"
-        ls -tc "$arg"
+    # Caller's $@!
+    for arg in "${@:3}"; do
+
+        [[ $# > 3 ]] && printf "$arg:\n"
+        ls "$2" "$arg"
 
         (( i++ ))
-        [[ $# > 1 && $i != $# ]] && echo
+        local num=$(( $# - 2 ))
+        [[ $# > 3 ]] && (( i != num )) && printf "\n"
     done
 }
 
-lm() { echo -e "$magenta${underline}Sorted by modification date:$reset "; ls -t;  }
-lu() { echo -e "$magenta${underline}Sorted by access date:$reset ";       ls -tu; }
-
-llc() {
-
-    echo -en "$magenta${underline}Sorted by change date:$reset "
-    ls -tchl --time-style='+(%d/%m/%Y - %H:%M)'
-}
-
-llm() {
-
-    echo -en "$magenta${underline}Sorted by modification date:$reset "
-    ls -thl --time-style='+(%d/%m/%Y - %H:%M)'
-}
-
-llu() {
-
-    echo -en "$magenta${underline}Sorted by access date:$reset "
-    ls -tuhl --time-style='+(%d/%m/%Y - %H:%M)'
-}
+lc()  { _l change        -tc "$@"; }
+lm()  { _l modification  -t  "$@"; }
+lu()  { _l access        -tu "$@"; }
+llc() { _l change       "-tchl --time-style='+(%d/%m/%Y - %H:%M)'" "$@"; }
+llm() { _l modification "-tchl --time-style='+(%d/%m/%Y - %H:%M)'" "$@"; }
+llu() { _l access       "-tuhl --time-style='+(%d/%m/%Y - %H:%M)'" "$@"; }
 
 # Change directory ~\~2
 alias  cd-='cd -'
