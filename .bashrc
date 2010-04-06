@@ -250,7 +250,13 @@ _l() {
     for arg in "${@:3}"; do
 
         [[ $# > 3 ]] && printf "$arg:\n"
-        ls "$2" "$arg"
+
+        if [[ $1 == long ]]; then
+
+            ls "$3" "$4" "$arg"
+        else
+            ls "$2" "$arg"
+        fi
 
         (( i++ ))
         local num=$(( $# - 2 ))
@@ -258,12 +264,12 @@ _l() {
     done
 }
 
-lc()  { _l change        -tc "$@"; }
-lm()  { _l modification  -t  "$@"; }
-lu()  { _l access        -tu "$@"; }
-llc() { _l change       "-tchl --time-style='+(%d/%m/%Y - %H:%M)'" "$@"; }
-llm() { _l modification "-tchl --time-style='+(%d/%m/%Y - %H:%M)'" "$@"; }
-llu() { _l access       "-tuhl --time-style='+(%d/%m/%Y - %H:%M)'" "$@"; }
+lc()  { _l change             -tc                                      "$@"; }
+lm()  { _l modification       -t                                       "$@"; }
+lu()  { _l access             -tu                                      "$@"; }
+llc() { _l long change        -tchl --time-style='+(%d/%m/%Y - %H:%M)' "$@"; }
+llm() { _l long modification  -tchl --time-style='+(%d/%m/%Y - %H:%M)' "$@"; }
+llu() { _l long access        -tuhl --time-style='+(%d/%m/%Y - %H:%M)' "$@"; }
 
 # Change directory ~\~2
 alias  cd-='cd -'
