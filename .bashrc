@@ -237,7 +237,7 @@ lll() {
     done
 }
 
-# Usage: _l (change|modif|access) options (all other arguments)
+# Usage: _l $1: (change|modif|access), $2: options, $@:3: (all other arguments)
 _l() {
 
     local i
@@ -246,17 +246,11 @@ _l() {
 
     (( 2 == $# )) && ls "$2" && return
 
-    # Caller's $@!
     for arg in "${@:3}"; do
 
         [[ $# > 3 ]] && printf "$arg:\n"
 
-        if [[ $1 == long ]]; then
-
-            ls "$3" "$4" "$arg"
-        else
-            ls "$2" "$arg"
-        fi
+        ls "$2" "$arg"
 
         (( i++ ))
         local num=$(( $# - 2 ))
@@ -264,12 +258,33 @@ _l() {
     done
 }
 
-lc()  { _l change             -tc                                      "$@"; }
-lm()  { _l modification       -t                                       "$@"; }
-lu()  { _l access             -tu                                      "$@"; }
-llc() { _l long change        -tchl --time-style='+(%d/%m/%Y - %H:%M)' "$@"; }
-llm() { _l long modification  -tchl --time-style='+(%d/%m/%Y - %H:%M)' "$@"; }
-llu() { _l long access        -tuhl --time-style='+(%d/%m/%Y - %H:%M)' "$@"; }
+# Usage: _ll $1: (change|access|...), $2$3: options, $@:4: (llc's... arguments)
+_ll() {
+
+    local i
+
+    printf "$magenta${underline}Sorted by $1 date:$reset \n"
+
+    (( 3 == $# )) && ls "$2" "$3" && return
+
+    for arg in "${@:4}"; do
+
+        [[ $# > 4 ]] && printf "$arg:\n"
+
+            ls "$2" "$3" "$arg"
+
+        (( i++ ))
+        local num=$(( $# - 3 ))
+        [[ $# > 4 ]] && (( i != num )) && printf "\n"
+    done
+}
+
+lc()  { _l  change       -tc                                      "$@"; }
+lm()  { _l  modification -t                                       "$@"; }
+lu()  { _l  access       -tu                                      "$@"; }
+llc() { _ll change       -tchl --time-style='+(%d/%m/%Y - %H:%M)' "$@"; }
+llm() { _ll modification -tchl --time-style='+(%d/%m/%Y - %H:%M)' "$@"; }
+llu() { _ll access       -tuhl --time-style='+(%d/%m/%Y - %H:%M)' "$@"; }
 
 # Change directory ~\~2
 alias  cd-='cd -'
