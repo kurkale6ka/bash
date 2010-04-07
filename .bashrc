@@ -71,9 +71,9 @@ h() {
 
     local t="$(type -at "$@")"
 
-    if [[ "$t" == *builtin* || "$t" == *keyword* ]]; then
+    if [[ $t == *builtin* || $t == *keyword* ]]; then
 
-        if [[ "$*" == *[* && "$*" != *[[* || "$*" == *test* ]]; then
+        if [[ $* == *[* && $* != *[[* || $* == *test* ]]; then
 
             # If I ask for [ or test, I want them both
             help [ test | $MY_VIM -
@@ -233,7 +233,11 @@ lll() {
 
     for file in * .*; do
 
-        [[ -h $file ]] && ls -l --color "$file"
+        if [[ -h $file ]]; then
+
+            command\
+            ls -FBAhl --color=auto --time-style="+(%d/%m/%Y - %H:%M)" "$file"
+        fi
     done
 }
 
@@ -493,7 +497,7 @@ _cd() {
     local userlist
 
     # ex: ~user, not ~/dev
-    if [[ $2 == ~[!/]* || '~' == $2 ]]; then
+    if [[ $2 == ~[!/]* || $2 == '~' ]]; then
 
         # the default delimiter is \n, IFS '' - read reads several lines
         # [dir1 \n dir2 \n ... dirn \0 ]      - read reads one line
