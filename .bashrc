@@ -233,7 +233,7 @@ lll() {
 
     for file in * .*; do
 
-        [[ -h $f ]] && ls -l --color "$file"
+        [[ -h $file ]] && ls -l --color "$file"
     done
 }
 
