@@ -9,8 +9,8 @@ else
     export MY_VIM='gvim -v'
 fi
 
-export EDITOR=$MY_VIM
-export VISUAL=$MY_VIM
+export EDITOR="$MY_VIM"
+export VISUAL="$MY_VIM"
 
 # -i ignore case, -M ruler, -F quit if 1 screen, -PM long prompt
 # ?test ok:else:else. The . ends the test
@@ -20,7 +20,7 @@ export FIGNORE='~'
 
 export HISTFILE="$HOME"/.bash_history
 export HISTCONTROL='ignoredups:erasedups'
-export HISTIGNORE='..:...:-:--:1:2:3:4:a:am:b:bm:cd:cd-:cd..:cal:i:h:help:hlep:hm:bg:fg:z:c:cat:cta:df:du:en:env:hi::j:jobs:jbos:l:l.:la:ll:lr:ls:lv:ll.:lla:lll:msg:o:se-o:set-o:no:se+o:set+o:se:set:opt:otp:shopt:shotp:p:pw:pwd:pdw:v:vi:vim:vmi:gc:gp:gv:gvi:gvim:gvmi:su:x'
+export HISTIGNORE='..:...:-:--:1:2:3:4:a:am:b:bm:cd:cd-:cd..:cal:i:h:help:hlep:hm:bg:fg:z:c:cat:cta:df:du:en:env:hi::j:jobs:jbos:l:l.:la:ll:lr:ls:lv:ll.:lla:lc:llc:lm:llm:lu:llu:lll:msg:o:se-o:set-o:no:se+o:set+o:se:set:opt:otp:shopt:shotp:p:pw:pwd:pdw:v:vi:vim:vmi:gc:gp:gv:gvi:gvim:gvmi:su:x'
 
 export HOSTFILE="$HOME"/.hosts
 

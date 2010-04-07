@@ -96,13 +96,13 @@ sw() {
 
     if (( 2 == $# )); then
 
-        mv -- "$1"       $tmpfile
-        mv -- "$2"      "$1"
-        mv --  $tmpfile "$2"
+        mv -- "$1"       "$tmpfile"
+        mv -- "$2"       "$1"
+        mv -- "$tmpfile" "$2"
     else
-        mv -- "$1"       $tmpfile
-        mv -- "$1"~     "$1"
-        mv --  $tmpfile "$1"~
+        mv -- "$1"       "$tmpfile"
+        mv -- "$1"~      "$1"
+        mv -- "$tmpfile" "$1"~
     fi
 }
 
