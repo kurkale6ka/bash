@@ -24,6 +24,8 @@ export HISTIGNORE='..:...:-:--:1:2:3:4:a:am:b:bm:cd:cd-:cd..:cal:i:h:help:hlep:h
 
 export HOSTFILE="$HOME"/.hosts
 
+export LC_TIME=bg_BG.utf8
+
 export CDPATH="$HOME":/cygdrive/c:/cygdrive/d:..:../..:
 export GIT_PROXY_COMMAND="$HOME"/.ssh/proxy_cmd_for_github
 
