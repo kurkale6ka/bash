@@ -228,6 +228,8 @@ alias  lx='ls -X'
 alias llx='ls -Xhl --time-style="+(%d/%m/%Y - %H:%M)"'
 alias  lv="ls|$MY_VIM -"
 
+alias pc=lspci
+
 # List all links in a set of directories
 lll() {
 
@@ -316,6 +318,7 @@ alias     t=extract
 alias     z=fg
 alias    ej=eject
 alias    ex=export
+alias    hd='hdparm -I'
 alias    ln='ln -s'
 alias    pf=printf
 alias    pp='printf "%s\n"'
