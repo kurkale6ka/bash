@@ -336,6 +336,9 @@ alias  env-='env -i'
 alias  whoi=whoami
 alias uname='uname -a' # function? os() - print all sys info...
 
+alias ag=apt-get
+alias ac=apt-cache
+
 alias en=enable
 alias di='enable -n'
 
@@ -349,7 +352,6 @@ alias pl=perl
 alias py=python
 alias rb=ruby
 
-alias ag='alias|grep'
 alias am="alias|$MY_VIM -"
 alias  a=alias
 alias ua=unalias
@@ -551,6 +553,12 @@ llk lx llx lv lc llc lm llm lu llu v vi vim vmi vimx gv gvi gvim gvmi rpm
 
 # Complete commands and long options for: man
 complete -A command -F _longopts m man mna
+
+complete -W 'update upgrade install remove autoremove purge source build-dep
+dist-upgrade dselect-upgrade clean autoclean check' ag apt-get
+
+complete -W 'add gencaches showpkg showsrc stats dump dumpavail unmet search
+show depends rdepends pkgnames dotty xvcg policy' ac apt-cache
 
 complete -W 'bold dim rev setab setaf sgr0 smul' tp pt tput
 
