@@ -339,6 +339,7 @@ alias uname='uname -a' # function? os() - print all sys info...
 # Debian specific
 alias ag=apt-get
 alias ac=apt-cache
+alias  d=dpkg
 alias  r=dpkg-reconfigure
 
 alias en=enable
@@ -398,7 +399,6 @@ alias  hi=history
 alias  hm="history|$MY_VIM -"
 alias hgg='history|grep' # because of mercurial
 
-alias d=dig
 alias n=nslookup
 alias p='ping -c3'
 
@@ -475,7 +475,7 @@ complete -A disabled       en enable
 complete -A enabled        di builtin
 complete -A export         printenv
 complete -A function       function
-complete -A hostname       d dig n nslookup snlookup p ping pnig ssh
+complete -A hostname       dig n nslookup snlookup p ping pnig ssh
 complete -A user           chage chfn finger groups mail passwd slay su userdel usermod w write
 complete -A variable       export local readonly unset
 
