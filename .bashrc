@@ -336,8 +336,10 @@ alias  env-='env -i'
 alias  whoi=whoami
 alias uname='uname -a' # function? os() - print all sys info...
 
+# Debian specific
 alias ag=apt-get
 alias ac=apt-cache
+alias  r=dpkg-reconfigure
 
 alias en=enable
 alias di='enable -n'
