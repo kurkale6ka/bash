@@ -325,6 +325,7 @@ alias    pp='printf "%s\n"'
 alias    pa='(IFS=:; printf "%s\n" $PATH)'
 alias    pw=pwd
 alias    sc=screen
+alias    sd=sudo
 alias    so=source
 alias    to=touch
 alias    tp=tput
