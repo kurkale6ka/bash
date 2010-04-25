@@ -216,8 +216,6 @@ alias  ls='ls -FB --color=auto --dereference-command-line-symlink-to-dir'
 alias  ll='ls -hl --time-style="+(%d/%m/%Y - %H:%M)"'
 alias  ld='ls -d'
 alias lld='ls -dhl --time-style="+(%d/%m/%Y - %H:%M)"'
-alias  l.='ls -d .[^.]*'
-alias ll.='ls -dhl --time-style="+(%d/%m/%Y - %H:%M)" .[^.]*'
 alias  la='ls -A'
 alias lla='ls -Ahl --time-style="+(%d/%m/%Y - %H:%M)"'
 alias  lr='ls -R'
@@ -229,6 +227,49 @@ alias llx='ls -Xhl --time-style="+(%d/%m/%Y - %H:%M)"'
 alias  lv="ls|$MY_VIM -"
 
 alias pc=lspci
+
+alias  l.=ldot
+alias ll.=lldot
+
+ldot() {
+
+    local i
+
+    if [[ $# > 0 ]]; then
+
+        for arg in "$@"; do
+
+            [[ $# > 1 ]] && printf "$arg:\n"
+
+            ls -d "$arg".[^.]*
+
+            (( i++ ))
+            [[ $# > 1 && $i != $# ]] && echo
+        done
+    else
+        ls -d .[^.]*
+    fi
+}
+
+lldot() {
+
+    local i
+
+    if [[ $# > 0 ]]; then
+
+        for arg in "$@"; do
+
+            [[ $# > 1 ]] && printf "$arg:\n"
+
+            ls -dhl --time-style="+(%d/%m/%Y - %H:%M)" "$arg".[^.]*
+
+            (( i++ ))
+            [[ $# > 1 && $i != $# ]] && echo
+        done
+    else
+        ls -dhl --time-style="+(%d/%m/%Y - %H:%M)" .[^.]*
+    fi
+}
 
 # List all links in a set of directories
 lll() {
