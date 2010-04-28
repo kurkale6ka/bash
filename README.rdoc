@@ -1,7 +1,5 @@
 = Bash configuration files:
 
-- Dot Files
-
 * .bash_profile
 * .bashrc
 * .bash_logout
@@ -11,9 +9,7 @@
 
 http://mywiki.wooledge.org/DotFiles
 
-- Misc
-
-tips: <em>Still in progress</em>
+* tips: <em>Still in progress</em>
 
 == Author:
 
