@@ -1,15 +1,19 @@
 = Bash configuration files:
 
-[DotFiles] * .bash_profile
-           * .bashrc
-           * .bash_logout
+- Dot Files
 
-           * .inputrc:
-             <em>GNU Readline settings</em>
+* .bash_profile
+* .bashrc
+* .bash_logout
 
-           http://mywiki.wooledge.org/DotFiles
+* .inputrc:
+  <em>GNU Readline settings</em>
 
-[Misc] tips: <em>Still in progress</em>
+http://mywiki.wooledge.org/DotFiles
+
+- Misc
+
+tips: <em>Still in progress</em>
 
 == Author:
 
