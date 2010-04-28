@@ -1,6 +1,6 @@
-Bash configuration files:
+== Bash configuration files:
 
-    .bashrc
+    ==== .bashrc
 
     - Colors
     - PS1
@@ -10,10 +10,10 @@ Bash configuration files:
     - Shell options
     - Completion
 
-    .inputrc
+    ==== .inputrc
 
     GNU Readline settings
 
 == Author:
 
-    Dimitar Dimitrov: mitkofr@yahoo.fr, kurkale6ka
+    Dimitar Dimitrov: mailto:mitkofr@yahoo.fr, kurkale6ka
