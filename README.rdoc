@@ -1,18 +1,18 @@
-== Bash configuration files:
+= Bash configuration files:
 
-    ==== .bashrc
+    == .bash_profile
+    == .bashrc
+    == .bash_logout
 
-    - Colors
-    - PS1
-    - Functions
-    - Aliases
-    - Environment variables
-    - Shell options
-    - Completion
+    http://mywiki.wooledge.org/DotFiles
 
-    ==== .inputrc
+    == .inputrc
 
     GNU Readline settings
+
+    == tips
+
+    Still in progress
 
 == Author:
 
