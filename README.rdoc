@@ -4,14 +4,13 @@
 * .bashrc
 * .bash_logout
 
---
-
 * .inputrc:
   <em>GNU Readline settings</em>
 
 http://mywiki.wooledge.org/DotFiles
 
 * tips:
+
   <em>Still in progress</em>
 
 == Author:
