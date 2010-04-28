@@ -4,10 +4,11 @@
 * .bashrc
 * .bash_logout
 
-* .inputrc:
-  <em>GNU Readline settings</em>
-
 http://mywiki.wooledge.org/DotFiles
+
+* .inputrc:
+
+  <em>GNU Readline settings</em>
 
 * tips:
 
