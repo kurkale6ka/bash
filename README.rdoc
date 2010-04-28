@@ -1,11 +1,10 @@
 = Bash configuration files:
 
-[Dot Files]
-            - .bash_profile
-            - .bashrc
-            - .bash_logout
+[Dot Files] * .bash_profile
+            * .bashrc
+            * .bash_logout
 
-            - .inputrc:
+            * .inputrc:
               <em>GNU Readline settings</em>
 
             http://mywiki.wooledge.org/DotFiles
