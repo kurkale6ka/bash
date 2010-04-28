@@ -1,16 +1,16 @@
 = Bash configuration files:
 
-    - .bash_profile
-    - .bashrc
-    - .bash_logout
+Dot Files:: - .bash_profile
+            - .bashrc
+            - .bash_logout
 
-    - .inputrc: <em>GNU Readline settings</em>
+            - .inputrc: <em>GNU Readline settings</em>
 
-    http://mywiki.wooledge.org/DotFiles
+http://mywiki.wooledge.org/DotFiles
 
-    - tips: <em>Still in progress</em>
+- tips: <em>Still in progress</em>
 
 == Author:
 
-    Dimitar Dimitrov: kurkale6ka
-    mailto:mitkofr@yahoo.fr
+Dimitar Dimitrov: kurkale6ka
+mailto:mitkofr@yahoo.fr
