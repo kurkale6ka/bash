@@ -1,18 +1,18 @@
 = Bash configuration files:
 
-    == .bash_profile
-    == .bashrc
-    == .bash_logout
+- .bash_profile
+- .bashrc
+- .bash_logout
 
-    http://mywiki.wooledge.org/DotFiles
+http://mywiki.wooledge.org/DotFiles
 
-    == .inputrc
+== .inputrc
 
-    GNU Readline settings
+GNU Readline settings
 
-    == tips
+== tips
 
-    Still in progress
+Still in progress
 
 == Author:
 
