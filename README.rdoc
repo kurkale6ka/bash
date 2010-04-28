@@ -1,6 +1,7 @@
 = Bash configuration files:
 
-[Dot Files] - .bash_profile
+[Dot Files]
+            - .bash_profile
             - .bashrc
             - .bash_logout
 
