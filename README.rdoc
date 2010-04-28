@@ -4,16 +4,14 @@
 - .bashrc
 - .bash_logout
 
+- .inputrc: _GNU Readline settings_
+
 http://mywiki.wooledge.org/DotFiles
 
-== .inputrc
-
-GNU Readline settings
-
-== tips
-
-Still in progress
+- tips: _Still in progress_
 
 == Author:
 
-    Dimitar Dimitrov: mailto:mitkofr@yahoo.fr, kurkale6ka
+Dimitar Dimitrov: kurkale6ka
+
+mailto:mitkofr@yahoo.fr
