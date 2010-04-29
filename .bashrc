@@ -159,14 +159,14 @@ x() {
     fi
 }
 
-# Usage: fr '*~' - remove all those files
-fr() {
+# Usage: rrm '*~' - remove all those files
+rrm() {
 
     if (( 0 == $# )); then
 
         warn "Usage: $FUNCNAME '*~'"
     else
-        find . -name "$1" -exec rm -i {} +
+        find . -name "$1" -exec rm {} +
     fi
 }
 
