@@ -354,11 +354,12 @@ alias    mw=makewhatis
 
 # Misc ~\~2
 alias     e=echo
-alias     f='find . -iname "$@"'
+alias     f='find . -iname'
 alias     t=extract
 alias     z=fg
 alias    ej=eject
 alias    ex=export
+alias    fr=free
 alias    hd='hdparm -I'
 alias    ln='ln -s'
 alias    pf=printf
