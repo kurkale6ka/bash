@@ -207,6 +207,7 @@ alias     vim="$MY_VIM"
 alias    view="$MY_VIM -R"
 alias      vd="$MY_VIM -d"
 alias vimdiff="$MY_VIM -d"
+alias     gvd=gvimdiff
 alias      gv=gvim
 alias     gvi=gvim
 
