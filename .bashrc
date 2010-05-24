@@ -381,6 +381,7 @@ alias  whoi=whoami
 alias uname='uname -a' # function? os() - print all sys info...
 
 # Debian specific
+alias aa=aptitude
 alias ag=apt-get
 alias ac=apt-cache
 alias  d=dpkg
@@ -605,6 +606,10 @@ dist-upgrade dselect-upgrade clean autoclean check' ag apt-get
 
 complete -W 'add gencaches showpkg showsrc stats dump dumpavail unmet search
 show depends rdepends pkgnames dotty xvcg policy' ac apt-cache
+
+complete -W 'install remove purge hold unhold markauto unmarkauto
+forbid-version update safe-upgrade full-upgrade forget-new search show clean
+autoclean changelog download reinstall why why-not' aa aptitude
 
 complete -W 'bold dim rev setab setaf sgr0 smul' tp pt tput
 
