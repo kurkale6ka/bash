@@ -16,5 +16,3 @@ if [[ -w $HISTFILE ]]; then
         fi
     fi
 fi
-
-clear
