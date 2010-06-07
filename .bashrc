@@ -374,6 +374,7 @@ alias    to=touch
 alias    tp=tput
 alias   cmd=command
 alias   msg=dmesg
+alias   rmm=rrm
 alias   sed='sed -r' # ERE (Extended regex)
 alias   yum='yum --disableplugin=fastestmirror'
 alias  env-='env -i'
