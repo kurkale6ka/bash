@@ -33,7 +33,6 @@ fi
 # Functions ~\~1
 _exit() {
 
-    clear
     echo -e "${red}Hasta la vista, baby$reset"
 }
 trap _exit EXIT
