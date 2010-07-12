@@ -28,8 +28,10 @@ export HOSTFILE="$HOME"/.hosts
 
 export LC_TIME=bg_BG.utf8
 
-export CDPATH="$HOME":/cygdrive/c:/cygdrive/d:..:../..:
-export GIT_PROXY_COMMAND="$HOME"/.ssh/proxy_cmd_for_github
+export CDPATH="$HOME":..:../..
 
 # .bashrc exists and I can read it
 [[ -r ~/.bashrc ]] && source ~/.bashrc
+
+# Business specific
+[[ -r ~/.bash_profile_after ]] && source ~/.bash_profile_after
