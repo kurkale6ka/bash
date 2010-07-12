@@ -33,5 +33,5 @@ export CDPATH="$HOME":..:../..
 # .bashrc exists and I can read it
 [[ -r ~/.bashrc ]] && source ~/.bashrc
 
-# Business specific
+# Business specific or system dependant stuff
 [[ -r ~/.bash_profile_after ]] && source ~/.bash_profile_after

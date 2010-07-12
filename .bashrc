@@ -380,21 +380,11 @@ alias  env-='env -i'
 alias  whoi=whoami
 alias uname='uname -a' # function? os() - print all sys info...
 
-# Debian specific
-alias aa=aptitude
-alias ag=apt-get
-alias ac=apt-cache
-alias  d=dpkg
-alias  r=dpkg-reconfigure
-
 alias en=enable
 alias di='enable -n'
 
 alias     j='jobs -l'
 alias -- --='fg %-'
-
-alias gc='git commit -a'
-alias gp='git push origin master'
 
 alias pl=perl
 alias py=python
@@ -601,6 +591,33 @@ llk lx llx lv lc llc lm llm lu llu v vi vim vmi vimx gv gvi gvim gvmi rpm
 # Complete commands and long options for: man
 complete -A command -F _longopts m man mna
 
+complete -W 'bold dim rev setab setaf sgr0 smul' tp pt tput
+
+complete -W 'alias arrayvar binding builtin command directory disabled enabled
+export file function group helptopic hostname job keyword running service
+setopt shopt signal stopped user variable' cl compgen complete
+
+# Business specific or system dependant stuff
+
+complete -F _longopts -W 'check-update clean deplist erase grouperase groupinfo
+groupinstall grouplist groupremove groupupdate info install list localinstall
+localupdate makecache provides remove repolist resolvedep search shell update
+upgrade whatprovides' yum
+
+# Git only
+alias gc='git commit -a'
+alias gp='git push origin master'
+
+complete -F _longopts -W 'add bisect branch checkout clone commit diff fetch
+grep init log merge mv pull push rebase reset rm show status tag' git
+
+# Debian only
+alias aa=aptitude
+alias ag=apt-get
+alias ac=apt-cache
+alias  d=dpkg
+alias  r=dpkg-reconfigure
+
 complete -W 'update upgrade install remove autoremove purge source build-dep
 dist-upgrade dselect-upgrade clean autoclean check' ag apt-get
 
@@ -610,19 +627,3 @@ show depends rdepends pkgnames dotty xvcg policy' ac apt-cache
 complete -W 'install remove purge hold unhold markauto unmarkauto
 forbid-version update safe-upgrade full-upgrade forget-new search show clean
 autoclean changelog download reinstall why why-not' aa aptitude
-
-complete -W 'bold dim rev setab setaf sgr0 smul' tp pt tput
-
-complete -W 'alias arrayvar binding builtin command directory disabled enabled
-export file function group helptopic hostname job keyword running service
-setopt shopt signal stopped user variable' cl compgen complete
-
-complete -F _longopts -W 'add bisect branch checkout clone commit diff fetch
-grep init log merge mv pull push rebase reset rm show status tag' git
-
-# Source business specific...
-
-complete -F _longopts -W 'check-update clean deplist erase grouperase groupinfo
-groupinstall grouplist groupremove groupupdate info install list localinstall
-localupdate makecache provides remove repolist resolvedep search shell update
-upgrade whatprovides' yum
