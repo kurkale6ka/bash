@@ -28,6 +28,7 @@ export HOSTFILE="$HOME"/.hosts
 
 export LC_TIME=bg_BG.utf8
 
+export PATH="$PATH:$HOME/bin"
 export CDPATH="$HOME":..:../..
 
 # .bashrc exists and I can read it
