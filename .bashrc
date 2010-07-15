@@ -604,6 +604,9 @@ groupinstall grouplist groupremove groupupdate info install list localinstall
 localupdate makecache provides remove repolist resolvedep search shell update
 upgrade whatprovides' yum
 
+complete -W '-s --schema -w --web-script -l --library
+int test stage live' curl_isite
+
 # Git only
 alias gc='git commit -a'
 alias gp='git push origin master'
