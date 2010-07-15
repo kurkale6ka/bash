@@ -598,35 +598,4 @@ export file function group helptopic hostname job keyword running service
 setopt shopt signal stopped user variable' cl compgen complete
 
 # Business specific or system dependant stuff
-
-complete -F _longopts -W 'check-update clean deplist erase grouperase groupinfo
-groupinstall grouplist groupremove groupupdate info install list localinstall
-localupdate makecache provides remove repolist resolvedep search shell update
-upgrade whatprovides' yum
-
-complete -W '-s --schema -w --web-script -l --library
-int test stage live' curl_isite
-
-# Git only
-alias gc='git commit -a'
-alias gp='git push origin master'
-
-complete -F _longopts -W 'add bisect branch checkout clone commit diff fetch
-grep init log merge mv pull push rebase reset rm show status tag' git
-
-# Debian only
-alias aa=aptitude
-alias ag=apt-get
-alias ac=apt-cache
-alias  d=dpkg
-alias  r=dpkg-reconfigure
-
-complete -W 'update upgrade install remove autoremove purge source build-dep
-dist-upgrade dselect-upgrade clean autoclean check' ag apt-get
-
-complete -W 'add gencaches showpkg showsrc stats dump dumpavail unmet search
-show depends rdepends pkgnames dotty xvcg policy' ac apt-cache
-
-complete -W 'install remove purge hold unhold markauto unmarkauto
-forbid-version update safe-upgrade full-upgrade forget-new search show clean
-autoclean changelog download reinstall why why-not' aa aptitude
+[[ -r ~/.bashrc_after ]] && source ~/.bashrc_after
