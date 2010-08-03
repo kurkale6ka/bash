@@ -165,7 +165,8 @@ rrm() {
 
         warn "Usage: $FUNCNAME '*~'"
     else
-        find . -name "$1" -exec rm {} +
+        # find . -name "$1" -exec rm {} +
+        find -name \*~ -a ! -name \*.un~ -exec rm {} +
     fi
 }
 
