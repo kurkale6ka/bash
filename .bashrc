@@ -386,7 +386,6 @@ alias   cmd=command
 alias   msg=dmesg
 alias   rmm=rrm
 alias   sed='sed -r' # ERE (Extended regex)
-alias   yum='yum --disableplugin=fastestmirror'
 alias  env-='env -i'
 alias  whoi=whoami
 alias uname='uname -a' # function? os() - print all sys info...
