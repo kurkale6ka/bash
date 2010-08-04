@@ -17,6 +17,12 @@ magenta=$(tput setaf 5)
 underline=$(tput smul)
     reset=$(tput sgr0)
 
+# Shell options ~\~1
+shopt -s cdspell
+shopt -s extglob
+
+set -o notify # about terminated jobs
+
 # PS1 and title ~\~1
 if [[ linux != $TERM ]]; then
 
@@ -70,7 +76,7 @@ h() {
 
     local t="$(type -at "$@")"
 
-    if [[ $t == *builtin* || $t == *keyword* ]]; then
+    if [[ $t == @(*builtin*|*keyword*) ]]; then
 
         if [[ $* == *[* && $* != *[[* || $* == *test* ]]; then
 
@@ -161,12 +167,16 @@ x() {
 # Usage: rrm '*~' - remove all those files
 rrm() {
 
-    if (( 0 == $# )); then
+    if [[ 0 == $# || 1 < $# ]]; then
 
-        warn "Usage: $FUNCNAME '*~'"
-    else
-        # find . -name "$1" -exec rm {} +
+        warn "Usage: $FUNCNAME 'pattern' OR $FUNCNAME -b|--backup"
+
+    elif [[ $1 == @(-b|--backup) ]]; then
+
         find -name \*~ -a ! -name \*.un~ -exec rm {} +
+
+    else
+        find . -name "$1" -exec rm {} +
     fi
 }
 
@@ -496,12 +506,6 @@ alias     veiw=view
 alias      vmi=vim
 alias    wihch=_which
 # ~/~2
-
-# Shell options ~\~1
-shopt -s cdspell
-shopt -s extglob
-
-set -o notify # about terminated jobs
 
 # Programmable completion ~\~1
 complete -A alias          a alias alais unalias
