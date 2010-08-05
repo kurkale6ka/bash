@@ -164,7 +164,7 @@ x() {
     fi
 }
 
-# Usage: rrm '*~' - remove all those files
+# Usage: rrm/rmm 'pattern' - remove all those files
 rrm() {
 
     if [[ 0 == $# || 1 < $# ]]; then
