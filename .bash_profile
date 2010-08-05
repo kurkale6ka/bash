@@ -22,7 +22,6 @@ export HISTFILE="$HOME"/.bash_history
 export HISTSIZE=1000
 export HISTFILESIZE=1000
 export HISTCONTROL='ignorespace:ignoredups:erasedups'
-# I have to report this as a bug
 # export HISTIGNORE='@(?|??|???|????)*([[:space:]]):*([[:space:]])'
 export HISTIGNORE="@(?|??|???|????)*( |$'\t'):*( |$'\t')"
 
