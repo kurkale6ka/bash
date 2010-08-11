@@ -2,8 +2,8 @@
 
 # A script for uploading files to Alfresco
 #
-# Author Dimitar Dimitrov <dimitar.dimitrov@bbc.co.uk>
-# ----------------------------------------------------
+# Author Dimitar Dimitrov <mitkofr@yahoo.fr>
+# ------------------------------------------
 
 shopt -s extglob
 

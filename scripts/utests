@@ -3,7 +3,7 @@
 # A script for making sure that all our code is covered by Unit Testing
 # except for abstract Classes
 #
-# Author Dimitar Dimitrov <dimitar.dimitrov@bbc.co.uk>
+# Author Dimitar Dimitrov <mitkofr@yahoo.fr>
 # ---------------------------------------------------------------------
 
 shopt -s extglob
