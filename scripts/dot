@@ -1,0 +1,47 @@
+#! /usr/bin/env bash
+
+# Install/update all my dotfiles
+#
+# Author Dimitar Dimitrov <dimitar.dimitrov@bbc.co.uk>
+# ----------------------------------------------------
+
+shopt -s extglob
+
+dotfiles="$HOME"
+
+if command -v git >/dev/null 2>&1; then
+
+    git clone git@github.com:kurkale6ka/vimfiles.git
+    git clone git@github.com:kurkale6ka/bashfiles.git
+    git clone git@github.com:kurkale6ka/help.git
+
+else
+
+    printf "Do you want to install git or copy the repos?\n"
+
+fi
+
+cd
+
+if [[ -e $dotfiles/bashfiles ]]; then
+
+ln -s "$dotfiles/bashfiles/.profile"      .
+ln -s "$dotfiles/bashfiles/.bash_profile" .
+ln -s "$dotfiles/bashfiles/.bashrc"       .
+ln -s "$dotfiles/bashfiles/.bashrc_after" .
+ln -s "$dotfiles/bashfiles/.bash_logout"  .
+ln -s "$dotfiles/bashfiles/.inputrc"      .
+
+fi
+
+ln -s "$dotfiles/help/.gitignore" .
+ln -s "$dotfiles/help/.screenrc"  .
+ln -s "$dotfiles/help/.curlrc"    .
+
+ln -s "$dotfiles/vimfiles/.vim"    .
+ln -s "$dotfiles/vimfiles/.vimrc"  .
+ln -s "$dotfiles/vimfiles/.gvimrc" .
+
+wget http://github.com/kurkale6ka/help/tarball/master
+wget http://github.com/kurkale6ka/bashfiles/tarball/master
+wget http://github.com/kurkale6ka/vimfiles/tarball/master
