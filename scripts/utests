@@ -6,6 +6,8 @@
 # Author Dimitar Dimitrov <dimitar.dimitrov@bbc.co.uk>
 # ---------------------------------------------------------------------
 
+shopt -s extglob
+
 blue=$(tput setaf 4)
 bold=$(tput bold)
 reset=$(tput sgr0)
@@ -13,24 +15,32 @@ reset=$(tput sgr0)
 # Print a message to stderr
 warn() { echo "$@" >&2; }
 
-if (( 0 < $# )); then
+if [[ 1 < $# || 1 == $# && $1 != @(-p|--platform) ]]; then
 
-    warn "Usage: ${0##*/}"
+    warn "Usage: ${0##*/} [-p|--platform]"
 
 else
 
     ext=.php
 
-    project=org
+    project=cbbc
 
-    lib="/mnt/.../$project/Models"
-    libTest="/mnt/...-test/$project/Models"
+    if (( 1 == $# )); then
+
+        webapp='.'
+    else
+        workspace=workspace
+        webapp="$workspace/$project/webapp"
+    fi
+
+    lib="$webapp/.../Models"
+    libTest="$webapp/...-test/Models"
 
     libTestArray=("$libTest"/*Test"$ext" "$libTest"/*/*Test"$ext")
     lTestArray="${libTestArray[@]##*/}"
 
-    controllers="/mnt/.../$project/controllers"
-    controllersTest="/mnt/...-test/$project/controllers"
+    controllers="$webapp/.../controllers"
+    controllersTest="$webapp/...-test/controllers"
 
     controllersTestArray=("$controllersTest"/*Test"$ext")
     ctrlTestArray="${controllersTestArray[@]##*/}"
