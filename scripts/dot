@@ -5,46 +5,51 @@
 # Author Dimitar Dimitrov <mitkofr@yahoo.fr>
 # ------------------------------------------
 
-shopt -s extglob
+# shopt -s extglob
 
 me=kurkale6ka
 dotfiles="$HOME"
-bashfiles=bashfiles
-help=help
-vimfiles=vimfiles
+bashfiles="$dotfiles/bashfiles"
+help="$dotfiles/help"
+vimfiles="$dotfiles/vimfiles"
 
-# check git clone's params
-cd
+# [[ ! -d $HOME/bin ]] && mkdir -p "$HOME/bin"
+# ln -s "$bashfiles/scripts/iurl"   "$HOME/bin"
+# ln -s "$bashfiles/scripts/utests" "$HOME/bin"
+# ln -s "$bashfiles/scripts/dot"    "$HOME/bin"
 
 getRepo() {
-
-    if wget "$1"; then
-
-        tar -zxvf "$2.tar.gz"
-    fi
-}
-
-if [[ ! -d $dotfiles/$bashfiles ]]; then
 
     if [[ $git ]] || command -v git >/dev/null 2>&1; then
 
         git=true
 
-        if git clone "git@github.com:$me/$bashfiles.git"; then
+        if git clone "git@github.com:$me/$1.git" "$dotfiles"; then
 
-            printf "Cloned $bashfiles repository\n"
+            printf "Cloned $1 repository\n"
         else
-            getRepo "http://github.com/$me/$bashfiles/tarball/master" "$bashfiles"
+            if wget "http://github.com/$me/$1/tarball/master" "$dotfiles"; then
+
+                tar -zxvf "$dotfiles/$1.tar.gz"
+            fi
         fi
     else
         read -p "Do you want to install git or copy the repos?" answer
 
         # decide depending on answer
-        getRepo "http://github.com/$me/$bashfiles/tarball/master" "$bashfiles"
+        if wget "http://github.com/$me/$1/tarball/master" "$dotfiles"; then
+
+            tar -zxvf "$dotfiles/$1.tar.gz"
+        fi
     fi
+}
+
+if [[ ! -d $bashfiles ]]; then
+
+    getRepo "${bashfiles##*/}"
 fi
 
-if [[ -d $dotfiles/$bashfiles ]]; then
+if [[ -d $bashfiles ]]; then
 
     profile="$HOME/.profile"
     bash_profile="$HOME/.bash_profile"
@@ -61,34 +66,20 @@ if [[ -d $dotfiles/$bashfiles ]]; then
     [[ -f $bash_logout  && ! -O $bash_logout  ]] && rm "$bash_logout"
     [[ -f $inputrc      && ! -O $inputrc      ]] && rm "$inputrc"
 
-    ln -s "$dotfiles/$bashfiles/${profile##*/}"      "$HOME"
-    ln -s "$dotfiles/$bashfiles/${bash_profile##*/}" "$HOME"
-    ln -s "$dotfiles/$bashfiles/${bashrc##*/}"       "$HOME"
-    ln -s "$dotfiles/$bashfiles/${bashrc_after##*/}" "$HOME"
-    ln -s "$dotfiles/$bashfiles/${bash_logout##*/}"  "$HOME"
-    ln -s "$dotfiles/$bashfiles/${inputrc##*/}"      "$HOME"
+    ln -s "$bashfiles/${profile##*/}"      "$HOME"
+    ln -s "$bashfiles/${bash_profile##*/}" "$HOME"
+    ln -s "$bashfiles/${bashrc##*/}"       "$HOME"
+    ln -s "$bashfiles/${bashrc_after##*/}" "$HOME"
+    ln -s "$bashfiles/${bash_logout##*/}"  "$HOME"
+    ln -s "$bashfiles/${inputrc##*/}"      "$HOME"
 fi
 
-if [[ ! -d $dotfiles/$help ]]; then
+if [[ ! -d $help ]]; then
 
-    if [[ $git ]] || command -v git >/dev/null 2>&1; then
-
-        git=true
-
-        if git clone "git@github.com:$me/$help.git"; then
-
-            printf "Cloned $help repository\n"
-        else
-            printf "Do you want to install git or copy the repos?\n"
-            if wget "http://github.com/$me/$help/tarball/master"; then
-
-                tar -zxvf "$help.tar.gz"
-            fi
-        fi
-    fi
+    getRepo "${help##*/}"
 fi
 
-if [[ -d $dotfiles/$help ]]; then
+if [[ -d $help ]]; then
 
     gitignore="$HOME/.gitignore"
     screenrc="$HOME/.screenrc"
@@ -98,31 +89,17 @@ if [[ -d $dotfiles/$help ]]; then
     [[ -f $screenrc  && ! -O $screenrc  ]] && rm "$screenrc"
     [[ -f $curlrc    && ! -O $curlrc    ]] && rm "$curlrc"
 
-    ln -s "$dotfiles/$help/${gitignore##*/}" "$HOME"
-    ln -s "$dotfiles/$help/${screenrc##*/}"  "$HOME"
-    ln -s "$dotfiles/$help/${curlrc##*/}"    "$HOME"
+    ln -s "$help/${gitignore##*/}" "$HOME"
+    ln -s "$help/${screenrc##*/}"  "$HOME"
+    ln -s "$help/${curlrc##*/}"    "$HOME"
 fi
 
-if [[ ! -d $dotfiles/$vimfiles ]]; then
+if [[ ! -d $vimfiles ]]; then
 
-    if [[ $git ]] || command -v git >/dev/null 2>&1; then
-
-        git=true
-
-        if git clone "git@github.com:$me/$vimfiles.git"; then
-
-            printf "Cloned $vimfiles repository\n"
-        else
-            printf "Do you want to install git or copy the repos?\n"
-            if wget "http://github.com/$me/$vimfiles/tarball/master"; then
-
-                tar -zxvf "$vimfiles.tar.gz"
-            fi
-        fi
-    fi
+    getRepo "${vimfiles##*/}"
 fi
 
-if [[ -d $dotfiles/$vimfiles ]]; then
+if [[ -d $vimfiles ]]; then
 
     vim="$HOME/.vim"
     vimrc="$HOME/.vimrc"
@@ -133,9 +110,12 @@ if [[ -d $dotfiles/$vimfiles ]]; then
     [[ -f $vimrc  && ! -O $vimrc  ]] && rm "$vimrc"
     [[ -f $gvimrc && ! -O $gvimrc ]] && rm "$gvimrc"
 
-    ln -s "$dotfiles/$vimfiles/${vim##*/}"    "$HOME"
-    ln -s "$dotfiles/$vimfiles/${vimrc##*/}"  "$HOME"
-    ln -s "$dotfiles/$vimfiles/${gvimrc##*/}" "$HOME"
+    ln -s "$vimfiles/${vim##*/}"    "$HOME"
+    ln -s "$vimfiles/${vimrc##*/}"  "$HOME"
+    ln -s "$vimfiles/${gvimrc##*/}" "$HOME"
 
     # All plugins: ln or cp if -win
+    for p in "$vimfiles/plugins"; do
+
+    done
 fi
