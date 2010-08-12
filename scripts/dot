@@ -34,11 +34,18 @@ getRepo() {
             fi
         fi
     else
-        read -p "Do you want to install git or copy the repos?" answer
+        printf "Git is not installed on this machine\n"
+        choice_git='I want to install git and retry later'
+        choice_repos='I want to simply copy the repositories'
+
+        select choice in "$choice_git" "$choice_repos"; do
+
+            [[ $choice == $choice_git ]] && abort=true; break;
+        done
 
         # decide depending on answer
-        if wget "http://github.com/$me/$1/tarball/master" "$dotfiles"; then
-
+        if [[ ! $abort ]] && wget "http://github.com/$me/$1/tarball/master" "$dotfiles"
+        then
             tar -zxvf "$dotfiles/$1.tar.gz"
         fi
     fi
@@ -46,76 +53,70 @@ getRepo() {
 
 if [[ ! -d $bashfiles ]]; then
 
-    getRepo "${bashfiles##*/}"
-fi
+    if [[ ! $abort ]] && getRepo "${bashfiles##*/}"; then
 
-if [[ -d $bashfiles ]]; then
+        profile="$HOME/.profile"
+        bash_profile="$HOME/.bash_profile"
+        bashrc="$HOME/.bashrc"
+        bashrc_after="$HOME/.bashrc_after"
+        bash_logout="$HOME/.bash_logout"
+        inputrc="$HOME/.inputrc"
 
-    profile="$HOME/.profile"
-    bash_profile="$HOME/.bash_profile"
-    bashrc="$HOME/.bashrc"
-    bashrc_after="$HOME/.bashrc_after"
-    bash_logout="$HOME/.bash_logout"
-    inputrc="$HOME/.inputrc"
+        # Check if symlink as well !
+        [[ -f $profile      && ! -O $profile      ]] && rm "$profile"
+        [[ -f $bash_profile && ! -O $bash_profile ]] && rm "$bash_profile"
+        [[ -f $bashrc       && ! -O $bashrc       ]] && rm "$bashrc"
+        [[ -f $bashrc_after && ! -O $bashrc_after ]] && rm "$bashrc_after"
+        [[ -f $bash_logout  && ! -O $bash_logout  ]] && rm "$bash_logout"
+        [[ -f $inputrc      && ! -O $inputrc      ]] && rm "$inputrc"
 
-    # Check if symlink as well !
-    [[ -f $profile      && ! -O $profile      ]] && rm "$profile"
-    [[ -f $bash_profile && ! -O $bash_profile ]] && rm "$bash_profile"
-    [[ -f $bashrc       && ! -O $bashrc       ]] && rm "$bashrc"
-    [[ -f $bashrc_after && ! -O $bashrc_after ]] && rm "$bashrc_after"
-    [[ -f $bash_logout  && ! -O $bash_logout  ]] && rm "$bash_logout"
-    [[ -f $inputrc      && ! -O $inputrc      ]] && rm "$inputrc"
-
-    ln -s "$bashfiles/${profile##*/}"      "$HOME"
-    ln -s "$bashfiles/${bash_profile##*/}" "$HOME"
-    ln -s "$bashfiles/${bashrc##*/}"       "$HOME"
-    ln -s "$bashfiles/${bashrc_after##*/}" "$HOME"
-    ln -s "$bashfiles/${bash_logout##*/}"  "$HOME"
-    ln -s "$bashfiles/${inputrc##*/}"      "$HOME"
+        ln -s "$bashfiles/${profile##*/}"      "$HOME"
+        ln -s "$bashfiles/${bash_profile##*/}" "$HOME"
+        ln -s "$bashfiles/${bashrc##*/}"       "$HOME"
+        ln -s "$bashfiles/${bashrc_after##*/}" "$HOME"
+        ln -s "$bashfiles/${bash_logout##*/}"  "$HOME"
+        ln -s "$bashfiles/${inputrc##*/}"      "$HOME"
+    fi
 fi
 
 if [[ ! -d $help ]]; then
 
-    getRepo "${help##*/}"
-fi
+    if [[ ! $abort ]] && getRepo "${help##*/}"; then
 
-if [[ -d $help ]]; then
+        gitignore="$HOME/.gitignore"
+        screenrc="$HOME/.screenrc"
+        curlrc="$HOME/.curlrc"
 
-    gitignore="$HOME/.gitignore"
-    screenrc="$HOME/.screenrc"
-    curlrc="$HOME/.curlrc"
+        [[ -f $gitignore && ! -O $gitignore ]] && rm "$gitignore"
+        [[ -f $screenrc  && ! -O $screenrc  ]] && rm "$screenrc"
+        [[ -f $curlrc    && ! -O $curlrc    ]] && rm "$curlrc"
 
-    [[ -f $gitignore && ! -O $gitignore ]] && rm "$gitignore"
-    [[ -f $screenrc  && ! -O $screenrc  ]] && rm "$screenrc"
-    [[ -f $curlrc    && ! -O $curlrc    ]] && rm "$curlrc"
-
-    ln -s "$help/${gitignore##*/}" "$HOME"
-    ln -s "$help/${screenrc##*/}"  "$HOME"
-    ln -s "$help/${curlrc##*/}"    "$HOME"
+        ln -s "$help/${gitignore##*/}" "$HOME"
+        ln -s "$help/${screenrc##*/}"  "$HOME"
+        ln -s "$help/${curlrc##*/}"    "$HOME"
+    fi
 fi
 
 if [[ ! -d $vimfiles ]]; then
 
-    getRepo "${vimfiles##*/}"
-fi
+    if [[ ! $abort ]] && getRepo "${vimfiles##*/}"; then
 
-if [[ -d $vimfiles ]]; then
+        vim="$HOME/.vim"
+        vimrc="$HOME/.vimrc"
+        gvimrc="$HOME/.gvimrc"
 
-    vim="$HOME/.vim"
-    vimrc="$HOME/.vimrc"
-    gvimrc="$HOME/.gvimrc"
+        # to be revised
+        [[ -d $vim    && ! -O $vim    ]] && rm -r "$vim"
+        [[ -f $vimrc  && ! -O $vimrc  ]] && rm "$vimrc"
+        [[ -f $gvimrc && ! -O $gvimrc ]] && rm "$gvimrc"
 
-    # to be revised
-    [[ -d $vim    && ! -O $vim    ]] && rm -r "$vim"
-    [[ -f $vimrc  && ! -O $vimrc  ]] && rm "$vimrc"
-    [[ -f $gvimrc && ! -O $gvimrc ]] && rm "$gvimrc"
+        ln -s "$vimfiles/${vim##*/}"    "$HOME"
+        ln -s "$vimfiles/${vimrc##*/}"  "$HOME"
+        ln -s "$vimfiles/${gvimrc##*/}" "$HOME"
 
-    ln -s "$vimfiles/${vim##*/}"    "$HOME"
-    ln -s "$vimfiles/${vimrc##*/}"  "$HOME"
-    ln -s "$vimfiles/${gvimrc##*/}" "$HOME"
+        # All plugins: ln or cp if -win
+        for p in "$vimfiles/plugins"; do
 
-    # All plugins: ln or cp if -win
-    for p in "$vimfiles/plugins"; do
-
-    done
+        done
+    fi
 fi
