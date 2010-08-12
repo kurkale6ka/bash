@@ -8,7 +8,8 @@
 # shopt -s extglob
 
 me=kurkale6ka
-dotfiles="$HOME"
+dotfiles="$HOME/test"
+dest="$HOME/test"
 bashfiles="$dotfiles/bashfiles"
 help="$dotfiles/help"
 vimfiles="$dotfiles/vimfiles"
@@ -24,58 +25,80 @@ getRepo() {
 
         git=true
 
+        #if git clone "git@207.97.227.248:$me/$1.git" "$dotfiles"; then
         if git clone "git@github.com:$me/$1.git" "$dotfiles"; then
 
             printf "Cloned $1 repository\n"
         else
-            if wget "http://github.com/$me/$1/tarball/master" "$dotfiles"; then
+            if wget -P "$dest" "http://github.com/$me/$1/tarball/master"; then
 
-                tar -zxvf "$dotfiles/$1.tar.gz"
+                tar -zxvf "$dest"/*"$me"*"$1"*.tar.gz -C "$dest"
+                mv "$dest"/{*"$me"*"$1"*,"$1"}
             fi
         fi
     else
-        printf "Git is not installed on this machine\n"
-        choice_git='I want to install git and retry later'
-        choice_repos='I want to simply copy the repositories'
+        if [[ ! $first ]]; then
 
-        select choice in "$choice_git" "$choice_repos"; do
+            printf "Git is not installed on this machine\n"
+            choice_git='I want to install git and retry later'
+            choice_repos='I want to simply copy the repositories'
 
-            [[ $choice == $choice_git ]] && abort=true; break;
-        done
+            select choice in "$choice_git" "$choice_repos"; do
 
-        # decide depending on answer
-        if [[ ! $abort ]] && wget "http://github.com/$me/$1/tarball/master" "$dotfiles"
-        then
-            tar -zxvf "$dotfiles/$1.tar.gz"
+                if [[ $choice == $choice_git ]]; then
+
+                    abort=true
+                    return 1
+                fi
+                break
+            done
+
+            (( first++ ))
+        fi
+
+        if [[ ! $abort ]] && wget -P "$dest" "http://github.com/$me/$1/tarball/master"; then
+
+            tar -zxvf "$dest"/*"$me"*"$1"*.tar.gz -C "$dest"
+            mv "$dest"/{*"$me"*"$1"*,"$1"}
         fi
     fi
+}
+
+link() {
+
+    # Delete if not mine
+    if [[ -e $2 && ! -O $2 ]]; then
+
+        [[ -d $2 ]] && rm -r "$2" || rm "$2"
+    fi
+
+    # Delete if mine but not a link
+    if [[ -e $2 && ! -L $2 ]]; then
+
+        [[ -d $2 ]] && rm -r "$2" || rm "$2"
+    fi
+
+    # To be improved
+    [[ ! -L $2 ]] && ln -s "$1/${2##*/}" "$3"
 }
 
 if [[ ! -d $bashfiles ]]; then
 
     if [[ ! $abort ]] && getRepo "${bashfiles##*/}"; then
 
-        profile="$HOME/.profile"
-        bash_profile="$HOME/.bash_profile"
-        bashrc="$HOME/.bashrc"
-        bashrc_after="$HOME/.bashrc_after"
-        bash_logout="$HOME/.bash_logout"
-        inputrc="$HOME/.inputrc"
+        profile="$dest/.profile"
+        bash_profile="$dest/.bash_profile"
+        bashrc="$dest/.bashrc"
+        bashrc_after="$dest/.bashrc_after"
+        bash_logout="$dest/.bash_logout"
+        inputrc="$dest/.inputrc"
 
-        # Check if symlink as well !
-        [[ -f $profile      && ! -O $profile      ]] && rm "$profile"
-        [[ -f $bash_profile && ! -O $bash_profile ]] && rm "$bash_profile"
-        [[ -f $bashrc       && ! -O $bashrc       ]] && rm "$bashrc"
-        [[ -f $bashrc_after && ! -O $bashrc_after ]] && rm "$bashrc_after"
-        [[ -f $bash_logout  && ! -O $bash_logout  ]] && rm "$bash_logout"
-        [[ -f $inputrc      && ! -O $inputrc      ]] && rm "$inputrc"
-
-        ln -s "$bashfiles/${profile##*/}"      "$HOME"
-        ln -s "$bashfiles/${bash_profile##*/}" "$HOME"
-        ln -s "$bashfiles/${bashrc##*/}"       "$HOME"
-        ln -s "$bashfiles/${bashrc_after##*/}" "$HOME"
-        ln -s "$bashfiles/${bash_logout##*/}"  "$HOME"
-        ln -s "$bashfiles/${inputrc##*/}"      "$HOME"
+        link "$bashfiles" "$profile" "$dest"
+        link "$bashfiles" "$bash_profile" "$dest"
+        link "$bashfiles" "$bashrc" "$dest"
+        link "$bashfiles" "$bashrc_after" "$dest"
+        link "$bashfiles" "$bash_logout" "$dest"
+        link "$bashfiles" "$inputrc" "$dest"
     fi
 fi
 
@@ -83,17 +106,13 @@ if [[ ! -d $help ]]; then
 
     if [[ ! $abort ]] && getRepo "${help##*/}"; then
 
-        gitignore="$HOME/.gitignore"
-        screenrc="$HOME/.screenrc"
-        curlrc="$HOME/.curlrc"
+        gitignore="$dest/.gitignore"
+        screenrc="$dest/.screenrc"
+        curlrc="$dest/.curlrc"
 
-        [[ -f $gitignore && ! -O $gitignore ]] && rm "$gitignore"
-        [[ -f $screenrc  && ! -O $screenrc  ]] && rm "$screenrc"
-        [[ -f $curlrc    && ! -O $curlrc    ]] && rm "$curlrc"
-
-        ln -s "$help/${gitignore##*/}" "$HOME"
-        ln -s "$help/${screenrc##*/}"  "$HOME"
-        ln -s "$help/${curlrc##*/}"    "$HOME"
+        link "$help" "$gitignore" "$dest"
+        link "$help" "$screenrc" "$dest"
+        link "$help" "$curlrc" "$dest"
     fi
 fi
 
@@ -101,22 +120,17 @@ if [[ ! -d $vimfiles ]]; then
 
     if [[ ! $abort ]] && getRepo "${vimfiles##*/}"; then
 
-        vim="$HOME/.vim"
-        vimrc="$HOME/.vimrc"
-        gvimrc="$HOME/.gvimrc"
+        vim="$dest/.vim"
+        vimrc="$dest/.vimrc"
+        gvimrc="$dest/.gvimrc"
 
-        # to be revised
-        [[ -d $vim    && ! -O $vim    ]] && rm -r "$vim"
-        [[ -f $vimrc  && ! -O $vimrc  ]] && rm "$vimrc"
-        [[ -f $gvimrc && ! -O $gvimrc ]] && rm "$gvimrc"
+        link "$vimfiles" "$vim" "$dest"
+        link "$vimfiles" "$vimrc" "$dest"
+        link "$vimfiles" "$gvimrc" "$dest"
 
-        ln -s "$vimfiles/${vim##*/}"    "$HOME"
-        ln -s "$vimfiles/${vimrc##*/}"  "$HOME"
-        ln -s "$vimfiles/${gvimrc##*/}" "$HOME"
+        ## All plugins: ln or cp if -win
+        #for p in "$vimfiles/plugins"; do
 
-        # All plugins: ln or cp if -win
-        for p in "$vimfiles/plugins"; do
-
-        done
+        #done
     fi
 fi
