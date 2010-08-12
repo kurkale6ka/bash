@@ -8,16 +8,26 @@
 # shopt -s extglob
 
 me=kurkale6ka
-dotfiles="$HOME/test"
-dest="$HOME/test"
-bashfiles="$dotfiles/bashfiles"
-help="$dotfiles/help"
-vimfiles="$dotfiles/vimfiles"
+dotfiles="$HOME/test2"
+repos="$HOME/test"
+bashfiles="$repos/bashfiles"
+helpfiles="$repos/help"
+vimfiles="$repos/vimfiles"
+bash_dotfiles=("$dotfiles/."{profile,bash_profile,bashrc,bashrc_after,bash_logout,inputrc})
+help_dotfiles=("$dotfiles/."{gitignore,screenrc,curlrc})
+vim_dotfiles=("$dotfiles/."{vim,vimrc,gvimrc})
 
 # [[ ! -d $HOME/bin ]] && mkdir -p "$HOME/bin"
 # ln -s "$bashfiles/scripts/iurl"   "$HOME/bin"
 # ln -s "$bashfiles/scripts/utests" "$HOME/bin"
 # ln -s "$bashfiles/scripts/dot"    "$HOME/bin"
+
+uncompress() {
+
+    tar -zxvf "$1"/*"$2"*"$3"*.tar.gz -C "$1"
+    rm "$1"/*"$2"*"$3"*.tar.gz
+    mv "$1"/{*"$2"*"$3"*/,"$3"}
+}
 
 getRepo() {
 
@@ -25,21 +35,20 @@ getRepo() {
 
         git=true
 
-        #if git clone "git@207.97.227.248:$me/$1.git" "$dotfiles"; then
-        if git clone "git@github.com:$me/$1.git" "$dotfiles"; then
+        #if git clone "git@207.97.227.248:$me/$1.git" "$repos/$1"; then
+        if git clone "git@github.com:$me/$1.git" "$repos/$1"; then
 
             printf "Cloned $1 repository\n"
         else
-            if wget -P "$dest" "http://github.com/$me/$1/tarball/master"; then
+            if wget -P "$repos" "http://github.com/$me/$1/tarball/master"; then
 
-                tar -zxvf "$dest"/*"$me"*"$1"*.tar.gz -C "$dest"
-                mv "$dest"/{*"$me"*"$1"*,"$1"}
+                uncompress "$repos" "$me" "$1"
             fi
         fi
     else
         if [[ ! $first ]]; then
 
-            printf "Git is not installed on this machine\n"
+            printf "Git is not installed on this machine:\n\n"
             choice_git='I want to install git and retry later'
             choice_repos='I want to simply copy the repositories'
 
@@ -56,10 +65,10 @@ getRepo() {
             (( first++ ))
         fi
 
-        if [[ ! $abort ]] && wget -P "$dest" "http://github.com/$me/$1/tarball/master"; then
+        if [[ ! $abort ]] &&
+            wget -P "$repos" "http://github.com/$me/$1/tarball/master"; then
 
-            tar -zxvf "$dest"/*"$me"*"$1"*.tar.gz -C "$dest"
-            mv "$dest"/{*"$me"*"$1"*,"$1"}
+            uncompress "$repos" "$me" "$1"
         fi
     fi
 }
@@ -82,55 +91,25 @@ link() {
     [[ ! -L $2 ]] && ln -s "$1/${2##*/}" "$3"
 }
 
-if [[ ! -d $bashfiles ]]; then
+linkToRepo() {
 
-    if [[ ! $abort ]] && getRepo "${bashfiles##*/}"; then
+    if [[ ! -d $1 ]]; then
 
-        profile="$dest/.profile"
-        bash_profile="$dest/.bash_profile"
-        bashrc="$dest/.bashrc"
-        bashrc_after="$dest/.bashrc_after"
-        bash_logout="$dest/.bash_logout"
-        inputrc="$dest/.inputrc"
+        if [[ ! $abort ]] && getRepo "${1##*/}"; then
 
-        link "$bashfiles" "$profile" "$dest"
-        link "$bashfiles" "$bash_profile" "$dest"
-        link "$bashfiles" "$bashrc" "$dest"
-        link "$bashfiles" "$bashrc_after" "$dest"
-        link "$bashfiles" "$bash_logout" "$dest"
-        link "$bashfiles" "$inputrc" "$dest"
+            for df in "${2[@]}"; do
+
+                link "$1" "$df" "$3"
+            done
+        fi
     fi
-fi
+}
 
-if [[ ! -d $help ]]; then
+linkToRepo "$bashfiles" "$bash_dotfiles" "$dotfiles"
+linkToRepo "$helpfiles" "$help_dotfiles" "$dotfiles"
+linkToRepo "$vimfiles"  "$vim_dotfiles"  "$dotfiles"
 
-    if [[ ! $abort ]] && getRepo "${help##*/}"; then
+## All plugins: ln or cp if -win
+#for p in "$vimfiles/plugins"; do
 
-        gitignore="$dest/.gitignore"
-        screenrc="$dest/.screenrc"
-        curlrc="$dest/.curlrc"
-
-        link "$help" "$gitignore" "$dest"
-        link "$help" "$screenrc" "$dest"
-        link "$help" "$curlrc" "$dest"
-    fi
-fi
-
-if [[ ! -d $vimfiles ]]; then
-
-    if [[ ! $abort ]] && getRepo "${vimfiles##*/}"; then
-
-        vim="$dest/.vim"
-        vimrc="$dest/.vimrc"
-        gvimrc="$dest/.gvimrc"
-
-        link "$vimfiles" "$vim" "$dest"
-        link "$vimfiles" "$vimrc" "$dest"
-        link "$vimfiles" "$gvimrc" "$dest"
-
-        ## All plugins: ln or cp if -win
-        #for p in "$vimfiles/plugins"; do
-
-        #done
-    fi
-fi
+#done
