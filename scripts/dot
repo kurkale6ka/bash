@@ -81,7 +81,7 @@ pullRepo() { # {{{1
 
         git=true
 
-        if git pull "git@github.com:$me/$repo.git master"; then
+        if git pull "git@github.com:$me/$repo.git master" "$repos/$repo"; then
 
             printf "Updated $repo repository\n"
         else
@@ -159,16 +159,16 @@ updateRepo() { # {{{1
     local repo="$2"
     local dotfiles="$3"
 
+    [[ -d $repo ]] && pullRepo "${repo##*/}"
+
     if [[ ! -d $repo ]] && cloneRepo "${repo##*/}" ||
-        [[ -d $repo && $option == @(-l|--links) ]]; then
+       [[ -d $repo && $option == @(-l|--links) ]]; then
 
         for dotfile in "${@:4}"; do
 
             linkToRepo "$repo" "$dotfiles" "$dotfile"
         done
     fi
-
-    [[ -d $repo ]] && pullRepo "${repo##*/}"
 }
 
 updateRepo "$1" "$bashfiles" "$dotfiles" "${bash_dotfiles[@]}"
