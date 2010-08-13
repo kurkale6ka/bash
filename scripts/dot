@@ -17,7 +17,7 @@ helpfiles="$repos/help"
 vimfiles="$repos/vimfiles"
 
 dotfiles="$HOME/test2"
-bash_dotfiles=("$dotfiles/."{profile,bash_profile,bashrc,bashrc_after,bash_logout,inputrc})
+bash_dotfiles=("$dotfiles/."{profile,bash_login,bash_profile,bashrc,bashrc_after,bash_logout,logout,inputrc})
 help_dotfiles=("$dotfiles/."{gitignore,screenrc,curlrc})
 vim_dotfiles=("$dotfiles/."{vim,vimrc,gvimrc})
 
@@ -179,6 +179,14 @@ updateRepo() { # {{{1
 updateRepo "$1" "$bashfiles" "$dotfiles" "${bash_dotfiles[@]}"
 #updateRepo "$1" "$helpfiles" "$dotfiles" "${help_dotfiles[@]}"
 #updateRepo "$1" "$vimfiles"  "$dotfiles" "${vim_dotfiles[@]}"
+
+#git://github.com/godlygeek/csapprox.git
+#git://github.com/godlygeek/tabular.git
+#git://github.com/godlygeek/netlib.git
+#git://github.com/godlygeek/windowlayout.git
+#git://github.com/spiiph/vim-space.git
+#git://github.com/tpope/vim-surround.git
+#git://github.com/tpope/vim-repeat.git
 
 ## All plugins: ln or cp if -win
 #for p in "$vimfiles/plugins"; do
