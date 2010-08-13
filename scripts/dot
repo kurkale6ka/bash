@@ -8,41 +8,45 @@
 # shopt -s extglob
 
 me=kurkale6ka
-dotfiles="$HOME/test2"
 repos="$HOME/test"
 bashfiles="$repos/bashfiles"
 helpfiles="$repos/help"
 vimfiles="$repos/vimfiles"
+dotfiles="$HOME/test2"
 bash_dotfiles=("$dotfiles/."{profile,bash_profile,bashrc,bashrc_after,bash_logout,inputrc})
 help_dotfiles=("$dotfiles/."{gitignore,screenrc,curlrc})
 vim_dotfiles=("$dotfiles/."{vim,vimrc,gvimrc})
 
 # [[ ! -d $HOME/bin ]] && mkdir -p "$HOME/bin"
-# ln -s "$bashfiles/scripts/iurl"   "$HOME/bin"
-# ln -s "$bashfiles/scripts/utests" "$HOME/bin"
 # ln -s "$bashfiles/scripts/dot"    "$HOME/bin"
 
 uncompress() {
 
-    tar -zxvf "$1"/*"$2"*"$3"*.tar.gz -C "$1"
-    rm "$1"/*"$2"*"$3"*.tar.gz
-    mv "$1"/{*"$2"*"$3"*/,"$3"}
+    local repos="$1"
+    local me="$2"
+    local repo="$3"
+
+    tar -zxvf "$repos"/*"$me"*"$repo"*.tar.gz -C "$repos"
+    rm "$repos"/*"$me"*"$repo"*.tar.gz
+    mv "$repos"/{*"$me"*"$repo"*/,"$repo"}
 }
 
 getRepo() {
+
+    local repo="$1"
 
     if [[ $git ]] || command -v git >/dev/null 2>&1; then
 
         git=true
 
-        #if git clone "git@207.97.227.248:$me/$1.git" "$repos/$1"; then
-        if git clone "git@github.com:$me/$1.git" "$repos/$1"; then
+        #if git clone "git@207.97.227.248:$me/$repo.git" "$repos/$repo"; then
+        if git clone "git@github.com:$me/$repo.git" "$repos/$repo"; then
 
-            printf "Cloned $1 repository\n"
+            printf "Cloned $repo repository\n"
         else
-            if wget -P "$repos" "http://github.com/$me/$1/tarball/master"; then
+            if wget -P "$repos" "http://github.com/$me/$repo/tarball/master"; then
 
-                uncompress "$repos" "$me" "$1"
+                uncompress "$repos" "$me" "$repo"
             fi
         fi
     else
@@ -66,48 +70,55 @@ getRepo() {
         fi
 
         if [[ ! $abort ]] &&
-            wget -P "$repos" "http://github.com/$me/$1/tarball/master"; then
+            wget -P "$repos" "http://github.com/$me/$repo/tarball/master"; then
 
-            uncompress "$repos" "$me" "$1"
+            uncompress "$repos" "$me" "$repo"
         fi
     fi
 }
 
 link() {
 
-    # Delete if not mine
-    if [[ -e $2 && ! -O $2 ]]; then
+    local repo="$1"
+    local dotfiles="$2"
+    local dotfile="$3"
 
-        [[ -d $2 ]] && rm -r "$2" || rm "$2"
+    # Delete if not mine
+    if [[ -e $dotfile && ! -O $dotfile ]]; then
+
+        [[ -d $dotfile ]] && rm -r "$dotfile" || rm "$dotfile"
     fi
 
     # Delete if mine but not a link
-    if [[ -e $2 && ! -L $2 ]]; then
+    if [[ -e $dotfile && ! -L $dotfile ]]; then
 
-        [[ -d $2 ]] && rm -r "$2" || rm "$2"
+        [[ -d $dotfile ]] && rm -r "$dotfile" || rm "$dotfile"
     fi
 
     # To be improved
-    [[ ! -L $2 ]] && ln -s "$1/${2##*/}" "$3"
+    [[ ! -L $dotfile ]] && ln -s "$repo/${dotfile##*/}" "$dotfiles"
 }
 
 linkToRepo() {
 
-    if [[ ! -d $1 ]]; then
+    local repo="$1"
+    local dotfiles="$2"
 
-        if [[ ! $abort ]] && getRepo "${1##*/}"; then
+    if [[ ! -d $repo ]]; then
 
-            for df in "${2[@]}"; do
+        if [[ ! $abort ]] && getRepo "${repo##*/}"; then
 
-                link "$1" "$df" "$3"
+            for dotfile in "${@:3}"; do
+
+                link "$repo" "$dotfiles" "$dotfile"
             done
         fi
     fi
 }
 
-linkToRepo "$bashfiles" "$bash_dotfiles" "$dotfiles"
-linkToRepo "$helpfiles" "$help_dotfiles" "$dotfiles"
-linkToRepo "$vimfiles"  "$vim_dotfiles"  "$dotfiles"
+linkToRepo "$bashfiles" "$dotfiles" "${bash_dotfiles[@]}"
+#linkToRepo "$helpfiles" "$dotfiles" "${help_dotfiles[@]}"
+#linkToRepo "$vimfiles"  "$dotfiles" "${vim_dotfiles[@]}"
 
 ## All plugins: ln or cp if -win
 #for p in "$vimfiles/plugins"; do
