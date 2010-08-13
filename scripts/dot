@@ -84,7 +84,7 @@ pullRepo() { # {{{1
         git=true
 
         #if git pull "git@207.97.227.248:$me/$repo.git master"; then
-        if git pull "git@github.com:$me/$repo.git master"; then
+        if git pull "git@github.com:$me/$repo.git" master; then
 
             printf "Updated $repo repository\n"
         else
