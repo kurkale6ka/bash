@@ -9,8 +9,12 @@
 
 shopt -s extglob
 
+# account?
 me=kurkale6ka
 
+# todo:
+# --repos, --dotfiles, --copy
+# messages/quiet + warn
 repos="$HOME/test"
 bashfiles="$repos/bashfiles"
 helpfiles="$repos/help"
@@ -180,6 +184,7 @@ updateRepo "$1" "$bashfiles" "$dotfiles" "${bash_dotfiles[@]}"
 #updateRepo "$1" "$helpfiles" "$dotfiles" "${help_dotfiles[@]}"
 #updateRepo "$1" "$vimfiles"  "$dotfiles" "${vim_dotfiles[@]}"
 
+# matchit, vsearch, bgrep, php, xsd...
 #git://github.com/godlygeek/csapprox.git
 #git://github.com/godlygeek/tabular.git
 #git://github.com/godlygeek/netlib.git
@@ -188,7 +193,7 @@ updateRepo "$1" "$bashfiles" "$dotfiles" "${bash_dotfiles[@]}"
 #git://github.com/tpope/vim-surround.git
 #git://github.com/tpope/vim-repeat.git
 
-## All plugins: ln or cp if -win
+# All plugins: ln or cp if --windows
 #for p in "$vimfiles/plugins"; do
 
 #done
