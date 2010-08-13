@@ -22,18 +22,21 @@ vim_dotfiles=("$dotfiles/."{vim,vimrc,gvimrc})
 # [[ ! -d $HOME/bin ]] && mkdir -p "$HOME/bin"
 # ln -s "$bashfiles/scripts/dot"    "$HOME/bin"
 
-uncompress() { # {{{1
+copyRepo() { # {{{1
 
     local repos="$1"
     local me="$2"
     local repo="$3"
 
-    tar -zxvf "$repos"/*"$me"*"$repo"*.tar.gz -C "$repos"
-    rm "$repos"/*"$me"*"$repo"*.tar.gz
-    mv "$repos"/{*"$me"*"$repo"*/,"$repo"}
+    if wget -P "$repos" "http://github.com/$me/$repo/tarball/master"; then
+
+        tar -zxvf "$repos"/*"$me"*"$repo"*.tar.gz -C "$repos"
+        rm "$repos"/*"$me"*"$repo"*.tar.gz
+        mv "$repos"/{*"$me"*"$repo"*/,"$repo"}
+    fi
 }
 
-getRepo() { # {{{1
+cloneRepo() { # {{{1
 
     local repo="$1"
 
@@ -41,15 +44,11 @@ getRepo() { # {{{1
 
         git=true
 
-        #if git clone "git@207.97.227.248:$me/$repo.git" "$repos/$repo"; then
         if git clone "git@github.com:$me/$repo.git" "$repos/$repo"; then
 
             printf "Cloned $repo repository\n"
         else
-            if wget -P "$repos" "http://github.com/$me/$repo/tarball/master"
-            then
-                uncompress "$repos" "$me" "$repo"
-            fi
+            copyRepo "$repos" "$me" "$repo"
         fi
     else
         if [[ ! $first ]]; then
@@ -70,14 +69,68 @@ getRepo() { # {{{1
             (( first++ ))
         fi
 
-        if wget -P "$repos" "http://github.com/$me/$repo/tarball/master"; then
-
-            uncompress "$repos" "$me" "$repo"
-        fi
+        copyRepo "$repos" "$me" "$repo"
     fi
 }
 
-link() { # {{{1
+pullRepo() { # {{{1
+
+    local repo="$1"
+
+    if [[ $git ]] || command -v git >/dev/null 2>&1; then
+
+        git=true
+
+        if git pull "git@github.com:$me/$repo.git master"; then
+
+            printf "Updated $repo repository\n"
+        else
+            if [[ ! $firstAbort ]]; then
+
+                printf "Cannot update $repo: Git error:\n\n"
+                choice_abort='Abort'
+                choice_repos='I want to copy over the existing repositories'
+
+                select choice in "$choice_abort" "$choice_repos"; do
+
+                    if [[ $choice == $choice_abort ]]; then
+
+                        exit 0
+                    fi
+                    break
+                done
+
+                (( firstAbort++ ))
+            fi
+
+            rm -rf "$repo"
+            copyRepo "$repos" "$me" "$repo"
+        fi
+    else
+        if [[ ! $first ]]; then
+
+            printf "Cannot update $repo: Git is not installed:\n\n"
+            choice_git='I want to install git and retry later'
+            choice_repos='I want to copy over the existing repositories'
+
+            select choice in "$choice_git" "$choice_repos"; do
+
+                if [[ $choice == $choice_git ]]; then
+
+                    exit 0
+                fi
+                break
+            done
+
+            (( first++ ))
+        fi
+
+        rm -rf "$repo"
+        copyRepo "$repos" "$me" "$repo"
+    fi
+}
+
+linkToRepo() { # {{{1
 
     local repo="$1"
     local dotfiles="$2"
@@ -99,26 +152,28 @@ link() { # {{{1
     [[ ! -L $dotfile ]] && ln -s "$repo/${dotfile##*/}" "$dotfiles"
 }
 
-linkToRepo() { # {{{1
+updateRepo() { # {{{1
 
     # improve: get option -l independently of where it is
     local option="$1"
     local repo="$2"
     local dotfiles="$3"
 
-    if [[ ! -d $repo ]] && getRepo "${repo##*/}" ||
-       [[ -d $repo && $option == @(-l|--links) ]]; then
+    if [[ ! -d $repo ]] && cloneRepo "${repo##*/}" ||
+        [[ -d $repo && $option == @(-l|--links) ]]; then
 
         for dotfile in "${@:4}"; do
 
-            link "$repo" "$dotfiles" "$dotfile"
+            linkToRepo "$repo" "$dotfiles" "$dotfile"
         done
     fi
+
+    [[ -d $repo ]] && pullRepo "${repo##*/}"
 }
 
-linkToRepo "$1" "$bashfiles" "$dotfiles" "${bash_dotfiles[@]}"
-#linkToRepo "$1" "$helpfiles" "$dotfiles" "${help_dotfiles[@]}"
-#linkToRepo "$1" "$vimfiles"  "$dotfiles" "${vim_dotfiles[@]}"
+updateRepo "$1" "$bashfiles" "$dotfiles" "${bash_dotfiles[@]}"
+#updateRepo "$1" "$helpfiles" "$dotfiles" "${help_dotfiles[@]}"
+#updateRepo "$1" "$vimfiles"  "$dotfiles" "${vim_dotfiles[@]}"
 
 ## All plugins: ln or cp if -win
 #for p in "$vimfiles/plugins"; do
