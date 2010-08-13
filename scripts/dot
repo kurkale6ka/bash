@@ -81,13 +81,13 @@ pullRepo() { # {{{1
 
         git=true
 
-        if git pull "git@github.com:$me/$repo.git master" "$repos/$repo"; then
+        if git pull --work-tree="$repos/$repo" "git@github.com:$me/$repo.git master"; then
 
             printf "Updated $repo repository\n"
         else
             if [[ ! $firstAbort ]]; then
 
-                printf "Cannot update $repo: Git error:\n\n"
+                printf "Git error, cannot update $repo:\n\n"
                 choice_abort='Abort'
                 choice_repos='I want to copy over the existing repositories'
 
