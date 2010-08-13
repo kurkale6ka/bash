@@ -5,7 +5,7 @@
 # Author Dimitar Dimitrov <mitkofr@yahoo.fr>
 # ------------------------------------------
 
-# shopt -s extglob
+shopt -s extglob
 
 me=kurkale6ka
 
@@ -37,21 +37,21 @@ getRepo() { # {{{1
 
     local repo="$1"
 
-    #if [[ $git ]] || command -v git >/dev/null 2>&1; then
+    if [[ $git ]] || command -v git >/dev/null 2>&1; then
 
-    #    git=true
+        git=true
 
-    #    #if git clone "git@207.97.227.248:$me/$repo.git" "$repos/$repo"; then
-    #    if git clone "git@github.com:$me/$repo.git" "$repos/$repo"; then
+        #if git clone "git@207.97.227.248:$me/$repo.git" "$repos/$repo"; then
+        if git clone "git@github.com:$me/$repo.git" "$repos/$repo"; then
 
-    #        printf "Cloned $repo repository\n"
-    #    else
-    #        if wget -P "$repos" "http://github.com/$me/$repo/tarball/master"; then
-
-    #            uncompress "$repos" "$me" "$repo"
-    #        fi
-    #    fi
-    #else
+            printf "Cloned $repo repository\n"
+        else
+            if wget -P "$repos" "http://github.com/$me/$repo/tarball/master"
+            then
+                uncompress "$repos" "$me" "$repo"
+            fi
+        fi
+    else
         if [[ ! $first ]]; then
 
             printf "Git is not installed on this machine:\n\n"
@@ -74,7 +74,7 @@ getRepo() { # {{{1
 
             uncompress "$repos" "$me" "$repo"
         fi
-    #fi
+    fi
 }
 
 link() { # {{{1
@@ -101,24 +101,24 @@ link() { # {{{1
 
 linkToRepo() { # {{{1
 
-    local repo="$1"
-    local dotfiles="$2"
+    # improve: get option -l independently of where it is
+    local option="$1"
+    local repo="$2"
+    local dotfiles="$3"
 
-    if [[ ! -d $repo ]]; then
+    if [[ ! -d $repo ]] && getRepo "${repo##*/}" ||
+       [[ -d $repo && $option == @(-l|--links) ]]; then
 
-        if getRepo "${repo##*/}"; then
+        for dotfile in "${@:4}"; do
 
-            for dotfile in "${@:3}"; do
-
-                link "$repo" "$dotfiles" "$dotfile"
-            done
-        fi
+            link "$repo" "$dotfiles" "$dotfile"
+        done
     fi
 }
 
-linkToRepo "$bashfiles" "$dotfiles" "${bash_dotfiles[@]}"
-linkToRepo "$helpfiles" "$dotfiles" "${help_dotfiles[@]}"
-linkToRepo "$vimfiles"  "$dotfiles" "${vim_dotfiles[@]}"
+linkToRepo "$1" "$bashfiles" "$dotfiles" "${bash_dotfiles[@]}"
+#linkToRepo "$1" "$helpfiles" "$dotfiles" "${help_dotfiles[@]}"
+#linkToRepo "$1" "$vimfiles"  "$dotfiles" "${vim_dotfiles[@]}"
 
 ## All plugins: ln or cp if -win
 #for p in "$vimfiles/plugins"; do
