@@ -5,6 +5,8 @@
 # Author Dimitar Dimitrov <mitkofr@yahoo.fr>
 # ------------------------------------------
 
+# Settings {{{1
+
 shopt -s extglob
 
 me=kurkale6ka
@@ -81,7 +83,8 @@ pullRepo() { # {{{1
 
         git=true
 
-        if git pull --work-tree="$repos/$repo" "git@github.com:$me/$repo.git master"; then
+        #if git pull "git@207.97.227.248:$me/$repo.git master"; then
+        if git pull "git@github.com:$me/$repo.git master"; then
 
             printf "Updated $repo repository\n"
         else
@@ -159,7 +162,7 @@ updateRepo() { # {{{1
     local repo="$2"
     local dotfiles="$3"
 
-    [[ -d $repo ]] && pullRepo "${repo##*/}"
+    [[ -d $repo ]] && cd "$repo" && pullRepo "${repo##*/}"
 
     if [[ ! -d $repo ]] && cloneRepo "${repo##*/}" ||
        [[ -d $repo && $option == @(-l|--links) ]]; then
@@ -170,6 +173,8 @@ updateRepo() { # {{{1
         done
     fi
 }
+
+# Actions {{{1
 
 updateRepo "$1" "$bashfiles" "$dotfiles" "${bash_dotfiles[@]}"
 #updateRepo "$1" "$helpfiles" "$dotfiles" "${help_dotfiles[@]}"
