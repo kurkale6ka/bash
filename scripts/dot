@@ -227,8 +227,12 @@ if [[ -d $repos/$vimfiles/plugins ]]; then
 
     for plugin in "$repos/$vimfiles/plugins"/*; do
 
-        # Make a loop
-        #find "$plugin" -name '*.vim' -exec ln -s {} "$repos/$vimfiles/${plugin_file##*$plugin/}" {} +
+        while read -r -d $'\0'; do
+
+            ln -s $REPLY "$repos/$vimfiles/${REPLY##*$plugin/}"
+
+        done < <(find "$plugin" \( -name '*.vim' -o -name '*.txt' \) -print0)
+
     done
 fi
 
