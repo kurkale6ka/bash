@@ -192,10 +192,10 @@ linkToRepo() { # {{{1
 
 updateRepo() { # {{{1
 
-    local author="$2"
-    local repo="$3"
-    local destination="$4"
-    local dotfiles="$5"
+    local author="$1"
+    local repo="$2"
+    local destination="$3"
+    local dotfiles="$4"
 
     [[ -d $destination ]] && cd "$destination" && pullRepo "$author" "$repo"
 
@@ -203,9 +203,9 @@ updateRepo() { # {{{1
         [[ -d $destination && $arg_links ]]; then
 
     # If there are dotfiles to link to
-    if [[ $6 ]]; then
+    if [[ $5 ]]; then
 
-        for dotfile in "${@:6}"; do
+        for dotfile in "${@:5}"; do
 
             linkToRepo "$destination" "$dotfiles" "$dotfile"
         done
@@ -215,15 +215,15 @@ fi
 
 # Actions {{{1
 
-updateRepo "$1" "$me" "$bashfiles" "$repos/$bashfiles" "$dotfiles" "${bash_dotfiles[@]}"
-updateRepo "$1" "$me" "$helpfiles" "$repos/$helpfiles" "$dotfiles" "${help_dotfiles[@]}"
-updateRepo "$1" "$me" "$vimfiles"  "$repos/$vimfiles" "$dotfiles" "${vim_dotfiles[@]}"
+updateRepo "$me" "$bashfiles" "$repos/$bashfiles" "$dotfiles" "${bash_dotfiles[@]}"
+updateRepo "$me" "$helpfiles" "$repos/$helpfiles" "$dotfiles" "${help_dotfiles[@]}"
+updateRepo "$me" "$vimfiles"  "$repos/$vimfiles" "$dotfiles" "${vim_dotfiles[@]}"
 
-updateRepo "NA" "$godlygeek" csapprox      "$repos/$vimfiles/plugins/csapprox"
-updateRepo "NA" "$godlygeek" tabular       "$repos/$vimfiles/plugins/tabular"
-updateRepo "NA" "$spiiph"    vim-space     "$repos/$vimfiles/plugins/vim-space"
-updateRepo "NA" "$tpope"     vim-surround  "$repos/$vimfiles/plugins/vim-surround"
-updateRepo "NA" "$tpope"     vim-repeat    "$repos/$vimfiles/plugins/vim-repeat"
+updateRepo "$godlygeek" csapprox      "$repos/$vimfiles/plugins/csapprox"
+updateRepo "$godlygeek" tabular       "$repos/$vimfiles/plugins/tabular"
+updateRepo "$spiiph"    vim-space     "$repos/$vimfiles/plugins/vim-space"
+updateRepo "$tpope"     vim-surround  "$repos/$vimfiles/plugins/vim-surround"
+updateRepo "$tpope"     vim-repeat    "$repos/$vimfiles/plugins/vim-repeat"
 
 # Create a symlink of this script in ~/bin
 if [[ -d $repos/$bashfiles/scripts && ! -L $HOME/bin/${0##*/} ]]; then
