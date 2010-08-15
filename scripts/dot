@@ -9,52 +9,63 @@
 
 shopt -s extglob
 
-# account?
+# Plugin Authors
 me=kurkale6ka
+godlygeek=godlygeek
+spiiph=spiiph
+tpope=tpope
+
+# matchit, vsearch, bgrep, php, xsd...
+#git://github.com/godlygeek/netlib.git
+#git://github.com/godlygeek/windowlayout.git
 
 # todo:
 # --repos, --dotfiles, --copy
 # messages/quiet + warn
 repos="$HOME/test"
-bashfiles="$repos/bashfiles"
-helpfiles="$repos/help"
-vimfiles="$repos/vimfiles"
-
 dotfiles="$HOME/test2"
-bash_dotfiles=("$dotfiles/."{profile,bash_login,bash_profile,bashrc,bashrc_after,bash_logout,logout,inputrc})
+
+bashfiles=bashfiles
+helpfiles=help
+vimfiles=vimfiles
+
+bash_dotfiles=("$dotfiles/."{profile,bash_login,bash_profile})
+bash_dotfiles+=("$dotfiles/."{bashrc,bashrc_after,bash_logout,logout,inputrc})
 help_dotfiles=("$dotfiles/."{gitignore,screenrc,curlrc})
 vim_dotfiles=("$dotfiles/."{vim,vimrc,gvimrc})
 
-# [[ ! -d $HOME/bin ]] && mkdir -p "$HOME/bin"
-# ln -s "$bashfiles/scripts/dot"    "$HOME/bin"
-
 copyRepo() { # {{{1
 
-    local repos="$1"
-    local me="$2"
+    local author="$1"
+    local repos="$2"
     local repo="$3"
 
-    if wget -P "$repos" "http://github.com/$me/$repo/tarball/master"; then
+    if wget -P "$repos" "http://github.com/$author/$repo/tarball/master"; then
 
-        tar -zxvf "$repos"/*"$me"*"$repo"*.tar.gz -C "$repos"
-        rm "$repos"/*"$me"*"$repo"*.tar.gz
-        mv "$repos"/{*"$me"*"$repo"*/,"$repo"}
+        tar -zxvf "$repos"/*"$author"*"$repo"*.tar.gz -C "$repos"
+        rm "$repos"/*"$author"*"$repo"*.tar.gz
+        mv "$repos"/{*"$author"*"$repo"*/,"$repo"}
     fi
 }
 
 cloneRepo() { # {{{1
 
-    local repo="$1"
+    local author="$1"
+    local repo="$2"
+    local destination="$3"
+    local remote_host="git://github.com/"
+
+    [[ $author == $me ]] && remote_host="git@github.com:"
 
     if [[ $git ]] || command -v git >/dev/null 2>&1; then
 
         git=true
 
-        if git clone "git@github.com:$me/$repo.git" "$repos/$repo"; then
+        if git clone "$remote_host$author/$repo.git" "$destination"; then
 
             printf "Cloned $repo repository\n"
         else
-            copyRepo "$repos" "$me" "$repo"
+            copyRepo "$author" "$repos" "$repo"
         fi
     else
         if [[ ! $first ]]; then
@@ -75,20 +86,24 @@ cloneRepo() { # {{{1
             (( first++ ))
         fi
 
-        copyRepo "$repos" "$me" "$repo"
+        copyRepo "$author" "$repos" "$repo"
     fi
 }
 
 pullRepo() { # {{{1
 
-    local repo="$1"
+    local author="$1"
+    local repo="$2"
+    local remote_host="git://github.com/"
+
+    [[ $author == $me ]] && remote_host="git@github.com:"
 
     if [[ $git ]] || command -v git >/dev/null 2>&1; then
 
         git=true
 
-        #if git pull "git@207.97.227.248:$me/$repo.git master"; then
-        if git pull "git@github.com:$me/$repo.git" master; then
+        #if git pull "git@207.97.227.248:$author/$repo.git master"; then
+        if git pull "$remote_host$author/$repo.git" master; then
 
             printf "Updated $repo repository\n"
         else
@@ -111,7 +126,7 @@ pullRepo() { # {{{1
             fi
 
             rm -rf "$repo"
-            copyRepo "$repos" "$me" "$repo"
+            copyRepo "$author" "$repos" "$repo"
         fi
     else
         if [[ ! $first ]]; then
@@ -133,7 +148,7 @@ pullRepo() { # {{{1
         fi
 
         rm -rf "$repo"
-        copyRepo "$repos" "$me" "$repo"
+        copyRepo "$author" "$repos" "$repo"
     fi
 }
 
@@ -163,39 +178,58 @@ updateRepo() { # {{{1
 
     # improve: get option -l independently of where it is
     local option="$1"
-    local repo="$2"
-    local dotfiles="$3"
+    local author="$2"
+    local repo="$3"
+    local destination="$4"
+    local dotfiles="$5"
 
-    [[ -d $repo ]] && cd "$repo" && pullRepo "${repo##*/}"
+    [[ -d $destination ]] && cd "$destination" && pullRepo "$author" "$repo"
 
-    if [[ ! -d $repo ]] && cloneRepo "${repo##*/}" ||
-       [[ -d $repo && $option == @(-l|--links) ]]; then
+    if [[ ! -d $destination ]] && cloneRepo "$author" "$repo" "$destination" ||
+        [[ -d $destination && $option == @(-l|--links) ]]; then
 
-        for dotfile in "${@:4}"; do
+    # If there are dotfiles to link to
+    if [[ $6 ]]; then
 
-            linkToRepo "$repo" "$dotfiles" "$dotfile"
+        for dotfile in "${@:6}"; do
+
+            linkToRepo "$destination" "$dotfiles" "$dotfile"
         done
     fi
+fi
 }
 
 # Actions {{{1
 
-updateRepo "$1" "$bashfiles" "$dotfiles" "${bash_dotfiles[@]}"
-#updateRepo "$1" "$helpfiles" "$dotfiles" "${help_dotfiles[@]}"
-#updateRepo "$1" "$vimfiles"  "$dotfiles" "${vim_dotfiles[@]}"
+updateRepo "$1" "$me" "$bashfiles" "$repos/$bashfiles" "$dotfiles" "${bash_dotfiles[@]}"
+#updateRepo "$1" "$me" "$helpfiles" "$repos/$helpfiles" "$dotfiles" "${help_dotfiles[@]}"
+updateRepo "$1" "$me" "$vimfiles"  "$repos/$vimfiles" "$dotfiles" "${vim_dotfiles[@]}"
 
-# matchit, vsearch, bgrep, php, xsd...
-#git://github.com/godlygeek/csapprox.git
-#git://github.com/godlygeek/tabular.git
-#git://github.com/godlygeek/netlib.git
-#git://github.com/godlygeek/windowlayout.git
-#git://github.com/spiiph/vim-space.git
-#git://github.com/tpope/vim-surround.git
-#git://github.com/tpope/vim-repeat.git
+updateRepo "NA" "$godlygeek" csapprox      "$repos/$vimfiles/plugins/csapprox"
+updateRepo "NA" "$godlygeek" tabular       "$repos/$vimfiles/plugins/tabular"
+updateRepo "NA" "$spiiph"    vim-space     "$repos/$vimfiles/plugins/vim-space"
+updateRepo "NA" "$tpope"     vim-surround  "$repos/$vimfiles/plugins/vim-surround"
+updateRepo "NA" "$tpope"     vim-repeat    "$repos/$vimfiles/plugins/vim-repeat"
+
+# Create a symlink of this script in ~/bin
+if [[ -d $repos/$bashfiles/scripts && ! -L $HOME/bin/${0##*/} ]]; then
+
+    if [[ ! -d $HOME/bin ]]; then
+
+        mkdir "$HOME/bin" && ln -s "$repos/$bashfiles/scripts/${0##*/}" "$HOME/bin"
+    else
+        ln -s "$repos/$bashfiles/scripts/${0##*/}" "$HOME/bin"
+    fi
+fi
 
 # All plugins: ln or cp if --windows
-#for p in "$vimfiles/plugins"; do
+if [[ -d $repos/$vimfiles/plugins ]]; then
 
-#done
+    for plugin in "$repos/$vimfiles/plugins"/*; do
+
+        # Make a loop
+        #find "$plugin" -name '*.vim' -exec ln -s {} "$repos/$vimfiles/${plugin_file##*$plugin/}" {} +
+    done
+fi
 
 # vim: se fdm=marker fmr&:
