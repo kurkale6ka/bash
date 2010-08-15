@@ -123,7 +123,7 @@ pullRepo() { # {{{1
 
             printf "Updated $repo repository\n"
         else
-            if [[ ! $firstAbort ]]; then
+            if [[ ! $firstTime ]]; then
 
                 printf "Git error, cannot update $repo:\n\n"
                 choice_abort='Abort'
@@ -138,7 +138,7 @@ pullRepo() { # {{{1
                     break
                 done
 
-                (( firstAbort++ ))
+                (( firstTime++ ))
             fi
 
             rm -rf "$repo"
