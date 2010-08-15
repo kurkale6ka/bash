@@ -7,7 +7,7 @@
 
 # Settings {{{1
 
-shopt -s extglob
+#shopt -s extglob
 
 # Plugin Authors
 me=kurkale6ka
@@ -22,8 +22,8 @@ tpope=tpope
 # todo:
 # --repos, --dotfiles, --copy
 # messages/quiet + warn
-repos="$HOME/test"
-dotfiles="$HOME/test2"
+repos="$HOME"
+dotfiles="$HOME"
 
 bashfiles=bashfiles
 helpfiles=help
@@ -33,6 +33,22 @@ bash_dotfiles=("$dotfiles/."{profile,bash_login,bash_profile})
 bash_dotfiles+=("$dotfiles/."{bashrc,bashrc_after,bash_logout,logout,inputrc})
 help_dotfiles=("$dotfiles/."{gitignore,screenrc,curlrc})
 vim_dotfiles=("$dotfiles/."{vim,vimrc,gvimrc})
+
+arg_plugins=(ln -s)
+
+while [[ $1 == -* ]]; do
+
+    case "$1" in
+
+        -h|--help|-\?) show_help; exit 0;;
+    -v|--verbose) verbose=1; shift;;
+-l|--links) arg_links="$1"; shift;;
+      --copy-plugins) arg_plugins=(cp -f); shift;;
+  --move-plugins) arg_plugins=(mv); shift;;
+      --) shift; break;;
+  -*) echo "invalid option: $1" 1>&2; show_help; exit 1;;
+    esac
+done
 
 copyRepo() { # {{{1
 
@@ -176,8 +192,6 @@ linkToRepo() { # {{{1
 
 updateRepo() { # {{{1
 
-    # improve: get option -l independently of where it is
-    local option="$1"
     local author="$2"
     local repo="$3"
     local destination="$4"
@@ -186,7 +200,7 @@ updateRepo() { # {{{1
     [[ -d $destination ]] && cd "$destination" && pullRepo "$author" "$repo"
 
     if [[ ! -d $destination ]] && cloneRepo "$author" "$repo" "$destination" ||
-        [[ -d $destination && $option == @(-l|--links) ]]; then
+        [[ -d $destination && $arg_links ]]; then
 
     # If there are dotfiles to link to
     if [[ $6 ]]; then
@@ -202,7 +216,7 @@ fi
 # Actions {{{1
 
 updateRepo "$1" "$me" "$bashfiles" "$repos/$bashfiles" "$dotfiles" "${bash_dotfiles[@]}"
-#updateRepo "$1" "$me" "$helpfiles" "$repos/$helpfiles" "$dotfiles" "${help_dotfiles[@]}"
+updateRepo "$1" "$me" "$helpfiles" "$repos/$helpfiles" "$dotfiles" "${help_dotfiles[@]}"
 updateRepo "$1" "$me" "$vimfiles"  "$repos/$vimfiles" "$dotfiles" "${vim_dotfiles[@]}"
 
 updateRepo "NA" "$godlygeek" csapprox      "$repos/$vimfiles/plugins/csapprox"
@@ -222,14 +236,21 @@ if [[ -d $repos/$bashfiles/scripts && ! -L $HOME/bin/${0##*/} ]]; then
     fi
 fi
 
-# All plugins: ln or cp if --windows
 if [[ -d $repos/$vimfiles/plugins ]]; then
 
     for plugin in "$repos/$vimfiles/plugins"/*; do
 
         while read -r -d $'\0'; do
 
-            ln -s $REPLY "$repos/$vimfiles/${REPLY##*$plugin/}"
+            if [[ cp == ${arg_plugins[0]} ]]; then
+
+                reply=${REPLY##*$plugin/}
+                reply=${reply%/*}
+                "${arg_plugins[@]}" -- "$REPLY" "$repos/$vimfiles/$reply"
+
+            else
+                "${arg_plugins[@]}" -- "$REPLY" "$repos/$vimfiles/${REPLY##*$plugin/}"
+            fi
 
         done < <(find "$plugin" \( -name '*.vim' -o -name '*.txt' \) -print0)
 
