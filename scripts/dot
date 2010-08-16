@@ -34,19 +34,51 @@ bash_dotfiles+=("$dotfiles/."{bashrc,bashrc_after,bash_logout,logout,inputrc})
 help_dotfiles=("$dotfiles/."{gitignore,screenrc,curlrc})
 vim_dotfiles=("$dotfiles/."{vim,vimrc,gvimrc})
 
+github='github.com'
 arg_plugins=(ln -s)
 
+# Print a message to stderr
+warn() { echo "$@" >&2; }
+
+show_help() { # {{{1
+
+    local programme="${0##*/}"
+
+    warn "Usage: $programme -l|--links"
+    warn "       $programme --copy-plugins"
+    warn "       $programme --move-plugins"
+    warn "       $programme --repos=repos-folder"
+    warn "       $programme --dotfiles=dotfiles-folder"
+    warn "       $programme --ip=github's ip"
+    warn "       $programme -h|--help|-?: this help text"
+}
+
+# Parse -|-- options {{{1
+parse_option() {
+
+    local option="$1"
+    local value="${option#*=}"
+
+    case "$option" in
+
+        *repos*) repos="$value";;
+        *dotfiles*) dotfiles="$value";;
+        *ip*) github="$value";;
+    esac
+}
+
+# Go trough all -|-- command line options
 while [[ $1 == -* ]]; do
 
     case "$1" in
 
         -h|--help|-\?) show_help; exit 0;;
-    -v|--verbose) verbose=1; shift;;
--l|--links) arg_links="$1"; shift;;
-      --copy-plugins) arg_plugins=(cp -f); shift;;
-  --move-plugins) arg_plugins=(mv); shift;;
-      --) shift; break;;
-  -*) echo "invalid option: $1" 1>&2; show_help; exit 1;;
+        --*=*) parse_option "$1"; shift;;
+        -l|--links) arg_links="$1"; shift;;
+        --copy-plugins) arg_plugins=(cp -f); shift;;
+        --move-plugins) arg_plugins=(mv); shift;;
+        --) shift; break;;
+        -*) echo "invalid option: $1" 1>&2; show_help; exit 1;;
     esac
 done
 
@@ -69,9 +101,9 @@ cloneRepo() { # {{{1
     local author="$1"
     local repo="$2"
     local destination="$3"
-    local remote_host="git://github.com/"
+    local remote_host="git://$github/"
 
-    [[ $author == $me ]] && remote_host="git@github.com:"
+    [[ $author == $me ]] && remote_host="git@$github:"
 
     if [[ $git ]] || command -v git >/dev/null 2>&1; then
 
@@ -92,27 +124,27 @@ cloneRepo() { # {{{1
 
             select choice in "$choice_git" "$choice_repos"; do
 
-                if [[ $choice == $choice_git ]]; then
+            if [[ $choice == $choice_git ]]; then
 
-                    exit 0
-                fi
-                break
-            done
+                exit 0
+            fi
+            break
+        done
 
-            (( first++ ))
-        fi
-
-        copyRepo "$author" "$repos" "$repo"
+        (( first++ ))
     fi
+
+    copyRepo "$author" "$repos" "$repo"
+fi
 }
 
 pullRepo() { # {{{1
 
     local author="$1"
     local repo="$2"
-    local remote_host="git://github.com/"
+    local remote_host="git://$github/"
 
-    [[ $author == $me ]] && remote_host="git@github.com:"
+    [[ $author == $me ]] && remote_host="git@$github:"
 
     if [[ $git ]] || command -v git >/dev/null 2>&1; then
 
@@ -131,40 +163,40 @@ pullRepo() { # {{{1
 
                 select choice in "$choice_abort" "$choice_repos"; do
 
-                    if [[ $choice == $choice_abort ]]; then
-
-                        exit 0
-                    fi
-                    break
-                done
-
-                (( firstTime++ ))
-            fi
-
-            rm -rf "$repo"
-            copyRepo "$author" "$repos" "$repo"
-        fi
-    else
-        if [[ ! $first ]]; then
-
-            printf "Cannot update $repo: Git is not installed:\n\n"
-            choice_git='I want to install git and retry later'
-            choice_repos='I want to copy over the existing repositories'
-
-            select choice in "$choice_git" "$choice_repos"; do
-
-                if [[ $choice == $choice_git ]]; then
+                if [[ $choice == $choice_abort ]]; then
 
                     exit 0
                 fi
                 break
             done
 
-            (( first++ ))
+            (( firstTime++ ))
         fi
 
         rm -rf "$repo"
         copyRepo "$author" "$repos" "$repo"
+    fi
+else
+    if [[ ! $first ]]; then
+
+        printf "Cannot update $repo: Git is not installed:\n\n"
+        choice_git='I want to install git and retry later'
+        choice_repos='I want to copy over the existing repositories'
+
+        select choice in "$choice_git" "$choice_repos"; do
+
+        if [[ $choice == $choice_git ]]; then
+
+            exit 0
+        fi
+        break
+    done
+
+    (( first++ ))
+fi
+
+rm -rf "$repo"
+copyRepo "$author" "$repos" "$repo"
     fi
 }
 
@@ -202,15 +234,15 @@ updateRepo() { # {{{1
     if [[ ! -d $destination ]] && cloneRepo "$author" "$repo" "$destination" ||
         [[ -d $destination && $arg_links ]]; then
 
-    # If there are dotfiles to link to
-    if [[ $5 ]]; then
+        # If there are dotfiles to link to
+        if [[ $5 ]]; then
 
-        for dotfile in "${@:5}"; do
+            for dotfile in "${@:5}"; do
 
-            linkToRepo "$destination" "$dotfiles" "$dotfile"
-        done
+                linkToRepo "$destination" "$dotfiles" "$dotfile"
+            done
+        fi
     fi
-fi
 }
 
 # Actions {{{1
