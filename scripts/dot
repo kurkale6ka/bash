@@ -7,8 +7,6 @@
 
 # Settings {{{1
 
-#shopt -s extglob
-
 # Plugin Authors
 me=kurkale6ka
 godlygeek=godlygeek
@@ -16,12 +14,13 @@ spiiph=spiiph
 tpope=tpope
 
 # matchit, vsearch, bgrep, php, xsd...
-#git://github.com/godlygeek/netlib.git
-#git://github.com/godlygeek/windowlayout.git
+# git://github.com/godlygeek/netlib.git
+# git://github.com/godlygeek/windowlayout.git
 
 # todo:
-# --repos, --dotfiles, --copy
-# messages/quiet + warn
+# messages/quiet
+# repo/working copy?
+# $repos/$bashfiles/scripts -> shorten
 repos="$HOME"
 dotfiles="$HOME"
 
@@ -62,8 +61,8 @@ parse_option() {
     case "$option" in
 
         *repos*) repos="$value";;
-        *dotfiles*) dotfiles="$value";;
-        *ip*) github="$value";;
+    *dotfiles*) dotfiles="$value";;
+*ip*) github="$value";;
     esac
 }
 
@@ -73,14 +72,16 @@ while [[ $1 == -* ]]; do
     case "$1" in
 
         -h|--help|-\?) show_help; exit 0;;
-        --*=*) parse_option "$1"; shift;;
-        -l|--links) arg_links="$1"; shift;;
+    --*=*) parse_option "$1"; shift;;
+-l|--links) arg_links="$1"; shift;;
         --copy-plugins) arg_plugins=(cp -f); shift;;
-        --move-plugins) arg_plugins=(mv); shift;;
-        --) shift; break;;
+    --move-plugins) arg_plugins=(mv); shift;;
+--) shift; break;;
         -*) echo "invalid option: $1" 1>&2; show_help; exit 1;;
     esac
 done
+
+command -v git >/dev/null 2>&1 && git=true
 
 copyRepo() { # {{{1
 
@@ -96,6 +97,29 @@ copyRepo() { # {{{1
     fi
 }
 
+choice() { # {{{1
+
+    local quit="$1"
+    local message="$2"
+
+    printf "$message:\n\n"
+
+    select choice in "${@:2}"; do
+
+        # The first choice is for exiting
+        if [[ $choice == $1 ]]; then
+
+            if [[ quit == $quit ]]; then
+
+                exit 0
+            else
+                return 1
+            fi
+        fi
+        break
+    done
+}
+
 cloneRepo() { # {{{1
 
     local author="$1"
@@ -105,9 +129,7 @@ cloneRepo() { # {{{1
 
     [[ $author == $me ]] && remote_host="git@$github:"
 
-    if [[ $git ]] || command -v git >/dev/null 2>&1; then
-
-        git=true
+    if [[ $git ]]; then
 
         if git clone "$remote_host$author/$repo.git" "$destination"; then
 
@@ -118,85 +140,67 @@ cloneRepo() { # {{{1
     else
         if [[ ! $first ]]; then
 
-            printf "Git is not installed on this machine:\n\n"
-            choice_git='I want to install git and retry later'
-            choice_repos='I want to simply copy the repositories'
+            message='Git is not installed on this machine'
+            choice_one='I want to install git and retry later'
+            choice_two='I want to simply copy the repositories'
 
-            select choice in "$choice_git" "$choice_repos"; do
+            choice quit "$message" "$choice_one" "$choice_two"
 
-            if [[ $choice == $choice_git ]]; then
+            (( first++ ))
+        fi
 
-                exit 0
-            fi
-            break
-        done
-
-        (( first++ ))
+        copyRepo "$author" "$repos" "$repo"
     fi
-
-    copyRepo "$author" "$repos" "$repo"
-fi
 }
 
 pullRepo() { # {{{1
 
     local author="$1"
     local repo="$2"
+    local destination="$3"
+
     local remote_host="git://$github/"
 
     [[ $author == $me ]] && remote_host="git@$github:"
 
-    if [[ $git ]] || command -v git >/dev/null 2>&1; then
+    if [[ -d $destination/.git ]]; then
 
-        git=true
+        if [[ $git ]]; then
 
-        #if git pull "git@207.97.227.248:$author/$repo.git master"; then
-        if git pull "$remote_host$author/$repo.git" master; then
+            if git pull "$remote_host$author/$repo.git" master; then
 
-            printf "Updated $repo repository\n"
+                printf "Updated $repo repository\n"
+            else
+                message='Git error, cannot update $repo'
+                choice_one='Abort'
+                choice_two='I want to copy over the existing repository'
+
+                choice go_on "$message" "$choice_one" "$choice_two"
+
+                rm -rf "$repo"
+                copyRepo "$author" "$repos" "$repo"
+            fi
         else
-            if [[ ! $firstTime ]]; then
+            if [[ ! $first ]]; then
 
-                printf "Git error, cannot update $repo:\n\n"
-                choice_abort='Abort'
-                choice_repos='I want to copy over the existing repositories'
+                message="Cannot update $repo: Git is not installed"
+                choice_one='I want to install git and retry later'
+                choice_two='I want to copy over the existing repositories'
 
-                select choice in "$choice_abort" "$choice_repos"; do
+                choice quit "$message" "$choice_one" "$choice_two"
 
-                if [[ $choice == $choice_abort ]]; then
+                (( first++ ))
+            fi
 
-                    exit 0
-                fi
-                break
-            done
-
-            (( firstTime++ ))
+            rm -rf "$repo"
+            copyRepo "$author" "$repos" "$repo"
         fi
+    else
+        warn "$repo is not a Git working copy"
+        warn "overwriting $repo..."
 
         rm -rf "$repo"
         copyRepo "$author" "$repos" "$repo"
-    fi
-else
-    if [[ ! $first ]]; then
-
-        printf "Cannot update $repo: Git is not installed:\n\n"
-        choice_git='I want to install git and retry later'
-        choice_repos='I want to copy over the existing repositories'
-
-        select choice in "$choice_git" "$choice_repos"; do
-
-        if [[ $choice == $choice_git ]]; then
-
-            exit 0
-        fi
-        break
-    done
-
-    (( first++ ))
-fi
-
-rm -rf "$repo"
-copyRepo "$author" "$repos" "$repo"
     fi
 }
 
@@ -229,20 +233,20 @@ updateRepo() { # {{{1
     local destination="$3"
     local dotfiles="$4"
 
-    [[ -d $destination ]] && cd "$destination" && pullRepo "$author" "$repo"
+    [[ -d $destination ]] && cd "$destination" && pullRepo "$author" "$repo" "$destination"
 
     if [[ ! -d $destination ]] && cloneRepo "$author" "$repo" "$destination" ||
         [[ -d $destination && $arg_links ]]; then
 
-        # If there are dotfiles to link to
-        if [[ $5 ]]; then
+    # If there are dotfiles to link to
+    if [[ $5 ]]; then
 
-            for dotfile in "${@:5}"; do
+        for dotfile in "${@:5}"; do
 
-                linkToRepo "$destination" "$dotfiles" "$dotfile"
-            done
-        fi
+            linkToRepo "$destination" "$dotfiles" "$dotfile"
+        done
     fi
+fi
 }
 
 # Actions {{{1
