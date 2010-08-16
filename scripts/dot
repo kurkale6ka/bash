@@ -42,15 +42,15 @@ warn() { echo "$@" >&2; }
 
 show_help() { # {{{1
 
-    local programme="${0##*/}"
+    local program="${0##*/}"
 
-    warn "Usage: $programme -l|--links"
-    warn "       $programme --copy-plugins"
-    warn "       $programme --move-plugins"
-    warn "       $programme --repos=repos-folder"
-    warn "       $programme --dotfiles=dotfiles-folder"
-    warn "       $programme --ip=github's ip"
-    warn "       $programme -h|--help|-?: this help text"
+    warn "Usage: $program -l|--links"
+    warn "       $program --copy-plugins"
+    warn "       $program --move-plugins"
+    warn "       $program --repos=repos-folder"
+    warn "       $program --dotfiles=dotfiles-folder"
+    warn "       $program --ip=github's ip"
+    warn "       $program -h|--help|-?: this help text"
 }
 
 # Parse -|-- options {{{1
