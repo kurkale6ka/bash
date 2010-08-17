@@ -55,9 +55,9 @@ parse_option() {
 
     case "$option" in
 
-        *repos*) repos="$value";;
+           *repos*) repos="$value";;
         *dotfiles*) dotfiles="$value";;
-        *ip*) github="$value";;
+              *ip*) github="$value";;
     esac
 }
 
@@ -91,11 +91,15 @@ copyRepo() { # {{{1
 
         if wget -qP "$destination" "http://github.com/$author/$repo/tarball/master"; then
 
-            tar -zxvf "$destination"/*"$author"*"$repo"*.tar.gz -C "$destination" >/dev/null 2>&1
-            rm "$destination"/*"$author"*"$repo"*.tar.gz
-            mv "$destination"/{*"$author"*"$repo"*/,"$repo"}
-
-            printf "Copied $repo repository\n"
+            if
+                tar -zxvf "$destination"/*"$author"*"$repo"*.tar.gz -C "$destination" >/dev/null 2>&1
+                rm "$destination"/*"$author"*"$repo"*.tar.gz
+                mv "$destination"/{*"$author"*"$repo"*/,"$repo"}
+            then
+                printf "Copied $repo repository\n"
+            else
+                printf "Copy of $repo failed: $? (tar, rm or mv)\n"
+            fi
         else
             printf "Copy of $repo failed: network failure\n"
         fi
@@ -237,7 +241,7 @@ updateRepo() { # {{{1
         pullRepo "$author" "$repo" "$destination"
 
     if [[ ! -d $destination ]] && cloneRepo "$author" "$repo" "$destination" ||
-        [[ -d $destination && $arg_links ]]; then
+       [[ -d $destination && $arg_links ]]; then
 
         # If there are dotfiles to link to
         if [[ $5 ]]; then
