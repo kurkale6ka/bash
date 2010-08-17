@@ -29,7 +29,7 @@ helpfiles=help
 vimfiles=vimfiles
 
 github='github.com'
-arg_plugins=(ln -s)
+arg_plugins=(ln -sv)
 
 # Print a message to stderr
 warn() { echo "$@" >&2; }
@@ -66,17 +66,18 @@ while [[ $1 == -* ]]; do
 
     case "$1" in
 
-        -h|--help|-\?) show_help; exit 0;;
-        --*=*) parse_option "$1"; shift;;
-        -l|--links) arg_links="$1"; shift;;
-        --copy-plugins) arg_plugins=(cp -f); shift;;
-        --move-plugins) arg_plugins=(mv); shift;;
-        --) shift; break;;
-        -*) echo "invalid option: $1" 1>&2; show_help; exit 1;;
+                 --*=*) parse_option "$1";    shift;;
+            -l|--links) arg_links="$1";       shift;;
+        --copy-plugins) arg_plugins=(cp -fv); shift;;
+        --move-plugins) arg_plugins=(mv -v);  shift;;
+        # -v|--verbose) arg_plugins=(mv);     shift;;
+         -h|--help|-\?) show_help;            exit 0;;
+                    --) shift; break;;
+                    -*) echo "invalid option: $1" 1>&2; show_help; exit 1;;
     esac
 done
 
-#command -v git >/dev/null 2>&1 && git=true
+command -v git >/dev/null 2>&1 && git=true
 
 copyRepo() { # {{{1
 
@@ -84,7 +85,10 @@ copyRepo() { # {{{1
     local destination="$2"
     local repo="$3"
 
-    [[ ! -d $destination ]] && mkdir -p "$destination"
+    if [[ ! -d $destination ]]; then
+
+        mkdir -p "$destination" && printf "Created folder $destination\n"
+    fi
 
     if [[ -d $destination ]]; then
 
@@ -96,6 +100,8 @@ copyRepo() { # {{{1
 
             printf "Copied $repo repository\n"
         fi
+    else
+        printf "Copy of $repo failed: $destination is not a folder\n"
     fi
 }
 
@@ -175,7 +181,7 @@ pullRepo() { # {{{1
                 'Abort' \
                 'I want to copy over the existing repository'
 
-                rm -rf "$destination"
+                rm -rf "$destination" && printf "Removed folder $destination\n"
                 copyRepo "$author" "${destination%/*}" "$repo"
             fi
         else
@@ -183,14 +189,14 @@ pullRepo() { # {{{1
             'I want to install git and retry later' \
             'I want to copy over the existing repositories'
 
-            rm -rf "$destination"
+            rm -rf "$destination" && printf "Removed folder $destination\n"
             copyRepo "$author" "${destination%/*}" "$repo"
         fi
     else
         warn "$repo is not a Git working copy"
         warn "overwriting $repo..."
 
-        rm -rf "$destination"
+        rm -rf "$destination" && printf "Removed folder $destination\n"
         copyRepo "$author" "${destination%/*}" "$repo"
     fi
 }
@@ -224,7 +230,8 @@ updateRepo() { # {{{1
     local destination="$3"
     local dotfiles="$4"
 
-    [[ -d $destination ]] && cd "$destination" && pullRepo "$author" "$repo" "$destination"
+    [[ -d $destination ]] && cd "$destination" &&
+        pullRepo "$author" "$repo" "$destination"
 
     if [[ ! -d $destination ]] && cloneRepo "$author" "$repo" "$destination" ||
         [[ -d $destination && $arg_links ]]; then
@@ -262,7 +269,12 @@ if [[ -d $repos/$bashfiles/scripts && ! -L $HOME/bin/${0##*/} ]]; then
 
     if [[ ! -d $HOME/bin ]]; then
 
-        mkdir "$HOME/bin" && ln -s "$repos/$bashfiles/scripts/${0##*/}" "$HOME/bin"
+        if mkdir "$HOME/bin"; then
+
+            printf "Created folder $HOME/bin\n"
+
+            ln -s "$repos/$bashfiles/scripts/${0##*/}" "$HOME/bin"
+        fi
     else
         ln -s "$repos/$bashfiles/scripts/${0##*/}" "$HOME/bin"
     fi
