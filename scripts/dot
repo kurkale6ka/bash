@@ -28,11 +28,6 @@ bashfiles=bashfiles
 helpfiles=help
 vimfiles=vimfiles
 
-bash_dotfiles=("$dotfiles/."{profile,bash_login,bash_profile})
-bash_dotfiles+=("$dotfiles/."{bashrc,bashrc_after,bash_logout,logout,inputrc})
-help_dotfiles=("$dotfiles/."{gitignore,screenrc,curlrc})
-vim_dotfiles=("$dotfiles/."{vim,vimrc,gvimrc})
-
 github='github.com'
 arg_plugins=(ln -s)
 
@@ -86,16 +81,21 @@ done
 copyRepo() { # {{{1
 
     local author="$1"
-    local repos="$2"
+    local destination="$2"
     local repo="$3"
 
-    if wget -qP "$repos" "http://github.com/$author/$repo/tarball/master"; then
+    [[ ! -d $destination ]] && mkdir -p "$destination"
 
-        tar -zxvf "$repos"/*"$author"*"$repo"*.tar.gz -C "$repos" &> /dev/null
-        rm "$repos"/*"$author"*"$repo"*.tar.gz
-        mv "$repos"/{*"$author"*"$repo"*/,"$repo"}
+    if [[ -d $destination ]]; then
 
-        printf "Copied $repo repository\n"
+        if wget -qP "$destination" "http://github.com/$author/$repo/tarball/master"; then
+
+            tar -zxvf "$destination"/*"$author"*"$repo"*.tar.gz -C "$destination" &> /dev/null
+            rm "$destination"/*"$author"*"$repo"*.tar.gz
+            mv "$destination"/{*"$author"*"$repo"*/,"$repo"}
+
+            printf "Copied $repo repository\n"
+        fi
     fi
 }
 
@@ -110,20 +110,21 @@ choice() { # {{{1
 
         select choice in "${@:3}"; do
 
-        # The first choice is for exiting
-        if [[ $choice == $3 ]]; then
+            # The first choice is for exiting
+            if [[ $choice == $3 ]]; then
 
-            if [[ quit == $quit ]]; then
+                if [[ quit == $quit ]]; then
 
-                exit 0
-            else
-                return 1
+                    exit 0
+                else
+                    return 1
+                fi
             fi
-        fi
-        break
-    done
-fi
-[[ go_on != $quit ]] && (( secondTime++ ))
+            break
+        done
+    fi
+
+    [[ go_on != $quit ]] && (( secondTime++ ))
 }
 
 cloneRepo() { # {{{1
@@ -141,14 +142,14 @@ cloneRepo() { # {{{1
 
             printf "Cloned $repo repository\n"
         else
-            copyRepo "$author" "$repos" "$repo"
+            copyRepo "$author" "${destination%/*}" "$repo"
         fi
     else
         choice quit 'Git is not installed on this machine' \
         'I want to install git and retry later' \
         'I want to simply copy the repositories'
 
-        copyRepo "$author" "$repos" "$repo"
+        copyRepo "$author" "${destination%/*}" "$repo"
     fi
 }
 
@@ -174,23 +175,23 @@ pullRepo() { # {{{1
                 'Abort' \
                 'I want to copy over the existing repository'
 
-                rm -rf "$repo"
-                copyRepo "$author" "$repos" "$repo"
+                rm -rf "$destination"
+                copyRepo "$author" "${destination%/*}" "$repo"
             fi
         else
             choice quit "Cannot update $repo: Git is not installed" \
             'I want to install git and retry later' \
             'I want to copy over the existing repositories'
 
-            rm -rf "$repo"
-            copyRepo "$author" "$repos" "$repo"
+            rm -rf "$destination"
+            copyRepo "$author" "${destination%/*}" "$repo"
         fi
     else
         warn "$repo is not a Git working copy"
         warn "overwriting $repo..."
 
-        rm -rf "$repo"
-        copyRepo "$author" "$repos" "$repo"
+        rm -rf "$destination"
+        copyRepo "$author" "${destination%/*}" "$repo"
     fi
 }
 
@@ -240,6 +241,11 @@ updateRepo() { # {{{1
 }
 
 # Actions {{{1
+
+bash_dotfiles=("$dotfiles/."{profile,bash_login,bash_profile})
+bash_dotfiles+=("$dotfiles/."{bashrc,bashrc_after,bash_logout,logout,inputrc})
+help_dotfiles=("$dotfiles/."{gitignore,screenrc,curlrc})
+vim_dotfiles=("$dotfiles/."{vim,vimrc,gvimrc}) # .vim to be removed ?!
 
 updateRepo "$me" "$bashfiles" "$repos/$bashfiles" "$dotfiles" "${bash_dotfiles[@]}"
 #updateRepo "$me" "$helpfiles" "$repos/$helpfiles" "$dotfiles" "${help_dotfiles[@]}"
