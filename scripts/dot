@@ -81,7 +81,7 @@ while [[ $1 == -* ]]; do
     esac
 done
 
-command -v git >/dev/null 2>&1 && git=true
+#command -v git >/dev/null 2>&1 && git=true
 
 copyRepo() { # {{{1
 
@@ -89,11 +89,13 @@ copyRepo() { # {{{1
     local repos="$2"
     local repo="$3"
 
-    if wget -P "$repos" "http://github.com/$author/$repo/tarball/master"; then
+    if wget -qP "$repos" "http://github.com/$author/$repo/tarball/master"; then
 
-        tar -zxvf "$repos"/*"$author"*"$repo"*.tar.gz -C "$repos"
+        tar -zxvf "$repos"/*"$author"*"$repo"*.tar.gz -C "$repos" &> /dev/null
         rm "$repos"/*"$author"*"$repo"*.tar.gz
         mv "$repos"/{*"$author"*"$repo"*/,"$repo"}
+
+        printf "Copied $repo repository\n"
     fi
 }
 
@@ -102,26 +104,26 @@ choice() { # {{{1
     local quit="$1"
     local message="$2"
 
-    if [[ go_on == $quit || $firstTime ]]; then
+    if [[ go_on == $quit || ! $secondTime ]]; then
 
         printf "$message:\n\n"
 
-        select choice in "${@:2}"; do
+        select choice in "${@:3}"; do
 
-            # The first choice is for exiting
-            if [[ $choice == $1 ]]; then
+        # The first choice is for exiting
+        if [[ $choice == $3 ]]; then
 
-                if [[ quit == $quit ]]; then
+            if [[ quit == $quit ]]; then
 
-                    exit 0
-                else
-                    return 1
-                fi
+                exit 0
+            else
+                return 1
             fi
-            break
-        done
-    fi
-    [[ go_on != $quit ]] $$ (( firstTime++ ))
+        fi
+        break
+    done
+fi
+[[ go_on != $quit ]] && (( secondTime++ ))
 }
 
 cloneRepo() { # {{{1
@@ -240,7 +242,7 @@ updateRepo() { # {{{1
 # Actions {{{1
 
 updateRepo "$me" "$bashfiles" "$repos/$bashfiles" "$dotfiles" "${bash_dotfiles[@]}"
-updateRepo "$me" "$helpfiles" "$repos/$helpfiles" "$dotfiles" "${help_dotfiles[@]}"
+#updateRepo "$me" "$helpfiles" "$repos/$helpfiles" "$dotfiles" "${help_dotfiles[@]}"
 updateRepo "$me" "$vimfiles"  "$repos/$vimfiles" "$dotfiles" "${vim_dotfiles[@]}"
 
 updateRepo "$godlygeek" csapprox      "$repos/$vimfiles/plugins/csapprox"
