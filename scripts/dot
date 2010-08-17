@@ -89,14 +89,16 @@ copyRepo() { # {{{1
 
     if [[ -d $destination ]]; then
 
+        printf "%-50s" "Copying $repo repository..."
+
         if wget -qP "$destination" "http://github.com/$author/$repo/tarball/master"; then
 
             if
-                tar -zxvf "$destination"/*"$author"*"$repo"*.tar.gz -C "$destination" >/dev/null 2>&1
+                tar -zxf "$destination"/*"$author"*"$repo"*.tar.gz -C "$destination"
                 rm "$destination"/*"$author"*"$repo"*.tar.gz
                 mv "$destination"/{*"$author"*"$repo"*/,"$repo"}
             then
-                printf "Copied $repo repository\n"
+                printf "... [ OK ]\n"
             else
                 printf "Copy of $repo failed: $? (tar, rm or mv)\n"
             fi
@@ -147,7 +149,7 @@ cloneRepo() { # {{{1
 
     if [[ $git ]]; then
 
-        printf "%-50s" "Clonning $repo repository..."
+        printf "%-50s" "Cloning $repo repository..."
 
         if git clone -q "$remote_host$author/$repo.git" "$destination"; then
 
