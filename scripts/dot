@@ -85,23 +85,22 @@ copyRepo() { # {{{1
     local destination="$2"
     local repo="$3"
 
-    if [[ ! -d $destination ]]; then
-
-        mkdir -p "$destination" && printf "Created folder $destination\n"
-    fi
+    [[ ! -d $destination ]] && mkdir -pv "$destination"
 
     if [[ -d $destination ]]; then
 
         if wget -qP "$destination" "http://github.com/$author/$repo/tarball/master"; then
 
-            tar -zxvf "$destination"/*"$author"*"$repo"*.tar.gz -C "$destination" &> /dev/null
+            tar -zxvf "$destination"/*"$author"*"$repo"*.tar.gz -C "$destination" >/dev/null 2>&1
             rm "$destination"/*"$author"*"$repo"*.tar.gz
             mv "$destination"/{*"$author"*"$repo"*/,"$repo"}
 
             printf "Copied $repo repository\n"
+        else
+            printf "Copy of $repo failed: network failure\n"
         fi
     else
-        printf "Copy of $repo failed: $destination is not a folder\n"
+        printf "Copy of $repo failed: $destination folder couldn't be created\n"
     fi
 }
 
@@ -144,9 +143,11 @@ cloneRepo() { # {{{1
 
     if [[ $git ]]; then
 
-        if git clone "$remote_host$author/$repo.git" "$destination"; then
+        printf "%-50s" "Clonning $repo repository..."
 
-            printf "Cloned $repo repository\n"
+        if git clone -q "$remote_host$author/$repo.git" "$destination"; then
+
+            printf "... [ OK ]\n"
         else
             copyRepo "$author" "${destination%/*}" "$repo"
         fi
@@ -173,15 +174,17 @@ pullRepo() { # {{{1
 
         if [[ $git ]]; then
 
-            if git pull "$remote_host$author/$repo.git" master; then
+            printf "%-50s" "Updating $repo repository..."
 
-                printf "Updated $repo repository\n"
+            if git pull -q "$remote_host$author/$repo.git" master; then
+
+                printf "... [ OK ]\n"
             else
                 choice go_on 'Git error, cannot update $repo' \
                 'Abort' \
                 'I want to copy over the existing repository'
 
-                rm -rf "$destination" && printf "Removed folder $destination\n"
+                rm -rfv "$destination"
                 copyRepo "$author" "${destination%/*}" "$repo"
             fi
         else
@@ -189,14 +192,14 @@ pullRepo() { # {{{1
             'I want to install git and retry later' \
             'I want to copy over the existing repositories'
 
-            rm -rf "$destination" && printf "Removed folder $destination\n"
+            rm -rfv "$destination"
             copyRepo "$author" "${destination%/*}" "$repo"
         fi
     else
         warn "$repo is not a Git working copy"
         warn "overwriting $repo..."
 
-        rm -rf "$destination" && printf "Removed folder $destination\n"
+        rm -rfv "$destination"
         copyRepo "$author" "${destination%/*}" "$repo"
     fi
 }
@@ -269,12 +272,7 @@ if [[ -d $repos/$bashfiles/scripts && ! -L $HOME/bin/${0##*/} ]]; then
 
     if [[ ! -d $HOME/bin ]]; then
 
-        if mkdir "$HOME/bin"; then
-
-            printf "Created folder $HOME/bin\n"
-
-            ln -s "$repos/$bashfiles/scripts/${0##*/}" "$HOME/bin"
-        fi
+        mkdir -v "$HOME/bin" && ln -s "$repos/$bashfiles/scripts/${0##*/}" "$HOME/bin"
     else
         ln -s "$repos/$bashfiles/scripts/${0##*/}" "$HOME/bin"
     fi
