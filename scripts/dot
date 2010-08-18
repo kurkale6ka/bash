@@ -41,9 +41,11 @@ warn() { echo "$@" >&2; }
 
 show_help() { # {{{1
 
-    warn "Usage: $program -l|--links"
+    warn "Usage: $program --links"
     warn "       $program --copy-plugins"
     warn "       $program --move-plugins"
+    warn "       $program --omit-plugins"
+    warn "       $program --verbose"
     warn "       $program --repos=repos-folder"
     warn "       $program --dotfiles=dotfiles-folder"
     warn "       $program --ip=github's ip"
@@ -70,11 +72,11 @@ while [[ $1 == -* ]]; do
     case "$1" in
 
                  --*=*) parse_option "$1";    shift;;
-            -l|--links) arg_links="$1";       shift;;
+               --links) arg_links="$1";       shift;;
         --copy-plugins) arg_plugins=(cp -fv); shift;;
         --move-plugins) arg_plugins=(mv -v);  shift;;
         --omit-plugins) arg_omit=omit;        shift;;
-        # -v|--verbose) arg_plugins=(mv);     shift;;
+           # --verbose) arg_plugins=(mv);     shift;;
          -h|--help|-\?) show_help;            exit 0;;
                     --) shift; break;;
                     -*) echo "invalid option: $1" 1>&2; show_help; exit 1;;
