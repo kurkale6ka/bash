@@ -227,17 +227,23 @@ linkToRepo() { # {{{1
     # Delete if not mine
     if [[ -e $dotfile && ! -O $dotfile ]]; then
 
-        [[ -d $dotfile ]] && rm -r "$dotfile" || rm "$dotfile"
+        [[ -d $dotfile ]] && rm -irv "$dotfile" || rm -v "$dotfile"
     fi
 
     # Delete if mine but not a link
     if [[ -e $dotfile && ! -L $dotfile ]]; then
 
-        [[ -d $dotfile ]] && rm -r "$dotfile" || rm "$dotfile"
+        [[ -d $dotfile ]] && rm -irv "$dotfile" || rm -v "$dotfile"
     fi
 
-    # To be improved
-    [[ ! -L $dotfile ]] && ln -s "$repo/${dotfile##*/}" "$dotfiles"
+    # Not a link
+    if [[ ! -L $dotfile ]]; then
+
+        ln -sv "$repo/${dotfile##*/}" "$dotfiles"
+    else
+        printf "Link $dotfile already exists\n"
+        ln -isv "$repo/${dotfile##*/}" "$dotfiles"
+    fi
 }
 
 updateRepo() { # {{{1
