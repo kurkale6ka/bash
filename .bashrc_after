@@ -11,8 +11,8 @@ grep init log merge mv pull push rebase reset rm show status tag' git
 alias aa=aptitude
 alias ag=apt-get
 alias ac=apt-cache
-alias  d=dpkg
-alias  r=dpkg-reconfigure
+alias d=dpkg
+alias r=dpkg-reconfigure
 
 complete -W 'update upgrade install remove autoremove purge source build-dep
 dist-upgrade dselect-upgrade clean autoclean check' ag apt-get
