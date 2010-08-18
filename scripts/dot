@@ -24,7 +24,6 @@ reset=$(tput sgr0)
 # todo:
 # messages/quiet
 # repo/working copy?
-# $repos/$bashfiles/scripts -> shorten
 repos="$HOME"
 dotfiles="$HOME"
 
@@ -35,12 +34,12 @@ vimfiles=vimfiles
 github='github.com'
 arg_plugins=(ln -sv)
 
+program="${0##*/}"
+
 # Print a message to stderr
 warn() { echo "$@" >&2; }
 
 show_help() { # {{{1
-
-    local program="${0##*/}"
 
     warn "Usage: $program -l|--links"
     warn "       $program --copy-plugins"
@@ -230,7 +229,7 @@ linkToRepo() { # {{{1
 
     if [[ ! -e $dotfile ]]; then
 
-        printf "\t"
+        printf "\n\t"
         ln -sv "$repo/${dotfile##*/}" "${dotfile%/*}"
     else
         [[ -f $dotfile ]] && local file='File'
@@ -289,21 +288,27 @@ bash_dotfiles+=("$dotfiles/."{bashrc,bashrc_after,bash_logout,logout,inputrc})
 help_dotfiles=("$dotfiles/."{gitignore,screenrc,curlrc})
 vim_dotfiles=("$dotfiles/."{vim,vimrc,gvimrc}) # .vim to be removed ?!
 
-updateRepo "$me" "$bashfiles" "$repos/$bashfiles" "${bash_dotfiles[@]}"
-updateRepo "$me" "$helpfiles" "$repos/$helpfiles" "${help_dotfiles[@]}"
-updateRepo "$me" "$vimfiles"  "$repos/$vimfiles"  "${vim_dotfiles[@]}"
+bash_repos="$repos/$bashfiles"
+help_repos="$repos/$helpfiles"
+vim_repos="$repos/$vimfiles"
+
+updateRepo "$me" "$bashfiles" "$bash_repos" "${bash_dotfiles[@]}"
+updateRepo "$me" "$helpfiles" "$help_repos" "${help_dotfiles[@]}"
+updateRepo "$me" "$vimfiles"  "$vim_repos"  "${vim_dotfiles[@]}"
 
 if [[ ! $arg_omit ]]; then
 
-    updateRepo "$godlygeek" csapprox      "$repos/$vimfiles/plugins/csapprox"
-    updateRepo "$godlygeek" tabular       "$repos/$vimfiles/plugins/tabular"
-    updateRepo "$spiiph"    vim-space     "$repos/$vimfiles/plugins/vim-space"
-    updateRepo "$tpope"     vim-surround  "$repos/$vimfiles/plugins/vim-surround"
-    updateRepo "$tpope"     vim-repeat    "$repos/$vimfiles/plugins/vim-repeat"
+    vim_plugins="$vim_repos/plugins"
 
-    if [[ -d $repos/$vimfiles/plugins ]]; then
+    updateRepo "$godlygeek" csapprox      "$vim_plugins/csapprox"
+    updateRepo "$godlygeek" tabular       "$vim_plugins/tabular"
+    updateRepo "$spiiph"    vim-space     "$vim_plugins/vim-space"
+    updateRepo "$tpope"     vim-surround  "$vim_plugins/vim-surround"
+    updateRepo "$tpope"     vim-repeat    "$vim_plugins/vim-repeat"
 
-        for plugin in "$repos/$vimfiles/plugins"/*; do
+    if [[ -d $vim_plugins ]]; then
+
+        for plugin in "$vim_plugins"/*; do
 
             while read -r -d $'\0'; do
 
@@ -311,10 +316,10 @@ if [[ ! $arg_omit ]]; then
 
                     reply=${REPLY##*$plugin/}
                     reply=${reply%/*}
-                    "${arg_plugins[@]}" -- "$REPLY" "$repos/$vimfiles/$reply"
+                    "${arg_plugins[@]}" -- "$REPLY" "$vim_repos/$reply"
 
                 else
-                    "${arg_plugins[@]}" -- "$REPLY" "$repos/$vimfiles/${REPLY##*$plugin/}"
+                    "${arg_plugins[@]}" -- "$REPLY" "$vim_repos/${REPLY##*$plugin/}"
                 fi
 
             done < <(find "$plugin" \( -name '*.vim' -o -name '*.txt' \) -print0)
@@ -324,13 +329,13 @@ if [[ ! $arg_omit ]]; then
 fi
 
 # Create a symlink of this script in ~/bin
-if [[ -d $repos/$bashfiles/scripts && ! -L $HOME/bin/${0##*/} ]]; then
+if [[ -d $bash_repos/scripts && ! -L $HOME/bin/$program ]]; then
 
     if [[ ! -d $HOME/bin ]]; then
 
-        mkdir -v "$HOME/bin" && ln -s "$repos/$bashfiles/scripts/${0##*/}" "$HOME/bin"
+        mkdir -v "$HOME/bin" && ln -s "$bash_repos/scripts/$program" "$HOME/bin"
     else
-        ln -s "$repos/$bashfiles/scripts/${0##*/}" "$HOME/bin"
+        ln -s "$bash_repos/scripts/$program" "$HOME/bin"
     fi
 fi
 
