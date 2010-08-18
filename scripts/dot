@@ -70,6 +70,7 @@ while [[ $1 == -* ]]; do
             -l|--links) arg_links="$1";       shift;;
         --copy-plugins) arg_plugins=(cp -fv); shift;;
         --move-plugins) arg_plugins=(mv -v);  shift;;
+        --omit-plugins) arg_omit=omit;        shift;;
         # -v|--verbose) arg_plugins=(mv);     shift;;
          -h|--help|-\?) show_help;            exit 0;;
                     --) shift; break;;
@@ -274,11 +275,35 @@ updateRepo "$me" "$bashfiles" "$repos/$bashfiles" "$dotfiles" "${bash_dotfiles[@
 #updateRepo "$me" "$helpfiles" "$repos/$helpfiles" "$dotfiles" "${help_dotfiles[@]}"
 updateRepo "$me" "$vimfiles"  "$repos/$vimfiles" "$dotfiles" "${vim_dotfiles[@]}"
 
-updateRepo "$godlygeek" csapprox      "$repos/$vimfiles/plugins/csapprox"
-updateRepo "$godlygeek" tabular       "$repos/$vimfiles/plugins/tabular"
-updateRepo "$spiiph"    vim-space     "$repos/$vimfiles/plugins/vim-space"
-updateRepo "$tpope"     vim-surround  "$repos/$vimfiles/plugins/vim-surround"
-updateRepo "$tpope"     vim-repeat    "$repos/$vimfiles/plugins/vim-repeat"
+if [[ ! $arg_omit ]]; then
+
+    updateRepo "$godlygeek" csapprox      "$repos/$vimfiles/plugins/csapprox"
+    updateRepo "$godlygeek" tabular       "$repos/$vimfiles/plugins/tabular"
+    updateRepo "$spiiph"    vim-space     "$repos/$vimfiles/plugins/vim-space"
+    updateRepo "$tpope"     vim-surround  "$repos/$vimfiles/plugins/vim-surround"
+    updateRepo "$tpope"     vim-repeat    "$repos/$vimfiles/plugins/vim-repeat"
+
+    if [[ -d $repos/$vimfiles/plugins ]]; then
+
+        for plugin in "$repos/$vimfiles/plugins"/*; do
+
+            while read -r -d $'\0'; do
+
+                if [[ cp == ${arg_plugins[0]} ]]; then
+
+                    reply=${REPLY##*$plugin/}
+                    reply=${reply%/*}
+                    "${arg_plugins[@]}" -- "$REPLY" "$repos/$vimfiles/$reply"
+
+                else
+                    "${arg_plugins[@]}" -- "$REPLY" "$repos/$vimfiles/${REPLY##*$plugin/}"
+                fi
+
+            done < <(find "$plugin" \( -name '*.vim' -o -name '*.txt' \) -print0)
+
+        done
+    fi
+fi
 
 # Create a symlink of this script in ~/bin
 if [[ -d $repos/$bashfiles/scripts && ! -L $HOME/bin/${0##*/} ]]; then
@@ -289,27 +314,6 @@ if [[ -d $repos/$bashfiles/scripts && ! -L $HOME/bin/${0##*/} ]]; then
     else
         ln -s "$repos/$bashfiles/scripts/${0##*/}" "$HOME/bin"
     fi
-fi
-
-if [[ -d $repos/$vimfiles/plugins ]]; then
-
-    for plugin in "$repos/$vimfiles/plugins"/*; do
-
-        while read -r -d $'\0'; do
-
-            if [[ cp == ${arg_plugins[0]} ]]; then
-
-                reply=${REPLY##*$plugin/}
-                reply=${reply%/*}
-                "${arg_plugins[@]}" -- "$REPLY" "$repos/$vimfiles/$reply"
-
-            else
-                "${arg_plugins[@]}" -- "$REPLY" "$repos/$vimfiles/${REPLY##*$plugin/}"
-            fi
-
-        done < <(find "$plugin" \( -name '*.vim' -o -name '*.txt' \) -print0)
-
-    done
 fi
 
 # vim: se fdm=marker fmr&:
