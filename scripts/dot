@@ -13,6 +13,10 @@ godlygeek=godlygeek
 spiiph=spiiph
 tpope=tpope
 
+blue=$(tput setaf 4)
+bold=$(tput bold)
+reset=$(tput sgr0)
+
 # matchit, vsearch, bgrep, php, xsd...
 # git://github.com/godlygeek/netlib.git
 # git://github.com/godlygeek/windowlayout.git
@@ -88,7 +92,7 @@ copyRepo() { # {{{1
 
     [[ ! -d $destination ]] && mkdir -pv "$destination"
 
-    printf "%-50s" "Copying $repo repository..."
+    printf "\n%-50s" "${bold}Copying $repo repository$reset..."
 
     if [[ -d $destination ]]; then
 
@@ -99,15 +103,15 @@ copyRepo() { # {{{1
                 rm "$destination"/*"$author"*"$repo"*.tar.gz
                 mv "$destination"/{*"$author"*"$repo"*/,"$repo"}
             then
-                printf "... [ OK ]\n"
+                printf "... [ ${bold}OK$reset ]\n"
             else
-                printf "... [ FAILED ]: $? (tar, rm or mv)\n"
+                printf "... [ ${bold}FAILED$reset ]: $? (tar, rm or mv)\n"
             fi
         else
-            printf "... [ FAILED ]: network failure\n"
+            printf "... [ ${bold}FAILED$reset ]: network failure\n"
         fi
     else
-        printf "... [ FAILED ]: $destination folder couldn't be created\n"
+        printf "... [ ${bold}FAILED$reset ]: $destination folder couldn't be created\n"
     fi
 }
 
@@ -154,13 +158,13 @@ cloneRepo() { # {{{1
 
     if [[ $git ]]; then
 
-        printf "%-50s" "Cloning $repo repository..."
+        printf "\n%-50s" "${bold}Cloning $repo repository$reset..."
 
         if git clone -q "$remote_host$author/$repo.git" "$destination"; then
 
-            printf "... [ OK ]\n"
+            printf "... [ ${bold}OK$reset ]\n"
         else
-            printf "... [ FAILED: Git error ] - trying to copy instead\n"
+            printf "... [ ${bold}FAILED$reset: Git error ] - trying to copy instead\n"
             copyRepo "$author" "${destination%/*}" "$repo"
         fi
     else
@@ -189,13 +193,13 @@ pullRepo() { # {{{1
 
         if [[ $git ]]; then
 
-            printf "%-50s" "Updating $repo repository..."
+            printf "\n%-50s" "${bold}Updating $repo repository$reset..."
 
             if git pull -q "$remote_host$author/$repo.git" master >/dev/null 2>&1; then
 
-                printf "... [ OK ]\n"
+                printf "... [ ${bold}OK$reset ]\n"
             else
-                choice go_on '... [ FAILED: Git error ]' \
+                choice go_on "... [ ${bold}FAILED$reset: Git error ]" \
                 'Abort' \
                 'I want to copy over the existing repository'
 
@@ -226,8 +230,20 @@ linkToRepo() { # {{{1
 
     if [[ ! -e $dotfile ]]; then
 
+        printf "\t"
         ln -sv "$repo/${dotfile##*/}" "${dotfile%/*}"
     else
+        [[ -f $dotfile ]] && local file='File'
+        [[ -L $dotfile ]] && local file='Link'
+        [[ -d $dotfile ]] && local file='Folder'
+
+        if [[ ! -O $dotfile ]]; then
+
+            printf "\n\t$blue$file$reset $dotfile ${blue}not owned by you$reset already exists\n\t"
+        else
+            printf "\n\t$blue$file$reset $dotfile ${blue}owned by you$reset already exists\n\t"
+        fi
+
         # If it is a folder
         if [[ -d $dotfile ]]; then
 
@@ -237,24 +253,9 @@ linkToRepo() { # {{{1
 
                 ln -sv "$repo/${dotfile##*/}" "${dotfile%/*}"
             fi
-            return 0
-        fi
-
-        if [[ ! -L $dotfile ]]; then
-
-            local file='File'
         else
-            local file='Link'
+            ln -isv "$repo/${dotfile##*/}" "${dotfile%/*}"
         fi
-
-        if [[ ! -O $dotfile ]]; then
-
-            printf "$file $dotfile not owned by you already exists\n"
-        else
-            printf "$file $dotfile owned by you already exists\n"
-        fi
-
-        ln -isv "$repo/${dotfile##*/}" "${dotfile%/*}"
     fi
 }
 
