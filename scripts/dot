@@ -190,7 +190,7 @@ pullRepo() { # {{{1
 
             printf "%-50s" "Updating $repo repository..."
 
-            if git pull -q "$remote_host$author/$repo.git" master; then
+            if git pull -q "$remote_host$author/$repo.git" master >/dev/null 2>&1; then
 
                 printf "... [ OK ]\n"
             else
