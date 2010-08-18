@@ -272,8 +272,8 @@ help_dotfiles=("$dotfiles/."{gitignore,screenrc,curlrc})
 vim_dotfiles=("$dotfiles/."{vim,vimrc,gvimrc}) # .vim to be removed ?!
 
 updateRepo "$me" "$bashfiles" "$repos/$bashfiles" "$dotfiles" "${bash_dotfiles[@]}"
-#updateRepo "$me" "$helpfiles" "$repos/$helpfiles" "$dotfiles" "${help_dotfiles[@]}"
-updateRepo "$me" "$vimfiles"  "$repos/$vimfiles" "$dotfiles" "${vim_dotfiles[@]}"
+updateRepo "$me" "$helpfiles" "$repos/$helpfiles" "$dotfiles" "${help_dotfiles[@]}"
+updateRepo "$me" "$vimfiles"  "$repos/$vimfiles"  "$dotfiles" "${vim_dotfiles[@]}"
 
 if [[ ! $arg_omit ]]; then
 
