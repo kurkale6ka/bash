@@ -320,15 +320,9 @@ if [[ ! $arg_omit ]]; then
 
             while read -r -d $'\0'; do
 
-                if [[ cp == ${arg_plugins[0]} ]]; then
-
-                    reply=${REPLY##*$plugin/}
-                    reply=${reply%/*}
-                    "${arg_plugins[@]}" -- "$REPLY" "$vim_repos/$reply"
-
-                else
-                    "${arg_plugins[@]}" -- "$REPLY" "$vim_repos/${REPLY##*$plugin/}"
-                fi
+                reply=${REPLY##*$plugin/}
+                reply=${reply%/*}
+                "${arg_plugins[@]}" -- "$REPLY" "$vim_repos/$reply"
 
             done < <(find "$plugin" \( -name '*.vim' -o -name '*.txt' \) -print0)
 
