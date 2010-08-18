@@ -88,9 +88,9 @@ copyRepo() { # {{{1
 
     [[ ! -d $destination ]] && mkdir -pv "$destination"
 
-    if [[ -d $destination ]]; then
+    printf "%-50s" "Copying $repo repository..."
 
-        printf "%-50s" "Copying $repo repository..."
+    if [[ -d $destination ]]; then
 
         if wget -qP "$destination" "http://github.com/$author/$repo/tarball/master"; then
 
@@ -101,13 +101,13 @@ copyRepo() { # {{{1
             then
                 printf "... [ OK ]\n"
             else
-                printf "Copy of $repo failed: $? (tar, rm or mv)\n"
+                printf "... [ FAILED ]: $? (tar, rm or mv)\n"
             fi
         else
-            printf "Copy of $repo failed: network failure\n"
+            printf "... [ FAILED ]: network failure\n"
         fi
     else
-        printf "Copy of $repo failed: $destination folder couldn't be created\n"
+        printf "... [ FAILED ]: $destination folder couldn't be created\n"
     fi
 }
 
@@ -160,6 +160,7 @@ cloneRepo() { # {{{1
 
             printf "... [ OK ]\n"
         else
+            printf "... [ FAILED: Git error ] - trying to copy instead\n"
             copyRepo "$author" "${destination%/*}" "$repo"
         fi
     else
@@ -194,7 +195,7 @@ pullRepo() { # {{{1
 
                 printf "... [ OK ]\n"
             else
-                choice go_on 'Git error, cannot update $repo' \
+                choice go_on '... [ FAILED: Git error ]' \
                 'Abort' \
                 'I want to copy over the existing repository'
 
@@ -221,28 +222,39 @@ pullRepo() { # {{{1
 linkToRepo() { # {{{1
 
     local repo="$1"
-    local dotfiles="$2"
-    local dotfile="$3"
+    local dotfile="$2"
 
-    # Delete if not mine
-    if [[ -e $dotfile && ! -O $dotfile ]]; then
+    if [[ ! -e $dotfile ]]; then
 
-        [[ -d $dotfile ]] && rm -irv "$dotfile" || rm -v "$dotfile"
-    fi
-
-    # Delete if mine but not a link
-    if [[ -e $dotfile && ! -L $dotfile ]]; then
-
-        [[ -d $dotfile ]] && rm -irv "$dotfile" || rm -v "$dotfile"
-    fi
-
-    # Not a link
-    if [[ ! -L $dotfile ]]; then
-
-        ln -sv "$repo/${dotfile##*/}" "$dotfiles"
+        ln -sv "$repo/${dotfile##*/}" "${dotfile%/*}"
     else
-        printf "Link $dotfile already exists\n"
-        ln -isv "$repo/${dotfile##*/}" "$dotfiles"
+        # If it is a folder
+        if [[ -d $dotfile ]]; then
+
+            rm -irv "$dotfile"
+
+            if [[ ! -d $dotfile ]]; then
+
+                ln -sv "$repo/${dotfile##*/}" "${dotfile%/*}"
+            fi
+            return 0
+        fi
+
+        if [[ ! -L $dotfile ]]; then
+
+            local file='File'
+        else
+            local file='Link'
+        fi
+
+        if [[ ! -O $dotfile ]]; then
+
+            printf "$file $dotfile not owned by you already exists\n"
+        else
+            printf "$file $dotfile owned by you already exists\n"
+        fi
+
+        ln -isv "$repo/${dotfile##*/}" "${dotfile%/*}"
     fi
 }
 
@@ -251,7 +263,6 @@ updateRepo() { # {{{1
     local author="$1"
     local repo="$2"
     local destination="$3"
-    local dotfiles="$4"
 
     [[ -d $destination ]] && cd "$destination" &&
         pullRepo "$author" "$repo" "$destination"
@@ -260,11 +271,11 @@ updateRepo() { # {{{1
        [[ -d $destination && $arg_links ]]; then
 
         # If there are dotfiles to link to
-        if [[ $5 ]]; then
+        if [[ $4 ]]; then
 
-            for dotfile in "${@:5}"; do
+            for dotfile in "${@:4}"; do
 
-                linkToRepo "$destination" "$dotfiles" "$dotfile"
+                linkToRepo "$destination" "$dotfile"
             done
         fi
     fi
@@ -277,9 +288,9 @@ bash_dotfiles+=("$dotfiles/."{bashrc,bashrc_after,bash_logout,logout,inputrc})
 help_dotfiles=("$dotfiles/."{gitignore,screenrc,curlrc})
 vim_dotfiles=("$dotfiles/."{vim,vimrc,gvimrc}) # .vim to be removed ?!
 
-updateRepo "$me" "$bashfiles" "$repos/$bashfiles" "$dotfiles" "${bash_dotfiles[@]}"
-updateRepo "$me" "$helpfiles" "$repos/$helpfiles" "$dotfiles" "${help_dotfiles[@]}"
-updateRepo "$me" "$vimfiles"  "$repos/$vimfiles"  "$dotfiles" "${vim_dotfiles[@]}"
+updateRepo "$me" "$bashfiles" "$repos/$bashfiles" "${bash_dotfiles[@]}"
+updateRepo "$me" "$helpfiles" "$repos/$helpfiles" "${help_dotfiles[@]}"
+updateRepo "$me" "$vimfiles"  "$repos/$vimfiles"  "${vim_dotfiles[@]}"
 
 if [[ ! $arg_omit ]]; then
 
