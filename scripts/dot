@@ -7,6 +7,8 @@
 
 # Settings {{{1
 
+shopt -s extglob
+
 # Plugin Authors
 me=kurkale6ka
 godlygeek=godlygeek
@@ -24,6 +26,7 @@ reset=$(tput sgr0)
 # todo:
 # messages/quiet
 # repo/working copy?
+# improve ~/help/.gitignore
 repos="$HOME"
 dotfiles="$HOME"
 
@@ -76,7 +79,7 @@ while [[ $1 == -* ]]; do
         --copy-plugins) arg_plugins=(cp -fv); shift;;
         --move-plugins) arg_plugins=(mv -v);  shift;;
         --omit-plugins) arg_omit=omit;        shift;;
-           # --verbose) arg_plugins=(mv);     shift;;
+           # --verbose) arg_plugins=(  );     shift;;
          -h|--help|-\?) show_help;            exit 0;;
                     --) shift; break;;
                     -*) echo "invalid option: $1" 1>&2; show_help; exit 1;;
@@ -228,56 +231,46 @@ linkToRepo() { # {{{1
 
     local repo="$1"
     local dotfile="$2"
+    local repo_dotfile="$repo/$dotfile"
 
-    if [[ ! -e $dotfile ]]; then
+    if [[ ! -e $dotfiles/$dotfile ]]; then
 
         printf "\n\t"
-        ln -sv "$repo/${dotfile##*/}" "${dotfile%/*}"
+        ln -sv "$repo_dotfile" "$dotfiles"
     else
-        [[ -f $dotfile ]] && local file='File'
-        [[ -L $dotfile ]] && local file='Link'
-        [[ -d $dotfile ]] && local file='Folder'
+        [[ -f $repo_dotfile ]] && local file='File'
+        [[ -L $repo_dotfile ]] && local file='Link'
+        [[ -d $repo_dotfile ]] && local file='Folder'
 
-        if [[ ! -O $dotfile ]]; then
+        if [[ ! -O $repo_dotfile ]]; then
 
-            printf "\n\t$blue$file$reset $dotfile ${blue}not owned by you$reset already exists\n\t"
+            printf "\n\t$blue$file$reset $repo_dotfile ${blue}not owned by you$reset already exists\n\t"
         else
-            printf "\n\t$blue$file$reset $dotfile ${blue}owned by you$reset already exists\n\t"
+            printf "\n\t$blue$file$reset $repo_dotfile ${blue}owned by you$reset already exists\n\t"
         fi
 
-        # If it is a folder
-        if [[ -d $dotfile ]]; then
-
-            rm -irv "$dotfile"
-
-            if [[ ! -d $dotfile ]]; then
-
-                ln -sv "$repo/${dotfile##*/}" "${dotfile%/*}"
-            fi
-        else
-            ln -isv "$repo/${dotfile##*/}" "${dotfile%/*}"
-        fi
+        ln -isv "$repo_dotfile" "$dotfiles"
     fi
 }
 
 updateRepo() { # {{{1
 
     local author="$1"
-    local repo="$2"
-    local destination="$3"
+    local repo_name="$2"
+    local repo="$3"
 
-    [[ -d $destination ]] && cd "$destination" &&
-        pullRepo "$author" "$repo" "$destination"
+    [[ -d $repo ]] && cd "$repo" &&
+        pullRepo "$author" "$repo_name" "$repo"
 
-    if [[ ! -d $destination ]] && cloneRepo "$author" "$repo" "$destination" ||
-       [[ -d $destination && $arg_links ]]; then
+    if [[ ! -d $repo ]] && cloneRepo "$author" "$repo_name" "$repo" ||
+       [[ -d $repo && $arg_links ]]; then
 
         # If there are dotfiles to link to
         if [[ $4 ]]; then
 
             for dotfile in "${@:4}"; do
 
-                linkToRepo "$destination" "$dotfile"
+                linkToRepo "$repo" "$dotfile"
             done
         fi
     fi
@@ -285,10 +278,10 @@ updateRepo() { # {{{1
 
 # Actions {{{1
 
-bash_dotfiles=("$dotfiles/."{profile,bash_login,bash_profile})
-bash_dotfiles+=("$dotfiles/."{bashrc,bashrc_after,bash_logout,logout,inputrc})
-help_dotfiles=("$dotfiles/."{gitignore,screenrc,curlrc})
-vim_dotfiles=("$dotfiles/."{vim,vimrc,gvimrc}) # .vim to be removed ?!
+bash_dotfiles=(.{profile,bash_login,bash_profile})
+bash_dotfiles+=(.{bashrc,bashrc_after,bash_logout,logout,inputrc})
+help_dotfiles=(.{gitignore,screenrc,curlrc})
+vim_dotfiles=(.{vimrc,gvimrc})
 
 bash_repos="$repos/$bashfiles"
 help_repos="$repos/$helpfiles"
@@ -298,6 +291,19 @@ updateRepo "$me" "$bashfiles" "$bash_repos" "${bash_dotfiles[@]}"
 updateRepo "$me" "$helpfiles" "$help_repos" "${help_dotfiles[@]}"
 updateRepo "$me" "$vimfiles"  "$vim_repos"  "${vim_dotfiles[@]}"
 
+# .vim -> vimfiles, _vimrc, _gvimrc
+if [[ -d $vim_repos ]]; then
+
+    ln -sv "$vim_repos" "$dotfiles/.vim"
+
+    if [[ ${arg_plugins[0]} == @(cp|mv) ]]; then
+
+        cp -fv "$vim_repos/.vimrc" "$dotfiles/_vimrc"
+        cp -fv "$vim_repos/.gvimrc" "$dotfiles/_gvimrc"
+    fi
+fi
+
+# Vim plugins
 if [[ ! $arg_omit ]]; then
 
     vim_plugins="$vim_repos/plugins"
