@@ -143,9 +143,13 @@ cloneRepo() { # {{{1
     local author="$1"
     local repo="$2"
     local destination="$3"
-    local remote_host="git://$github/"
 
-    [[ $author == $me ]] && remote_host="git@$github:"
+    if [[ $author == $me ]]; then
+
+        local remote_host="git@$github:"
+    else
+        local remote_host="git://$github/"
+    fi
 
     if [[ $git ]]; then
 
@@ -172,9 +176,12 @@ pullRepo() { # {{{1
     local repo="$2"
     local destination="$3"
 
-    local remote_host="git://$github/"
+    if [[ $author == $me ]]; then
 
-    [[ $author == $me ]] && remote_host="git@$github:"
+        local remote_host="git@$github:"
+    else
+        local remote_host="git://$github/"
+    fi
 
     if [[ -d $destination/.git ]]; then
 
