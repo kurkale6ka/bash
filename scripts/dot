@@ -283,7 +283,7 @@ help_repo="$repos/$helpfiles"
 vim_repo="$repos/$vimfiles"
 
 updateRepo "$me" "$bashfiles" "$bash_repo" "${bash_dotfiles[@]}"
-#updateRepo "$me" "$helpfiles" "$help_repo" "${help_dotfiles[@]}"
+updateRepo "$me" "$helpfiles" "$help_repo" "${help_dotfiles[@]}"
 updateRepo "$me" "$vimfiles"  "$vim_repo"  "${vim_dotfiles[@]}"
 
 # .vim -> vimfiles, _vimrc, _gvimrc
