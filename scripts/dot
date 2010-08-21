@@ -84,15 +84,15 @@ while [[ $1 == -* ]]; do
 
     case "$1" in
 
-                 --*=*) parse_option "$1";                        shift;;
-               --links) arg_links="$1";                           shift;;
-        --copy-plugins) arg_plugins=(cp -v --remove-destination); shift;;
-        --move-plugins) arg_plugins=(mv -vf);                     shift;;
-        --omit-plugins) arg_omit=omit;                            shift;;
-           # --verbose) arg_plugins=(  );                         shift;;
+                 --*=*) parse_option "$1";                        shift ;;
+               --links) arg_links="$1";                           shift ;;
+        --copy-plugins) arg_plugins=(cp -v --remove-destination); shift ;;
+        --move-plugins) arg_plugins=(mv -vf);                     shift ;;
+        --omit-plugins) arg_omit=omit;                            shift ;;
+           # --verbose) arg_plugins=(  );                         shift ;;
          -h|--help|-\?) show_help;                                exit 0;;
-                    --) shift;                                    break;;
-                    -*) echo "invalid option: $1" 1>&2; show_help; exit 1;;
+                    --) shift;                                    break ;;
+                    -*) warn "invalid option: $1"; show_help;     exit 1;;
     esac
 done
 
@@ -105,19 +105,22 @@ copyRepo() { # {{{1
 
     printf "\n%-50s" "${bold}Copying $repo_name repository$reset..."
 
-    if wget -qP "$repo_parent" "http://github.com/$author/$repo_name/tarball/master"; then
+    if wget -qP "$repo_parent" \
+        "http://github.com/$author/$repo_name/tarball/master"; then
 
         if
-            tar -zxf "$repo_parent"/*"$author"*"$repo_name"*.tar.gz -C "$repo_parent"
+            tar -zxf "$repo_parent"/*"$author"*"$repo_name"*.tar.gz \
+                -C "$repo_parent"
+
             rm "$repo_parent"/*"$author"*"$repo_name"*.tar.gz
             mv "$repo_parent"/{*"$author"*"$repo_name"*/,"$repo_name"}
         then
             printf "... [ $bold${green}OK$reset ]\n"
         else
-            printf "... [ $bold${red}FAILED$reset ]: $? (tar, rm or mv)\n"
+            warn "... [ $bold${red}FAILED$reset ]: $? (tar, rm or mv)\n"
         fi
     else
-        printf "... [ $bold${red}FAILED$reset ]: network failure\n"
+        warn "... [ $bold${red}FAILED$reset ]: network failure\n"
     fi
 }
 
@@ -166,11 +169,14 @@ cloneRepo() { # {{{1
 
         printf "\n%-50s" "${bold}Cloning $repo_name repository$reset..."
 
-        if git clone -q "$remote_host$author/$repo_name.git" "$repo" >/dev/null 2>&1; then
+        if git clone -q "$remote_host$author/$repo_name.git" "$repo" \
+            >/dev/null 2>&1; then
 
             printf "... [ $bold${green}OK$reset ]\n"
         else
-            printf "... [ $bold${red}FAILED$reset: Git error ] - trying to copy instead\n"
+            warn "... [ $bold${red}FAILED$reset: Git error ]"\
+                " - trying to copy instead\n"
+
             copyRepo "$author" "$repo_name" "$repo"
         fi
     else
@@ -201,7 +207,8 @@ pullRepo() { # {{{1
 
             printf "\n%-50s" "${bold}Updating $repo_name repository$reset..."
 
-            if git pull -q "$remote_host$author/$repo_name.git" master >/dev/null 2>&1; then
+            if git pull -q "$remote_host$author/$repo_name.git" master \
+                >/dev/null 2>&1; then
 
                 printf "... [ $bold${green}OK$reset ]\n"
             else
@@ -221,8 +228,8 @@ pullRepo() { # {{{1
             copyRepo "$author" "$repo_name" "$repo"
         fi
     else
-        warn "$repo_name is not a Git working copy"
-        warn "overwriting $repo_name..."
+        printf "$repo_name is not a Git working copy"
+        printf "overwriting $repo_name..."
 
         rm -rfv "$repo"
         copyRepo "$author" "$repo_name" "$repo"
@@ -245,9 +252,11 @@ linkToRepo() { # {{{1
 
         if [[ ! -O $repo_dotfile ]]; then
 
-            printf "\n\t$blue$file$reset $repo_dotfile ${blue}not owned by you$reset already exists\n\t"
+            printf "\n\t$blue$file$reset $repo_dotfile ${blue}not owned by you"\
+                "$reset already exists\n\t"
         else
-            printf "\n\t$blue$file$reset $repo_dotfile ${blue}owned by you$reset already exists\n\t"
+            printf "\n\t$blue$file$reset $repo_dotfile ${blue}owned by you"\
+                "$reset already exists\n\t"
         fi
 
         ln -isv "$repo_dotfile" "$dotfiles"
@@ -301,6 +310,9 @@ if [[ -d $vim_repo ]]; then
         printf "\n\t"; cp -fv "$vim_repo/.vimrc" "$dotfiles/_vimrc"
         printf "\n\t"; cp -fv "$vim_repo/.gvimrc" "$dotfiles/_gvimrc"
     fi
+else
+    warn "Failed to install/update $vimfiles repository"
+    warn "$vim_repo wasn't created"
 fi
 
 # Install/update Vim plugins {{{1
@@ -328,6 +340,9 @@ if [[ ! $arg_omit ]]; then
             done < <(find "$plugin" \( -name '*.vim' -o -name '*.txt' \) -print0)
 
         done
+    else
+        warn 'Failed to install/update the Vim plugins.'
+        warn "$vim_plugins wasn't created"
     fi
 fi
 
