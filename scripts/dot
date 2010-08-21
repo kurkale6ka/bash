@@ -36,10 +36,6 @@ bashfiles=bashfiles
 helpfiles=help
 vimfiles=vimfiles
 
-bash_repo="$repos/$bashfiles"
-help_repo="$repos/$helpfiles"
-vim_repo="$repos/$vimfiles"
-
 bash_dotfiles=(.{profile,bash_login,bash_profile})
 bash_dotfiles+=(.{bashrc,bashrc_after,bash_logout,logout,inputrc})
 help_dotfiles=(.{gitignore,screenrc,curlrc})
@@ -282,6 +278,10 @@ updateRepo() { # {{{1
 }
 
 # Install/update my repositories {{{1
+
+bash_repo="$repos/$bashfiles"
+help_repo="$repos/$helpfiles"
+vim_repo="$repos/$vimfiles"
 
 updateRepo "$me" "$bashfiles" "$bash_repo" "${bash_dotfiles[@]}"
 updateRepo "$me" "$helpfiles" "$help_repo" "${help_dotfiles[@]}"
