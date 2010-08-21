@@ -5,21 +5,21 @@
 # Author Dimitar Dimitrov <mitkofr@yahoo.fr>
 # ------------------------------------------
 
-# Settings {{{1
+# Settings & globals {{{1
 
 shopt -s extglob
+
+program="${0##*/}"
+
+command -v git >/dev/null 2>&1 && git=true
+
+github='github.com'
 
 # Plugin Authors
 me=kurkale6ka
 godlygeek=godlygeek
 spiiph=spiiph
 tpope=tpope
-
-red=$(tput setaf 1)
-green=$(tput setaf 2)
-blue=$(tput setaf 4)
-bold=$(tput bold)
-reset=$(tput sgr0)
 
 # matchit, vsearch, bgrep, php, xsd...
 # git://github.com/godlygeek/netlib.git
@@ -36,12 +36,22 @@ bashfiles=bashfiles
 helpfiles=help
 vimfiles=vimfiles
 
-github='github.com'
-arg_plugins=(ln -svf)
+bash_repo="$repos/$bashfiles"
+help_repo="$repos/$helpfiles"
+vim_repo="$repos/$vimfiles"
 
-program="${0##*/}"
+bash_dotfiles=(.{profile,bash_login,bash_profile})
+bash_dotfiles+=(.{bashrc,bashrc_after,bash_logout,logout,inputrc})
+help_dotfiles=(.{gitignore,screenrc,curlrc})
+vim_dotfiles=(.{vimrc,gvimrc})
 
-# Print a message to stderr
+red=$(tput setaf 1)
+green=$(tput setaf 2)
+blue=$(tput setaf 4)
+bold=$(tput bold)
+reset=$(tput sgr0)
+
+# Print a message to stderr {{{1
 warn() { echo "$@" >&2; }
 
 show_help() { # {{{1
@@ -57,7 +67,7 @@ show_help() { # {{{1
     warn "       $program -h|--help|-?: this help text"
 }
 
-# Parse -|-- options {{{1
+# -|-- options {{{1
 parse_option() {
 
     local option="$1"
@@ -70,6 +80,8 @@ parse_option() {
               *ip*) github="$value";;
     esac
 }
+
+arg_plugins=(ln -svf)
 
 # Go trough all -|-- command line options
 while [[ $1 == -* ]]; do
@@ -87,8 +99,6 @@ while [[ $1 == -* ]]; do
                     -*) echo "invalid option: $1" 1>&2; show_help; exit 1;;
     esac
 done
-
-command -v git >/dev/null 2>&1 && git=true
 
 copyRepo() { # {{{1
 
@@ -271,22 +281,14 @@ updateRepo() { # {{{1
     fi
 }
 
-# Actions {{{1
-
-bash_dotfiles=(.{profile,bash_login,bash_profile})
-bash_dotfiles+=(.{bashrc,bashrc_after,bash_logout,logout,inputrc})
-help_dotfiles=(.{gitignore,screenrc,curlrc})
-vim_dotfiles=(.{vimrc,gvimrc})
-
-bash_repo="$repos/$bashfiles"
-help_repo="$repos/$helpfiles"
-vim_repo="$repos/$vimfiles"
+# Install/update my repositories {{{1
 
 updateRepo "$me" "$bashfiles" "$bash_repo" "${bash_dotfiles[@]}"
 updateRepo "$me" "$helpfiles" "$help_repo" "${help_dotfiles[@]}"
 updateRepo "$me" "$vimfiles"  "$vim_repo"  "${vim_dotfiles[@]}"
 
-# .vim -> vimfiles, _vimrc, _gvimrc
+# symlink .vim      -> vimfiles
+# copy    .[g]vimrc -> _[g]vimrc
 if [[ -d $vim_repo ]]; then
 
     if [[ ! -L $dotfiles/.vim ]]; then
@@ -301,7 +303,7 @@ if [[ -d $vim_repo ]]; then
     fi
 fi
 
-# Vim plugins
+# Install/update Vim plugins {{{1
 if [[ ! $arg_omit ]]; then
 
     vim_plugins="$vim_repo/plugins"
@@ -329,7 +331,7 @@ if [[ ! $arg_omit ]]; then
     fi
 fi
 
-# Create a symlink of this script in ~/bin
+# Create a symlink of this script in ~/bin {{{1
 if [[ -d $bash_repo/scripts && ! -L $HOME/bin/$program ]]; then
 
     if [[ ! -d $HOME/bin ]]; then
