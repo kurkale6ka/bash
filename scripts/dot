@@ -166,7 +166,7 @@ cloneRepo() { # {{{1
 
         printf "\n%-50s" "${bold}Cloning $repo_name repository$reset..."
 
-        if git clone -q "$remote_host$author/$repo_name.git" "$repo"; then
+        if git clone -q "$remote_host$author/$repo_name.git" "$repo" >/dev/null 2>&1; then
 
             printf "... [ $bold${green}OK$reset ]\n"
         else
@@ -338,7 +338,8 @@ if [[ -d $bash_repo/scripts && ! -L $HOME/bin/$program ]]; then
 
         mkdir -v "$HOME/bin" && ln -s "$bash_repo/scripts/$program" "$HOME/bin"
     else
-        ln -s "$bash_repo/scripts/$program" "$HOME/bin"
+        [[ ! -L $HOME/bin/$program ]] &&
+            ln -s "$bash_repo/scripts/$program" "$HOME/bin"
     fi
 fi
 
