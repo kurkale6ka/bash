@@ -53,6 +53,7 @@ warn() { echo "$@" >&2; }
 show_help() { # {{{1
 
     warn "Usage: $program --links"
+    warn "       $program --links-only"
     warn "       $program --copy-plugins"
     warn "       $program --move-plugins"
     warn "       $program --omit-plugins"
@@ -85,11 +86,12 @@ while [[ $1 == -* ]]; do
     case "$1" in
 
                  --*=*) parse_option "$1";                        shift ;;
-               --links) arg_links="$1";                           shift ;;
+               --links) arg_links=true;                           shift ;;
+          --links-only) arg_links_only=true;                      shift ;;
+        --omit-plugins) arg_omit=true;                            shift ;;
         --copy-plugins) arg_plugins=(cp -v --remove-destination); shift ;;
         --move-plugins) arg_plugins=(mv -vf);                     shift ;;
-        --omit-plugins) arg_omit=omit;                            shift ;;
-           # --verbose) arg_plugins=(  );                         shift ;;
+           # --verbose) arg_verbose=true;                         shift ;;
          -h|--help|-\?) show_help;                                exit 0;;
                     --) shift;                                    break ;;
                     -*) warn "invalid option: $1"; show_help;     exit 1;;
@@ -263,26 +265,40 @@ linkToRepo() { # {{{1
     fi
 }
 
+updateLinks() { # {{{1
+
+    local repo="$1"
+
+    # If there are dotfiles to link to
+    if [[ $2 ]]; then
+
+        for dotfile in "${@:2}"; do
+
+            linkToRepo "$repo" "$dotfile"
+        done
+    fi
+}
+
 updateRepo() { # {{{1
 
     local author="$1"
     local repo_name="$2"
     local repo="$3"
 
-    [[ -d $repo ]] && cd "$repo" &&
-        pullRepo "$author" "$repo_name" "$repo"
+    if [[ -d $repo ]]; then
 
-    if [[ ! -d $repo ]] && cloneRepo "$author" "$repo_name" "$repo" ||
-       [[ -d $repo && $arg_links ]]; then
+        if [[ ! $arg_links_only ]]; then
 
-        # If there are dotfiles to link to
-        if [[ $4 ]]; then
+            if cd "$repo"; then
 
-            for dotfile in "${@:4}"; do
-
-                linkToRepo "$repo" "$dotfile"
-            done
+                pullRepo "$author" "$repo_name" "$repo"
+            fi
         fi
+        [[ $arg_links || $arg_links_only ]] && updateLinks "$repo" "${@:4}"
+
+    elif cloneRepo "$author" "$repo_name" "$repo"; then
+
+        updateLinks "$repo" "${@:4}"
     fi
 }
 
@@ -305,7 +321,7 @@ if [[ -d $vim_repo ]]; then
         printf "\n\t"; ln -sv "$vim_repo" "$dotfiles/.vim"
     fi
 
-    if [[ ${arg_plugins[0]} == @(cp|mv) ]]; then
+    if [[ ${arg_plugins[0]} == @(cp|mv) || $arg_links_only && $OS != unix ]]; then
 
         printf "\n\t"; cp -fv "$vim_repo/.vimrc" "$dotfiles/_vimrc"
         printf "\n\t"; cp -fv "$vim_repo/.gvimrc" "$dotfiles/_gvimrc"
@@ -316,7 +332,7 @@ else
 fi
 
 # Install/update Vim plugins {{{1
-if [[ ! $arg_omit ]]; then
+if [[ ! $arg_omit && ! $arg_links_only ]]; then
 
     vim_plugins="$vim_repo/plugins"
 
