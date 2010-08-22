@@ -57,9 +57,11 @@ show_help() { # {{{1
     warn "       $program --copy-plugins"
     warn "       $program --move-plugins"
     warn "       $program --omit-plugins"
+    warn "       $program --force-git"
+    warn "       $program --clean-repos"
     warn "       $program --verbose"
-    warn "       $program --repos=repos-folder"
-    warn "       $program --dotfiles=dotfiles-folder"
+    warn "       $program --repos=repos-folder (default: \$HOME)"
+    warn "       $program --dotfiles=dotfiles-folder (default: \$HOME)"
     warn "       $program --ip=github's ip"
     warn "       $program -h|--help|-?: this help text"
 }
@@ -89,6 +91,8 @@ while [[ $1 == -* ]]; do
                --links) arg_links=true;                           shift ;;
           --links-only) arg_links_only=true;                      shift ;;
         --omit-plugins) arg_omit=true;                            shift ;;
+           --force-git) arg_force_git=true;                       shift ;;
+         --clean-repos) arg_clean_repos=true;                     shift ;;
         --copy-plugins) arg_plugins=(cp -v --remove-destination); shift ;;
         --move-plugins) arg_plugins=(mv -vf);                     shift ;;
            # --verbose) arg_verbose=true;                         shift ;;
@@ -190,6 +194,15 @@ cloneRepo() { # {{{1
     fi
 }
 
+cleanRepos() { # {{{1
+
+    # todo: remove the links in dotfiles as well
+    for repo in "$my_repos"; do
+
+        rm -rfv "$repo"
+    done
+}
+
 pullRepo() { # {{{1
 
     local author="$1"
@@ -229,6 +242,10 @@ pullRepo() { # {{{1
             rm -rfv "$repo"
             copyRepo "$author" "$repo_name" "$repo"
         fi
+    elif [[ $arg_force_git ]]; then
+
+        cleanRepos
+        cloneRepo "$author" "$repo_name" "$repo"
     else
         printf "$repo_name is not a Git working copy"
         printf "overwriting $repo_name..."
@@ -308,69 +325,74 @@ bash_repo="$repos/$bashfiles"
 help_repo="$repos/$helpfiles"
 vim_repo="$repos/$vimfiles"
 
-updateRepo "$me" "$bashfiles" "$bash_repo" "${bash_dotfiles[@]}"
-updateRepo "$me" "$helpfiles" "$help_repo" "${help_dotfiles[@]}"
-updateRepo "$me" "$vimfiles"  "$vim_repo"  "${vim_dotfiles[@]}"
+my_repos=("$bash_repo" "$help_repo" "$vim_repo")
 
-# symlink .vim      -> vimfiles
-# copy    .[g]vimrc -> _[g]vimrc
-if [[ -d $vim_repo ]]; then
+if [[ ! $arg_clean_repos ]]; then
 
-    if [[ ! -L $dotfiles/.vim ]]; then
+    updateRepo "$me" "$bashfiles" "$bash_repo" "${bash_dotfiles[@]}"
+    updateRepo "$me" "$helpfiles" "$help_repo" "${help_dotfiles[@]}"
+    updateRepo "$me" "$vimfiles"  "$vim_repo"  "${vim_dotfiles[@]}"
 
-        printf "\n\t"; ln -sv "$vim_repo" "$dotfiles/.vim"
-    fi
+    # symlink .vim      -> vimfiles
+    # copy    .[g]vimrc -> _[g]vimrc
+    if [[ -d $vim_repo ]]; then
 
-    if [[ ${arg_plugins[0]} == @(cp|mv) || $arg_links_only && $OS != unix ]]; then
+        if [[ ! -L $dotfiles/.vim ]]; then
 
-        printf "\n\t"; cp -fv "$vim_repo/.vimrc" "$dotfiles/_vimrc"
-        printf "\n\t"; cp -fv "$vim_repo/.gvimrc" "$dotfiles/_gvimrc"
-    fi
-else
-    warn "Failed to install/update $vimfiles repository"
-    warn "$vim_repo wasn't created"
-fi
+            printf "\n\t"; ln -sv "$vim_repo" "$dotfiles/.vim"
+        fi
 
-# Install/update Vim plugins {{{1
-if [[ ! $arg_omit && ! $arg_links_only ]]; then
+        if [[ ${arg_plugins[0]} == @(cp|mv) || $arg_links_only && $OS != unix ]]; then
 
-    vim_plugins="$vim_repo/plugins"
-
-    updateRepo "$godlygeek" csapprox      "$vim_plugins/csapprox"
-    updateRepo "$godlygeek" tabular       "$vim_plugins/tabular"
-    updateRepo "$spiiph"    vim-space     "$vim_plugins/vim-space"
-    updateRepo "$tpope"     vim-surround  "$vim_plugins/vim-surround"
-    updateRepo "$tpope"     vim-repeat    "$vim_plugins/vim-repeat"
-
-    if [[ -d $vim_plugins ]]; then
-
-        for plugin in "$vim_plugins"/*; do
-
-            while read -r -d $'\0'; do
-
-                printf "\n\t"
-                file="${REPLY#*$plugin/}"
-                folder="${file%/*}"
-                "${arg_plugins[@]}" -- "$REPLY" "$vim_repo/$folder"
-
-            done < <(find "$plugin" \( -name '*.vim' -o -name '*.txt' \) -print0)
-
-        done
+            printf "\n\t"; cp -fv "$vim_repo/.vimrc" "$dotfiles/_vimrc"
+            printf "\n\t"; cp -fv "$vim_repo/.gvimrc" "$dotfiles/_gvimrc"
+        fi
     else
-        warn 'Failed to install/update the Vim plugins.'
-        warn "$vim_plugins wasn't created"
+        warn "Failed to install/update $vimfiles repository"
+        warn "$vim_repo wasn't created"
     fi
-fi
 
-# Create a symlink of this script in ~/bin {{{1
-if [[ -d $bash_repo/scripts && ! -L $HOME/bin/$program ]]; then
+    # Install/update Vim plugins {{{1
+    if [[ ! $arg_omit && ! $arg_links_only ]]; then
 
-    if [[ ! -d $HOME/bin ]]; then
+        vim_plugins="$vim_repo/plugins"
 
-        mkdir -v "$HOME/bin" && ln -s "$bash_repo/scripts/$program" "$HOME/bin"
-    else
-        [[ ! -L $HOME/bin/$program ]] &&
-            ln -s "$bash_repo/scripts/$program" "$HOME/bin"
+        updateRepo "$godlygeek" csapprox      "$vim_plugins/csapprox"
+        updateRepo "$godlygeek" tabular       "$vim_plugins/tabular"
+        updateRepo "$spiiph"    vim-space     "$vim_plugins/vim-space"
+        updateRepo "$tpope"     vim-surround  "$vim_plugins/vim-surround"
+        updateRepo "$tpope"     vim-repeat    "$vim_plugins/vim-repeat"
+
+        if [[ -d $vim_plugins ]]; then
+
+            for plugin in "$vim_plugins"/*; do
+
+                while read -r -d $'\0'; do
+
+                    printf "\n\t"
+                    file="${REPLY#*$plugin/}"
+                    folder="${file%/*}"
+                    "${arg_plugins[@]}" -- "$REPLY" "$vim_repo/$folder"
+
+                done < <(find "$plugin" \( -name '*.vim' -o -name '*.txt' \) -print0)
+
+            done
+        else
+            warn 'Failed to install/update the Vim plugins.'
+            warn "$vim_plugins wasn't created"
+        fi
+    fi
+
+    # Create a symlink of this script in ~/bin {{{1
+    if [[ -d $bash_repo/scripts && ! -L $HOME/bin/$program ]]; then
+
+        if [[ ! -d $HOME/bin ]]; then
+
+            mkdir -v "$HOME/bin" && ln -s "$bash_repo/scripts/$program" "$HOME/bin"
+        else
+            [[ ! -L $HOME/bin/$program ]] &&
+                ln -s "$bash_repo/scripts/$program" "$HOME/bin"
+        fi
     fi
 fi
 
