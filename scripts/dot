@@ -48,21 +48,21 @@ bold=$(tput bold)
 reset=$(tput sgr0)
 
 # Print a message to stderr {{{1
-warn() { printf '%s\n' "$@" >&2; }
+warn() { printf '%b' "$@" >&2; }
 
 show_help() { # {{{1
 
-    warn "Usage: $program --links"\
-         "       $program --links-only"\
-         "       $program --copy-plugins"\
-         "       $program --move-plugins"\
-         "       $program --omit-plugins"\
-         "       $program --force-git"\
-         "       $program --clean-repos"\
-         "       $program --verbose"\
-         "       $program --repos=repos-folder (default: \$HOME)"\
-         "       $program --dotfiles=dotfiles-folder (default: \$HOME)"\
-         "       $program --ip=github's ip"\
+    warn "Usage: $program --links\n"\
+         "       $program --links-only\n"\
+         "       $program --copy-plugins\n"\
+         "       $program --move-plugins\n"\
+         "       $program --omit-plugins\n"\
+         "       $program --force-git\n"\
+         "       $program --clean-repos\n"\
+         "       $program --verbose\n"\
+         "       $program --repos=repos-folder (default: \$HOME)\n"\
+         "       $program --dotfiles=dotfiles-folder (default: \$HOME)\n"\
+         "       $program --ip=github's ip\n"\
          "       $program -h|--help|-?: this help text"
 }
 
@@ -100,7 +100,7 @@ while [[ $1 == -* ]]; do
            # --verbose) arg_verbose=true;                         shift ;;
          -h|--help|-\?) show_help;                                exit 0;;
                     --) shift;                                    break ;;
-                    -*) warn "invalid option: $1"; show_help;     exit 1;;
+                    -*) warn "invalid option: $1\n"; show_help;   exit 1;;
     esac
 done
 
@@ -125,10 +125,10 @@ copyRepo() { # {{{1
         then
             printf "... [ $bold${green}OK$reset ]\n"
         else
-            warn "... [ $bold${red}FAILED$reset ]: $? (tar, rm or mv)"
+            warn "... [ $bold${red}FAILED$reset ]: $? (tar, rm or mv)\n"
         fi
     else
-        warn "... [ $bold${red}FAILED$reset ]: network failure"
+        warn "... [ $bold${red}FAILED$reset ]: network failure\n"
     fi
 }
 
@@ -182,7 +182,8 @@ cloneRepo() { # {{{1
 
             printf "... [ $bold${green}OK$reset ]\n"
         else
-            warn "... [ $bold${red}FAILED$reset: Git error ] - trying to copy instead"
+            warn "... [ $bold${red}FAILED$reset: Git error ]"\
+                 " - trying to copy instead\n"
 
             copyRepo "$author" "$repo_name" "$repo"
         fi
@@ -248,8 +249,8 @@ pullRepo() { # {{{1
         cleanRepos
         cloneRepo "$author" "$repo_name" "$repo"
     else
-        printf "$repo_name is not a Git working copy"
-        printf "overwriting $repo_name..."
+        printf "$repo_name is not a Git working copy\n"
+        printf "overwriting $repo_name...\n"
 
         rm -rfv "$repo"
         copyRepo "$author" "$repo_name" "$repo"
@@ -353,8 +354,8 @@ if [[ ! $arg_clean_repos ]]; then
             printf "\n\t"; cp -fv "$vim_repo/.gvimrc" "$dotfiles/_gvimrc"
         fi
     else
-        warn "Failed to install/update $vimfiles repository"\
-             "$vim_repo wasn't created"
+        warn "Failed to install/update $vimfiles repository\n"\
+             "$vim_repo wasn't created\n"
     fi
 
     # Install/update Vim plugins {{{1
@@ -383,8 +384,8 @@ if [[ ! $arg_clean_repos ]]; then
 
             done
         else
-            warn 'Failed to install/update the Vim plugins.'\
-                 "$vim_plugins wasn't created"
+            warn "Failed to install/update the Vim plugins\n"\
+                 "$vim_plugins wasn't created\n"
         fi
     fi
 
