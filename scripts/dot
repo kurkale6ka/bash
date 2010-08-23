@@ -271,11 +271,11 @@ linkToRepo() { # {{{1
 
         if [[ ! -O $repo_dotfile ]]; then
 
-            printf "\n\t$blue$file$reset $repo_dotfile ${blue}not owned by you"\
-                "$reset already exists\n\t"
+            printf "\n\t$blue$file$reset $repo_dotfile "
+            printf "${blue}not owned by you$reset already exists\n\t"
         else
-            printf "\n\t$blue$file$reset $repo_dotfile ${blue}owned by you"\
-                "$reset already exists\n\t"
+            printf "\n\t$blue$file$reset $repo_dotfile "
+            printf "${blue}owned by you$reset already exists\n\t"
         fi
 
         ln -isv "$repo_dotfile" "$dotfiles"
