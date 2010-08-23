@@ -155,6 +155,7 @@ choice() { # {{{1
             fi
             break
         done
+        return 0
     fi
 
     [[ go_on != $quit ]] && (( secondTime++ ))
@@ -229,12 +230,15 @@ pullRepo() { # {{{1
 
                 printf "... [ $bold${green}OK$reset ]\n"
             else
-                choice go_on "... [ $bold${red}FAILED$reset: Git error ]" \
-                'Abort' \
-                'I want to copy over the existing repository'
+                if
+                    choice go_on "... [ $bold${red}FAILED$reset: Git error ]" \
+                    'Abort' \
+                    'I want to copy over the existing repository'
+                then
 
-                rm -rfv "$repo"
-                copyRepo "$author" "$repo_name" "$repo"
+                    rm -rfv "$repo"
+                    copyRepo "$author" "$repo_name" "$repo"
+                fi
             fi
         else
             choice quit "Cannot update $repo_name: Git is not installed" \
