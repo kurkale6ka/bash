@@ -52,18 +52,18 @@ warn() { printf '%s\n' "$@" >&2; }
 
 show_help() { # {{{1
 
-    warn "Usage: $program --links"
-    warn "       $program --links-only"
-    warn "       $program --copy-plugins"
-    warn "       $program --move-plugins"
-    warn "       $program --omit-plugins"
-    warn "       $program --force-git"
-    warn "       $program --clean-repos"
-    warn "       $program --verbose"
-    warn "       $program --repos=repos-folder (default: \$HOME)"
-    warn "       $program --dotfiles=dotfiles-folder (default: \$HOME)"
-    warn "       $program --ip=github's ip"
-    warn "       $program -h|--help|-?: this help text"
+    warn "Usage: $program --links"\
+         "       $program --links-only"\
+         "       $program --copy-plugins"\
+         "       $program --move-plugins"\
+         "       $program --omit-plugins"\
+         "       $program --force-git"\
+         "       $program --clean-repos"\
+         "       $program --verbose"\
+         "       $program --repos=repos-folder (default: \$HOME)"\
+         "       $program --dotfiles=dotfiles-folder (default: \$HOME)"\
+         "       $program --ip=github's ip"\
+         "       $program -h|--help|-?: this help text"
 }
 
 # -|-- options {{{1
@@ -123,10 +123,10 @@ copyRepo() { # {{{1
         then
             printf "... [ $bold${green}OK$reset ]\n"
         else
-            warn "... [ $bold${red}FAILED$reset ]: $? (tar, rm or mv)\n"
+            warn "... [ $bold${red}FAILED$reset ]: $? (tar, rm or mv)"
         fi
     else
-        warn "... [ $bold${red}FAILED$reset ]: network failure\n"
+        warn "... [ $bold${red}FAILED$reset ]: network failure"
     fi
 }
 
@@ -180,8 +180,7 @@ cloneRepo() { # {{{1
 
             printf "... [ $bold${green}OK$reset ]\n"
         else
-            warn "... [ $bold${red}FAILED$reset: Git error ]"\
-                " - trying to copy instead\n"
+            warn "... [ $bold${red}FAILED$reset: Git error ] - trying to copy instead"
 
             copyRepo "$author" "$repo_name" "$repo"
         fi
@@ -348,8 +347,8 @@ if [[ ! $arg_clean_repos ]]; then
             printf "\n\t"; cp -fv "$vim_repo/.gvimrc" "$dotfiles/_gvimrc"
         fi
     else
-        warn "Failed to install/update $vimfiles repository"
-        warn "$vim_repo wasn't created"
+        warn "Failed to install/update $vimfiles repository"\
+             "$vim_repo wasn't created"
     fi
 
     # Install/update Vim plugins {{{1
@@ -378,8 +377,8 @@ if [[ ! $arg_clean_repos ]]; then
 
             done
         else
-            warn 'Failed to install/update the Vim plugins.'
-            warn "$vim_plugins wasn't created"
+            warn 'Failed to install/update the Vim plugins.'\
+                 "$vim_plugins wasn't created"
         fi
     fi
 
