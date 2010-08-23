@@ -259,22 +259,26 @@ linkToRepo() { # {{{1
     local repo="$1"
     local dotfile="$2"
     local repo_dotfile="$repo/$dotfile"
+    local dotfiles_dotfile="$dotfiles/$dotfile"
+    local _dotfile=${dotfiles_dotfile%.*}$blue${dotfiles_dotfile##*/}$reset
 
-    if [[ ! -e $dotfiles/$dotfile ]]; then
+    if [[ ! -e $dotfiles_dotfile ]]; then
 
         printf "\n\t"; ln -sv "$repo_dotfile" "$dotfiles"
     else
-        [[ -f $repo_dotfile ]] && local file='File'
-        [[ -L $repo_dotfile ]] && local file='Link'
-        [[ -d $repo_dotfile ]] && local file='Folder'
+        [[ -f $dotfiles_dotfile ]] && local file='File'
+        [[ -L $dotfiles_dotfile ]] && local file='Link'
+        [[ -d $dotfiles_dotfile ]] && local file='Folder'
 
-        if [[ ! -O $repo_dotfile ]]; then
+        local _file=$blue$file$reset
 
-            printf "\n\t$blue$file$reset $repo_dotfile "
-            printf "${blue}not owned by you$reset already exists\n\t"
+        if [[ ! -O $dotfiles_dotfile ]]; then
+
+            printf "\n\t$_file $_dotfile "
+            printf "${bold}not owned by you$reset already exists\n\t"
         else
-            printf "\n\t$blue$file$reset $repo_dotfile "
-            printf "${blue}owned by you$reset already exists\n\t"
+            printf "\n\t$_file $_dotfile "
+            printf "${bold}owned by you$reset already exists\n\t"
         fi
 
         ln -isv "$repo_dotfile" "$dotfiles"
@@ -341,7 +345,7 @@ if [[ ! $arg_clean_repos ]]; then
             printf "\n\t"; ln -sv "$vim_repo" "$dotfiles/.vim"
         fi
 
-        if [[ ${arg_plugins[0]} == @(cp|mv) || $arg_links_only && $OS != unix ]]; then
+        if [[ ${arg_plugins[0]} == @(cp|mv) || $arg_links_only && $OSTYPE != linux-gnu ]]; then
 
             printf "\n\t"; cp -fv "$vim_repo/.vimrc" "$dotfiles/_vimrc"
             printf "\n\t"; cp -fv "$vim_repo/.gvimrc" "$dotfiles/_gvimrc"
