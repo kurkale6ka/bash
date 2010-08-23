@@ -48,7 +48,7 @@ bold=$(tput bold)
 reset=$(tput sgr0)
 
 # Print a message to stderr {{{1
-warn() { echo "$@" >&2; }
+warn() { printf '%s\n' "$@" >&2 }
 
 show_help() { # {{{1
 

@@ -206,7 +206,7 @@ ee() {
 s() { fc -s "$1"="$2" "$3"; }
 
 # Usage: warn 'message' - print a message to stderr
-warn() { echo "$@" >&2; }
+warn() { printf '%s\n' "$@" >&2 }
 
 # Aliases ~\~1
 
