@@ -66,7 +66,7 @@ show_help() { # {{{1
          "       $program -h|--help|-?: this help text"
 }
 
-[[ $1 != -* ]] && show_help && exit 0
+[[ $# > 0 && $1 != -* ]] && show_help && exit 0
 
 # -|-- options {{{1
 parse_option() {
