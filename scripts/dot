@@ -242,8 +242,7 @@ pullRepo() { # {{{1
                     'I want to copy over the existing repository'
                 then
 
-                    rm -rfv "$repo"
-                    copyRepo "$author" "$repo_name" "$repo"
+                    rm -rfv "$repo" && copyRepo "$author" "$repo_name" "$repo"
                 fi
             fi
         else
@@ -251,19 +250,16 @@ pullRepo() { # {{{1
             'I want to install git and retry later' \
             'I want to copy over the existing repositories'
 
-            rm -rfv "$repo"
-            copyRepo "$author" "$repo_name" "$repo"
+            rm -rfv "$repo" && copyRepo "$author" "$repo_name" "$repo"
         fi
     elif [[ $arg_force_clone ]]; then
 
-        cleanRepos
-        cloneRepo "$author" "$repo_name" "$repo"
+        cleanRepos && cloneRepo "$author" "$repo_name" "$repo"
     else
         printf "$repo_name is not a Git working copy\n"
         printf "overwriting $repo_name...\n"
 
-        rm -rfv "$repo"
-        copyRepo "$author" "$repo_name" "$repo"
+        rm -rfv "$repo" && copyRepo "$author" "$repo_name" "$repo"
     fi
 }
 
