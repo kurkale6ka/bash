@@ -190,6 +190,9 @@ cloneRepo() { # {{{1
 
             copyRepo "$author" "$repo_name" "$repo"
         fi
+    elif [[ $arg_force_copy ]]; then
+
+        copyRepo "$author" "$repo_name" "$repo"
     else
         choice quit 'Git is not installed on this machine' \
         'I want to install git and retry later' \
