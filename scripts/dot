@@ -257,7 +257,7 @@ pullRepo() { # {{{1
         fi
     elif [[ $arg_force_clone ]]; then
 
-        cleanRepos && cloneRepo "$author" "$repo_name" "$repo"
+        cloneRepo "$author" "$repo_name" "$repo"
     else
         printf "$repo_name is not a Git working copy\n"
         printf "overwriting $repo_name...\n"
@@ -343,6 +343,8 @@ vim_repo="$repos/$vimfiles"
 my_repos=("$bash_repo" "$help_repo" "$vim_repo")
 
 if [[ ! $arg_clean_repos ]]; then
+
+    [[ $arg_force_clone ]] && cleanRepos
 
     updateRepo "$me" "$bashfiles" "$bash_repo" "${bash_dotfiles[@]}"
     updateRepo "$me" "$helpfiles" "$help_repo" "${help_dotfiles[@]}"
