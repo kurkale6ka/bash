@@ -11,8 +11,6 @@ shopt -s extglob
 
 program="${0##*/}"
 
-command -v git >/dev/null 2>&1 && git=true
-
 github='github.com'
 
 # Plugin Authors
@@ -57,7 +55,8 @@ show_help() { # {{{1
          "       $program --copy-plugins\n"\
          "       $program --move-plugins\n"\
          "       $program --omit-plugins\n"\
-         "       $program --force-git\n"\
+         "       $program --force-clone\n"\
+         "       $program --force-copy\n"\
          "       $program --clean-repos\n"\
          "       $program --verbose\n"\
          "       $program --repos=repos-folder (default: \$HOME)\n"\
@@ -93,7 +92,8 @@ while [[ $1 == -* ]]; do
                --links) arg_links=true;                           shift ;;
           --links-only) arg_links_only=true;                      shift ;;
         --omit-plugins) arg_omit=true;                            shift ;;
-           --force-git) arg_force_git=true;                       shift ;;
+         --force-clone) arg_force_clone=true;                     shift ;;
+          --force-copy) arg_force_copy=true;                      shift ;;
          --clean-repos) arg_clean_repos=true;                     shift ;;
         --copy-plugins) arg_plugins=(cp -v --remove-destination); shift ;;
         --move-plugins) arg_plugins=(mv -vf);                     shift ;;
@@ -103,6 +103,8 @@ while [[ $1 == -* ]]; do
                     -*) warn "invalid option: $1\n"; show_help;   exit 1;;
     esac
 done
+
+[[ ! $arg_force_copy ]] && command -v git >/dev/null 2>&1 && git=true
 
 copyRepo() { # {{{1
 
@@ -252,7 +254,7 @@ pullRepo() { # {{{1
             rm -rfv "$repo"
             copyRepo "$author" "$repo_name" "$repo"
         fi
-    elif [[ $arg_force_git ]]; then
+    elif [[ $arg_force_clone ]]; then
 
         cleanRepos
         cloneRepo "$author" "$repo_name" "$repo"
