@@ -394,6 +394,8 @@ if [[ ! $arg_clean_repos ]]; then
                 done < <(find "$plugin" \( -name '*.vim' -o -name '*.txt' \) -print0)
 
             done
+
+            vim -c "helptag $vim_repo/doc|q" && printf "Generated Vim help\n"
         else
             warn "Failed to install/update the Vim plugins\n"\
                  "$vim_plugins wasn't created\n"
