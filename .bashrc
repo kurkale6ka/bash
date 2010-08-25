@@ -473,9 +473,9 @@ rd() {
 
     if [[ -d $1 ]]; then
 
-        if read -p "rd: remove directory '$1'?" answer && [[ $answer == @(y|yes) ]]
-        then
-            rm -rf "$1"
+        if read -p "rd: remove directory '$1'? " answer; then
+
+            [[ $answer == @(y|yes) ]] && rm -rf "$1"
         fi
     else
         warn "$1 is not a directory"
