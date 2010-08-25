@@ -463,12 +463,24 @@ alias du='du -h'
 
 alias cp='cp -i'
 alias mv='mv -i'
-alias rm='rm -i'
+alias rm='rm -i --preserve-root'
 
 # -p lets you create a path structure, ex: mkdir -p /a/b/c
 alias mf=mkfifo
 alias md='mkdir -p'
-alias rd=rmdir
+
+rd() {
+
+    if [[ -d $1 ]]; then
+
+        if read -p "rd: remove directory '$1'?" answer && [[ $answer == @(y|yes) ]]
+        then
+            rm -rf "$1"
+        fi
+    else
+        warn "$1 is not a directory"
+    fi
+}
 
 # Spelling typos ~\~2
 alias      akw=awk
