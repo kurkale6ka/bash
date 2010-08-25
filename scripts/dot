@@ -395,7 +395,10 @@ if [[ ! $arg_clean_repos ]]; then
 
             done
 
-            vim -c "helptag $vim_repo/doc|q" && printf "Generated Vim help\n"
+            if vim -u NONE -U NONE -n -c "helptag $vim_repo/doc|q"; then
+
+                printf "Generated Vim help\n"
+            fi
         else
             warn "Failed to install/update the Vim plugins\n"\
                  "$vim_plugins wasn't created\n"
