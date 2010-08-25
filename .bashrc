@@ -43,6 +43,9 @@ _exit() {
 }
 trap _exit EXIT
 
+# Usage: warn 'message' - print a message to stderr
+warn() { printf '%s\n' "$@" >&2; }
+
 # Usage: t my_archive.tar.gz => my_archive/
 extract() {
 
@@ -204,9 +207,6 @@ ee() {
 
 # Usage: s old new [optional cmd number/string in history]
 s() { fc -s "$1"="$2" "$3"; }
-
-# Usage: warn 'message' - print a message to stderr
-warn() { printf '%s\n' "$@" >&2; }
 
 # Aliases ~\~1
 
