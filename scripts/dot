@@ -422,4 +422,4 @@ else
     cleanRepos
 fi
 
-# vim: se fdm=marker fmr&:
+# vim: set foldmarker&:
