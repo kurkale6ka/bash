@@ -18,6 +18,7 @@ me=kurkale6ka
 godlygeek=godlygeek
 spiiph=spiiph
 tpope=tpope
+ervandew=ervandew
 
 # matchit, vsearch, bgrep, php, xsd...
 # git://github.com/godlygeek/netlib.git
@@ -379,6 +380,7 @@ if [[ ! $arg_clean_repos ]]; then
         updateRepo "$spiiph"    vim-space     "$vim_plugins/vim-space"
         updateRepo "$tpope"     vim-surround  "$vim_plugins/vim-surround"
         updateRepo "$tpope"     vim-repeat    "$vim_plugins/vim-repeat"
+        updateRepo "$ervandew"  supertab      "$vim_plugins/supertab"
 
         if [[ -d $vim_plugins ]]; then
 
