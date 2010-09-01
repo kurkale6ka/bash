@@ -473,15 +473,18 @@ alias md='mkdir -p'
 
 rd() {
 
-    if [[ -d $1 ]]; then
+    for arg in "$@"; do
 
-        if read -p "rd: remove directory '$1'? " answer; then
+        if [[ -d $arg ]]; then
 
-            [[ $answer == @(y|yes) ]] && rm -rf "$1"
+            if read -p "rd: remove directory '$arg'? " answer; then
+
+                [[ $answer == @(y|yes) ]] && rm -rf "$arg"
+            fi
+        else
+            warn "$arg is not a directory"
         fi
-    else
-        warn "$1 is not a directory"
-    fi
+    done
 }
 
 # Spelling typos ~\~2
