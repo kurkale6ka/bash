@@ -51,7 +51,8 @@ warn() { printf '%b' "$@" >&2; }
 
 show_help() { # {{{1
 
-    warn "Usage: $program --links\n"\
+    warn "Usage: $program --info\n"\
+         "       $program --links\n"\
          "       $program --links-only\n"\
          "       $program --copy-plugins\n"\
          "       $program --move-plugins\n"\
@@ -90,6 +91,7 @@ while [[ $1 == -* ]]; do
     case "$1" in
 
                  --*=*) parse_option "$1";                        shift ;;
+                --info) arg_info=true;                            shift ;;
                --links) arg_links=true;                           shift ;;
           --links-only) arg_links_only=true;                      shift ;;
         --omit-plugins) arg_omit=true;                            shift ;;
@@ -104,6 +106,14 @@ while [[ $1 == -* ]]; do
                     -*) warn "invalid option: $1\n"; show_help;   exit 1;;
     esac
 done
+
+if [[ $arg_info ]]; then
+
+    printf '%b ' "${bash_dotfiles[@]}\n"
+    printf '%b ' "${help_dotfiles[@]}\n"
+    printf '%b ' "${vim_dotfiles[@] }\n"
+    exit 0
+fi
 
 [[ ! $arg_force_copy ]] && command -v git >/dev/null 2>&1 && git=true
 
