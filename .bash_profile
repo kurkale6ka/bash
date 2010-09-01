@@ -4,10 +4,11 @@ hash fortune >/dev/null 2>&1 && fortune
 # If vimx is found in $PATH, store it in the hash...
 if command -v vimx >/dev/null 2>&1; then
 
-    export MY_VIM=vimx
+    export MY_GVIM=vimx
 else
-    export MY_VIM='gvim -v'
+    export MY_GVIM=gvim
 fi
+export MY_VIM="$MY_GVIM -v"
 
 export EDITOR="$MY_VIM"
 export VISUAL="$MY_VIM"

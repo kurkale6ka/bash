@@ -214,12 +214,14 @@ s() { fc -s "$1"="$2" "$3"; }
 alias       v="$MY_VIM"
 alias      vi="$MY_VIM"
 alias     vim="$MY_VIM"
-alias    view="$MY_VIM -R"
-alias      vd="$MY_VIM -d"
-alias vimdiff="$MY_VIM -d"
-alias     gvd=gvimdiff
-alias      gv=gvim
-alias     gvi=gvim
+alias    view="$MY_VIM  -R"
+alias      vd="$MY_VIM  -d"
+alias vimdiff="$MY_VIM  -d"
+alias     gvd="$MY_GVIM -d"
+alias      gv="$MY_GVIM"
+alias     gvi="$MY_GVIM"
+alias      vn="$MY_VIM  -N -u NONE -U NONE"
+alias     gvn="$MY_GVIM -N -u NONE -U NONE"
 
 # List directory contents ~\~2
 alias   l=ls
