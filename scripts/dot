@@ -387,6 +387,7 @@ if [[ ! $arg_clean_repos ]]; then
 
         updateRepo "$godlygeek" csapprox      "$vim_plugins/csapprox"
         updateRepo "$godlygeek" tabular       "$vim_plugins/tabular"
+        updateRepo "$godlygeek" windowlayout  "$vim_plugins/windowlayout"
         updateRepo "$spiiph"    vim-space     "$vim_plugins/vim-space"
         updateRepo "$tpope"     vim-surround  "$vim_plugins/vim-surround"
         updateRepo "$tpope"     vim-repeat    "$vim_plugins/vim-repeat"
