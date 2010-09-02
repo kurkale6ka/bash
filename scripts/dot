@@ -407,7 +407,7 @@ if [[ ! $arg_clean_repos ]]; then
 
             done
 
-            if vim -u NONE -U NONE -n -c "helptag $vim_repo/doc|q"; then
+            if vim -N -u NONE -U NONE -n -c "helptag $vim_repo/doc|q"; then
 
                 printf "Generated Vim help\n"
             fi
