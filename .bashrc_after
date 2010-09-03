@@ -4,8 +4,9 @@
 alias gc='git commit -a'
 alias gp='git push origin master'
 
-complete -F _longopts -W 'add bisect branch checkout clone commit diff fetch
-grep init log merge mv pull push rebase reset rm show status tag' git
+complete -F _longopts -W 'HEAD add bisect branch checkout clone commit diff
+fetch grep init log merge mv pull push rebase revert reset rm show status tag' \
+git
 
 # Debian only
 alias aa=aptitude
@@ -24,5 +25,6 @@ complete -W 'install remove purge hold unhold markauto unmarkauto
 forbid-version update safe-upgrade full-upgrade forget-new search show clean
 autoclean changelog download reinstall why why-not' aa aptitude
 
-complete -W '--links --links-only --copy-plugins --move-plugins --omit-plugins
---force-clone --force-copy --clean-repos --verbose --repos= --dotfiles= --ip=' dot
+complete -W '--info --links --links-only --copy-plugins --move-plugins
+--omit-plugins --force-clone --force-copy --clean-repos --verbose --repos=
+--dotfiles= --ip=' dot
