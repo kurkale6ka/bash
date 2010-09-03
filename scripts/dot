@@ -432,4 +432,4 @@ else
     cleanRepos
 fi
 
-# vim: set foldmethod& foldmarker&:
+# vim: set foldmethod=marker foldmarker&:
