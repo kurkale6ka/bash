@@ -391,7 +391,6 @@ if [[ ! $arg_clean_repos ]]; then
         updateRepo "$tpope"     vim-surround  "$vim_plugins/vim-surround"
         updateRepo "$tpope"     vim-repeat    "$vim_plugins/vim-repeat"
         updateRepo "$ervandew"  supertab      "$vim_plugins/supertab"
-        updateRepo "$me"        vim-smarttill "$vim_plugins/vim-smarttill"
 
         if [[ -d $vim_plugins ]]; then
 
