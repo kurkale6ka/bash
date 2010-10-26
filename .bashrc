@@ -429,7 +429,7 @@ alias pk=pkill
 
 alias  cal='cal -3'
 alias call='cal -y'
-alias date="date '+%d %B %Y, %H:%M %Z (%A)'"
+alias date="date '+%d %B [%-m] %Y, %H:%M %Z (%A)'"
 
 alias    g=grep
 alias grep='grep -iE --color' # ERE (Extended regex)
