@@ -1,7 +1,7 @@
 clear
 hash fortune >/dev/null 2>&1 && fortune
 
-# If vimx is found in $PATH, store it in the hash...
+# Checks that vimx is installed
 if command -v vimx >/dev/null 2>&1; then
 
     export MY_GVIM=vimx
