@@ -1,0 +1,9 @@
+#! /usr/bin/env bash
+
+i=0
+
+while 1
+do
+    ((i++))
+    screencapture -T 1 "capture$i.jpg"
+done
