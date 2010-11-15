@@ -35,7 +35,7 @@ helpfiles=help
 vimfiles=vimfiles
 
 bash_dotfiles=(.{profile,bash_login,bash_profile})
-bash_dotfiles+=(.{bashrc,bashrc_after,bash_logout,logout,inputrc})
+bash_dotfiles+=(.{bashrc,bashrc_after,bash_logout,logout,inputrc,irbrc})
 help_dotfiles=(.{gitignore,screenrc,curlrc})
 vim_dotfiles=(.{vimrc,gvimrc})
 
