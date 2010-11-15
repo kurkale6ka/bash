@@ -400,7 +400,7 @@ alias -- --='fg %-'
 
 alias pl=perl
 alias py='python -i -c "from math import *"'
-alias rb='irb -m'
+alias rb=irb
 
 alias am="alias|$MY_VIM -"
 alias  a=alias
