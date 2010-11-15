@@ -399,8 +399,8 @@ alias     j='jobs -l'
 alias -- --='fg %-'
 
 alias pl=perl
-alias py=python
-alias rb=ruby
+alias py='python -i -c "from math import *"'
+alias rb='irb -m'
 
 alias am="alias|$MY_VIM -"
 alias  a=alias
