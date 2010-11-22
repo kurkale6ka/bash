@@ -427,8 +427,8 @@ alias  k=kill
 alias ka=killall
 alias pk=pkill
 
-alias  cal='cal -3'
-alias call='cal -y'
+alias  cal='cal -3 -m'
+alias call='cal -y -m'
 alias date="date '+%d %B [%-m] %Y, %H:%M %Z (%A)'"
 
 alias    g=grep
