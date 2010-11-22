@@ -1,0 +1,57 @@
+ftp://ftp.ams.org/pub/tex/amslatex/install.txt
+
+amsmath
+
+I. Installing the easy way.
+
+1. Download the following archive file:
+
+   ftp://ftp.ams.org/pub/tex/amslatex.zip
+
+For the amsrefs package, download also
+
+   ftp://ftp.ams.org/pub/tex/amsrefs.zip
+
+and carry out step 4 (steps 2 and 3 can be skipped).
+
+2. View the following files to assess the effects of the upgrade on
+your system:
+
+  source/latex/amsmath/diffs-m.txt
+  source/latex/amscls/diffs-c.txt
+
+3. Backup the old version of AMS-LaTeX, preferably by moving it out of
+the TEXMF tree.
+
+4. Extract files from the .zip archive using your favorite unzip tool, setting
+the extraction target directory to the texmf root directory.
+
+5. To check the end result, you should find that you now have amsmath.sty
+in the following location
+
+  TEXMF/tex/latex/amsmath/amsmath.sty
+
+Some TeX systems also use a database to keep track of TeX input files.
+If this database is not updated, your TeX system might not find the
+newly installed files.  Consult your TeX system's documentation to
+determine how to update this database.
+
+6. Some files will appear in both the source area and another area.
+This is because the source form and the in-use form are identical.
+As distributed, the files in the source/latex/ams* areas comprise a
+complete copy of the distribution from which all the other files can
+be regenerated if need be. If you need to conserve disk space, you
+could delete the files in the source area, since they are not needed
+for normal use.
+
+========================================================================
+II. Installing the not-so-easy way.
+
+Get the following zip archives:
+
+ftp://ftp.ams.org/pub/tex/amscls.zip
+ftp://ftp.ams.org/pub/tex/amsmath.zip
+ftp://ftp.ams.org/pub/tex/amsrefs.zip
+
+Unpack the zip archives and follow the instructions in their respective
+install.txt files.
