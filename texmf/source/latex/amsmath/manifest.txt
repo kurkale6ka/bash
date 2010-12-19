@@ -1,0 +1,38 @@
+
+texmf/doc/latex/amsmath/
+  amsldoc.pdf
+  diffs-m.txt
+  subeqn.pdf
+  technote.pdf
+  testmath.pdf
+
+texmf/source/latex/amsmath/
+  00readme.txt
+  ams-m1.ins
+  amsbsy.dtx
+  amscd.dtx
+  amsdtx.cls
+  amsgen.dtx
+  amsldoc.cls
+  amsldoc.tex
+  amsmath.dtx
+  amsopn.dtx
+  amstex.sty
+  amstext.dtx
+  amsxtra.dtx
+  diffs-m.txt
+  install.txt
+  manifest.txt
+  subeqn.tex
+  technote.tex
+  testmath.tex
+
+texmf/tex/latex/amsmath/
+  amsbsy.sty
+  amscd.sty
+  amsgen.sty
+  amsmath.sty
+  amsopn.sty
+  amstex.sty
+  amstext.sty
+  amsxtra.sty
