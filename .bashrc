@@ -36,9 +36,9 @@ else
     PS1="$title\n\[$yellow\][\u@\H] \[$magenta\]\w \[$red\](!\! - %\j, \A)\[$reset\]\n\$ "
 fi
 
-PS2='↪ '
-PS3='Choose an entry: '
-PS4='+ '
+export PS2='↪ '
+export PS3='Choose an entry: '
+export PS4='+ '
 
 # Functions ~\~1
 _exit() {
