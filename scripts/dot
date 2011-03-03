@@ -382,14 +382,16 @@ if [[ ! $arg_clean_repos ]]; then
     # Install/update Vim plugins {{{1
     if [[ ! $arg_omit && ! $arg_links_only ]]; then
 
-        vim_plugins="$vim_repo/plugins"
+        vim_plugins="$vim_repo/bundle"
 
         updateRepo "$godlygeek" csapprox      "$vim_plugins/csapprox"
         updateRepo "$godlygeek" tabular       "$vim_plugins/tabular"
-        updateRepo "$godlygeek" windowlayout  "$vim_plugins/windowlayout"
-        updateRepo "$spiiph"    vim-space     "$vim_plugins/vim-space"
-        updateRepo "$tpope"     vim-surround  "$vim_plugins/vim-surround"
-        updateRepo "$tpope"     vim-repeat    "$vim_plugins/vim-repeat"
+        # updateRepo "$godlygeek" windowlayout  "$vim_plugins/windowlayout"
+        updateRepo "$spiiph"    vim-space     "$vim_plugins/space"
+        updateRepo "$tpope"     vim-abolish   "$vim_plugins/abolish"
+        updateRepo "$tpope"     vim-flatfoot  "$vim_plugins/flatfoot"
+        updateRepo "$tpope"     vim-surround  "$vim_plugins/surround"
+        updateRepo "$tpope"     vim-repeat    "$vim_plugins/repeat"
         updateRepo "$ervandew"  supertab      "$vim_plugins/supertab"
 
         if [[ -d $vim_plugins ]]; then
