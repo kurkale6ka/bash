@@ -394,6 +394,31 @@ if [[ ! $arg_clean_repos ]]; then
         updateRepo "$tpope"     vim-repeat    "$vim_plugins/repeat"
         updateRepo "$ervandew"  supertab      "$vim_plugins/supertab"
 
+# abolish
+# bufgrep
+# bufkill
+# colorchart
+# color_sample_pack
+# csapprox
+# flatfoot
+# fuzzyfinder
+# l9
+# nerdcommenter
+# ragtag
+# repeat
+# snippet
+# space
+# supertab
+# surround
+# syntaxcomplete
+# tabular
+# unicodename
+# unimpaired
+# vim-endwise
+# vsearch
+# win_full_screen
+# yankring
+
         if [[ -d $vim_plugins ]]; then
 
             for plugin in "$vim_plugins"/*; do
