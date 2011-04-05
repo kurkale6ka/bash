@@ -1,20 +1,11 @@
-= Bash configuration files:
+= My bash configuration files:
+Here you will find all my bash configuration files & tips,
+including my <em>GNU Readline settings</em>
 
-* .bash_profile
-* .bashrc
-* .bash_logout
-
-* .inputrc:
-
-  <em>GNU Readline settings</em>
-
+= DotFiles - Greg's Wiki:
 http://mywiki.wooledge.org/DotFiles
 
-* tips:
-
-  <em>Still in progress</em>
-
-== Author:
+= Author:
 
 Dimitar Dimitrov: kurkale6ka
 
