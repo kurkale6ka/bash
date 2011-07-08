@@ -453,7 +453,6 @@ alias hgg='history|grep' # because of mercurial
 alias n=nslookup
 alias p='ping -c3'
 
-alias  c=cat
 alias cn='cat -n'
 
 alias     o='set -o'
