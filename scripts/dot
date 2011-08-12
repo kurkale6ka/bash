@@ -190,9 +190,8 @@ cloneRepo() { # {{{1
 
         printf "\n%-50s" "${bold}Cloning $repo_name repository$reset..."
 
-        if git clone -q "$remote_host$author/$repo_name.git" "$repo" \
-            >/dev/null 2>&1; then
-
+        if git clone -q "$remote_host$author/$repo_name.git" "$repo" >/dev/null
+        then
             printf "... [ $bold${green}OK$reset ]\n"
         else
             warn "... [ $bold${red}FAILED$reset: Git error ]"\
@@ -244,9 +243,8 @@ pullRepo() { # {{{1
 
             printf "\n%-50s" "${bold}Updating $repo_name repository$reset..."
 
-            if git pull -q "$remote_host$author/$repo_name.git" master \
-                >/dev/null 2>&1; then
-
+            if git pull -q "$remote_host$author/$repo_name.git" master >/dev/null
+            then
                 printf "... [ $bold${green}OK$reset ]\n"
             else
                 if
