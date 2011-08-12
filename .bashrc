@@ -493,7 +493,12 @@ rd() {
 # Spelling typos ~\~2
 alias      akw=awk
 alias     akws=awks
-# alias     awks='echo awk "'"'/pattern1|test1/"'{print $1" "$2}; /2/{}'"' file"'"'
+awk_snip_a='echo awk "'
+awk_snip_b="'/pattern/ "
+awk_snip_c='{print \$1 \"\\t\" \$2}'
+awk_snip_d="'"
+awk_snip_e='" file'
+alias     awks="$awk_snip_a$awk_snip_b$awk_snip_c$awk_snip_d$awk_snip_e"
 alias    alais=alias
 alias      bka=bak
 alias     bnid=bind
