@@ -452,7 +452,7 @@ if [[ ! $arg_clean_repos ]]; then
             [[ ! -L $HOME/bin/$program ]] &&
                 ln -s "$bash_repo/scripts/$program" "$HOME/bin"
             [[ ! -L $HOME/bin/c ]] &&
-                ln -s "$vim_repo/scripts/vimcat" "$HOME/bin"
+                ln -s "$vim_repo/scripts/vimcat" "$HOME/bin/c"
         fi
     fi
 else
