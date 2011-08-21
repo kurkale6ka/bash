@@ -27,7 +27,7 @@ ervandew=ervandew
 # messages/quiet
 # repo/working copy?
 # improve ~/help/.gitignore
-repos="$HOME"
+repos="$HOME/git"
 dotfiles="$HOME"
 
 bashfiles=bashfiles
@@ -447,12 +447,12 @@ if [[ ! $arg_clean_repos ]]; then
 
         if [[ ! -d $HOME/bin ]]; then
 
-            mkdir -v "$HOME/bin" && ln -s "$bash_repo/scripts/$program" "$HOME/bin"
+            mkdir -v "$HOME/bin" && ln "$bash_repo/scripts/$program" "$HOME/bin"
         else
             [[ ! -L $HOME/bin/$program ]] &&
-                ln -s "$bash_repo/scripts/$program" "$HOME/bin"
+                ln "$bash_repo/scripts/$program" "$HOME/bin"
             [[ ! -L $HOME/bin/c ]] &&
-                ln -s "$vim_repo/scripts/vimcat" "$HOME/bin/c"
+                ln "$vim_repo/scripts/vimcat" "$HOME/bin/c"
         fi
     fi
 else
