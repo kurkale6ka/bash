@@ -3,6 +3,9 @@
 #
 # Note: use ^x^r to re-read this file after modification
 
+# Key bindings
+# ------------
+
 # <up> and <down>
 "\e[A": history-search-backward
 "\e[B": history-search-forward
@@ -13,6 +16,9 @@
 
 # Alt + x
 "\ex": kill-whole-line
+
+# Variable settings
+# -----------------
 
 # link@, dir/...
 set visible-stats on
