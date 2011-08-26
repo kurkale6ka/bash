@@ -27,7 +27,7 @@ set bell-style none
 # link@, dir/...
 set visible-stats on
 
-# Don't complete with .files
+# Don't show hidden files (unless .<tab>)
 set match-hidden-files off
 
 # Ignore case + treat - and _ as equivalent
