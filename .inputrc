@@ -1,3 +1,8 @@
+# GNU Readline Library
+# http://cnswww.cns.cwru.edu/php/chet/readline/rluserman.html
+#
+# Note: use ^x^r to re-read this file after modification
+
 # <up> and <down>
 "\e[A": history-search-backward
 "\e[B": history-search-forward
