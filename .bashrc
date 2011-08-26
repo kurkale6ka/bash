@@ -50,6 +50,16 @@ trap _exit EXIT
 # Usage: warn 'message' - print a message to stderr
 warn() { printf '%s\n' "$@" >&2; }
 
+usersee() {
+
+   for user in "$@"; do
+
+      sudo grep -iE --color "$user" /etc/{passwd,shadow,group}
+   done
+}
+
+service() { /etc/init.d/"$1" "$2"; }
+
 # Usage: t my_archive.tar.gz => my_archive/
 extract() {
 
@@ -367,7 +377,12 @@ alias     ?=_which
 alias     i=info
 alias     m=man
 alias    ap=apropos
-alias    mw=makewhatis
+alias    mm='man -k'
+alias    mp=manpath
+alias   dbl=updatedb
+alias   dba=makewhatis
+alias   dbm=dba
+alias   lo=locate
 
 # Misc ~\~2
 alias     e=echo
@@ -394,6 +409,7 @@ alias   rmm=rrm
 alias   sed='sed -r' # ERE (Extended regex)
 alias  seds="echo sed \"'s/old/new/'\" file"
 alias  env-='env -i'
+alias  vish='sudo vipw -s'
 alias  whoi=whoami
 alias uname='uname -a' # function? os() - print all sys info...
 
@@ -418,10 +434,14 @@ alias  mn=mount
 alias umn=umount
 
 alias cg=chgrp
-alias cm=chmod
-alias cx='chmod u+x'
 alias co=chown
-alias cr=chroot
+alias cm=chmod
+alias cr='chmod u+r'
+alias cw='chmod u+w'
+alias cx='chmod u+x'
+alias setuid='chmod u+s'
+alias setgid='chmod g+s'
+alias setsticky='chmod +t'
 
 alias shutdown='shutdown -h now'
 

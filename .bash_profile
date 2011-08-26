@@ -33,6 +33,8 @@ export LC_TIME=bg_BG.utf8
 export PATH="$PATH:$HOME/bin"
 export CDPATH="$HOME":..:../..
 
+umask 027
+
 # .bashrc exists and I can read it
 [[ -r ~/.bashrc ]] && source ~/.bashrc
 
