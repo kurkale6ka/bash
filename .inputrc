@@ -10,19 +10,34 @@
 "\e[A": history-search-backward
 "\e[B": history-search-forward
 
-# Allow the use of the <Home>/<End> keys
+# Allow the use of the <Home> / <End> keys
 "\e[1~": beginning-of-line
 "\e[4~": end-of-line
 
 # Alt + x
 "\ex": kill-whole-line
 
+control-e: " 2>/dev/null"
+
 # Variable settings
 # -----------------
+
+set bell-style none
 
 # link@, dir/...
 set visible-stats on
 
-set bell-style none
+# Don't complete with .files
+set match-hidden-files off
 
+# Ignore case + treat - and _ as equivalent
+set completion-ignore-case on
+set completion-map-case on
+
+# Display all possible completions right away
 set show-all-if-ambiguous on
+set show-all-if-unmodified on
+
+# no (y or n) + no less
+set completion-query-items 200
+set page-completions off
