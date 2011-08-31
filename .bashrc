@@ -58,6 +58,16 @@ usersee() {
    done
 }
 
+hd() {
+
+   if [[ 1 == $# ]]; then
+
+      hdparm -I "$1"
+   else
+      hdparm "$@"
+   fi
+}
+
 service() { /etc/init.d/"$1" "$2"; }
 
 # Usage: t my_archive.tar.gz => my_archive/
@@ -392,7 +402,6 @@ alias     z=fg
 alias    ej=eject
 alias    ex=export
 alias    fr=free
-alias    hd='hdparm -I'
 alias    ln='ln -s'
 alias    pf=printf
 alias    pp='printf "%s\n"'
