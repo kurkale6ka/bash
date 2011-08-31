@@ -68,6 +68,16 @@ hd() {
    fi
 }
 
+f() {
+
+   if [[ 1 == $# ]]; then
+
+      find . -iname "$1"
+   else
+      find "$@"
+   fi
+}
+
 service() { /etc/init.d/"$1" "$2"; }
 
 # Usage: t my_archive.tar.gz => my_archive/
@@ -396,7 +406,6 @@ alias   lo=locate
 
 # Misc ~\~2
 alias     e=echo
-alias     f='find . -iname'
 alias     t=extract
 alias     z=fg
 alias    ej=eject
