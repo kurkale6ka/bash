@@ -25,6 +25,4 @@ complete -W 'install remove purge hold unhold markauto unmarkauto
 forbid-version update safe-upgrade full-upgrade forget-new search show clean
 autoclean changelog download reinstall why why-not' aa aptitude
 
-complete -W '--info --links --links-only --copy-plugins --move-plugins
---omit-plugins --force-clone --force-copy --clean-repos --verbose --repos=
---dotfiles= --ip=' dot
+complete -W '--links --copy --clone --clean' mkconfig

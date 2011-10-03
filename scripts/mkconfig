@@ -100,49 +100,81 @@ updaterepos() {
 
 cprepos() {
 
-   wget --no-check-certificate https://github.com/godlygeek/csapprox/tarball/master
-   wget --no-check-certificate https://github.com/kurkale6ka/bashfiles.git
-   # wget --no-check-certificate https://github.com/kurkale6ka/help.git
+   wget --no-check-certificate https://github.com/kurkale6ka/bashfiles/tarball/master
+   # wget --no-check-certificate https://github.com/kurkale6ka/help/tarball/master
 
-   if wget --no-check-certificate https://github.com/kurkale6ka/vimfiles.git; then
+   if wget --no-check-certificate https://github.com/kurkale6ka/vimfiles/tarball/master; then
 
-      wget --no-check-certificate https://github.com/kurkale6ka/vim-blanklines.git
-      wget --no-check-certificate https://github.com/kurkale6ka/vim-blockinsert.git
-      wget --no-check-certificate https://github.com/kurkale6ka/vim-quotes.git
-      wget --no-check-certificate https://github.com/kurkale6ka/vim-sequence.git
-      wget --no-check-certificate https://github.com/kurkale6ka/vim-swap.git
-      wget --no-check-certificate https://github.com/godlygeek/csapprox.git
-      wget --no-check-certificate https://github.com/godlygeek/tabular.git
-      wget --no-check-certificate https://github.com/tpope/vim-abolish.git
-      wget --no-check-certificate https://github.com/tpope/vim-endwise.git
-      # wget --no-check-certificate https://github.com/tpope/vim-pathogen.git
-      wget --no-check-certificate https://github.com/tpope/vim-unimpaired.git
-      wget --no-check-certificate https://github.com/tpope/vim-surround.git
-      wget --no-check-certificate https://github.com/tpope/vim-repeat.git
-      wget --no-check-certificate https://github.com/tpope/vim-ragtag.git
-      wget --no-check-certificate https://github.com/tpope/vim-flatfoot.git
-      wget --no-check-certificate https://github.com/scrooloose/nerdcommenter.git
-      wget --no-check-certificate https://github.com/spiiph/vim-space.git
+      wget --no-check-certificate https://github.com/kurkale6ka/vim-blanklines/tarball/master
+      wget --no-check-certificate https://github.com/kurkale6ka/vim-blockinsert/tarball/master
+      wget --no-check-certificate https://github.com/kurkale6ka/vim-quotes/tarball/master
+      wget --no-check-certificate https://github.com/kurkale6ka/vim-sequence/tarball/master
+      wget --no-check-certificate https://github.com/kurkale6ka/vim-swap/tarball/master
+      wget --no-check-certificate https://github.com/godlygeek/csapprox/tarball/master
+      wget --no-check-certificate https://github.com/godlygeek/tabular/tarball/master
+      wget --no-check-certificate https://github.com/tpope/vim-abolish/tarball/master
+      wget --no-check-certificate https://github.com/tpope/vim-endwise/tarball/master
+      # wget --no-check-certificate https://github.com/tpope/vim-pathogen/tarball/master
+      wget --no-check-certificate https://github.com/tpope/vim-unimpaired/tarball/master
+      wget --no-check-certificate https://github.com/tpope/vim-surround/tarball/master
+      wget --no-check-certificate https://github.com/tpope/vim-repeat/tarball/master
+      wget --no-check-certificate https://github.com/tpope/vim-ragtag/tarball/master
+      wget --no-check-certificate https://github.com/tpope/vim-flatfoot/tarball/master
+      wget --no-check-certificate https://github.com/scrooloose/nerdcommenter/tarball/master
+      wget --no-check-certificate https://github.com/spiiph/vim-space/tarball/master
    fi
+
+   for repo in master*; do
+      tar zxvf "$repo" # -C <dir>
+      rm "$repo"
+   done
 }
 
 mklinks() {
 
-   ln -s "$HOME"/config/vimfiles                "$HOME"/.vim
-   ln    "$HOME"/config/vimfiles/.vimrc         "$HOME"
-   ln    "$HOME"/config/vimfiles/.gvimrc        "$HOME"
-   ln    "$HOME"/config/bashfiles/.profile      "$HOME"
-   ln    "$HOME"/config/bashfiles/.bash_profile "$HOME"
-   ln    "$HOME"/config/bashfiles/.bash_login   "$HOME"
-   ln    "$HOME"/config/bashfiles/.bashrc       "$HOME"
-   ln    "$HOME"/config/bashfiles/.bashrc_after "$HOME"
-   ln    "$HOME"/config/bashfiles/.logout       "$HOME"
-   ln    "$HOME"/config/bashfiles/.bash_logout  "$HOME"
-   ln    "$HOME"/config/bashfiles/.inputrc      "$HOME"
-   ln    "$HOME"/config/bashfiles/.irbrc        "$HOME"
-   ln    "$HOME"/config/help/.gitignore         "$HOME"
-   ln    "$HOME"/config/help/.screenrc          "$HOME"
-   ln    "$HOME"/config/help/.curlrc            "$HOME"
+   ln -s "$HOME"/config/vimfiles                   "$HOME"/.vim
+   ln    "$HOME"/config/vimfiles/.vimrc            "$HOME"
+   ln    "$HOME"/config/vimfiles/.gvimrc           "$HOME"
+
+   ln    "$HOME"/config/bashfiles/.profile         "$HOME"
+   ln    "$HOME"/config/bashfiles/.bash_profile    "$HOME"
+   ln    "$HOME"/config/bashfiles/.bash_login      "$HOME"
+   ln    "$HOME"/config/bashfiles/.bashrc          "$HOME"
+   ln    "$HOME"/config/bashfiles/.bashrc_after    "$HOME"
+   ln    "$HOME"/config/bashfiles/.logout          "$HOME"
+   ln    "$HOME"/config/bashfiles/.bash_logout     "$HOME"
+   ln    "$HOME"/config/bashfiles/.inputrc         "$HOME"
+   ln    "$HOME"/config/bashfiles/.irbrc           "$HOME"
+
+   ln    "$HOME"/config/help/.gitignore            "$HOME"
+   ln    "$HOME"/config/help/.screenrc             "$HOME"
+   ln    "$HOME"/config/help/.curlrc               "$HOME"
+
+   [[ ! -d $HOME/bin ]] && mkdir -p "$HOME"/bin
+
+   ln    "$HOME"/config/bashfiles/scripts/mkconfig "$HOME"/bin
+   ln    "$HOME"/config/vimfiles/scripts/vimcat    "$HOME"/bin/c
+}
+
+rmlinks() {
+
+   rm "$HOME"/.vim
+   rm "$HOME"/.vimrc
+   rm "$HOME"/.gvimrc
+   rm "$HOME"/.profile
+   rm "$HOME"/.bash_profile
+   rm "$HOME"/.bash_login
+   rm "$HOME"/.bashrc
+   rm "$HOME"/.bashrc_after
+   rm "$HOME"/.logout
+   rm "$HOME"/.bash_logout
+   rm "$HOME"/.inputrc
+   rm "$HOME"/.irbrc
+   rm "$HOME"/.gitignore
+   rm "$HOME"/.screenrc
+   rm "$HOME"/.curlrc
+   rm "$HOME"/bin/mkconfig
+   rm "$HOME"/bin/vimcat
 }
 
 if (( 0 == $# )); then
@@ -155,6 +187,7 @@ else
           --copy) cprepos; shift;;
          --clone) mkrepos; shift;;
          --links) mklinks; shift;;
+         --clean) rmlinks; shift;;
       esac
    done
 fi
