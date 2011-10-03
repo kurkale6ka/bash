@@ -128,23 +128,21 @@ cprepos() {
 
 mklinks() {
 
-   cd "$HOME"/config
-
-   ln -s vimfiles "$HOME"/.vim
-   ln vimfiles/.vimrc "$HOME"
-   ln vimfiles/.gvimrc "$HOME"
-   ln bashfiles/.profile "$HOME"
-   ln bashfiles/.bash_profile "$HOME"
-   ln bashfiles/.bash_login "$HOME"
-   ln bashfiles/.bashrc "$HOME"
-   ln bashfiles/.bashrc_after "$HOME"
-   ln bashfiles/.logout "$HOME"
-   ln bashfiles/.bash_logout "$HOME"
-   ln bashfiles/.inputrc "$HOME"
-   ln bashfiles/.irbrc "$HOME"
-   ln help/.gitignore "$HOME"
-   ln help/.screenrc "$HOME"
-   ln help/.curlrc "$HOME"
+   ln -s "$HOME"/config/vimfiles                "$HOME"/.vim
+   ln    "$HOME"/config/vimfiles/.vimrc         "$HOME"
+   ln    "$HOME"/config/vimfiles/.gvimrc        "$HOME"
+   ln    "$HOME"/config/bashfiles/.profile      "$HOME"
+   ln    "$HOME"/config/bashfiles/.bash_profile "$HOME"
+   ln    "$HOME"/config/bashfiles/.bash_login   "$HOME"
+   ln    "$HOME"/config/bashfiles/.bashrc       "$HOME"
+   ln    "$HOME"/config/bashfiles/.bashrc_after "$HOME"
+   ln    "$HOME"/config/bashfiles/.logout       "$HOME"
+   ln    "$HOME"/config/bashfiles/.bash_logout  "$HOME"
+   ln    "$HOME"/config/bashfiles/.inputrc      "$HOME"
+   ln    "$HOME"/config/bashfiles/.irbrc        "$HOME"
+   ln    "$HOME"/config/help/.gitignore         "$HOME"
+   ln    "$HOME"/config/help/.screenrc          "$HOME"
+   ln    "$HOME"/config/help/.curlrc            "$HOME"
 }
 
 if (( 0 == $# )); then
