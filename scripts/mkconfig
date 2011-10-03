@@ -68,28 +68,28 @@ updaterepos() {
    git pull git://github.com/godlygeek/tabular.git master
 
    cd "$HOME"/config/vimfiles/bundle/vim-abolish
-   git pull git://github.com/godlygeek/vim-abolish.git master
+   git pull git://github.com/tpope/vim-abolish.git master
 
    cd "$HOME"/config/vimfiles/bundle/vim-endwise
-   git pull git://github.com/godlygeek/vim-endwise.git master
+   git pull git://github.com/tpope/vim-endwise.git master
 
    # cd "$HOME"/config/vimfiles/autoload/vim-pathogen
-   # git pull git://github.com/godlygeek/vim-pathogen.git master
+   # git pull git://github.com/tpope/vim-pathogen.git master
 
    cd "$HOME"/config/vimfiles/bundle/vim-unimpaired
-   git pull git://github.com/godlygeek/vim-unimpaired.git master
+   git pull git://github.com/tpope/vim-unimpaired.git master
 
    cd "$HOME"/config/vimfiles/bundle/vim-surround
-   git pull git://github.com/godlygeek/vim-surround.git master
+   git pull git://github.com/tpope/vim-surround.git master
 
    cd "$HOME"/config/vimfiles/bundle/vim-repeat
-   git pull git://github.com/godlygeek/vim-repeat.git master
+   git pull git://github.com/tpope/vim-repeat.git master
 
    cd "$HOME"/config/vimfiles/bundle/vim-ragtag
-   git pull git://github.com/godlygeek/vim-ragtag.git master
+   git pull git://github.com/tpope/vim-ragtag.git master
 
    cd "$HOME"/config/vimfiles/bundle/vim-flatfoot
-   git pull git://github.com/godlygeek/vim-flatfoot.git master
+   git pull git://github.com/tpope/vim-flatfoot.git master
 
    cd "$HOME"/config/vimfiles/bundle/nerdcommenter
    git pull git://github.com/scrooloose/nerdcommenter.git master
