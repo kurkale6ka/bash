@@ -156,6 +156,7 @@ else
 
           --copy) cprepos; shift;;
          --clone) mkrepos; shift;;
+         --links) mklinks; shift;;
       esac
    done
 fi
