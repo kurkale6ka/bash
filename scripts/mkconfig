@@ -1,0 +1,159 @@
+#! /usr/bin/env bash
+
+mkrepos() {
+
+   [[ ! -d "$HOME"/config ]] && mkdir -p "$HOME"/config
+
+   cd "$HOME"/config
+
+   git clone git@github.com:kurkale6ka/bashfiles.git
+   #git clone git@github.com:kurkale6ka/help.git
+
+   if git clone git@github.com:kurkale6ka/vimfiles.git; then
+
+      cd vimfiles/bundle
+
+      git clone git@github.com:kurkale6ka/vim-blanklines.git
+      git clone git@github.com:kurkale6ka/vim-blockinsert.git
+      git clone git@github.com:kurkale6ka/vim-quotes.git
+      git clone git@github.com:kurkale6ka/vim-sequence.git
+      git clone git@github.com:kurkale6ka/vim-swap.git
+      #git clone git://github.com/godlygeek/csapprox.git
+      #git clone git://github.com/godlygeek/tabular.git
+      #git clone git://github.com/tpope/vim-abolish.git
+      #git clone git://github.com/tpope/vim-endwise.git
+      #git clone git://github.com/tpope/vim-pathogen.git
+      #git clone git://github.com/tpope/vim-unimpaired.git
+      #git clone git://github.com/tpope/vim-surround.git
+      #git clone git://github.com/tpope/vim-repeat.git
+      #git clone git://github.com/tpope/vim-ragtag.git
+      #git clone git://github.com/tpope/vim-flatfoot.git
+      #git clone git://github.com/scrooloose/nerdcommenter.git
+      #git clone git://github.com/spiiph/vim-space.git
+   fi
+}
+
+updaterepos() {
+
+   cd "$HOME"/config/bashfiles
+   git pull git@github.com:kurkale6ka/bashfiles.git master
+
+   #cd "$HOME"/config/help
+   #git pull git@github.com:kurkale6ka/help.git master
+
+   cd "$HOME"/config/vimfiles
+   git pull git@github.com:kurkale6ka/vimfiles.git
+
+   cd "$HOME"/config/vimfiles/bundle/vim-blanklines
+   git pull git@github.com:kurkale6ka/vim-blanklines.git master
+
+   cd "$HOME"/config/vimfiles/bundle/vim-blockinsert
+   git pull git@github.com:kurkale6ka/vim-blockinsert.git master
+
+   cd "$HOME"/config/vimfiles/bundle/vim-quotes
+   git pull git@github.com:kurkale6ka/vim-quotes.git master
+
+   cd "$HOME"/config/vimfiles/bundle/vim-sequence
+   git pull git@github.com:kurkale6ka/vim-sequence.git master
+
+   cd "$HOME"/config/vimfiles/bundle/vim-swap
+   git pull git@github.com:kurkale6ka/vim-swap.git master
+
+   cd "$HOME"/config/vimfiles/bundle/csapprox
+   git pull git://github.com/godlygeek/csapprox.git master
+
+   cd "$HOME"/config/vimfiles/bundle/tabular
+   git pull git://github.com/godlygeek/tabular.git master
+
+   cd "$HOME"/config/vimfiles/bundle/vim-abolish
+   git pull git://github.com/godlygeek/vim-abolish.git master
+
+   cd "$HOME"/config/vimfiles/bundle/vim-endwise
+   git pull git://github.com/godlygeek/vim-endwise.git master
+
+   cd "$HOME"/config/vimfiles/bundle/vim-pathogen
+   git pull git://github.com/godlygeek/vim-pathogen.git master
+
+   cd "$HOME"/config/vimfiles/bundle/vim-unimpaired
+   git pull git://github.com/godlygeek/vim-unimpaired.git master
+
+   cd "$HOME"/config/vimfiles/bundle/vim-surround
+   git pull git://github.com/godlygeek/vim-surround.git master
+
+   cd "$HOME"/config/vimfiles/bundle/vim-repeat
+   git pull git://github.com/godlygeek/vim-repeat.git master
+
+   cd "$HOME"/config/vimfiles/bundle/vim-ragtag
+   git pull git://github.com/godlygeek/vim-ragtag.git master
+
+   cd "$HOME"/config/vimfiles/bundle/vim-flatfoot
+   git pull git://github.com/godlygeek/vim-flatfoot.git master
+
+   cd "$HOME"/config/vimfiles/bundle/nerdcommenter
+   git pull git://github.com/scrooloose/nerdcommenter.git master
+
+   cd "$HOME"/config/vimfiles/bundle/vim-space
+   git pull git://github.com/spiiph/vim-space.git
+}
+
+cprepos() {
+
+   wget --no-check-certificate https://github.com/godlygeek/csapprox/tarball/master
+   wget --no-check-certificate https://github.com/kurkale6ka/bashfiles.git
+   #wget --no-check-certificate https://github.com/kurkale6ka/help.git
+
+   if wget --no-check-certificate https://github.com/kurkale6ka/vimfiles.git; then
+
+      wget --no-check-certificate https://github.com/kurkale6ka/vim-blanklines.git
+      wget --no-check-certificate https://github.com/kurkale6ka/vim-blockinsert.git
+      wget --no-check-certificate https://github.com/kurkale6ka/vim-quotes.git
+      wget --no-check-certificate https://github.com/kurkale6ka/vim-sequence.git
+      wget --no-check-certificate https://github.com/kurkale6ka/vim-swap.git
+      wget --no-check-certificate https://github.com/godlygeek/csapprox.git
+      wget --no-check-certificate https://github.com/godlygeek/tabular.git
+      wget --no-check-certificate https://github.com/tpope/vim-abolish.git
+      wget --no-check-certificate https://github.com/tpope/vim-endwise.git
+      wget --no-check-certificate https://github.com/tpope/vim-pathogen.git
+      wget --no-check-certificate https://github.com/tpope/vim-unimpaired.git
+      wget --no-check-certificate https://github.com/tpope/vim-surround.git
+      wget --no-check-certificate https://github.com/tpope/vim-repeat.git
+      wget --no-check-certificate https://github.com/tpope/vim-ragtag.git
+      wget --no-check-certificate https://github.com/tpope/vim-flatfoot.git
+      wget --no-check-certificate https://github.com/scrooloose/nerdcommenter.git
+      wget --no-check-certificate https://github.com/spiiph/vim-space.git
+   fi
+}
+
+mklinks() {
+
+   cd "$HOME"/config
+
+   ln -s vimfiles "$HOME"/.vim
+   ln vimfiles/.vimrc "$HOME"
+   ln vimfiles/.gvimrc "$HOME"
+   ln bashfiles/.profile "$HOME"
+   ln bashfiles/.bash_profile "$HOME"
+   ln bashfiles/.bash_login "$HOME"
+   ln bashfiles/.bashrc "$HOME"
+   ln bashfiles/.bashrc_after "$HOME"
+   ln bashfiles/.logout "$HOME"
+   ln bashfiles/.bash_logout "$HOME"
+   ln bashfiles/.inputrc "$HOME"
+   ln bashfiles/.irbrc "$HOME"
+   ln help/.gitignore "$HOME"
+   ln help/.screenrc "$HOME"
+   ln help/.curlrc "$HOME"
+}
+
+if (( 0 == $# )); then
+   updaterepos
+else
+   while [[ $1 == -* ]]; do
+
+      case "$1" in
+
+          --copy) cprepos; shift;;
+         --clone) mkrepos; shift;;
+      esac
+   done
+fi
