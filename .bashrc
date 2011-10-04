@@ -398,9 +398,21 @@ alias     i=info
 alias    ap=apropos
 alias    mm='man -k'
 alias    mp=manpath
-alias   dbl=updatedb
-alias   dba=makewhatis
-alias   dbm=dba
+
+db() {
+
+   select prgm in apropos locate; do
+
+      if [[ apropos == $prgm ]]; then
+
+         makewhatis
+         break
+      else
+         updatedb
+      fi
+   done
+}
+
 alias   lo=locate
 
 # Misc ~\~2
@@ -415,20 +427,23 @@ alias    pp='printf "%s\n"'
 alias    pa='(IFS=:; printf "%s\n" $PATH)'
 alias    pw=pwd
 alias    sc=screen
-alias    sd=sudo
 alias    so=source
 alias    to=touch
 alias    tp=tput
 alias   cmd=command
 alias   msg=dmesg
 alias   rmm=rrm
-alias   sed='sed -r' # ERE (Extended regex)
-alias  seds="echo sed \"'s/old/new/'\" file"
 alias  env-='env -i'
-alias  vish='sudo vipw -s'
 alias  whoi=whoami
 alias uname='uname -a' # function? os() - print all sys info...
+
 alias ipconfig=ifconfig
+alias dump='dump -u'
+alias bc='bc -l'
+alias vish='sudo vipw -s'
+
+alias su='sudo su'
+alias sd=sudo
 
 alias en=enable
 alias di='enable -n'
@@ -446,6 +461,9 @@ awk_snip_c='{print \$1 \"\\t\" \$2}'
 awk_snip_d="'"
 awk_snip_e='" file'
 alias awks="$awk_snip_a$awk_snip_b$awk_snip_c$awk_snip_d$awk_snip_e"
+
+alias  sed='sed -r' # ERE (Extended regex)
+alias seds="echo sed \"'s/old/new/'\" file"
 
 alias am="alias|$MY_VIM -"
 alias  a=alias
