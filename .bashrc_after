@@ -1,14 +1,21 @@
 # Business specific or system dependant stuff
 
-# Git only
-alias gc='git commit -a'
+# Git
+gc() {
+
+   if [[ 0 == $# ]]; then
+      git commit -a
+   else
+      git commit "$@"
+   fi
+}
 alias gp='git push origin master'
 
 complete -F _longopts -W 'HEAD add bisect branch checkout clone commit diff
 fetch grep init log merge mv pull push rebase revert reset rm show status tag' \
 git
 
-# Debian only
+# Debian
 alias aa=aptitude
 alias ag=apt-get
 alias ac=apt-cache
@@ -25,4 +32,5 @@ complete -W 'install remove purge hold unhold markauto unmarkauto
 forbid-version update safe-upgrade full-upgrade forget-new search show clean
 autoclean changelog download reinstall why why-not' aa aptitude
 
+# Misc
 complete -W '--links --copy --clone --clean' mkconfig

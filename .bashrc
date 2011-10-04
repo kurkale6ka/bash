@@ -109,7 +109,7 @@ extract() {
 
 # Usage: h arg - 'help arg' if it is a builtin, 'man arg' otherwise
 # If mixing both types, as in 'h [ cat', only 'h [' will show
-h() {
+m() {
 
     local t="$(type -at "$@")"
 
@@ -395,7 +395,6 @@ alias  ...='cd ../..'
 alias which=_which
 alias     ?=_which
 alias     i=info
-alias     m=man
 alias    ap=apropos
 alias    mm='man -k'
 alias    mp=manpath
@@ -411,7 +410,6 @@ alias     z=fg
 alias    ej=eject
 alias    ex=export
 alias    fr=free
-alias    ln='ln -s'
 alias    pf=printf
 alias    pp='printf "%s\n"'
 alias    pa='(IFS=:; printf "%s\n" $PATH)'
@@ -430,6 +428,7 @@ alias  env-='env -i'
 alias  vish='sudo vipw -s'
 alias  whoi=whoami
 alias uname='uname -a' # function? os() - print all sys info...
+alias ipconfig=ifconfig
 
 alias en=enable
 alias di='enable -n'
@@ -440,6 +439,13 @@ alias -- --='fg %-'
 alias pl=perl
 alias py='python -i -c "from math import *"'
 alias rb=irb
+
+awk_snip_a='echo awk "'
+awk_snip_b="'/pattern/ "
+awk_snip_c='{print \$1 \"\\t\" \$2}'
+awk_snip_d="'"
+awk_snip_e='" file'
+alias awks="$awk_snip_a$awk_snip_b$awk_snip_c$awk_snip_d$awk_snip_e"
 
 alias am="alias|$MY_VIM -"
 alias  a=alias
@@ -532,12 +538,6 @@ rd() {
 # Spelling typos ~\~2
 alias      akw=awk
 alias     akws=awks
-awk_snip_a='echo awk "'
-awk_snip_b="'/pattern/ "
-awk_snip_c='{print \$1 \"\\t\" \$2}'
-awk_snip_d="'"
-awk_snip_e='" file'
-alias     awks="$awk_snip_a$awk_snip_b$awk_snip_c$awk_snip_d$awk_snip_e"
 alias    alais=alias
 alias      bka=bak
 alias     bnid=bind
