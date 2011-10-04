@@ -17,7 +17,7 @@
 # Alt + x
 "\ex": kill-whole-line
 
-control-e: " 2>/dev/null"
+# control-e: " 2>/dev/null"
 
 # Variable settings
 # -----------------
