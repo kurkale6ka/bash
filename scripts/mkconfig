@@ -101,7 +101,7 @@ updaterepos() {
 cprepos() {
 
    wget --no-check-certificate https://github.com/kurkale6ka/bashfiles/tarball/master
-   # wget --no-check-certificate https://github.com/kurkale6ka/help/tarball/master
+   wget --no-check-certificate https://github.com/kurkale6ka/help/tarball/master
 
    if wget --no-check-certificate https://github.com/kurkale6ka/vimfiles/tarball/master; then
 
@@ -114,7 +114,7 @@ cprepos() {
       wget --no-check-certificate https://github.com/godlygeek/tabular/tarball/master
       wget --no-check-certificate https://github.com/tpope/vim-abolish/tarball/master
       wget --no-check-certificate https://github.com/tpope/vim-endwise/tarball/master
-      # wget --no-check-certificate https://github.com/tpope/vim-pathogen/tarball/master
+      wget --no-check-certificate https://github.com/tpope/vim-pathogen/tarball/master
       wget --no-check-certificate https://github.com/tpope/vim-unimpaired/tarball/master
       wget --no-check-certificate https://github.com/tpope/vim-surround/tarball/master
       wget --no-check-certificate https://github.com/tpope/vim-repeat/tarball/master
