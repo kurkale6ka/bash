@@ -7,7 +7,7 @@ mkrepos() {
    cd "$HOME"/config
 
    git clone git@github.com:kurkale6ka/bashfiles.git
-   # git clone git@github.com:kurkale6ka/help.git
+   git clone git@github.com:kurkale6ka/help.git
 
    if git clone git@github.com:kurkale6ka/vimfiles.git; then
 
@@ -40,11 +40,11 @@ updaterepos() {
    cd "$HOME"/config/bashfiles
    git pull git@github.com:kurkale6ka/bashfiles.git master
 
-   # cd "$HOME"/config/help
-   # git pull git@github.com:kurkale6ka/help.git master
+   cd "$HOME"/config/help
+   git pull git@github.com:kurkale6ka/help.git master
 
    cd "$HOME"/config/vimfiles
-   git pull git@github.com:kurkale6ka/vimfiles.git
+   git pull git@github.com:kurkale6ka/vimfiles.git master
 
    cd "$HOME"/config/vimfiles/bundle/vim-blanklines
    git pull git@github.com:kurkale6ka/vim-blanklines.git master
@@ -95,7 +95,7 @@ updaterepos() {
    git pull git://github.com/scrooloose/nerdcommenter.git master
 
    cd "$HOME"/config/vimfiles/bundle/vim-space
-   git pull git://github.com/spiiph/vim-space.git
+   git pull git://github.com/spiiph/vim-space.git master
 }
 
 cprepos() {
