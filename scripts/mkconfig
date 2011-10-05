@@ -35,6 +35,12 @@ mkrepos() {
    fi
 }
 
+mkr() {
+
+   git clone git@github.com:kurkale6ka/bashfiles.git
+   git clone git@github.com:kurkale6ka/vimfiles.git
+}
+
 updaterepos() {
 
    cd "$HOME"/config/bashfiles
@@ -96,6 +102,15 @@ updaterepos() {
 
    cd "$HOME"/config/vimfiles/bundle/vim-space
    git pull git://github.com/spiiph/vim-space.git master
+}
+
+updater() {
+
+   cd "$HOME"/config/bashfiles
+   git pull git@github.com:kurkale6ka/bashfiles.git master
+
+   cd "$HOME"/config/vimfiles
+   git pull git@github.com:kurkale6ka/vimfiles.git master
 }
 
 cprepos() {
@@ -177,17 +192,25 @@ rmlinks() {
    rm "$HOME"/bin/vimcat
 }
 
-if (( 0 == $# )); then
-   updaterepos
-else
-   while [[ $1 == -* ]]; do
+options[0]='Update repositories'
+options[1]='Create repositories'
+options[2]='Copy repositories'
+options[3]='Update bashfiles and vimfiles'
+options[4]='Create bashfiles and vimfiles'
+options[5]='Make links'
+options[6]='Remove links'
 
-      case "$1" in
+select choice in "${options[@]}"; do
 
-          --copy) cprepos; shift;;
-         --clone) mkrepos; shift;;
-         --links) mklinks; shift;;
-         --clean) rmlinks; shift;;
-      esac
-   done
-fi
+   case "$choice" in
+
+      "${options[0]}") updaterepos;;
+      "${options[1]}") mkrepos;;
+      "${options[2]}") cprepos;;
+      "${options[3]}") updater;;
+      "${options[4]}") mkr;;
+      "${options[5]}") mklinks;;
+      "${options[6]}") rmlinks;;
+   esac
+   break
+done
