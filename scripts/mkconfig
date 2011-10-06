@@ -11,9 +11,6 @@ mkrepos() {
 
    if git clone git@github.com:kurkale6ka/vimfiles.git; then
 
-      # cd vimfiles/autoload
-      # git clone git://github.com/tpope/vim-pathogen.git
-
       cd vimfiles/bundle
 
       git clone git@github.com:kurkale6ka/vim-blanklines.git
@@ -23,6 +20,7 @@ mkrepos() {
       git clone git@github.com:kurkale6ka/vim-swap.git
       git clone git://github.com/godlygeek/csapprox.git
       git clone git://github.com/godlygeek/tabular.git
+      git clone git://github.com/tpope/vim-pathogen.git
       git clone git://github.com/tpope/vim-abolish.git
       git clone git://github.com/tpope/vim-endwise.git
       git clone git://github.com/tpope/vim-unimpaired.git
@@ -36,6 +34,10 @@ mkrepos() {
 }
 
 mkr() {
+
+   [[ ! -d "$HOME"/config ]] && mkdir -p "$HOME"/config
+
+   cd "$HOME"/config
 
    git clone git@github.com:kurkale6ka/bashfiles.git
    git clone git@github.com:kurkale6ka/vimfiles.git
@@ -73,14 +75,14 @@ updaterepos() {
    cd "$HOME"/config/vimfiles/bundle/tabular
    git pull git://github.com/godlygeek/tabular.git master
 
+   cd "$HOME"/config/vimfiles/bundle/vim-pathogen
+   git pull git://github.com/tpope/vim-pathogen.git master
+
    cd "$HOME"/config/vimfiles/bundle/vim-abolish
    git pull git://github.com/tpope/vim-abolish.git master
 
    cd "$HOME"/config/vimfiles/bundle/vim-endwise
    git pull git://github.com/tpope/vim-endwise.git master
-
-   # cd "$HOME"/config/vimfiles/autoload/vim-pathogen
-   # git pull git://github.com/tpope/vim-pathogen.git master
 
    cd "$HOME"/config/vimfiles/bundle/vim-unimpaired
    git pull git://github.com/tpope/vim-unimpaired.git master
@@ -127,9 +129,9 @@ cprepos() {
       wget --no-check-certificate https://github.com/kurkale6ka/vim-swap/tarball/master
       wget --no-check-certificate https://github.com/godlygeek/csapprox/tarball/master
       wget --no-check-certificate https://github.com/godlygeek/tabular/tarball/master
+      wget --no-check-certificate https://github.com/tpope/vim-pathogen/tarball/master
       wget --no-check-certificate https://github.com/tpope/vim-abolish/tarball/master
       wget --no-check-certificate https://github.com/tpope/vim-endwise/tarball/master
-      wget --no-check-certificate https://github.com/tpope/vim-pathogen/tarball/master
       wget --no-check-certificate https://github.com/tpope/vim-unimpaired/tarball/master
       wget --no-check-certificate https://github.com/tpope/vim-surround/tarball/master
       wget --no-check-certificate https://github.com/tpope/vim-repeat/tarball/master
@@ -147,28 +149,31 @@ cprepos() {
 
 mklinks() {
 
-   ln -s "$HOME"/config/vimfiles                   "$HOME"/.vim
-   ln    "$HOME"/config/vimfiles/.vimrc            "$HOME"
-   ln    "$HOME"/config/vimfiles/.gvimrc           "$HOME"
+   ln -sT "$HOME"/config/vimfiles                   "$HOME"/.vim
+   ln     "$HOME"/config/vimfiles/.vimrc            "$HOME"
+   ln     "$HOME"/config/vimfiles/.gvimrc           "$HOME"
 
-   ln    "$HOME"/config/bashfiles/.profile         "$HOME"
-   ln    "$HOME"/config/bashfiles/.bash_profile    "$HOME"
-   ln    "$HOME"/config/bashfiles/.bash_login      "$HOME"
-   ln    "$HOME"/config/bashfiles/.bashrc          "$HOME"
-   ln    "$HOME"/config/bashfiles/.bashrc_after    "$HOME"
-   ln    "$HOME"/config/bashfiles/.logout          "$HOME"
-   ln    "$HOME"/config/bashfiles/.bash_logout     "$HOME"
-   ln    "$HOME"/config/bashfiles/.inputrc         "$HOME"
-   ln    "$HOME"/config/bashfiles/.irbrc           "$HOME"
+   ln     "$HOME"/config/vimfiles/bundle/vim-pathogen/autoload/pathogen.vim\
+          "$HOME"/config/vimfiles/autoload
 
-   ln    "$HOME"/config/help/.gitignore            "$HOME"
-   ln    "$HOME"/config/help/.screenrc             "$HOME"
-   ln    "$HOME"/config/help/.curlrc               "$HOME"
+   ln     "$HOME"/config/bashfiles/.profile         "$HOME"
+   ln     "$HOME"/config/bashfiles/.bash_profile    "$HOME"
+   ln     "$HOME"/config/bashfiles/.bash_login      "$HOME"
+   ln     "$HOME"/config/bashfiles/.bashrc          "$HOME"
+   ln     "$HOME"/config/bashfiles/.bashrc_after    "$HOME"
+   ln     "$HOME"/config/bashfiles/.logout          "$HOME"
+   ln     "$HOME"/config/bashfiles/.bash_logout     "$HOME"
+   ln     "$HOME"/config/bashfiles/.inputrc         "$HOME"
+   ln     "$HOME"/config/bashfiles/.irbrc           "$HOME"
+
+   ln     "$HOME"/config/help/.gitignore            "$HOME"
+   ln     "$HOME"/config/help/.screenrc             "$HOME"
+   ln     "$HOME"/config/help/.curlrc               "$HOME"
 
    [[ ! -d $HOME/bin ]] && mkdir -p "$HOME"/bin
 
-   ln    "$HOME"/config/bashfiles/scripts/mkconfig "$HOME"/bin
-   ln    "$HOME"/config/vimfiles/scripts/vimcat    "$HOME"/bin/c
+   ln     "$HOME"/config/bashfiles/scripts/mkconfig "$HOME"/bin
+   ln     "$HOME"/config/vimfiles/scripts/vimcat    "$HOME"/bin/c
 }
 
 rmlinks() {
@@ -176,6 +181,7 @@ rmlinks() {
    rm "$HOME"/.vim
    rm "$HOME"/.vimrc
    rm "$HOME"/.gvimrc
+   rm "$HOME"/config/vimfiles/autoload/pathogen.vim
    rm "$HOME"/.profile
    rm "$HOME"/.bash_profile
    rm "$HOME"/.bash_login
@@ -189,7 +195,7 @@ rmlinks() {
    rm "$HOME"/.screenrc
    rm "$HOME"/.curlrc
    rm "$HOME"/bin/mkconfig
-   rm "$HOME"/bin/vimcat
+   rm "$HOME"/bin/c
 }
 
 options[0]='Update repositories'
