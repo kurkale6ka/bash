@@ -31,6 +31,3 @@ show depends rdepends pkgnames dotty xvcg policy' ac apt-cache
 complete -W 'install remove purge hold unhold markauto unmarkauto
 forbid-version update safe-upgrade full-upgrade forget-new search show clean
 autoclean changelog download reinstall why why-not' aa aptitude
-
-# Misc
-complete -W '--links --copy --clone --clean' mkconfig
