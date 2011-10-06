@@ -259,7 +259,7 @@ alias     gvn="$MY_GVIM -N -u NONE -U NONE"
 
 # List directory contents ~\~2
 alias   l=ls
-alias  ls='ls -FB --color=auto --dereference-command-line-symlink-to-dir'
+alias  ls='ls -FB --color=auto'
 alias  ll='ls -hl --time-style="+(%d/%m/%Y - %H:%M)"'
 alias  ld='ls -d'
 alias lld='ls -dhl --time-style="+(%d/%m/%Y - %H:%M)"'
