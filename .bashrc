@@ -455,7 +455,7 @@ alias pl=perl
 alias py='python -i -c "from math import *"'
 alias rb=irb
 
-awk_snip_a='echo awk "'
+awk_snip_a='echo awk -F: "'
 awk_snip_b="'/pattern/ "
 awk_snip_c='{print \$1 \"\\t\" \$2}'
 awk_snip_d="'"
