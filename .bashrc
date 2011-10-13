@@ -254,8 +254,29 @@ alias vimdiff="$MY_VIM  -d"
 alias     gvd="$MY_GVIM -d"
 alias      gv="$MY_GVIM"
 alias     gvi="$MY_GVIM"
-alias      vn="$MY_VIM  -N -u NONE -U NONE"
-alias     gvn="$MY_GVIM -N -u NONE -U NONE"
+
+vim_options[0]='vim'
+vim_options[1]='vim no .vimrc'
+vim_options[2]='vim no plugins'
+vim_options[3]='gvim no .gvimrc'
+
+vn() {
+
+   select vim in "${vim_options[@]}"; do
+
+   case "$vim" in
+
+      "${vim_options[0]}") "$MY_GVIM" -v -N -u NONE;;
+      "${vim_options[1]}") "$MY_GVIM" -v -N -u NORC;;
+      "${vim_options[2]}") "$MY_GVIM" -v -N --noplugin;;
+      "${vim_options[3]}") "$MY_GVIM"    -N -U NONE;;
+   esac
+   break
+   done
+}
+
+# alias  vn="$MY_VIM  -N -u NONE -U NONE"
+alias gvn="$MY_GVIM -N -U NONE"
 
 # List directory contents ~\~2
 alias   l=ls
