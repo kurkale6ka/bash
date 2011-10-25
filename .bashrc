@@ -534,6 +534,7 @@ alias  hm="history|$MY_VIM -"
 alias hgg='history|grep' # because of mercurial
 
 alias n=nslookup
+alias r='netstat -rn'
 alias p='ping -c3'
 
 alias cn='cat -n'

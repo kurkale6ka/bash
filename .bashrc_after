@@ -17,8 +17,6 @@ git
 
 # Debian
 alias ap=aptitude
-alias d=dpkg
-alias r=dpkg-reconfigure
 
 complete -W 'update upgrade install remove autoremove purge source build-dep
 dist-upgrade dselect-upgrade clean autoclean check' apt-get
