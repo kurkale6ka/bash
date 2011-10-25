@@ -16,18 +16,16 @@ fetch grep init log merge mv pull push rebase revert reset rm show status tag' \
 git
 
 # Debian
-alias aa=aptitude
-alias ag=apt-get
-alias ac=apt-cache
+alias ap=aptitude
 alias d=dpkg
 alias r=dpkg-reconfigure
 
 complete -W 'update upgrade install remove autoremove purge source build-dep
-dist-upgrade dselect-upgrade clean autoclean check' ag apt-get
+dist-upgrade dselect-upgrade clean autoclean check' apt-get
 
 complete -W 'add gencaches showpkg showsrc stats dump dumpavail unmet search
-show depends rdepends pkgnames dotty xvcg policy' ac apt-cache
+show depends rdepends pkgnames dotty xvcg policy' apt-cache
 
 complete -W 'install remove purge hold unhold markauto unmarkauto
 forbid-version update safe-upgrade full-upgrade forget-new search show clean
-autoclean changelog download reinstall why why-not' aa aptitude
+autoclean changelog download reinstall why why-not' ap aptitude

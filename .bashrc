@@ -416,7 +416,6 @@ alias  ...='cd ../..'
 alias which=_which
 alias     ?=_which
 alias     i=info
-alias    ap=apropos
 alias    mm='man -k'
 alias    mp=manpath
 
