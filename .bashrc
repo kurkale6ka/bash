@@ -534,8 +534,8 @@ alias hgg='history|grep' # because of mercurial
 
 alias n=nslookup
 alias r='netstat -rn'
-alias i='ifconfig'
-alias ia='ifconfig -a'
+alias i='/sbin/ifconfig'
+alias ia='/sbin/ifconfig -a'
 alias p='ping -c3'
 
 port() { grep -iE --color "$1" /etc/services; }
