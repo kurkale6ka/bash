@@ -415,7 +415,6 @@ alias  ...='cd ../..'
 # Help ~\~2
 alias which=_which
 alias     ?=_which
-alias     i=info
 alias    mm='man -k'
 alias    mp=manpath
 
@@ -535,7 +534,11 @@ alias hgg='history|grep' # because of mercurial
 
 alias n=nslookup
 alias r='netstat -rn'
+alias i='ifconfig'
+alias ia='ifconfig'
 alias p='ping -c3'
+
+port() { grep -iE --color "$1" /etc/services; }
 
 alias cn='cat -n'
 
