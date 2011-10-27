@@ -87,6 +87,8 @@ f() {
    fi
 }
 
+nu() { sed -n "$1"p "$2"; }
+
 service() { /etc/init.d/"$1" "$2"; }
 
 # Usage: t my_archive.tar.gz => my_archive/
