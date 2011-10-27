@@ -40,6 +40,15 @@ export PS2='↪ '
 export PS3='Choose an entry: '
 export PS4='+ '
 
+# Checks that vimx is installed
+if command -v vimx >/dev/null 2>&1; then
+
+    my_gvim=vimx
+else
+    my_gvim=gvim
+fi
+my_vim="$my_gvim -v"
+
 # Functions ~\~1
 _exit() {
 
@@ -118,7 +127,7 @@ m() {
         if [[ $* == *[* && $* != *[[* || $* == *test* ]]; then
 
             # If I ask for [ or test, I want them both
-            help [ test | $MY_VIM -
+            help [ test | $my_vim -
         else
             help "$@"
         fi
@@ -245,15 +254,15 @@ s() { fc -s "$1"="$2" "$3"; }
 # Aliases ~\~1
 
 # Vim ~\~2
-alias       v="$MY_VIM"
-alias      vi="$MY_VIM"
-alias     vim="$MY_VIM"
-alias    view="$MY_VIM  -R"
-alias      vd="$MY_VIM  -d"
-alias vimdiff="$MY_VIM  -d"
-alias     gvd="$MY_GVIM -d"
-alias      gv="$MY_GVIM"
-alias     gvi="$MY_GVIM"
+alias       v="$my_vim"
+alias      vi="$my_vim"
+alias     vim="$my_vim"
+alias    view="$my_vim  -R"
+alias      vd="$my_vim  -d"
+alias vimdiff="$my_vim  -d"
+alias     gvd="$my_gvim -d"
+alias      gv="$my_gvim"
+alias     gvi="$my_gvim"
 
 vim_options[0]='vim'
 vim_options[1]='vim no .vimrc'
@@ -266,17 +275,17 @@ vn() {
 
    case "$vim" in
 
-      "${vim_options[0]}") "$MY_GVIM" -v -N -u NONE;;
-      "${vim_options[1]}") "$MY_GVIM" -v -N -u NORC;;
-      "${vim_options[2]}") "$MY_GVIM" -v -N --noplugin;;
-      "${vim_options[3]}") "$MY_GVIM"    -N -U NONE;;
+      "${vim_options[0]}") "$my_gvim" -v -N -u NONE;;
+      "${vim_options[1]}") "$my_gvim" -v -N -u NORC;;
+      "${vim_options[2]}") "$my_gvim" -v -N --noplugin;;
+      "${vim_options[3]}") "$my_gvim"    -N -U NONE;;
    esac
    break
    done
 }
 
-# alias  vn="$MY_VIM  -N -u NONE -U NONE"
-alias gvn="$MY_GVIM -N -U NONE"
+# alias  vn="$my_vim  -N -u NONE -U NONE"
+alias gvn="$my_gvim -N -U NONE"
 
 # List directory contents ~\~2
 alias   l=ls
@@ -292,7 +301,7 @@ alias  lk='ls -S'
 alias llk='ls -Shl --time-style="+(%d/%m/%Y - %H:%M)"'
 alias  lx='ls -X'
 alias llx='ls -Xhl --time-style="+(%d/%m/%Y - %H:%M)"'
-alias  lv="ls|$MY_VIM -"
+alias  lv="ls|$my_vim -"
 
 alias pc=lspci
 
@@ -484,7 +493,7 @@ alias awks="$awk_snip_a$awk_snip_b$awk_snip_c$awk_snip_d$awk_snip_e"
 alias  sed='sed -r' # ERE (Extended regex)
 alias seds="echo sed \"'s/old/new/'\" file"
 
-alias am="alias|$MY_VIM -"
+alias am="alias|$my_vim -"
 alias  a=alias
 alias ua=unalias
 
@@ -520,16 +529,16 @@ alias date="date '+%d %B [%-m] %Y, %H:%M %Z (%A)'"
 alias    g=grep
 alias grep='grep -iE --color' # ERE (Extended regex)
 
-alias less="$MY_VIM -"
-alias more="$MY_VIM -"
+alias less="$my_vim -"
+alias more="$my_vim -"
 alias mo=more
 
 alias   b='bind -p'
 alias bgg='bind -p|grep'
-alias  bm="bind -p|$MY_VIM -"
+alias  bm="bind -p|$my_vim -"
 
 alias  hi=history
-alias  hm="history|$MY_VIM -"
+alias  hm="history|$my_vim -"
 alias hgg='history|grep' # because of mercurial
 
 alias n=nslookup

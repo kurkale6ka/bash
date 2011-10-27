@@ -4,14 +4,13 @@ hash fortune >/dev/null 2>&1 && fortune
 # Checks that vimx is installed
 if command -v vimx >/dev/null 2>&1; then
 
-    export MY_GVIM=vimx
+    my_vim='vimx -v'
 else
-    export MY_GVIM=gvim
+    my_vim='gvim -v'
 fi
-export MY_VIM="$MY_GVIM -v"
 
-export EDITOR="$MY_VIM"
-export VISUAL="$MY_VIM"
+export EDITOR="$my_vim"
+export VISUAL="$my_vim"
 
 # -i ignore case, -M ruler, -F quit if 1 screen, -PM long prompt
 # ?test ok:else:else. The . ends the test
