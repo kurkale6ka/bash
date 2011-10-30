@@ -87,7 +87,7 @@ f() {
    fi
 }
 
-nu() { sed -n "$1"p "$2"; }
+n() { sed -n "$1"p "$2"; }
 
 service() { /etc/init.d/"$1" "$2"; }
 
@@ -533,17 +533,16 @@ alias grep='grep -iE --color' # ERE (Extended regex)
 
 alias less="$my_vim -"
 alias more="$my_vim -"
-alias mo=more
+alias   mo=more
 
 alias   b='bind -p'
 alias bgg='bind -p|grep'
 alias  bm="bind -p|$my_vim -"
 
-alias  hi=history
-alias  hm="history|$my_vim -"
-alias hgg='history|grep' # because of mercurial
+alias hi=history
+alias hv="history|$my_vim -"
+alias  h='history|grep'
 
-alias n=nslookup
 alias r='netstat -rn'
 alias i='/sbin/ifconfig'
 alias ia='/sbin/ifconfig -a'
