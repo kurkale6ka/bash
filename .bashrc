@@ -521,6 +521,7 @@ alias ps='ps -ef'
 alias pg=pgrep
 
 alias  k=kill
+alias kl='kill -l'
 alias ka=killall
 alias pk=pkill
 
