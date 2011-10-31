@@ -628,16 +628,16 @@ alias    wihch=_which
 # Programmable completion ~\~1
 complete -A alias          a alias alais unalias
 complete -A binding        b bind bnid
-complete -A command        ? which wihch type tpye
+complete -A command        ? which wihch type tpye sudo
 complete -A disabled       en enable
 complete -A enabled        di builtin
 complete -A export         printenv
 complete -A function       function
-complete -A hostname       dig n nslookup snlookup p ping pnig ssh
+complete -A hostname       dig n nslookup snlookup host p ping pnig ssh
 complete -A user           chage chfn finger groups mail passwd slay su userdel usermod w write
 complete -A variable       export local readonly unset
 
-complete -A helptopic      h help hlep # Currently, same as builtin
+complete -A helptopic      h help hlep m # Currently, same as builtin
 complete -A signal         k kill klil
 complete -A job     -P '%' j z fg jobs disown
 complete -A stopped -P '%' bg
@@ -675,6 +675,7 @@ _cd() {
     fi
 }
 
+# --option
 _longopts() {
 
     COMP_WORDBREAKS="${COMP_WORDBREAKS/=/}"
