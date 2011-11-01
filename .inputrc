@@ -17,7 +17,7 @@
 # Alt + x
 "\ex": kill-whole-line
 
-"\eOQ": " 1>/dev/null 2>&1"
+"\eOQ": " >/dev/null 2>&1"
 
 # Variable settings
 # -----------------
