@@ -721,5 +721,10 @@ complete -W 'alias arrayvar binding builtin command directory disabled enabled
 export file function group helptopic hostname job keyword running service
 setopt shopt signal stopped user variable' cl compgen complete
 
+# enable bash completion in interactive shells
+if [[ -f /etc/bash_completion ]] && ! shopt -oq posix; then
+   . /etc/bash_completion >/dev/null 2>&1
+fi
+
 # Business specific or system dependant stuff
 [[ -r ~/.bashrc_after ]] && source ~/.bashrc_after
