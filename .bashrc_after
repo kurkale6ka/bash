@@ -15,11 +15,6 @@ complete -F _longopts -W 'HEAD add bisect branch checkout clone commit diff
 fetch grep init log merge mv pull push rebase revert reset rm show status tag' \
 git
 
-# enable bash completion in interactive shells
-# if [[ -f /etc/profile.d/bash_completion.sh ]] && ! shopt -oq posix; then
-   # . /etc/profile.d/bash_completion.sh
-# fi
-
 # Debian
 alias ap=aptitude
 
