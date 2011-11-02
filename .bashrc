@@ -136,7 +136,7 @@ m() {
          help "$@"
       fi
    else
-      man "$@" || info "$@"
+      man "$@" || _which "$@"
    fi
 }
 
