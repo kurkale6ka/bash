@@ -2,7 +2,6 @@
 
 # Git
 gc() {
-
    if [[ 0 == $# ]]; then
       git commit -a
    else

@@ -649,6 +649,8 @@ complete -A shopt          shopt opt
 complete -A directory -F _cd cd
 complete -A directory        md mkdir rd rmdir
 
+complete -A file n
+
 # eXclude what is not(!) matched by the pattern
 complete -f -o default -X '!*.@(zip|ZIP|z|Z|gz|GZ|bz2|BZ2)' extract t tar
 
