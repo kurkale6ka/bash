@@ -469,6 +469,7 @@ alias  env-='env -i'
 alias  whoi=whoami
 alias uname='uname -a' # function? os() - print all sys info...
 
+ir() { ifdown "$1" && ifup "$1" || echo "Couldn't do it."; }
 alias ipconfig=ifconfig
 alias dump='dump -u'
 alias bc='bc -l'
@@ -725,10 +726,12 @@ complete -W 'alias arrayvar binding builtin command directory disabled enabled
 export file function group helptopic hostname job keyword running service
 setopt shopt signal stopped user variable' cl compgen complete
 
+complete -W 'eth0 eth1 lo' ir
+
+# Business specific or system dependant stuff
+[[ -r ~/.bashrc_after ]] && source ~/.bashrc_after
+
 # enable bash completion in interactive shells
 if [[ -f /etc/bash_completion ]] && ! shopt -oq posix; then
    . /etc/bash_completion >/dev/null 2>&1
 fi
-
-# Business specific or system dependant stuff
-[[ -r ~/.bashrc_after ]] && source ~/.bashrc_after
