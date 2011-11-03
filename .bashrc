@@ -143,15 +143,37 @@ m() {
 # Usage: key mitkofr@yahoo.fr remote_host
 key() {
 
-   options[0]='Create and copy'
-   options[1]='copy only'
+   local options[0]='Create and copy'
+         options[1]='copy only'
+
+   local mail; local host
 
    select choice in "${options[@]}"; do
 
       case "$choice" in
 
-         "${options[0]}") ssh-keygen -t rsa -C "$1" && ssh-copy-id "$2";;
-         "${options[1]}") ssh-copy-id "$1";;
+         "${options[0]}")
+
+            if [[ ! $1 ]]; then
+               read -p 'Email: ' mail
+            else
+               mail="$1"
+            fi
+            if [[ ! $2 ]]; then
+               read -p 'Remote host: ' host
+            else
+               host="$2"
+            fi
+            ssh-keygen -t rsa -C "$mail" && ssh-copy-id "$host";;
+
+         "${options[1]}")
+
+            if [[ ! $2 ]]; then
+               read -p 'Remote host: ' host
+            else
+               host="$2"
+            fi
+            ssh-copy-id "$host";;
       esac
       break
    done
