@@ -140,6 +140,22 @@ m() {
    fi
 }
 
+key() {
+
+   options[0]='Create and copy'
+   options[1]='copy only'
+
+   select choice in "${options[@]}"; do
+
+      case "$choice" in
+
+         "${options[0]}") ssh-keygen -t rsa -C "$1" && ssh-copy-id "$2";;
+         "${options[1]}") ssh-copy-id "$1";;
+      esac
+      break
+   done
+}
+
 # Usage: sw my_file.c [my_file.c~] - my_file.c <=> my_file.c~
 # the second arg is optional if it is the same arg with a '~' appended to it
 sw() {
