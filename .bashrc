@@ -140,6 +140,7 @@ m() {
    fi
 }
 
+# Usage: key mitkofr@yahoo.fr remote_host
 key() {
 
    options[0]='Create and copy'
