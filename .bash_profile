@@ -32,6 +32,8 @@ export LC_TIME=bg_BG.utf8
 export PATH="$PATH:$HOME/bin"
 export CDPATH="$HOME":..:../..
 
+# file default 666 (-rw-rw-rw-) => 640 (-rw-r-----)
+# directory default 777 (drwxrwxrwx) => 750 (drwxr-x---)
 umask 027
 
 # .bashrc exists and I can read it
