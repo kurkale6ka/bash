@@ -488,6 +488,7 @@ alias uname='uname -a' # function? os() - print all sys info...
 
 ir() { ifdown "$1" && ifup "$1" || echo "Couldn't do it."; }
 alias ipconfig=ifconfig
+
 alias dump='dump -u'
 alias bc='bc -l'
 alias vish='sudo vipw -s'
@@ -643,6 +644,7 @@ alias     tpye=type
 alias     veiw=view
 alias      vmi=vim
 alias    wihch=_which
+alias      shh=ssh
 # ~/~2
 
 # Programmable completion ~\~1
