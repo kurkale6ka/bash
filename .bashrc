@@ -164,7 +164,8 @@ key() {
             else
                host="$2"
             fi
-            ssh-keygen -t rsa -C "$mail" && ssh-copy-id "$host";;
+            ssh-keygen -t rsa -C "$mail" && ssh-copy-id "$host"
+            break;;
 
          "${options[1]}")
 
@@ -173,9 +174,10 @@ key() {
             else
                host="$2"
             fi
-            ssh-copy-id "$host";;
+            ssh-copy-id "$host"
+            break;;
       esac
-      break
+      echo '*** Wrong choice ***'
    done
 }
 
