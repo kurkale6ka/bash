@@ -51,11 +51,6 @@ fi
 my_vim="$my_gvim -v"
 
 # Functions ~\~1
-_exit() {
-
-   echo -e "${red}Hasta la vista, baby$reset"
-}
-trap _exit EXIT
 
 # Usage: warn 'message' - print a message to stderr
 warn() { printf '%s\n' "$@" >&2; }
