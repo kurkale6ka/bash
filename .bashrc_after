@@ -15,7 +15,7 @@ fetch grep init log merge mv pull push rebase revert reset rm show status tag' \
 git
 
 # Debian
-alias ap=aptitude
+alias ap='sudo aptitude'
 
 complete -W 'update upgrade install remove autoremove purge source build-dep
 dist-upgrade dselect-upgrade clean autoclean check' apt-get
