@@ -39,7 +39,3 @@ umask 027
 
 # Business specific or system dependant stuff
 [[ -r ~/.bash_profile_after ]] && source ~/.bash_profile_after
-export LANGUAGE="en_GB:en"
-export LC_MESSAGES="en_GB.UTF-8"
-export LC_CTYPE="en_GB.UTF-8"
-export LC_COLLATE="en_GB.UTF-8"
