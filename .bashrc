@@ -760,12 +760,12 @@ llk lx llx lv lc llc lm llm lu llu v vi vim vmi vimx gv gvi gvim gvmi rpm
 complete -A command -F _longopts m man mna
 
 complete -W 'bold dim rev setab setaf sgr0 smul' tp pt tput
+complete -W 'eth0 eth1 lo' ir
+complete -W 'if=/dev/zero' dd
 
 complete -W 'alias arrayvar binding builtin command directory disabled enabled
 export file function group helptopic hostname job keyword running service
 setopt shopt signal stopped user variable' cl compgen complete
-
-complete -W 'eth0 eth1 lo' ir
 
 # Business specific or system dependant stuff
 [[ -r ~/.bashrc_after ]] && source ~/.bashrc_after
