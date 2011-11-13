@@ -43,7 +43,7 @@ export PS4='+ '
 
 if command -v vimx >/dev/null 2>&1; then
    my_gvim=vimx
-else if command -v gvim >/dev/null 2>&1; then
+elif command -v gvim >/dev/null 2>&1; then
    my_gvim=gvim
 else
    my_gvim=vi
