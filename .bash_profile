@@ -3,10 +3,11 @@ hash fortune >/dev/null 2>&1 && fortune
 
 # Checks that vimx is installed
 if command -v vimx >/dev/null 2>&1; then
-
    my_vim='vimx -v'
-else
+else if command -v gvim >/dev/null 2>&1; then
    my_vim='gvim -v'
+else
+   my_vim=vi
 fi
 
 export EDITOR="$my_vim"

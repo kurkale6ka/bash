@@ -41,12 +41,12 @@ export PS2='↪ '
 export PS3='Choose an entry: '
 export PS4='+ '
 
-# Checks that vimx is installed
 if command -v vimx >/dev/null 2>&1; then
-
    my_gvim=vimx
-else
+else if command -v gvim >/dev/null 2>&1; then
    my_gvim=gvim
+else
+   my_gvim=vi
 fi
 my_vim="$my_gvim -v"
 
