@@ -558,7 +558,6 @@ alias setsticky='chmod +t'
 
 alias shutdown='shutdown -h now'
 
-alias ps='ps -ef'
 alias pg=pgrep
 
 alias  k=kill
