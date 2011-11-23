@@ -505,6 +505,7 @@ alias   rmm=rrm
 alias  env-='env -i'
 alias  whoi=whoami
 alias uname='uname -a' # function? os() - print all sys info...
+alias ldapsearch='ldapsearch -x -LLL'
 
 ir() { ifdown "$1" && ifup "$1" || echo "Couldn't do it."; }
 alias ipconfig=ifconfig
@@ -773,3 +774,5 @@ setopt shopt signal stopped user variable' cl compgen complete
 if [[ -f /etc/bash_completion ]] && ! shopt -oq posix; then
    . /etc/bash_completion >/dev/null 2>&1
 fi
+
+ssh-add ~/.ssh/id_rsa_phorm
