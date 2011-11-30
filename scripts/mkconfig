@@ -208,7 +208,7 @@ mklinks() {
    [[ ! -d $src/bin ]] && mkdir -p "$dest"/bin
 
    ln     "$src"/config/bashfiles/scripts/mkconfig "$dest"/bin
-   ln     "$src"/config/vimfiles/scripts/vimcat    "$dest"/bin/c
+   ln     "$src"/config/vimfiles/scripts/vimcat    "$dest"/bin/vc
 }
 
 rmlinks() {
