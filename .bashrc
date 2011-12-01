@@ -27,7 +27,7 @@ set -o notify # about terminated jobs
 if [[ linux != $TERM ]]; then
 
    # \e]2; TITLE \a
-   title="\e]2;\D{%e %B %Y (%A)}, bash $BASH_VERSION on $TERM\a"
+   title="\e]2;\D{%A %e %b}, bash $BASH_VERSION on $TERM\a"
 fi
 
 if (( 0 == UID )); then
