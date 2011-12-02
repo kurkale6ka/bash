@@ -775,5 +775,3 @@ setopt shopt signal stopped user variable' cl compgen complete
 if [[ -f /etc/bash_completion ]] && ! shopt -oq posix; then
    . /etc/bash_completion >/dev/null 2>&1
 fi
-
-ssh-add ~/.ssh/id_rsa_phorm
