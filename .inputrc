@@ -17,6 +17,7 @@
 # Alt + x
 "\ex": kill-whole-line
 
+"\eOP": "uk01"
 "\eOQ": " >/dev/null 2>&1"
 
 # Variable settings
