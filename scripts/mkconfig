@@ -205,9 +205,9 @@ mklinks() {
    ln     "$src"/config/help/.screenrc             "$dest"
    ln     "$src"/config/help/.curlrc               "$dest"
 
-   ln -sT "$src"/config/vimfiles                   "$dest"/vimfiles
-   ln -sT "$src"/config/bashfiles                  "$dest"/bashfiles
-   ln -sT "$src"/config/help                       "$dest"/help
+   ln -s  "$src"/config/vimfiles                   "$dest"/vimfiles
+   ln -s  "$src"/config/bashfiles                  "$dest"/bashfiles
+   ln -s  "$src"/config/help                       "$dest"/help
 
    [[ ! -d $src/bin ]] && mkdir -p "$dest"/bin
 
