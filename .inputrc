@@ -18,6 +18,7 @@
 "\ex": kill-whole-line
 
 "\eOP": "uk01"
+"\e[23~": "dimitar.dimitrov"
 "\eOQ": " >/dev/null 2>&1"
 
 # Variable settings
