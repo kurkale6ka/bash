@@ -567,8 +567,9 @@ alias kl='kill -l'
 alias ka=killall
 alias pk=pkill
 
-alias  cal='cal -3 -m'
-alias call='cal -y -m'
+cal()  { env LC_TIME=bg_BG.utf8 ncal -3 -M -C "$@"; }
+call() { env LC_TIME=bg_BG.utf8 ncal -y -M -C "$@"; }
+
 alias date="date '+%d %B [%-m] %Y, %H:%M %Z (%A)'"
 
 alias    g=grep
