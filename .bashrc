@@ -355,6 +355,14 @@ alias pc=lspci
 alias  l.=ldot
 alias ll.=lldot
 
+.() {
+   if [[ $# == 0 ]]; then
+      ldot
+   else
+      source "$@"
+   fi
+}
+
 ldot() {
 
    local i
