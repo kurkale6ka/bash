@@ -771,7 +771,7 @@ setopt shopt signal stopped user variable' cl compgen complete
 # Business specific or system dependant stuff
 [[ -r ~/.bashrc_after ]] && source ~/.bashrc_after
 
-# enable bash completion in interactive shells
-if [[ -f /etc/bash_completion ]] && ! shopt -oq posix; then
-   . /etc/bash_completion >/dev/null 2>&1
-fi
+# # enable bash completion in interactive shells
+# if [[ -f /etc/bash_completion ]] && ! shopt -oq posix; then
+   # . /etc/bash_completion >/dev/null 2>&1
+# fi
