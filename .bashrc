@@ -39,6 +39,7 @@ fi
 if (( 0 == UID )); then
 
    PS1="$title\n\[$red\][\u@\H] \w (!\! - %\j, $info)\n# \[$reset\]"
+   export PATH="$PATH":/sbin:/usr/sbin:/usr/local/sbin:/root/bin
 else
    PS1="$title\n\[$yellow\][\u@\H] \[$magenta\]\w \[$red\](!\! - %\j, $info)\[$reset\]\n\$ "
 fi
@@ -529,7 +530,7 @@ alias dump='dump -u'
 alias bc='bc -l'
 alias vish='sudo vipw -s'
 
-alias su='sudo su -'
+alias su='sudo -s'
 alias sd=sudo
 
 alias en=enable
