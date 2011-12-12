@@ -233,8 +233,11 @@ rmlinks() {
    rm "$HOME"/.gitignore
    rm "$HOME"/.screenrc
    rm "$HOME"/.curlrc
+   rm "$HOME"/vimfiles
+   rm "$HOME"/bashfiles
+   rm "$HOME"/help
    rm "$HOME"/bin/mkconfig
-   rm "$HOME"/bin/c
+   rm "$HOME"/bin/vc
 }
 
 options[0]='Update repositories'
