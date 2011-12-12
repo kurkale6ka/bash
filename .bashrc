@@ -30,11 +30,17 @@ if [[ linux != $TERM ]]; then
    title="\e]2;\D{%A %e %b}, bash $BASH_VERSION on $TERM\a"
 fi
 
+if [[ $SSH_CLIENT || $SSH2_CLIENT ]]; then
+   info=ssh
+else
+   info='\A'
+fi
+
 if (( 0 == UID )); then
 
-   PS1="$title\n\[$red\][\u@\H] \w (!\! - %\j, \A)\n# \[$reset\]"
+   PS1="$title\n\[$red\][\u@\H] \w (!\! - %\j, $info)\n# \[$reset\]"
 else
-   PS1="$title\n\[$yellow\][\u@\H] \[$magenta\]\w \[$red\](!\! - %\j, \A)\[$reset\]\n\$ "
+   PS1="$title\n\[$yellow\][\u@\H] \[$magenta\]\w \[$red\](!\! - %\j, $info)\[$reset\]\n\$ "
 fi
 
 export PS2='↪ '
@@ -349,6 +355,14 @@ alias pc=lspci
 alias  l.=ldot
 alias ll.=lldot
 
+.() {
+   if [[ $# == 0 ]]; then
+      ldot
+   else
+      source "$@"
+   fi
+}
+
 ldot() {
 
    local i
@@ -567,8 +581,9 @@ alias kl='kill -l'
 alias ka=killall
 alias pk=pkill
 
-alias  cal='cal -3 -m'
-alias call='cal -y -m'
+cal()  { env LC_TIME=bg_BG.utf8 ncal -3 -M -C "$@"; }
+call() { env LC_TIME=bg_BG.utf8 ncal -y -M -C "$@"; }
+
 alias date="date '+%d %B [%-m] %Y, %H:%M %Z (%A)'"
 
 alias    g=grep

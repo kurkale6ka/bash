@@ -17,7 +17,9 @@ export VISUAL="$my_vim"
 # ?test ok:else:else. The . ends the test
 export LESS='-i -M -F -PM?f%f - :.?L%L lines, :.?ltL\:%lt:.?pB, %pB\% : .?e(Bottom)%t'
 
+# Completion
 export FIGNORE='~'
+export HOSTFILE="$HOME"/.hosts
 
 export HISTFILE="$HOME"/.bash_history
 export HISTSIZE=1000
@@ -25,8 +27,6 @@ export HISTFILESIZE=1000
 export HISTCONTROL='ignorespace:ignoredups:erasedups'
 # export HISTIGNORE='@(?|??|???|????)*([[:space:]]):*([[:space:]])'
 export HISTIGNORE="@(?|??|???|????)*( |$'\t'):*( |$'\t')"
-
-export HOSTFILE="$HOME"/.hosts
 
 export PATH="$PATH:$HOME/bin"
 export CDPATH="$HOME":..:../..

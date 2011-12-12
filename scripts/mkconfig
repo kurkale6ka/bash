@@ -250,14 +250,14 @@ select choice in "${options[@]}"; do
 
    case "$choice" in
 
-      "${options[0]}") updaterepos;                break;;
-      "${options[1]}") mkrepos;                    break;;
-      "${options[2]}") cprepos;                    break;;
-      "${options[3]}") updater;                    break;;
-      "${options[4]}") mkr;                        break;;
-      "${options[5]}") mklinks;                    break;;
-      "${options[6]}") mklinks /home/tyrion /root; break;;
-      "${options[7]}") rmlinks;                    break;;
+      "${options[0]}") updaterepos;               break;;
+      "${options[1]}") mkrepos;                   break;;
+      "${options[2]}") cprepos;                   break;;
+      "${options[3]}") updater;                   break;;
+      "${options[4]}") mkr;                       break;;
+      "${options[5]}") mklinks;                   break;;
+      "${options[6]}") mklinks /home/mitko /root; break;;
+      "${options[7]}") rmlinks;                   break;;
    esac
    echo '*** Wrong choice ***'
 done
