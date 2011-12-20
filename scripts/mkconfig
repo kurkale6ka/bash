@@ -183,36 +183,36 @@ mklinks() {
    fi
 
    ln -sT "$src"/config/vimfiles                   "$dest"/.vim
-   ln     "$src"/config/vimfiles/.vimrc            "$dest"
-   ln     "$src"/config/vimfiles/.gvimrc           "$dest"
+   ln -s  "$src"/config/vimfiles/.vimrc            "$dest"
+   ln -s  "$src"/config/vimfiles/.gvimrc           "$dest"
 
    if [[ 0 == $# ]]; then
-      ln "$src"/config/vimfiles/bundle/vim-pathogen/autoload/pathogen.vim\
-         "$src"/config/vimfiles/autoload
+      ln -s "$src"/config/vimfiles/bundle/vim-pathogen/autoload/pathogen.vim\
+            "$src"/config/vimfiles/autoload
    fi
 
-   ln     "$src"/config/bashfiles/.profile         "$dest"
-   ln     "$src"/config/bashfiles/.bash_profile    "$dest"
-   ln     "$src"/config/bashfiles/.bash_login      "$dest"
-   ln     "$src"/config/bashfiles/.bashrc          "$dest"
-   ln     "$src"/config/bashfiles/.bashrc_after    "$dest"
-   ln     "$src"/config/bashfiles/.logout          "$dest"
-   ln     "$src"/config/bashfiles/.bash_logout     "$dest"
-   ln     "$src"/config/bashfiles/.inputrc         "$dest"
-   ln     "$src"/config/bashfiles/.irbrc           "$dest"
+   ln -s  "$src"/config/bashfiles/.profile         "$dest"
+   ln -s  "$src"/config/bashfiles/.bash_profile    "$dest"
+   ln -s  "$src"/config/bashfiles/.bash_login      "$dest"
+   ln -s  "$src"/config/bashfiles/.bashrc          "$dest"
+   ln -s  "$src"/config/bashfiles/.bashrc_after    "$dest"
+   ln -s  "$src"/config/bashfiles/.logout          "$dest"
+   ln -s  "$src"/config/bashfiles/.bash_logout     "$dest"
+   ln -s  "$src"/config/bashfiles/.inputrc         "$dest"
+   ln -s  "$src"/config/bashfiles/.irbrc           "$dest"
 
-   ln     "$src"/config/help/.gitignore            "$dest"
-   ln     "$src"/config/help/.screenrc             "$dest"
-   ln     "$src"/config/help/.curlrc               "$dest"
+   ln -s  "$src"/config/help/.gitignore            "$dest"
+   ln -s  "$src"/config/help/.screenrc             "$dest"
+   ln -s  "$src"/config/help/.curlrc               "$dest"
 
-   ln -s  "$src"/config/vimfiles                   "$dest"/vimfiles
-   ln -s  "$src"/config/bashfiles                  "$dest"/bashfiles
-   ln -s  "$src"/config/help                       "$dest"/help
+   ln -sT "$src"/config/vimfiles                   "$dest"/vimfiles
+   ln -sT "$src"/config/bashfiles                  "$dest"/bashfiles
+   ln -sT "$src"/config/help                       "$dest"/help
 
    [[ ! -d $src/bin ]] && mkdir -p "$dest"/bin
 
-   ln     "$src"/config/bashfiles/scripts/mkconfig "$dest"/bin
-   ln     "$src"/config/vimfiles/scripts/vimcat    "$dest"/bin/vc
+   ln -s  "$src"/config/bashfiles/scripts/mkconfig "$dest"/bin
+   ln -s  "$src"/config/vimfiles/scripts/vimcat    "$dest"/bin/vc
 }
 
 rmlinks() {
