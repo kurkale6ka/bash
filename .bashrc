@@ -3,6 +3,8 @@
 #    Vim: zR to unfold everything, then :help folding
 # ------------------------------------------------------
 
+[[ -t 1 ]] || return
+
 # Colors: set[af|ab] (ANSI [fore|back]ground) ~\~1
 # black=$(tput setaf 0)
     red=$(tput setaf 1)
