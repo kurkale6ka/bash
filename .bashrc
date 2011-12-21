@@ -532,7 +532,7 @@ alias dump='dump -u'
 alias bc='bc -l'
 alias vish='sudo vipw -s'
 
-alias su='sudo -s'
+alias su='sudo -s -E'
 alias sd=sudo
 
 alias en=enable
