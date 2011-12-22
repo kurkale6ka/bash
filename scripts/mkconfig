@@ -174,13 +174,8 @@ cprepos() {
 
 mklinks() {
 
-   if [[ 0 == $# ]]; then
-      local src="$HOME"
-      local dest="$HOME"
-   else
-      local src="$1"
-      local dest="$2"
-   fi
+   local src="$HOME"
+   local dest="$HOME"
 
    ln -sT "$src"/config/vimfiles                   "$dest"/.vim
    ln -s  "$src"/config/vimfiles/.vimrc            "$dest"
@@ -246,21 +241,19 @@ options[2]='Copy repositories'
 options[3]='Update bashfiles and vimfiles'
 options[4]='Create bashfiles and vimfiles'
 options[5]='Make links'
-options[6]='Make links (root)'
-options[7]='Remove links'
+options[6]='Remove links'
 
 select choice in "${options[@]}"; do
 
    case "$choice" in
 
-      "${options[0]}") updaterepos;               break;;
-      "${options[1]}") mkrepos;                   break;;
-      "${options[2]}") cprepos;                   break;;
-      "${options[3]}") updater;                   break;;
-      "${options[4]}") mkr;                       break;;
-      "${options[5]}") mklinks;                   break;;
-      "${options[6]}") mklinks /home/mitko /root; break;;
-      "${options[7]}") rmlinks;                   break;;
+      "${options[0]}") updaterepos; break;;
+      "${options[1]}") mkrepos;     break;;
+      "${options[2]}") cprepos;     break;;
+      "${options[3]}") updater;     break;;
+      "${options[4]}") mkr;         break;;
+      "${options[5]}") mklinks;     break;;
+      "${options[6]}") rmlinks;     break;;
    esac
    echo '*** Wrong choice ***'
 done
