@@ -503,6 +503,7 @@ alias   lo=locate
 
 # Misc ~\~2
 alias     c=cat
+alias     d=dpkg
 alias     e=echo
 alias     t=extract
 alias     z=fg
