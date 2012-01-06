@@ -199,6 +199,7 @@ mklinks() {
    ln -s  "$src"/config/help/.gitignore            "$dest"
    ln -s  "$src"/config/help/.screenrc             "$dest"
    ln -s  "$src"/config/help/.curlrc               "$dest"
+   ln -s  "$src"/config/help/.my.cnf               "$dest"
 
    ln -sT "$src"/config/vimfiles                   "$dest"/vimfiles
    ln -sT "$src"/config/bashfiles                  "$dest"/bashfiles
@@ -228,6 +229,7 @@ rmlinks() {
    rm "$HOME"/.gitignore
    rm "$HOME"/.screenrc
    rm "$HOME"/.curlrc
+   rm "$HOME"/.my.cnf
    rm "$HOME"/vimfiles
    rm "$HOME"/bashfiles
    rm "$HOME"/help
