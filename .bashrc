@@ -8,9 +8,9 @@
 # Colors: set[af|ab] (ANSI [fore|back]ground) ~\~1
 # black=$(tput setaf 0)
     red=$(tput setaf 1)
-# green=$(tput setaf 2)
- yellow=$(tput setaf 3)
-#  blue=$(tput setaf 4)
+  green=$(tput setaf 2)
+#yellow=$(tput setaf 3)
+   blue=$(tput setaf 4)
 magenta=$(tput setaf 5)
 #  cyan=$(tput setaf 6)
 # white=$(tput setaf 7)
@@ -40,10 +40,10 @@ fi
 
 if (( 0 == UID )); then
 
-   PS1="$title\n\[$red\]\u \H \w (%\j, $info)\n# \[$reset\]"
+   PS1="$title\n\[$red\]\u \H \[$blue\]\w - $info, %\j\[$reset\]\n# "
    export PATH="$PATH":/sbin:/usr/sbin:/usr/local/sbin:/root/bin
 else
-   PS1="$title\n\[$yellow\]\u \H \[$magenta\]\w \[$red\](%\j, $info)\[$reset\]\n\$ "
+   PS1="$title\n\[$green\]\u \H \[$blue\]\w - $info, %\j\[$reset\]\n\$ "
 fi
 
 export PS2='↪ '
