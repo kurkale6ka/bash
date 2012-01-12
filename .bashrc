@@ -40,10 +40,10 @@ fi
 
 if (( 0 == UID )); then
 
-   PS1="$title\n\[$red\]\u \H \[$blue\]\w\[$reset\] ----------- \A, %\j$info\n# "
+   PS1="$title\n\[$red\]\u \H \[$blue\]\w\[$reset\] - \A, %\j$info\n# "
    export PATH="$PATH":/sbin:/usr/sbin:/usr/local/sbin:/root/bin
 else
-   PS1="$title\n\[$green\]\u \H \[$blue\]\w\[$reset\] ----------- \A, %\j$info\n\$ "
+   PS1="$title\n\[$green\]\u \H \[$blue\]\w\[$reset\] - \A, %\j$info\n\$ "
 fi
 
 export PS2='↪ '
