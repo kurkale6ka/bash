@@ -33,17 +33,17 @@ if [[ linux != $TERM ]]; then
 fi
 
 if [[ $SSH_CLIENT || $SSH2_CLIENT ]]; then
-   info=ssh
+   info=', remote'
 else
-   info='\A'
+   info=''
 fi
 
 if (( 0 == UID )); then
 
-   PS1="$title\n\[$red\]\u \H \[$blue\]\w - $info, %\j\[$reset\]\n# "
+   PS1="$title\n\[$red\]\u \H \[$blue\]\w - \A, %\j$info\[$reset\]\n# "
    export PATH="$PATH":/sbin:/usr/sbin:/usr/local/sbin:/root/bin
 else
-   PS1="$title\n\[$green\]\u \H \[$blue\]\w - $info, %\j\[$reset\]\n\$ "
+   PS1="$title\n\[$green\]\u \H \[$blue\]\w - \A, %\j$info\[$reset\]\n\$ "
 fi
 
 export PS2='↪ '
