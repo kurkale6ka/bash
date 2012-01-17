@@ -25,14 +25,14 @@
 # Blue="$(tput setaf 4)"
 # BlueBG="$(tput setab 4)"
   LightBlue="$(tput bold ; tput setaf 4)"
-# Purple="$(tput setaf 5)"
+  Purple="$(tput setaf 5)"
 # PurpleBG="$(tput setab 5)"
 # Pink="$(tput bold ; tput setaf 5)"
 # Cyan="$(tput setaf 6)"
 # CyanBG="$(tput setab 6)"
 # LightCyan="$(tput bold ; tput setaf 6)"
+# Bold="$(tput bold)"
   Underline="$(tput smul)"
-  Bold="$(tput bold)"
   Reset="$(tput sgr0)" # No Color
 
 # Shell options ~\~1
