@@ -6,14 +6,6 @@
 [[ -t 1 ]] || return
 
 # Colors: set[af|ab] (ANSI [fore|back]ground) ~\~1
-# black="$(tput setaf 0)"
-    red="$(tput setaf 1)"
-  green="$(tput setaf 2)"
-#yellow="$(tput setaf 3)"
-   blue="$(tput setaf 4)"
-magenta="$(tput setaf 5)"
-#  cyan="$(tput setaf 6)"
-# white="$(tput setaf 7)"
 
 # Black="$(tput setaf 0)"
 # BlackBG="$(tput setab 0)"
@@ -23,27 +15,25 @@ magenta="$(tput setaf 5)"
 # White="$(tput bold ; tput setaf 7)"
 # Red="$(tput setaf 1)"
 # RedBG="$(tput setab 1)"
-# LightRed="$(tput bold ; tput setaf 1)"
+  LightRed="$(tput bold ; tput setaf 1)"
 # Green="$(tput setaf 2)"
 # GreenBG="$(tput setab 2)"
-# LightGreen="$(tput bold ; tput setaf 2)"
+  LightGreen="$(tput bold ; tput setaf 2)"
 # Brown="$(tput setaf 3)"
 # BrownBG="$(tput setab 3)"
 # Yellow="$(tput bold ; tput setaf 3)"
 # Blue="$(tput setaf 4)"
 # BlueBG="$(tput setab 4)"
-# LightBlue="$(tput bold ; tput setaf 4)"
+  LightBlue="$(tput bold ; tput setaf 4)"
 # Purple="$(tput setaf 5)"
 # PurpleBG="$(tput setab 5)"
 # Pink="$(tput bold ; tput setaf 5)"
 # Cyan="$(tput setaf 6)"
 # CyanBG="$(tput setab 6)"
 # LightCyan="$(tput bold ; tput setaf 6)"
-# NC="$(tput sgr0)" # No Color
-
-#    bold="$(tput bold)"
-underline="$(tput smul)"
-    reset="$(tput sgr0)"
+  Underline="$(tput smul)"
+  Bold="$(tput bold)"
+  Reset="$(tput sgr0)" # No Color
 
 # Shell options ~\~1
 shopt -s cdspell
@@ -66,12 +56,10 @@ fi
 
 if (( 0 == UID )); then
 
-   PS1="$title\n\[$red\]\u \H \[$blue\]\w\[$reset\] - \A, %\j$info\n\[$reset\]# "
-   #PS1="$title\n\[\033[01;31m\]\u \H \[\033[01;34m\]\w\[$reset\] - \A, %\j$info\n\[$red\]#\[$reset\] "
+   PS1="$title\n\[$LightRed\]\u \H \[$LightBlue\]\w\[$Reset\] - \A, %\j$info\n# "
    export PATH="$PATH":/sbin:/usr/sbin:/usr/local/sbin:/root/bin
 else
-   PS1="$title\n\[$green\]\u \H \[$blue\]\w\[$reset\] - \A, %\j$info\n\[$reset\]\$ "
-   #PS1="$title\n\[\033[01;32m\]\u \H $LightBlue\w\[$reset\] - \A, %\j$info\n\[$LightBlue\]\$\[$reset\] "
+   PS1="$title\n\[$LightGreen\]\u \H \[$LightBlue\]\w\[$Reset\] - \A, %\j$info\n\$ "
 fi
 
 export PS2='↪ '
@@ -452,7 +440,7 @@ _l() {
 
    local i
 
-   printf "$magenta${underline}Sorted by $1 date:$reset \n"
+   printf "$Purple${Underline}Sorted by $1 date:$Reset \n"
 
    (( 2 == $# )) && ls "$2" && return
 
@@ -473,7 +461,7 @@ _ll() {
 
    local i
 
-   printf "$magenta${underline}Sorted by $1 date:$reset \n"
+   printf "$Purple${Underline}Sorted by $1 date:$Reset \n"
 
    (( 3 == $# )) && ls "$2" "$3" && return
 
