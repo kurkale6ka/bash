@@ -496,7 +496,6 @@ alias   ..='cd ..'
 alias  ...='cd ../..'
 
 # Help ~\~2
-alias which=_which
 alias     ?=_which
 alias    mm='man -k'
 alias    mp=manpath
@@ -537,6 +536,7 @@ alias    tp=tput
 alias   cmd=command
 alias   msg=dmesg
 alias   rmm=rrm
+alias   rmp=rpm
 alias  env-='env -i'
 alias  whoi=whoami
 alias uname='uname -a' # function? os() - print all sys info...
@@ -609,9 +609,7 @@ alias date="date '+%d %B [%-m] %Y, %H:%M %Z (%A)'"
 alias    g=grep
 alias grep='grep -iE --color' # ERE (Extended regex)
 
-alias less="$my_vim -"
-alias more="$my_vim -"
-alias   mo=more
+alias   mo="$my_vim -"
 
 alias   b='bind -p'
 alias bgg='bind -p|grep'
