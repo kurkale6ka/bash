@@ -354,7 +354,7 @@ vn() {
 alias gvn="$my_gvim -N -U NONE"
 
 # List directory contents ~\~2
-alias   l=ls
+alias   l='ls -FB --color=auto'
 alias  ls='ls -FB --color=auto'
 alias  ll='ls -hl --time-style="+(%d/%m/%Y - %H:%M)"'
 alias  ld='ls -d'
@@ -606,7 +606,7 @@ call() { env LC_TIME=bg_BG.utf8 ncal -y -M -C "$@"; }
 
 alias date="date '+%d %B [%-m] %Y, %H:%M %Z (%A)'"
 
-alias    g=grep
+alias    g='grep -iE --color'
 alias grep='grep -iE --color' # ERE (Extended regex)
 
 alias   mo="$my_vim -"
