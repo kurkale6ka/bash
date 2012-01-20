@@ -174,67 +174,66 @@ cprepos() {
 
 mklinks() {
 
-   local src="$HOME"
-   local dest="$HOME"
-
-   ln -sT "$src"/config/vimfiles                   "$dest"/.vim
-   ln -s  "$src"/config/vimfiles/.vimrc            "$dest"
-   ln -s  "$src"/config/vimfiles/.gvimrc           "$dest"
+   ln -sT "$HOME"/config/vimfiles                   "$HOME"/.vim
+   ln -s  "$HOME"/config/vimfiles/.vimrc            "$HOME"
+   ln -s  "$HOME"/config/vimfiles/.gvimrc           "$HOME"
 
    if [[ 0 == $# ]]; then
-      ln -s "$src"/config/vimfiles/bundle/vim-pathogen/autoload/pathogen.vim\
-            "$src"/config/vimfiles/autoload
+      ln -s "$HOME"/config/vimfiles/bundle/vim-pathogen/autoload/pathogen.vim\
+            "$HOME"/config/vimfiles/autoload
    fi
 
-   ln -s  "$src"/config/bashfiles/.profile         "$dest"
-   ln -s  "$src"/config/bashfiles/.bash_profile    "$dest"
-   ln -s  "$src"/config/bashfiles/.bash_login      "$dest"
-   ln -s  "$src"/config/bashfiles/.bashrc          "$dest"
-   ln -s  "$src"/config/bashfiles/.bashrc_after    "$dest"
-   ln -s  "$src"/config/bashfiles/.logout          "$dest"
-   ln -s  "$src"/config/bashfiles/.bash_logout     "$dest"
-   ln -s  "$src"/config/bashfiles/.inputrc         "$dest"
-   ln -s  "$src"/config/bashfiles/.irbrc           "$dest"
+   ln -s  "$HOME"/config/bashfiles/.profile         "$HOME"
+   ln -s  "$HOME"/config/bashfiles/.bash_profile    "$HOME"
+   ln -s  "$HOME"/config/bashfiles/.bash_login      "$HOME"
+   ln -s  "$HOME"/config/bashfiles/.bashrc          "$HOME"
+   ln -s  "$HOME"/config/bashfiles/.bashrc_after    "$HOME"
+   ln -s  "$HOME"/config/bashfiles/.logout          "$HOME"
+   ln -s  "$HOME"/config/bashfiles/.bash_logout     "$HOME"
+   ln -s  "$HOME"/config/bashfiles/.inputrc         "$HOME"
+   ln -s  "$HOME"/config/bashfiles/.irbrc           "$HOME"
 
-   ln -s  "$src"/config/help/.gitignore            "$dest"
-   ln -s  "$src"/config/help/.screenrc             "$dest"
-   ln -s  "$src"/config/help/.curlrc               "$dest"
-   ln -s  "$src"/config/help/.my.cnf               "$dest"
+   ln -s  "$HOME"/config/help/.gitignore            "$HOME"
+   ln -s  "$HOME"/config/help/.screenrc             "$HOME"
+   ln -s  "$HOME"/config/help/.curlrc               "$HOME"
+   ln -s  "$HOME"/config/help/.my.cnf               "$HOME"
+   ln -sT "$HOME"/config/help/.irssi                "$HOME"
 
-   ln -sT "$src"/config/vimfiles                   "$dest"/vimfiles
-   ln -sT "$src"/config/bashfiles                  "$dest"/bashfiles
-   ln -sT "$src"/config/help                       "$dest"/help
+   ln -sT "$HOME"/config/vimfiles                   "$HOME"/vimfiles
+   ln -sT "$HOME"/config/bashfiles                  "$HOME"/bashfiles
+   ln -sT "$HOME"/config/help                       "$HOME"/help
 
-   [[ ! -d $src/bin ]] && mkdir -p "$dest"/bin
+   [[ ! -d $HOME/bin ]] && mkdir -p "$HOME"/bin
 
-   ln -s  "$src"/config/bashfiles/scripts/mkconfig "$dest"/bin
-   ln -s  "$src"/config/vimfiles/scripts/vimcat    "$dest"/bin/vc
+   ln -s  "$HOME"/config/bashfiles/scripts/mkconfig "$HOME"/bin
+   ln -s  "$HOME"/config/vimfiles/scripts/vimcat    "$HOME"/bin/vc
 }
 
 rmlinks() {
 
-   rm "$HOME"/.vim
-   rm "$HOME"/.vimrc
-   rm "$HOME"/.gvimrc
-   rm "$HOME"/config/vimfiles/autoload/pathogen.vim
-   rm "$HOME"/.profile
-   rm "$HOME"/.bash_profile
-   rm "$HOME"/.bash_login
-   rm "$HOME"/.bashrc
-   rm "$HOME"/.bashrc_after
-   rm "$HOME"/.logout
-   rm "$HOME"/.bash_logout
-   rm "$HOME"/.inputrc
-   rm "$HOME"/.irbrc
-   rm "$HOME"/.gitignore
-   rm "$HOME"/.screenrc
-   rm "$HOME"/.curlrc
-   rm "$HOME"/.my.cnf
-   rm "$HOME"/vimfiles
-   rm "$HOME"/bashfiles
-   rm "$HOME"/help
-   rm "$HOME"/bin/mkconfig
-   rm "$HOME"/bin/vc
+   rm    "$HOME"/.vim
+   rm    "$HOME"/.vimrc
+   rm    "$HOME"/.gvimrc
+   rm    "$HOME"/config/vimfiles/autoload/pathogen.vim
+   rm    "$HOME"/.profile
+   rm    "$HOME"/.bash_profile
+   rm    "$HOME"/.bash_login
+   rm    "$HOME"/.bashrc
+   rm    "$HOME"/.bashrc_after
+   rm    "$HOME"/.logout
+   rm    "$HOME"/.bash_logout
+   rm    "$HOME"/.inputrc
+   rm    "$HOME"/.irbrc
+   rm    "$HOME"/.gitignore
+   rm    "$HOME"/.screenrc
+   rm    "$HOME"/.curlrc
+   rm    "$HOME"/.my.cnf
+   rm -r "$HOME"/.irssi
+   rm    "$HOME"/vimfiles
+   rm    "$HOME"/bashfiles
+   rm    "$HOME"/help
+   rm    "$HOME"/bin/mkconfig
+   rm    "$HOME"/bin/vc
 }
 
 options[0]='Update repositories'
