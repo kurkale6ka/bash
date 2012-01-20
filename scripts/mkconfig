@@ -197,7 +197,7 @@ mklinks() {
    ln -s  "$HOME"/config/help/.screenrc             "$HOME"
    ln -s  "$HOME"/config/help/.curlrc               "$HOME"
    ln -s  "$HOME"/config/help/.my.cnf               "$HOME"
-   ln -sT "$HOME"/config/help/.irssi                "$HOME"
+   ln -sT "$HOME"/config/help/.irssi                "$HOME"/.irssi
 
    ln -sT "$HOME"/config/vimfiles                   "$HOME"/vimfiles
    ln -sT "$HOME"/config/bashfiles                  "$HOME"/bashfiles
