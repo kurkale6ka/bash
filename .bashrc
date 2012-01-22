@@ -807,6 +807,6 @@ setopt shopt signal stopped user variable' cl compgen complete
 # enable bash completion in interactive shells
 if [[ -f /etc/profile.d/bash-completion.sh ]] && ! shopt -oq posix; then
    . /etc/profile.d/bash-completion.sh >/dev/null 2>&1
-# else if [[ -f /etc/bash_completion ]] && ! shopt -oq posix; then
-   # . /etc/bash_completion >/dev/null 2>&1
+elif [[ -f /etc/bash_completion ]] && ! shopt -oq posix; then
+   . /etc/bash_completion >/dev/null 2>&1
 fi
