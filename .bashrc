@@ -355,19 +355,18 @@ alias gvn="$my_gvim -N -U NONE"
 
 # List directory contents ~\~2
 alias   l='ls -FB --color=auto'
-alias  ls='ls -FB --color=auto'
-alias  ll='ls -hl --time-style="+(%d/%m/%Y - %H:%M)"'
-alias  ld='ls -d'
-alias lld='ls -dhl --time-style="+(%d/%m/%Y - %H:%M)"'
-alias  la='ls -A'
-alias lla='ls -Ahl --time-style="+(%d/%m/%Y - %H:%M)"'
-alias  lr='ls -R'
-alias llr='ls -Rhl --time-style="+(%d/%m/%Y - %H:%M)"'
-alias  lk='ls -S'
-alias llk='ls -Shl --time-style="+(%d/%m/%Y - %H:%M)"'
-alias  lx='ls -X'
-alias llx='ls -Xhl --time-style="+(%d/%m/%Y - %H:%M)"'
-alias  lv="ls|$my_vim -"
+alias  ll='ls -FB --color=auto -hl --time-style="+(%d/%m/%Y - %H:%M)"'
+alias  ld='ls -FB --color=auto -d'
+alias lld='ls -FB --color=auto -dhl --time-style="+(%d/%m/%Y - %H:%M)"'
+alias  la='ls -FB --color=auto -A'
+alias lla='ls -FB --color=auto -Ahl --time-style="+(%d/%m/%Y - %H:%M)"'
+alias  lr='ls -FB --color=auto -R'
+alias llr='ls -FB --color=auto -Rhl --time-style="+(%d/%m/%Y - %H:%M)"'
+alias  lk='ls -FB --color=auto -S'
+alias llk='ls -FB --color=auto -Shl --time-style="+(%d/%m/%Y - %H:%M)"'
+alias  lx='ls -FB --color=auto -X'
+alias llx='ls -FB --color=auto -Xhl --time-style="+(%d/%m/%Y - %H:%M)"'
+alias  lv="ls -FB --color=auto|$my_vim -"
 
 alias pc=lspci
 
