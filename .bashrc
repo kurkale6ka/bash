@@ -391,13 +391,13 @@ ldot() {
 
          [[ $# > 1 ]] && printf "$arg:\n"
 
-         ls -d "$arg".[^.]*
+         ls -FB --color=auto -d "$arg".[^.]*
 
          (( i++ ))
          [[ $# > 1 && $i != $# ]] && echo
       done
    else
-      ls -d .[^.]*
+      ls -FB --color=auto -d .[^.]*
    fi
 }
 
@@ -411,13 +411,13 @@ lldot() {
 
          [[ $# > 1 ]] && printf "$arg:\n"
 
-         ls -dhl --time-style="+(%d/%m/%Y - %H:%M)" "$arg".[^.]*
+         ls -FB --color=auto -dhl --time-style="+(%d/%m/%Y - %H:%M)" "$arg".[^.]*
 
          (( i++ ))
          [[ $# > 1 && $i != $# ]] && echo
       done
    else
-      ls -dhl --time-style="+(%d/%m/%Y - %H:%M)" .[^.]*
+      ls -FB --color=auto -dhl --time-style="+(%d/%m/%Y - %H:%M)" .[^.]*
    fi
 }
 
@@ -441,13 +441,13 @@ _l() {
 
    printf "$Purple${Underline}Sorted by $1 date:$Reset \n"
 
-   (( 2 == $# )) && ls "$2" && return
+   (( 2 == $# )) && ls -FB --color=auto "$2" && return
 
    for arg in "${@:3}"; do
 
       [[ $# > 3 ]] && printf "$arg:\n"
 
-      ls "$2" "$arg"
+      ls -FB --color=auto "$2" "$arg"
 
       (( i++ ))
       local num=$(( $# - 2 ))
@@ -462,13 +462,13 @@ _ll() {
 
    printf "$Purple${Underline}Sorted by $1 date:$Reset \n"
 
-   (( 3 == $# )) && ls "$2" "$3" && return
+   (( 3 == $# )) && ls -FB --color=auto "$2" "$3" && return
 
    for arg in "${@:4}"; do
 
       [[ $# > 4 ]] && printf "$arg:\n"
 
-      ls "$2" "$3" "$arg"
+      ls -FB --color=auto "$2" "$3" "$arg"
 
       (( i++ ))
       local num=$(( $# - 3 ))
