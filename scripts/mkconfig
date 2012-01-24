@@ -29,6 +29,7 @@ mkrepos() {
       git clone git://github.com/tpope/vim-ragtag.git
       git clone git://github.com/tpope/vim-flatfoot.git
       git clone git://github.com/scrooloose/nerdcommenter.git
+      git clone git://github.com/vim-scripts/MarkLines.git
       git clone git://github.com/vim-scripts/bufkill.vim.git
       # git clone git://github.com/vim-scripts/L9.git
       # git clone git://github.com/vim-scripts/FuzzyFinder.git
@@ -107,6 +108,9 @@ updaterepos() {
    cd "$HOME"/config/vimfiles/bundle/nerdcommenter
    git pull git://github.com/scrooloose/nerdcommenter.git master
 
+   cd "$HOME"/config/vimfiles/bundle/MarkLines
+   git pull git://github.com/vim-scripts/MarkLines.git master
+
    cd "$HOME"/config/vimfiles/bundle/bufkill.vim
    git pull git://github.com/vim-scripts/bufkill.vim.git master
 
@@ -158,6 +162,7 @@ cprepos() {
       wget --no-check-certificate https://github.com/tpope/vim-ragtag/tarball/master
       wget --no-check-certificate https://github.com/tpope/vim-flatfoot/tarball/master
       wget --no-check-certificate https://github.com/scrooloose/nerdcommenter/tarball/master
+      wget --no-check-certificate https://github.com/vim-scripts/MarkLines/tarball/master
       wget --no-check-certificate https://github.com/vim-scripts/bufkill.vim/tarball/master
       # wget --no-check-certificate https://github.com/vim-scripts/L9/tarball/master
       # wget --no-check-certificate https://github.com/vim-scripts/FuzzyFinder/tarball/master
