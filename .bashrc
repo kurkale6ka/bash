@@ -524,6 +524,7 @@ alias     z=fg
 alias    ej=eject
 alias    ex=export
 alias    fr=free
+alias    irssi="$HOME/config/help/.irssi/fnotify.bash & && irssi"
 alias    pf=printf
 alias    pp='printf "%s\n"'
 alias    pa='(IFS=:; printf "%s\n" $PATH)'

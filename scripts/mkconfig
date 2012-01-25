@@ -212,7 +212,6 @@ mklinks() {
 
    ln -s  "$HOME"/config/bashfiles/scripts/mkconfig "$HOME"/bin
    ln -s  "$HOME"/config/vimfiles/scripts/vimcat    "$HOME"/bin/vc
-   ln -s  "$HOME"/config/help/.irssi/fnotify.bash   "$HOME"/bin
 }
 
 rmlinks() {
@@ -240,7 +239,6 @@ rmlinks() {
    rm    "$HOME"/help
    rm    "$HOME"/bin/mkconfig
    rm    "$HOME"/bin/vc
-   rm    "$HOME"/bin/fnotify.bash
 }
 
 options[0]='Update repositories'
