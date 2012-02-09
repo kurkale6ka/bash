@@ -519,7 +519,8 @@ alias   lo=locate
 alias     c=cat
 alias     d=dpkg
 alias     e=echo
-alias     t=extract
+alias     t=tail
+alias    tf=tailf
 alias     z=fg
 alias    ej=eject
 alias    ex=export
@@ -528,6 +529,7 @@ alias    irssi="$HOME/config/help/.irssi/fnotify.bash & irssi"
 alias    pf=printf
 alias    pp='printf "%s\n"'
 alias    pa='(IFS=:; printf "%s\n" $PATH)'
+alias   pwd='pwd -P'
 alias    pw=pwd
 alias    sc=screen
 alias    so=source
