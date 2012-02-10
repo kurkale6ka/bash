@@ -479,9 +479,9 @@ _ll() {
 lc()  { _l  change       -tc                                      "$@"; }
 lm()  { _l  modification -t                                       "$@"; }
 lu()  { _l  access       -tu                                      "$@"; }
-llc() { _ll change       -tchl --time-style='+(%d/%m/%Y - %H:%M)' "$@"; }
-llm() { _ll modification -tchl --time-style='+(%d/%m/%Y - %H:%M)' "$@"; }
-llu() { _ll access       -tuhl --time-style='+(%d/%m/%Y - %H:%M)' "$@"; }
+llc() { _ll change       -tchl --time-style='+(%d %b %Y - %H:%M)' "$@"; }
+llm() { _ll modification -thl  --time-style='+(%d %b %Y - %H:%M)' "$@"; }
+llu() { _ll access       -tuhl --time-style='+(%d %b %Y - %H:%M)' "$@"; }
 
 # Change directory ~\~2
 alias  cd-='cd -'
