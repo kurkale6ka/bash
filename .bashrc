@@ -54,7 +54,7 @@ else
    info=''
 fi
 
-if (( 0 == UID )); then
+if (( 0 == EUID )); then
 
    PS1="$title\n\[$LightRed\]\u \H \[$LightBlue\]\w\[$Reset\] - \A, %\j$info\n# "
    export PATH="$PATH":/sbin:/usr/sbin:/usr/local/sbin:/root/bin
