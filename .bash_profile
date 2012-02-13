@@ -31,6 +31,7 @@ export VISUAL="$my_vim"
   LightGreen="$(tput bold ; tput setaf 2)"
 # Brown="$(tput setaf 3)"
 # BrownBG="$(tput setab 3)"
+# LightBrown="$(tput setaf 3)" bogus
 # Yellow="$(tput bold ; tput setaf 3)"
 # Blue="$(tput setaf 4)"
 # BlueBG="$(tput setab 4)"
