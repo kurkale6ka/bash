@@ -500,15 +500,16 @@ alias    mm='man -k'
 alias    mp=manpath
 
 db() {
-
-   select prgm in apropos locate; do
-
-      if [[ apropos == $prgm ]]; then
-
+   PS3='Choose a database to update: '
+   select prgm in 'locate' 'apropos, man -k'; do
+      if [[ $prgm == apropos* ]]; then
+         printf "makewhatis...\n"
          makewhatis
          break
-      else
+      elif [[ $prgm == locate ]]; then
+         printf "updatedb...\n"
          updatedb
+         break
       fi
    done
 }
