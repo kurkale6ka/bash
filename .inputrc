@@ -17,9 +17,9 @@
 # ^d (instead of the default 'delete char before cursor')
 "\C-d": kill-whole-line
 
-"\eOP": "uk01"
-"\C-m": "dimitar.dimitrov"
+"\C-xm": "dimitar.dimitrov"
 "\eOQ": " >/dev/null 2>&1"
+"\eOP": "uk01"
 
 # Variable settings
 # -----------------
