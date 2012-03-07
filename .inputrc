@@ -18,8 +18,8 @@
 "\C-d": kill-whole-line
 
 "\C-xm": "dimitar.dimitrov"
+"\C-xd": "dimitar.dimitrov"
 "\eOQ": " >/dev/null 2>&1"
-"\eOP": "uk01"
 
 # Variable settings
 # -----------------
