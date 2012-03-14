@@ -45,7 +45,8 @@ set -o notify # about terminated jobs
 if [[ linux != $TERM ]]; then
 
    # \e]2; TITLE \a
-   title="\e]2;\D{%A %e %b}, bash $BASH_VERSION on $TERM\a"
+   # title="\e]2;\D{%A %e %b}, bash $BASH_VERSION on $TERM\a"
+   title=""
 fi
 
 if [[ $SSH_CLIENT || $SSH2_CLIENT ]]; then
