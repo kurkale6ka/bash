@@ -543,7 +543,16 @@ alias   rmm=rrm
 alias   rmp=rpm
 alias  env-='env -i'
 alias  whoi=whoami
-alias uname='uname -a' # function? os() - print all sys info...
+# function? os() - print all sys info...
+alias uname="printf '%23s' 'Network node hostname: ' && uname -n;\
+             printf '%23s' 'Machine hardware name: ' && uname -m;\
+             printf '%23s' 'Hardware platform: '     && uname -i;\
+             printf '%23s' 'Processor type: '        && uname -p;\
+             printf '%23s' 'Kernel name: '           && uname -s;\
+             printf '%23s' 'Kernel release: '        && uname -r;\
+             printf '%23s' 'Kernel version: '        && uname -v;\
+             printf '%23s' 'Operating system: '      && uname -o"
+
 alias ldapsearch='ldapsearch -x -LLL'
 
 ir() { ifdown "$1" && ifup "$1" || echo "Couldn't do it."; }
