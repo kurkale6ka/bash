@@ -7,7 +7,7 @@ if command -v vimx >/dev/null 2>&1; then
 elif command -v gvim >/dev/null 2>&1; then
    my_vim='gvim -v'
 else
-   my_vim=vi
+   my_vim=vim
 fi
 
 export EDITOR="$my_vim"

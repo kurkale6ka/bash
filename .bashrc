@@ -72,7 +72,7 @@ if command -v vimx >/dev/null 2>&1; then
 elif command -v gvim >/dev/null 2>&1; then
    my_gvim=gvim
 else
-   my_gvim=vi
+   my_gvim=vim
 fi
 my_vim="$my_gvim -v"
 
