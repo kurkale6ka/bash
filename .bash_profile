@@ -1,4 +1,4 @@
-clear
+# clear
 hash fortune >/dev/null 2>&1 && fortune
 
 # Checks that vimx is installed

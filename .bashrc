@@ -550,7 +550,7 @@ alias uname="printf '%23s' 'Network node hostname: ' && uname -n;\
              printf '%23s' 'Processor type: '        && uname -p;\
              printf '%23s' 'Kernel name: '           && uname -s;\
              printf '%23s' 'Kernel release: '        && uname -r;\
-             printf '%23s' 'Kernel version: '        && uname -v;\
+             printf '%23s' 'Compiled on: '           && uname -v;\
              printf '%23s' 'Operating system: '      && uname -o"
 
 alias ldapsearch='ldapsearch -x -LLL'
