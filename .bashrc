@@ -554,8 +554,8 @@ alias uname="printf '%23s' 'Network node hostname: ' && uname -n;\
              printf '%23s' 'Operating system: '      && uname -o"
 rr() {
    printf '%s\n%s\n'\
-      '"\\e[A": history-search-backward'\
-      '"\\e[B": history-search-forward' >> .inputrc
+      '"\e[A": history-search-backward'\
+      '"\e[B": history-search-forward' >> .inputrc
 }
 
 alias ldapsearch='ldapsearch -x -LLL'
