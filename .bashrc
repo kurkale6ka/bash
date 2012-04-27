@@ -619,8 +619,13 @@ alias kl='kill -l'
 alias ka=killall
 alias pk=pkill
 
-cal()  { env LC_TIME=bg_BG.utf8 ncal -3 -M -C "$@"; }
-call() { env LC_TIME=bg_BG.utf8 ncal -y -M -C "$@"; }
+if command -v ncal >/dev/null 2>&1; then
+   alias cal='env LC_TIME=bg_BG.utf8 ncal -3 -M -C'
+   alias call='env LC_TIME=bg_BG.utf8 ncal -y -M -C'
+else
+   alias cal='env LC_TIME=bg_BG.utf8 cal -m3'
+   alias call='env LC_TIME=bg_BG.utf8 cal -my'
+fi
 
 alias date="date '+%d %B [%-m] %Y, %H:%M %Z (%A)'"
 
