@@ -659,8 +659,13 @@ alias  se+o='set +o'
 alias set+o='set +o'
 alias   opt=shopt
 
-alias df='df -h'
-alias du='du -h'
+alias df='df -h|sort -k5r'
+if sort -h /dev/null
+then
+   alias du='du -sh *|sort -hr'
+else
+   alias du='du -sk *|sort -nr'
+fi
 
 alias cp='cp -i'
 alias mv='mv -i'
