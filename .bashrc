@@ -660,7 +660,7 @@ alias set+o='set +o'
 alias   opt=shopt
 
 alias df='df -h|sort -k5r'
-if sort -h /dev/null
+if sort -h /dev/null 2>/dev/null
 then
    alias du='du -sh *|sort -hr'
 else
