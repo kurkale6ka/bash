@@ -77,6 +77,7 @@ export HISTFILESIZE=1000
 export HISTCONTROL='ignorespace:ignoredups:erasedups'
 # export HISTIGNORE='@(?|??|???|????)*([[:space:]]):*([[:space:]])'
 export HISTIGNORE="@(?|??|???|????)*( |$'\t'):*( |$'\t')"
+HISTTIMEFORMAT='<%d %b %H:%M>  '
 
 export PATH="$PATH:$HOME/bin"
 export CDPATH="$HOME":..:../..
