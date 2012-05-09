@@ -42,7 +42,7 @@ shopt -s extglob
 set -o notify # about terminated jobs
 
 # PS1 and title (\e]2; ---- \a) ~\~1
-[[ linux != $TERM ]] && title="\e]2;\u \H\a"
+[[ linux != $TERM ]] && title="\e]2;\H\a"
 
 if [[ $SSH_CLIENT || $SSH2_CLIENT ]]; then
    info=', remote'
