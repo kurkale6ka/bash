@@ -351,17 +351,17 @@ alias gvn="$my_gvim -N -U NONE"
 
 # List directory contents ~\~2
 alias   l='ls -FB --color=auto'
-alias  ll='ls -FB --color=auto -hl --time-style="+(%d/%m/%Y - %H:%M)"'
+alias  ll='ls -FB --color=auto -hl --time-style="+(%d %b %y - %H:%M)"'
 alias  ld='ls -FB --color=auto -d'
-alias lld='ls -FB --color=auto -dhl --time-style="+(%d/%m/%Y - %H:%M)"'
+alias lld='ls -FB --color=auto -dhl --time-style="+(%d %b %y - %H:%M)"'
 alias  la='ls -FB --color=auto -A'
-alias lla='ls -FB --color=auto -Ahl --time-style="+(%d/%m/%Y - %H:%M)"'
+alias lla='ls -FB --color=auto -Ahl --time-style="+(%d %b %y - %H:%M)"'
 alias  lr='ls -FB --color=auto -R'
-alias llr='ls -FB --color=auto -Rhl --time-style="+(%d/%m/%Y - %H:%M)"'
+alias llr='ls -FB --color=auto -Rhl --time-style="+(%d %b %y - %H:%M)"'
 alias  lk='ls -FB --color=auto -S'
-alias llk='ls -FB --color=auto -Shl --time-style="+(%d/%m/%Y - %H:%M)"'
+alias llk='ls -FB --color=auto -Shl --time-style="+(%d %b %y - %H:%M)"'
 alias  lx='ls -FB --color=auto -X'
-alias llx='ls -FB --color=auto -Xhl --time-style="+(%d/%m/%Y - %H:%M)"'
+alias llx='ls -FB --color=auto -Xhl --time-style="+(%d %b %y - %H:%M)"'
 alias  lv="ls -FB --color=auto|$my_vim -"
 
 alias pc=lspci
@@ -407,13 +407,13 @@ lldot() {
 
          [[ $# > 1 ]] && printf "$arg:\n"
 
-         ls -FB --color=auto -dhl --time-style="+(%d/%m/%Y - %H:%M)" "$arg".[^.]*
+         ls -FB --color=auto -dhl --time-style="+(%d %b %y - %H:%M)" "$arg".[^.]*
 
          (( i++ ))
          [[ $# > 1 && $i != $# ]] && echo
       done
    else
-      ls -FB --color=auto -dhl --time-style="+(%d/%m/%Y - %H:%M)" .[^.]*
+      ls -FB --color=auto -dhl --time-style="+(%d %b %y - %H:%M)" .[^.]*
    fi
 }
 
@@ -425,7 +425,7 @@ lll() {
       if [[ -h $file ]]; then
 
          command\
-         ls -FBAhl --color=auto --time-style="+(%d/%m/%Y - %H:%M)" "$file"
+         ls -FBAhl --color=auto --time-style="+(%d %b %y - %H:%M)" "$file"
       fi
    done
 }
