@@ -350,7 +350,13 @@ vn() {
 alias gvn="$my_gvim -N -U NONE"
 
 # List directory contents ~\~2
-alias  sl='stat -c "%7i %A (%a) %h %4u %4g %8sb (%.10y %10Y) %n"'
+sl() {
+   if [[ $# == 0 ]]; then
+      stat -c "%7i %A (%a) %2h %4u %4g %10s (%10Y) %n" *
+   else
+      stat -c "%7i %A (%a) %2h %4u %4g %10s (%10Y) %n" "$@"
+   fi
+}
 alias   l='ls -FB --color=auto'
 alias  ll='ls -FB --color=auto -hl --time-style="+(%d %b %y - %H:%M)"'
 alias  ld='ls -FB --color=auto -d'
