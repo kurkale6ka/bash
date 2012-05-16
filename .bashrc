@@ -645,7 +645,8 @@ alias hv="history|$my_vim -"
 alias  h='history|grep'
 
 alias r='netstat -rn'
-alias i='/sbin/ifconfig'
+alias i='hostname -i'
+alias ii='/sbin/ifconfig'
 alias ia='/sbin/ifconfig -a'
 alias p='ping -c3'
 
