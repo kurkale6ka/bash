@@ -337,10 +337,10 @@ vn() {
 
    case "$vim" in
 
-      "${vim_options[0]}") "$my_gvim" -v -N -u NONE;;
-      "${vim_options[1]}") "$my_gvim" -v -N -u NORC;;
-      "${vim_options[2]}") "$my_gvim" -v -N --noplugin;;
-      "${vim_options[3]}") "$my_gvim"    -N -U NONE;;
+      "${vim_options[0]}") "$my_gvim" -nNX -u NONE;;
+      "${vim_options[1]}") "$my_gvim" -nNX -u NORC;;
+      "${vim_options[2]}") "$my_gvim" -nNX --noplugin;;
+      "${vim_options[3]}") "$my_gvim"  -N  -U NONE;;
    esac
    break
    done
