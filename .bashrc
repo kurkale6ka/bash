@@ -663,12 +663,47 @@ alias set+o='set +o'
 alias   opt=shopt
 
 alias df='df -h|sort -k5r'
-if sort -h /dev/null 2>/dev/null
-then
-   alias du='du -sh *|sort -hr'
-else
-   alias du='du -sk *|sort -nr'
-fi
+
+du() {
+   if sort -h /dev/null 2>/dev/null
+   then
+      if [[ $# == 0 ]]
+      then
+         command du -sh * | sort -hr
+      else
+         command du -sh "$@" | sort -hr
+      fi
+   else
+      if [[ $# == 0 ]]
+      then
+         command du -sk * | sort -nr | while read -r size file
+         do
+            for unit in k M G T P E Z Y
+            do
+               if (( size < 1024 ))
+               then
+                  printf "$size$unit\t$file\n"
+                  break
+               fi
+               size=$(( size / 1024 ))
+            done
+         done
+      else
+         command du -sk "$@" | sort -nr | while read -r size file
+         do
+            for unit in k M G T P E Z Y
+            do
+               if (( size < 1024 ))
+               then
+                  printf "$size$unit\t$file\n"
+                  break
+               fi
+               size=$(( size / 1024 ))
+            done
+         done
+      fi
+   fi
+}
 
 alias cp='cp -i'
 alias mv='mv -i'
