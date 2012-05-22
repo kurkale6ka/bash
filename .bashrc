@@ -300,7 +300,7 @@ ee() {
 
       local arr="$arg[@]" # no {} ?
 
-      printf "%s\n" "${!arr}" | column
+      printf '%s\n' "${!arr}" | column
 
       (( i++ ))
       [[ $# > 1 && $i != $# ]] && echo
@@ -384,7 +384,7 @@ ldot() {
 
       for arg in "$@"; do
 
-         [[ $# > 1 ]] && printf "$arg:\n"
+         [[ $# > 1 ]] && printf '%s:\n' "$arg"
 
          ls -FB --color=auto -d "$arg".[^.]*
 
@@ -404,7 +404,7 @@ lldot() {
 
       for arg in "$@"; do
 
-         [[ $# > 1 ]] && printf "$arg:\n"
+         [[ $# > 1 ]] && printf '%s:\n' "$arg"
 
          ls -FB --color=auto -dhl --time-style="+(%d %b %y - %H:%M)" "$arg".[^.]*
 
@@ -434,19 +434,19 @@ _l() {
 
    local i
 
-   printf "$Purple${Underline}Sorted by $1 date:$Reset \n"
+   printf '%s%sSorted by %s date:%s \n' "$Purple" "$Underline" "$1" "$Reset"
 
    (( 2 == $# )) && ls -FB --color=auto "$2" && return
 
    for arg in "${@:3}"; do
 
-      [[ $# > 3 ]] && printf "$arg:\n"
+      [[ $# > 3 ]] && printf '%s:\n' "$arg"
 
       ls -FB --color=auto "$2" "$arg"
 
       (( i++ ))
       local num=$(( $# - 2 ))
-      [[ $# > 3 ]] && (( i != num )) && printf "\n"
+      [[ $# > 3 ]] && (( i != num )) && printf '\n'
    done
 }
 
@@ -455,19 +455,19 @@ _ll() {
 
    local i
 
-   printf "$Purple${Underline}Sorted by $1 date:$Reset \n"
+   printf '%s%sSorted by %s date:%s \n' "$Purple" "$Underline" "$1" "$Reset"
 
    (( 3 == $# )) && ls -FB --color=auto "$2" "$3" && return
 
    for arg in "${@:4}"; do
 
-      [[ $# > 4 ]] && printf "$arg:\n"
+      [[ $# > 4 ]] && printf '%s:\n' "$arg"
 
       ls -FB --color=auto "$2" "$3" "$arg"
 
       (( i++ ))
       local num=$(( $# - 3 ))
-      [[ $# > 4 ]] && (( i != num )) && printf "\n"
+      [[ $# > 4 ]] && (( i != num )) && printf '\n'
    done
 }
 
@@ -498,11 +498,11 @@ db() {
    PS3='Choose a database to update: '
    select prgm in 'locate' 'apropos, man -k'; do
       if [[ $prgm == apropos* ]]; then
-         printf "makewhatis...\n"
+         printf 'makewhatis...\n'
          makewhatis
          break
       elif [[ $prgm == locate ]]; then
-         printf "updatedb...\n"
+         printf 'updatedb...\n'
          updatedb
          break
       fi
@@ -789,7 +789,7 @@ _cd() {
 
       if [[ $userlist ]]; then
 
-         IFS=$'\n' read -r -d $'\0' -a COMPREPLY < <(printf "%q\n" "${userlist[@]}")
+         IFS=$'\n' read -r -d $'\0' -a COMPREPLY < <(printf '%q\n' "${userlist[@]}")
       fi
    fi
 }
