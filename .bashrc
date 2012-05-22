@@ -380,7 +380,7 @@ ldot() {
 
    local i
 
-   if [[ $# > 0 ]]; then
+   if (($#)); then
 
       for arg in "$@"; do
 
@@ -400,7 +400,7 @@ lldot() {
 
    local i
 
-   if [[ $# > 0 ]]; then
+   if (($#)); then
 
       for arg in "$@"; do
 
