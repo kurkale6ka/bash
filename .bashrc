@@ -664,44 +664,27 @@ alias   opt=shopt
 
 alias df='df -h|sort -k5r'
 
+# Fails with \n in filenames!? Try this instead:
+# for file in *; do read size _ < <(du -sk "$file");...
 du() {
+   if (($#)); then args=("$@"); else args=(*); fi
+
    if sort -h /dev/null 2>/dev/null
    then
-      if [[ $# == 0 ]]
-      then
-         command du -sh * | sort -hr
-      else
-         command du -sh "$@" | sort -hr
-      fi
+      command du -sh "${args[@]}" | sort -hr
    else
-      if [[ $# == 0 ]]
-      then
-         command du -sk * | sort -nr | while read -r size file
+      command du -sk "${args[@]}" | sort -nr | while read -r size file
+      do
+         for unit in K M G T P E Z Y
          do
-            for unit in k M G T P E Z Y
-            do
-               if (( size < 1024 ))
-               then
-                  printf "$size$unit\t$file\n"
-                  break
-               fi
-               size=$(( size / 1024 ))
-            done
+            if (( size < 1024 ))
+            then
+               printf '%3d%s\t%s\n' "$size" "$unit" "$file"
+               break
+            fi
+            size=$(( size / 1024 ))
          done
-      else
-         command du -sk "$@" | sort -nr | while read -r size file
-         do
-            for unit in k M G T P E Z Y
-            do
-               if (( size < 1024 ))
-               then
-                  printf "$size$unit\t$file\n"
-                  break
-               fi
-               size=$(( size / 1024 ))
-            done
-         done
-      fi
+      done
    fi
 }
 
