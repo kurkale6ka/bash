@@ -221,20 +221,17 @@ sw() {
 
 # Usage: wc my_file => 124 lines, 578 words and 1654 characters
 wc() {
-
-   if [[ 0 == $# ]]; then
-
-      # Find all not dot files (count the number of dots printf prints)
-      # Rem: I must also exclude those: ./.git/file (not a dot file!)
-      find . -name '[!.]*' -exec printf '.' \; | command wc -c
-
-   else
+   if (($#)); then
 
       for arg in "$@"; do
 
          local counts=($(command wc -lwm "$arg"))
          echo "${counts[0]} lines, ${counts[1]} words and ${counts[2]} characters"
       done
+   else
+      # Find all not dot files (count the number of dots printf prints)
+      # Rem: I must also exclude those: ./.git/file (not a dot file!)
+      find . -name '[!.]*' -exec printf '.' \; | command wc -c
    fi
 }
 
@@ -351,10 +348,10 @@ alias gvn="$my_gvim -N -U NONE"
 
 # List directory contents ~\~2
 sl() {
-   if [[ $# == 0 ]]; then
-      stat -c "%7i %A (%a) %2h %4u %4g %10s (%10Y) %n" *
-   else
+   if (($#)); then
       stat -c "%7i %A (%a) %2h %4u %4g %10s (%10Y) %n" "$@"
+   else
+      stat -c "%7i %A (%a) %2h %4u %4g %10s (%10Y) %n" *
    fi
 }
 alias   l='ls -FB --color=auto'
@@ -376,13 +373,8 @@ alias pc=lspci
 alias  l.=ldot
 alias ll.=lldot
 
-.() {
-   if [[ $# == 0 ]]; then
-      ldot
-   else
-      source "$@"
-   fi
-}
+# todo
+.() { if (($#)); then source "$@"; else ldot; fi; }
 
 ldot() {
 
