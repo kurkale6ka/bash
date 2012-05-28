@@ -368,8 +368,6 @@ alias  lx='ls -FB --color=auto -X'
 alias llx='ls -FB --color=auto -Xhl --time-style="+(%d %b %y - %H:%M)"'
 alias  lv="ls -FB --color=auto|$my_vim -"
 
-alias pc=lspci
-
 alias  l.=ldot
 alias ll.=lldot
 
@@ -492,7 +490,6 @@ alias  ...='cd ../..'
 # Help ~\~2
 alias     ?=_which
 alias    mm='man -k'
-alias    mp=manpath
 
 db() {
    PS3='Choose a database to update: '
@@ -513,30 +510,25 @@ alias   lo=locate
 
 # Misc ~\~2
 alias     c='cat -n'
-alias     d=dpkg
 alias     e=echo
 alias     t=tail
+alias     h=head
 alias    tf=tailf
 alias     z=fg
-alias    ej=eject
 alias    ex=export
 alias    fr=free
 alias    irssi="cd /var/log/irssi; $HOME/config/help/.irssi/fnotify.bash & irssi"
 alias    pf=printf
-alias    pp='printf "%s\n"'
 alias    pa='(IFS=:; printf "%s\n" $PATH)'
-alias   pwd='pwd -P'
-alias    pw=pwd
+alias    pw='pwd -P'
 alias    sc=screen
 alias    so=source
 alias    to=touch
-alias    tp=tput
 alias   cmd=command
 alias   msg=dmesg
 alias   rmm=rrm
 alias   rmp=rpm
 alias  env-='env -i'
-alias  whoi=whoami
 # function? os() - print all sys info...
 alias uname="printf '%23s' 'Network node hostname: ' && uname -n;\
              printf '%23s' 'Machine hardware name: ' && uname -m;\
@@ -581,10 +573,9 @@ awk_snip_d="'"
 awk_snip_e='" file'
 alias awks="$awk_snip_a$awk_snip_b$awk_snip_c$awk_snip_d$awk_snip_e"
 
-alias  sed='sed -r' # ERE (Extended regex)
+alias  sed='sed -r'
 alias seds="echo sed \"'s/old/new/'\" file"
 
-alias am="alias|$my_vim -"
 alias  a=alias
 alias ua=unalias
 
@@ -624,7 +615,6 @@ fi
 alias date="date '+%d %B [%-m] %Y, %H:%M %Z (%A)'"
 
 alias    g='grep -iE --color'
-alias grep='grep -iE --color' # ERE (Extended regex)
 
 alias   mo="$my_vim -"
 
@@ -633,8 +623,7 @@ alias bgg='bind -p|grep'
 alias  bm="bind -p|$my_vim -"
 
 alias hi=history
-alias hv="history|$my_vim -"
-alias  h='history|grep'
+alias hg='history|grep'
 
 alias r='netstat -rn'
 alias i='hostname -i'
@@ -684,8 +673,6 @@ alias cp='cp -i'
 alias mv='mv -i'
 alias rm='rm -i --preserve-root'
 
-# -p lets you create a path structure, ex: mkdir -p /a/b/c
-alias mf=mkfifo
 alias md='mkdir -p'
 
 rd() {
