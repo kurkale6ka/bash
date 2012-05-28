@@ -741,7 +741,7 @@ complete -A hostname       dig n nslookup snlookup host p ping pnig ssh
 complete -A user           chage chfn finger groups mail passwd slay su userdel usermod w write
 complete -A variable       export local readonly unset
 
-complete -A helptopic      h help hlep m # Currently, same as builtin
+complete -A helptopic      help hlep m # Currently, same as builtin
 complete -A signal         k kill klil
 complete -A job     -P '%' j z fg jobs disown
 complete -A stopped -P '%' bg
