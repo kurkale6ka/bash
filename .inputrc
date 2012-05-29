@@ -47,7 +47,3 @@ set show-all-if-unmodified on
 # no (y or n) + no less
 set completion-query-items 200
 set page-completions off
-"\e[A": history-search-backward
-"\e[B": history-search-forward
-"\e[A": history-search-backward
-"\e[B": history-search-forward
