@@ -5,6 +5,11 @@
 
 [[ -t 1 ]] || return
 
+shopt -s cdspell
+shopt -s extglob
+
+set -o notify # about terminated jobs
+
 # Colors: set[af|ab] (ANSI [fore|back]ground) {{{1
 
 # Black="$(tput setaf 0)"
@@ -34,12 +39,6 @@
 # Bold="$(tput bold)"
   Underline="$(tput smul)"
   Reset="$(tput sgr0)" # No Color
-
-# Shell options {{{1
-shopt -s cdspell
-shopt -s extglob
-
-set -o notify # about terminated jobs
 
 # PS1 and title (\e]2; ---- \a) {{{1
 [[ linux != $TERM ]] && title="\e]2;\H\a"
@@ -153,7 +152,7 @@ m() {
          help "$@"
       fi
    else
-      man "$@" || _which "$@"
+      man "$@" 2>/dev/null || _which "$@"
    fi
 }
 
@@ -506,8 +505,6 @@ db() {
    done
 }
 
-alias   lo=locate
-
 # Misc {{{2
 alias     c='cat -n'
 alias     e=echo
@@ -518,6 +515,7 @@ alias     z=fg
 alias    ex=export
 alias    fr=free
 alias    irssi="cd /var/log/irssi; $HOME/config/help/.irssi/fnotify.bash & irssi"
+alias    lo=locate
 alias    pf=printf
 alias    pa='(IFS=:; printf "%s\n" $PATH)'
 alias    pw='pwd -P'
@@ -578,7 +576,7 @@ alias  a=alias
 alias ua=unalias
 
 alias se=set
-alias  u=unset
+alias use=unset
 
 alias  mn=mount
 alias umn=umount
@@ -616,8 +614,6 @@ alias    g='grep -iE --color'
 
 alias   mo="$my_vim -"
 
-alias  bm="bind -p|$my_vim -"
-
 alias hi=history
 alias hg='history|grep'
 
@@ -629,13 +625,10 @@ alias p='ping -c3'
 
 port() { grep -iE --color "$1" /etc/services; }
 
-alias     o='set -o'
-alias  se-o='set -o'
-alias set-o='set -o'
-alias    no='set +o'
-alias  se+o='set +o'
-alias set+o='set +o'
-alias   opt=shopt
+alias   o='set -o'
+alias  no='set +o'
+alias  oo=shopt
+alias opt=shopt
 
 df() {
    if (($#)); then
@@ -647,14 +640,14 @@ df() {
 
 # Fails with \n in filenames!? Try this instead:
 # for file in *; do read size _ < <(du -sk "$file");...
-du() {
+d() {
    if (($#)); then args=("$@"); else args=(*); fi
 
    if sort -h /dev/null 2>/dev/null
    then
-      command du -sh "${args[@]}" | sort -hr
+      du -sh "${args[@]}" | sort -hr
    else
-      command du -sk "${args[@]}" | sort -nr | while read -r size file
+      du -sk "${args[@]}" | sort -nr | while read -r size file
       do
          for unit in K M G T P E Z Y
          do
