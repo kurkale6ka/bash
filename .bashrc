@@ -551,7 +551,7 @@ alias dump='dump -u'
 alias bc='bc -l'
 alias vish='sudo vipw -s'
 
-su() { if ! sudo -s -E; then sudo -s; fi; }
+b() { if ! sudo -s -E; then sudo -s; fi; }
 alias sd=sudo
 
 alias en=enable
@@ -616,8 +616,6 @@ alias    g='grep -iE --color'
 
 alias   mo="$my_vim -"
 
-alias   b='bind -p'
-alias bgg='bind -p|grep'
 alias  bm="bind -p|$my_vim -"
 
 alias hi=history
@@ -639,7 +637,13 @@ alias  se+o='set +o'
 alias set+o='set +o'
 alias   opt=shopt
 
-alias df='df -h|sort -k5r'
+df() {
+   if (($#)); then
+      command df "$@"|sort -k5r
+   else
+      command df -h|sort -k5r
+   fi
+}
 
 # Fails with \n in filenames!? Try this instead:
 # for file in *; do read size _ < <(du -sk "$file");...
