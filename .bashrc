@@ -694,7 +694,6 @@ rd() {
 # Spelling typos {{{2
 alias      akw=awk
 alias     akws=awks
-alias    alais=alias
 alias      bka=bak
 alias     bnid=bind
 alias      cdm=cmd
@@ -709,8 +708,6 @@ alias     hlep=help
 alias  hsitory=history
 alias     jbos=jobs
 alias     klil=kill
-alias      mna=man
-alias     mroe=more
 alias      otp=opt
 alias      pdw=pwd
 alias     pnig=ping
@@ -732,8 +729,8 @@ alias      shh=ssh
 # }}}2
 
 # Programmable completion {{{1
-complete -A alias          a alias alais unalias
-complete -A binding        b bind bnid
+complete -A alias          a alias unalias
+complete -A binding        bind bnid
 complete -A command        ? which wihch type tpye sudo
 complete -A disabled       en enable
 complete -A enabled        di builtin
