@@ -5,7 +5,7 @@
 
 [[ -t 1 ]] || return
 
-# Colors: set[af|ab] (ANSI [fore|back]ground) ~\~1
+# Colors: set[af|ab] (ANSI [fore|back]ground) {{{1
 
 # Black="$(tput setaf 0)"
 # BlackBG="$(tput setab 0)"
@@ -35,13 +35,13 @@
   Underline="$(tput smul)"
   Reset="$(tput sgr0)" # No Color
 
-# Shell options ~\~1
+# Shell options {{{1
 shopt -s cdspell
 shopt -s extglob
 
 set -o notify # about terminated jobs
 
-# PS1 and title (\e]2; ---- \a) ~\~1
+# PS1 and title (\e]2; ---- \a) {{{1
 [[ linux != $TERM ]] && title="\e]2;\H\a"
 
 if [[ $SSH_CLIENT || $SSH2_CLIENT ]]; then
@@ -71,7 +71,7 @@ else
 fi
 my_vim="$my_gvim -v"
 
-# Functions ~\~1
+# Functions {{{1
 
 # Usage: warn 'message' - print a message to stderr
 warn() { printf '%s\n' "$@" >&2; }
@@ -310,9 +310,9 @@ ee() {
 # Usage: s old new [optional cmd number/string in history]
 s() { fc -s "$1"="$2" "$3"; }
 
-# Aliases ~\~1
+# Aliases {{{1
 
-# Vim ~\~2
+# Vim {{{2
 alias       v="$my_vim"
 alias      vi="$my_vim"
 alias     vim="$my_vim"
@@ -346,7 +346,7 @@ vn() {
 # alias  vn="$my_vim  -N -u NONE -U NONE"
 alias gvn="$my_gvim -N -U NONE"
 
-# List directory contents ~\~2
+# List directory contents {{{2
 sl() {
    if (($#)); then
       stat -c "%7i %A (%a) %2h %4u %4g %10s (%10Y) %n" "$@"
@@ -476,7 +476,7 @@ llc() { _ll change       -tchl --time-style='+(%d %b %Y - %H:%M)' "$@"; }
 llm() { _ll modification -thl  --time-style='+(%d %b %Y - %H:%M)' "$@"; }
 llu() { _ll access       -tuhl --time-style='+(%d %b %Y - %H:%M)' "$@"; }
 
-# Change directory ~\~2
+# Change directory {{{2
 alias  cd-='cd -'
 alias -- -='cd -'
 alias    1='cd ..'
@@ -487,7 +487,7 @@ alias cd..='cd ..'
 alias   ..='cd ..'
 alias  ...='cd ../..'
 
-# Help ~\~2
+# Help {{{2
 alias     ?=_which
 alias    mm='man -k'
 
@@ -508,11 +508,11 @@ db() {
 
 alias   lo=locate
 
-# Misc ~\~2
+# Misc {{{2
 alias     c='cat -n'
 alias     e=echo
-alias     t=tail
 alias     h=head
+alias     t=tail
 alias    tf=tailf
 alias     z=fg
 alias    ex=export
@@ -526,8 +526,6 @@ alias    so=source
 alias    to=touch
 alias   cmd=command
 alias   msg=dmesg
-alias   rmm=rrm
-alias   rmp=rpm
 alias  env-='env -i'
 # function? os() - print all sys info...
 alias uname="printf '%23s' 'Network node hostname: ' && uname -n;\
@@ -633,8 +631,6 @@ alias p='ping -c3'
 
 port() { grep -iE --color "$1" /etc/services; }
 
-alias cn='cat -n'
-
 alias     o='set -o'
 alias  se-o='set -o'
 alias set-o='set -o'
@@ -681,7 +677,7 @@ rd() {
 
       if [[ -d $arg ]]; then
 
-         if read -p "rd: remove directory '$arg'? " answer; then
+         if read -r -p "rd: remove directory '$arg'? " answer; then
 
             [[ $answer == @(y|yes) ]] && rm -rf "$arg"
          fi
@@ -691,7 +687,7 @@ rd() {
    done
 }
 
-# Spelling typos ~\~2
+# Spelling typos {{{2
 alias      akw=awk
 alias     akws=awks
 alias    alais=alias
@@ -719,6 +715,8 @@ alias     prel=perl
 alias       pt=tput
 alias   pyhton=python
 alias     rbuy=ruby
+alias      rmm=rrm
+alias      rmp=rpm
 alias      sde=sed
 alias    shotp=shopt
 alias snlookup=nslookup
@@ -727,9 +725,9 @@ alias     veiw=view
 alias      vmi=vim
 alias    wihch=_which
 alias      shh=ssh
-# ~/~2
+# }}}2
 
-# Programmable completion ~\~1
+# Programmable completion {{{1
 complete -A alias          a alias alais unalias
 complete -A binding        b bind bnid
 complete -A command        ? which wihch type tpye sudo
