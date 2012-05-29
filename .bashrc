@@ -626,7 +626,6 @@ alias p='ping -c3'
 port() { grep -iE --color "$1" /etc/services; }
 
 alias   o='set -o'
-alias  no='set +o'
 alias  oo=shopt
 alias opt=shopt
 
