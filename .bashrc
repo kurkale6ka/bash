@@ -549,13 +549,10 @@ alias dump='dump -u'
 alias bc='bc -l'
 alias vish='sudo vipw -s'
 
-b() {
-   if ! sudo -p 'Password for %p: ' -E /bin/bash; then
-        sudo -p 'Password for %p: '    /bin/bash
-   fi
-}
+alias sudo="sudo -p 'Password for %p: '"
 alias sd=sudo
 alias sde=sudoedit
+b() { if ! sudo -E /bin/bash; then sudo /bin/bash; fi; }
 
 alias en=enable
 alias di='enable -n'
