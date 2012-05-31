@@ -344,6 +344,8 @@ alias gvn="$my_gvim -N -U NONE"
 
 # List directory contents {{{2
 sl() {
+   printf '%-8s %-17s %-3s %-4s %-4s %-10s %-12s %-s\n'\
+          'Inode' 'Permissions' 'ln' 'UID' 'GID' 'Size' 'Time' 'Name'
    if (($#)); then args=("$@"); else args=(*); fi
    stat -c "%8i %A (%4a) %3h %4u %4g %10s (%10Y) %n" "${args[@]}"
 }
