@@ -345,9 +345,9 @@ alias gvn="$my_gvim -N -U NONE"
 # List directory contents {{{2
 sl() {
    if (($#)); then
-      stat -c "%7i %A (%a) %2h %4u %4g %10s (%10Y) %n" "$@"
+      stat -c "%8i %A (%a) %3h %4u %4g %10s (%10Y) %n" "$@"
    else
-      stat -c "%7i %A (%a) %2h %4u %4g %10s (%10Y) %n" *
+      stat -c "%8i %A (%a) %3h %4u %4g %10s (%10Y) %n" *
    fi
 }
 alias   l='ls -FB --color=auto'
