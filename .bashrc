@@ -306,9 +306,6 @@ ee() {
    done
 }
 
-# Usage: s old new [optional cmd number/string in history]
-s() { fc -s "$1"="$2" "$3"; }
-
 # Aliases {{{1
 
 # Vim {{{2
@@ -552,7 +549,16 @@ alias vish='sudo vipw -s'
 alias sudo="sudo -p 'Password for %p: '"
 alias sd=sudo
 alias sde=sudoedit
-b() { if ! sudo -E /bin/bash; then sudo /bin/bash; fi; }
+
+s() {
+   if (($#)); then
+      # s///, s old new (optional cmd number/string in history)
+      fc -s "$1"="$2" "$3"
+   else
+      # root bash
+      if ! sudo -E /bin/bash; then sudo /bin/bash; fi
+   fi
+}
 
 alias en=enable
 alias di='enable -n'
