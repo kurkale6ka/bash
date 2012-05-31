@@ -344,11 +344,8 @@ alias gvn="$my_gvim -N -U NONE"
 
 # List directory contents {{{2
 sl() {
-   if (($#)); then
-      stat -c "%8i %A (%4a) %3h %4u %4g %10s (%10Y) %n" "$@"
-   else
-      stat -c "%8i %A (%4a) %3h %4u %4g %10s (%10Y) %n" *
-   fi
+   if (($#)); then args=("$@"); else args=(*); fi
+   stat -c "%8i %A (%4a) %3h %4u %4g %10s (%10Y) %n" "${args[@]}"
 }
 alias   l='ls -FB --color=auto'
 alias  ll='ls -FB --color=auto -hl --time-style="+(%d %b %y - %H:%M)"'
