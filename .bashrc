@@ -531,10 +531,10 @@ alias uname="printf '%23s' 'Network node hostname: ' && uname -n;\
              printf '%23s' 'Kernel release: '        && uname -r;\
              printf '%23s' 'Compiled on: '           && uname -v;\
              printf '%23s' 'Operating system: '      && uname -o"
-rr() {
-   printf '%s\n%s\n'\
-      '"\e[A": history-search-backward'\
-      '"\e[B": history-search-forward' >> .inputrc
+rc() {
+   echo "printf '%s\n%s\n'"\
+      "'\"\e[A\": history-search-backward'"\
+      "'\"\e[B\": history-search-forward' >> .inputrc" | tee >(xclip)
 }
 
 alias ldapsearch='ldapsearch -x -LLL'
@@ -719,7 +719,6 @@ alias   pyhton=python
 alias     rbuy=ruby
 alias      rmm=rrm
 alias      rmp=rpm
-alias      sde=sed
 alias    shotp=shopt
 alias snlookup=nslookup
 alias     tpye=type
