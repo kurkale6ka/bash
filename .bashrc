@@ -595,7 +595,8 @@ alias setsticky='chmod +t'
 
 alias shutdown='shutdown -h now'
 
-alias pg=pgrep
+alias pgrep='pgrep -l'
+alias pg='ps fax|grep'
 
 alias  k=kill
 alias kl='kill -l'
