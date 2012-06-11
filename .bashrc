@@ -545,17 +545,25 @@ alias dump='dump -u'
 alias bc='bc -l'
 alias vish='sudo vipw -s'
 
-alias sudo="sudo -p 'Password for %p: '"
+if ! [[ $(sudo -V) == *1.6* ]]; then
+   alias sudo="sudo -p 'Password for %p: '"
+else
+   alias sudo="sudo -p 'Password for %u: '"
+fi
 alias sd=sudo
 alias sde=sudoedit
 
 s() {
    if (($#)); then
-      # s///, s old new (optional cmd number/string in history)
+      # s///, s old new [number|cmd]
       fc -s "$1"="$2" "$3"
    else
       # root bash
-      if ! sudo -E /bin/bash; then sudo /bin/bash; fi
+      if ! [[ $(\sudo -V) == *1.6* ]]; then
+         sudo -E /bin/bash
+      else
+         sudo /bin/bash
+      fi
    fi
 }
 
