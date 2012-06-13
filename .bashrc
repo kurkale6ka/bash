@@ -521,19 +521,22 @@ alias    to=touch
 alias   cmd=command
 alias   msg=dmesg
 alias  env-='env -i'
-# function? os() - print all sys info...
-alias u="printf '%23s' 'Distribution: ' &&
-         if ! cat /etc/*-release 2>/dev/null; then
-              cat /etc/*_version 2>/dev/null
-         fi;
-         printf '%23s' 'Network node hostname: ' && uname -n;
-         printf '%23s' 'Machine hardware name: ' && uname -m;
-         printf '%23s' 'Hardware platform: '     && uname -i;
-         printf '%23s' 'Processor type: '        && uname -p;
-         printf '%23s' 'Kernel name: '           && uname -s;
-         printf '%23s' 'Kernel release: '        && uname -r;
-         printf '%23s' 'Compiled on: '           && uname -v;
-         printf '%23s' 'Operating system: '      && uname -o"
+
+u() {
+   printf '%23s' 'Distribution: '
+   for i in /etc/*{-release,_version}; do
+      cat "$i" 2>/dev/null; break
+   done
+   printf '%23s' 'Network node hostname: ' && uname -n
+   printf '%23s' 'Machine hardware name: ' && uname -m
+   printf '%23s' 'Hardware platform: '     && uname -i
+   printf '%23s' 'Processor type: '        && uname -p
+   printf '%23s' 'Kernel name: '           && uname -s
+   printf '%23s' 'Kernel release: '        && uname -r
+   printf '%23s' 'Compiled on: '           && uname -v
+   printf '%23s' 'Operating system: '      && uname -o
+}
+
 rc() {
    echo "printf '%s\n%s\n'"\
       "'\"\e[A\": history-search-backward'"\
