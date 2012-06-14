@@ -511,7 +511,7 @@ alias     z=fg
 alias    ex=export
 alias    fr=free
 alias    irssi="cd /var/log/irssi; $HOME/config/help/.irssi/fnotify.bash & irssi"
-alias    lo=locate
+alias    lo='locate -i'
 alias    pf=printf
 alias    pa='(IFS=:; printf "%s\n" $PATH)'
 alias    pw='pwd -P'
