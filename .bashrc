@@ -575,7 +575,7 @@ s() {
       if ! [[ $(\sudo -V) == *1.6* ]]; then
          sudo -E /bin/bash
       else
-         sudo /bin/bash
+         sudo    /bin/bash
       fi
    fi
 }
