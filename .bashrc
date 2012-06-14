@@ -561,9 +561,15 @@ alias sd=sudo
 alias sde=sudoedit
 
 s() {
-   if (($#)); then
+   if (($# == 2)); then
       # s///, s old new [number|cmd]
       fc -s "$1"="$2" "$3"
+   elif (($# == 1)); then
+      if [[ $1 == [[:digit:]]* ]]; then
+         grep -w -iE --color "$1" /etc/services
+      else
+         grep    -iE --color "$1" /etc/services
+      fi
    else
       # root bash
       if ! [[ $(\sudo -V) == *1.6* ]]; then
@@ -645,8 +651,6 @@ alias i='hostname -i'
 alias ii='/sbin/ifconfig'
 alias ia='/sbin/ifconfig -a'
 alias p='ping -c3'
-
-port() { grep -iE --color "$1" /etc/services; }
 
 alias   o='set -o'
 alias  oo=shopt
