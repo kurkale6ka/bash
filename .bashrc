@@ -76,17 +76,13 @@ my_vim="$my_gvim -v"
 warn() { printf '%s\n' "$@" >&2; }
 
 usersee() {
-
    for user in "$@"; do
-
       sudo grep -iE --color "$user" /etc/{passwd,shadow,group}
    done
 }
 
 hd() {
-
-   if [[ 1 == $# ]]; then
-
+   if (( 1 == $# )); then
       hdparm -I "$1"
    else
       hdparm "$@"
@@ -94,9 +90,7 @@ hd() {
 }
 
 f() {
-
-   if [[ 1 == $# ]]; then
-
+   if (( 1 == $# )); then
       find . -iname "$1"
    else
       find "$@"
@@ -109,7 +103,7 @@ if ! command -v service >/dev/null 2>&1; then
    service() { /etc/init.d/"$1" "$2"; }
 fi
 
-# Usage: t my_archive.tar.gz => my_archive/
+# Usage: extract my_archive.tar.gz => my_archive/
 extract() {
 
    for arg in "$@"; do
@@ -139,10 +133,7 @@ extract() {
 # Usage: h arg - 'help arg' if it is a builtin, 'man arg' otherwise
 # If mixing both types, as in 'h [ cat', only 'h [' will show
 m() {
-
-   local t="$(type -at "$@")"
-
-   if [[ $t == @(*builtin*|*keyword*) ]]; then
+   if [[ $(type -at $@) == @(*builtin*|*keyword*) ]]; then
 
       if [[ $* == *[* && $* != *[[* || $* == *test* ]]; then
 
@@ -152,7 +143,7 @@ m() {
          help "$@"
       fi
    else
-      man "$@" 2>/dev/null || _which "$@"
+      man "$@" 2>/dev/null || type -a "$@"
    fi
 }
 
@@ -237,29 +228,9 @@ wc() {
 alias wcc="find . -exec printf '.' \; | command wc -c"
 alias wc.="find . -name '.*' \! -name '.' -not -name '..' -exec printf '.' ';' | command wc -c"
 
-# Usage: ? arg - show how arg would be interpreted
-_which() {
-
-   local i
-
-   for arg in "$@"; do
-
-      type -a "$arg"
-
-      [[ $(whereis -b "$arg") != *: ]] && { echo Binaries:; whereis -b "$arg"; }
-      [[ $(whereis -s "$arg") != *: ]] && { echo Sources:;  whereis -s "$arg"; }
-      [[ $(whereis -m "$arg") != *: ]] && { echo Sections:; whereis -m "$arg"; }
-
-      (( i++ ))
-      [[ $# > 1 && $i != $# ]] && echo
-   done
-}
-
 # Usage: x - toggle debugging on/off
 x() {
-
    if [[ $- == *x* ]]; then
-
       echo 'debug off'
       set +o xtrace
    else
@@ -483,8 +454,8 @@ alias   ..='cd ..'
 alias  ...='cd ../..'
 
 # Help {{{2
-alias     ?=_which
-alias    mm='man -k'
+alias  ?='type -a'
+alias mm='man -k'
 
 db() {
    PS3='Choose a database to update: '
@@ -742,7 +713,6 @@ alias snlookup=nslookup
 alias     tpye=type
 alias     veiw=view
 alias      vmi=vim
-alias    wihch=_which
 alias      shh=ssh
 # }}}2
 
@@ -771,7 +741,7 @@ complete -A directory        md mkdir rd rmdir
 complete -A file n
 
 # eXclude what is not(!) matched by the pattern
-complete -f -o default -X '!*.@(zip|ZIP|z|Z|gz|GZ|bz2|BZ2)' extract t tar
+complete -f -o default -X '!*.@(zip|ZIP|z|Z|gz|GZ|bz2|BZ2)' extract tar
 
 complete -f -o default -X '!*.php' php    pph
 complete -f -o default -X '!*.pl'  perl   prel   pl
