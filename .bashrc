@@ -631,7 +631,6 @@ df() {
 # for file in *; do read size _ < <(du -sk "$file");...
 d() {
    if (($#)); then args=("$@"); else args=(*); fi
-
    if sort -h /dev/null 2>/dev/null
    then
       du -sh "${args[@]}" | sort -hr
@@ -658,13 +657,9 @@ alias rm='rm -i --preserve-root'
 alias md='mkdir -p'
 
 rd() {
-
    for arg in "$@"; do
-
       if [[ -d $arg ]]; then
-
          if read -r -p "rd: remove directory '$arg'? " answer; then
-
             [[ $answer == @(y|yes) ]] && rm -rf "$arg"
          fi
       else
