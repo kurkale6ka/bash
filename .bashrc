@@ -1,7 +1,4 @@
 # Author: Dimitar Dimitrov: mitkofr@yahoo.fr, kurkale6ka
-#
-#    Vim: zR to unfold everything, then :help folding
-# ------------------------------------------------------
 
 [[ -t 1 ]] || return
 
@@ -49,8 +46,7 @@ else
    info=''
 fi
 
-if (( 0 == EUID )); then
-
+if ((0 == EUID)); then
    PS1="$title\n\[$LightRed\]\u \H \[$LightBlue\]\w\[$Reset\] - \A, %\j$info\n# "
    export PATH="$PATH":/sbin:/usr/sbin:/usr/local/sbin:/root/bin
 else
@@ -63,12 +59,14 @@ export PS4='+ '
 
 if command -v vimx >/dev/null 2>&1; then
    my_gvim=vimx
+   my_vim="$my_gvim -v"
 elif command -v gvim >/dev/null 2>&1; then
    my_gvim=gvim
+   my_vim="$my_gvim -v"
 else
    my_gvim=vim
+   my_vim="$my_gvim"
 fi
-my_vim="$my_gvim -v"
 
 # Functions {{{1
 
@@ -82,7 +80,7 @@ usersee() {
 }
 
 hd() {
-   if (( 1 == $# )); then
+   if ((1 == $#)); then
       hdparm -I "$1"
    else
       hdparm "$@"
@@ -90,7 +88,7 @@ hd() {
 }
 
 f() {
-   if (( 1 == $# )); then
+   if ((1 == $#)); then
       find . -iname "$1"
    else
       find "$@"
@@ -100,48 +98,49 @@ f() {
 n() { sed -n "$1"p "$2"; }
 
 if ! command -v service >/dev/null 2>&1; then
-   service() { /etc/init.d/"$1" "$2"; }
+   service() { /etc/init.d/"$1" "${2:-start}"; }
 fi
 
-# Usage: extract my_archive.tar.gz => my_archive/
-extract() {
-
-   for arg in "$@"; do
-
-      if [[ -f $arg ]]; then
-
-         case "$arg" in
-
-            *.tar.gz|*.tgz)   tar zxvf   "$arg" ;;
-            *.tar.bz2|*.tbz2) tar jxvf   "$arg" ;;
-            *.tar)            tar xvf    "$arg" ;;
-            *.bz2)            bunzip2    "$arg" ;;
-            *.gz)             gunzip     "$arg" ;;
-            *.zip)            unzip      "$arg" ;;
-            *.rar)            unrar x    "$arg" ;;
-            *.Z)              uncompress "$arg" ;;
-            *.7z)             7z x       "$arg" ;;
-
-            *) warn "'$arg' cannot be extracted via extract" ;;
-         esac
-      else
-         warn "'$arg' is not a valid file"
-      fi
-   done
+# 'unzip' or uname
+u() {
+   if (($#)); then
+      for arg in "$@"; do
+         if [[ -f $arg ]]; then
+            case "$arg" in
+               *.tar.gz  | *.tgz ) tar zxvf   "$arg";;
+               *.tar.bz2 | *.tbz2) tar jxvf   "$arg";;
+                           *.tar ) tar xvf    "$arg";;
+                           *.bz2 ) bunzip2    "$arg";;
+                           *.gz  ) gunzip     "$arg";;
+                           *.zip ) unzip      "$arg";;
+                           *.rar ) unrar x    "$arg";;
+                           *.Z   ) uncompress "$arg";;
+                           *.7z  ) 7z x       "$arg";;
+               *) warn "'$arg' cannot be extracted via extract";;
+            esac
+         else
+            warn "'$arg' is not a valid file"
+         fi
+      done
+   else
+      printf '%23s' 'Distribution: '
+      for i in /etc/*{-release,_version}; do
+         cat "$i" 2>/dev/null; break
+      done
+      printf '%23s' 'Network node hostname: ' && uname -n
+      printf '%23s' 'Machine hardware name: ' && uname -m
+      printf '%23s' 'Hardware platform: '     && uname -i
+      printf '%23s' 'Processor type: '        && uname -p
+      printf '%23s' 'Kernel name: '           && uname -s
+      printf '%23s' 'Kernel release: '        && uname -r
+      printf '%23s' 'Compiled on: '           && uname -v
+      printf '%23s' 'Operating system: '      && uname -o
+   fi
 }
 
-# Usage: h arg - 'help arg' if it is a builtin, 'man arg' otherwise
-# If mixing both types, as in 'h [ cat', only 'h [' will show
 m() {
-   if [[ $(type -at $@) == @(*builtin*|*keyword*) ]]; then
-
-      if [[ $* == *[* && $* != *[[* || $* == *test* ]]; then
-
-         # If I ask for [ or test, I want them both
-         help [ test | $my_vim -
-      else
-         help "$@"
-      fi
+   if [[ $(type -at $1) == @(*builtin*|*keyword*) ]]; then
+      help "$@"
    else
       man "$@" 2>/dev/null || type -a "$@"
    fi
@@ -197,7 +196,7 @@ sw() {
 
    local tmpfile=tmp.$$
 
-   if (( 2 == $# )); then
+   if ((2 == $#)); then
 
       mv -- "$1"       "$tmpfile"
       mv -- "$2"       "$1"
@@ -272,7 +271,7 @@ ee() {
 
       printf '%s\n' "${!arr}" | column
 
-      (( i++ ))
+      ((i++))
       [[ $# > 1 && $i != $# ]] && echo
    done
 }
@@ -352,7 +351,7 @@ ldot() {
 
          ls -FB --color=auto -d "$arg".[^.]*
 
-         (( i++ ))
+         ((i++))
          [[ $# > 1 && $i != $# ]] && echo
       done
    else
@@ -372,7 +371,7 @@ lldot() {
 
          ls -FB --color=auto -dhl --time-style="+(%d %b %y - %H:%M)" "$arg".[^.]*
 
-         (( i++ ))
+         ((i++))
          [[ $# > 1 && $i != $# ]] && echo
       done
    else
@@ -400,7 +399,7 @@ _l() {
 
    printf '%s%sSorted by %s date:%s \n' "$Purple" "$Underline" "$1" "$Reset"
 
-   (( 2 == $# )) && ls -FB --color=auto "$2" && return
+   ((2 == $#)) && ls -FB --color=auto "$2" && return
 
    for arg in "${@:3}"; do
 
@@ -408,9 +407,9 @@ _l() {
 
       ls -FB --color=auto "$2" "$arg"
 
-      (( i++ ))
-      local num=$(( $# - 2 ))
-      [[ $# > 3 ]] && (( i != num )) && printf '\n'
+      ((i++))
+      local num=$(($# - 2))
+      [[ $# > 3 ]] && ((i != num)) && printf '\n'
    done
 }
 
@@ -421,7 +420,7 @@ _ll() {
 
    printf '%s%sSorted by %s date:%s \n' "$Purple" "$Underline" "$1" "$Reset"
 
-   (( 3 == $# )) && ls -FB --color=auto "$2" "$3" && return
+   ((3 == $#)) && ls -FB --color=auto "$2" "$3" && return
 
    for arg in "${@:4}"; do
 
@@ -429,9 +428,9 @@ _ll() {
 
       ls -FB --color=auto "$2" "$3" "$arg"
 
-      (( i++ ))
-      local num=$(( $# - 3 ))
-      [[ $# > 4 ]] && (( i != num )) && printf '\n'
+      ((i++))
+      local num=$(($# - 3))
+      [[ $# > 4 ]] && ((i != num)) && printf '\n'
    done
 }
 
@@ -492,21 +491,6 @@ alias    to=touch
 alias   cmd=command
 alias   msg=dmesg
 alias  env-='env -i'
-
-u() {
-   printf '%23s' 'Distribution: '
-   for i in /etc/*{-release,_version}; do
-      cat "$i" 2>/dev/null; break
-   done
-   printf '%23s' 'Network node hostname: ' && uname -n
-   printf '%23s' 'Machine hardware name: ' && uname -m
-   printf '%23s' 'Hardware platform: '     && uname -i
-   printf '%23s' 'Processor type: '        && uname -p
-   printf '%23s' 'Kernel name: '           && uname -s
-   printf '%23s' 'Kernel release: '        && uname -r
-   printf '%23s' 'Compiled on: '           && uname -v
-   printf '%23s' 'Operating system: '      && uname -o
-}
 
 rc() {
    echo "printf '%s\n%s\n'"\
@@ -648,12 +632,12 @@ d() {
       do
          for unit in K M G T P E Z Y
          do
-            if (( size < 1024 ))
+            if ((size < 1024))
             then
                printf '%3d%s\t%s\n' "$size" "$unit" "$file"
                break
             fi
-            size=$(( size / 1024 ))
+            size=$((size / 1024))
          done
       done
    fi
@@ -741,7 +725,7 @@ complete -A directory        md mkdir rd rmdir
 complete -A file n
 
 # eXclude what is not(!) matched by the pattern
-complete -f -o default -X '!*.@(zip|ZIP|z|Z|gz|GZ|bz2|BZ2)' extract tar
+complete -f -o default -X '!*.@(zip|ZIP|z|Z|gz|GZ|bz2|BZ2)' u tar
 
 complete -f -o default -X '!*.php' php    pph
 complete -f -o default -X '!*.pl'  perl   prel   pl
