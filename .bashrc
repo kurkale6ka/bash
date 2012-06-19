@@ -598,7 +598,15 @@ alias    g='grep -iE --color'
 alias   mo="$my_vim -"
 
 h() { if (($#)); then head "$@"; else history; fi; }
-b() { figlet -f smslant "$@"; }
+b() {
+   if (($# == 1)); then
+      figlet -f smslant "$1"
+   elif (($# == 2)); then
+      figlet -f "$1" "${@:2}"
+   else
+      figlist
+   fi
+}
 
 alias hg='history|grep'
 alias r='netstat -rn'
