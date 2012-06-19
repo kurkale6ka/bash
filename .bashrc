@@ -474,7 +474,6 @@ db() {
 # Misc {{{2
 alias     c='cat -n'
 alias     e=echo
-alias     h=head
 alias     t=tail
 alias    tf=tailf
 alias     z=fg
@@ -598,9 +597,10 @@ alias    g='grep -iE --color'
 
 alias   mo="$my_vim -"
 
-alias hi=history
-alias hg='history|grep'
+h() { if (($#)); then head "$@"; else history; fi; }
+b() { figlet -f smslant "$@"; }
 
+alias hg='history|grep'
 alias r='netstat -rn'
 alias i='hostname -i'
 alias ii='/sbin/ifconfig'
