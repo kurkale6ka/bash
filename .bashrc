@@ -107,16 +107,16 @@ u() {
       for arg in "$@"; do
          if [[ -f $arg ]]; then
             case "$arg" in
-               *.tar.gz  | *.tgz ) tar zxvf   "$arg";;
-               *.tar.bz2 | *.tbz2) tar jxvf   "$arg";;
-                           *.tar ) tar xvf    "$arg";;
-                           *.bz2 ) bunzip2    "$arg";;
-                           *.gz  ) gunzip     "$arg";;
-                           *.zip ) unzip      "$arg";;
-                           *.rar ) unrar x    "$arg";;
-                           *.Z   ) uncompress "$arg";;
-                           *.7z  ) 7z x       "$arg";;
-               *) warn "'$arg' cannot be extracted via extract";;
+               *.tar.gz  | *.tgz          ) tar zxvf   "$arg";;
+               *.tar.bz2 | *.tbz2 | *.tbz ) tar jxvf   "$arg";;
+                                    *.tar ) tar xvf    "$arg";;
+                                    *.bz2 ) bunzip2    "$arg";;
+                                    *.gz  ) gunzip     "$arg";;
+                                    *.zip ) unzip      "$arg";;
+                                    *.rar ) unrar x    "$arg";;
+                                    *.Z   ) uncompress "$arg";;
+                                    *.7z  ) 7z x       "$arg";;
+               *) warn "'$arg' cannot be extracted!";;
             esac
          else
             warn "'$arg' is not a valid file"
@@ -728,7 +728,8 @@ complete -A directory        md mkdir rd rmdir
 complete -A file n
 
 # eXclude what is not(!) matched by the pattern
-complete -f -o default -X '!*.@(zip|ZIP|z|Z|gz|GZ|bz2|BZ2)' u tar
+complete -f -o default -X '!*.@(tar.gz|tgz|tar.bz2|tbz2|tbz|tar|bz2|gz|zip|rar|Z|7z)' u
+complete -f -o default -X '!*.@(tar.gz|tgz|tar.bz2|tbz2|tbz|tar)' tar
 
 complete -f -o default -X '!*.php' php    pph
 complete -f -o default -X '!*.pl'  perl   prel   pl
