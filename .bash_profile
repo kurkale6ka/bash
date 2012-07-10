@@ -13,8 +13,6 @@ fi
 export EDITOR="$my_vim"
 export VISUAL="$my_vim"
 
-export TERM=xterm
-
 # tput smso -> sm so -> set mode stand out (bold)
 #      smul -> sm ul -> set mode underline
 #      rmso -> rm so -> remove mode stand out...
