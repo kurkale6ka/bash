@@ -467,6 +467,13 @@ db() {
    done
 }
 
+irssi() {
+   (cd /var/log/irssi
+   "$HOME"/config/help/.irssi/fnotify.bash &
+   command irssi
+   kill %?fnotify)
+}
+
 # Misc {{{2
 alias     c='cat -n'
 alias     e=echo
@@ -475,12 +482,6 @@ alias    tf=tailf
 alias     z=fg
 alias    ex=export
 alias    fr=free
-irssi() {
-   (cd /var/log/irssi
-   "$HOME"/config/help/.irssi/fnotify.bash &
-   command irssi
-   kill %?fnotify)
-}
 alias    lo='locate -i'
 alias    pf=printf
 alias    pa='(IFS=:; printf "%s\n" $PATH)'
