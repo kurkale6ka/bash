@@ -458,15 +458,11 @@ alias mm='man -k'
 
 db() {
    PS3='Choose a database to update: '
-   select prgm in 'locate' 'apropos, man -k'; do
+   select prgm in locate 'apropos, man -k'; do
       if [[ $prgm == apropos* ]]; then
-         printf 'makewhatis...\n'
-         makewhatis
-         break
-      elif [[ $prgm == locate ]]; then
-         printf 'updatedb...\n'
-         updatedb
-         break
+         printf 'makewhatis...\n'; makewhatis & break
+      else
+         printf 'updatedb...\n'; updatedb & break
       fi
    done
 }
