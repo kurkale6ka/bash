@@ -562,7 +562,7 @@ alias ua=unalias
 alias se=set
 alias use=unset
 
-alias  mn=mount
+mn() { mount | awk '{print $1" "$3" "$5" "$6}' | column -t; }
 alias umn=umount
 
 alias cg=chgrp
