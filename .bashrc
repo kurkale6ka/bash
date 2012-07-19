@@ -74,9 +74,17 @@ fi
 warn() { printf '%s\n' "$@" >&2; }
 
 usersee() {
+   [[ $1 == -p ]] && { f=passwd; o=7; s=LOGIN:PASSWORD:UID:GID:GECOS:HOME:SHELL; }
+   [[ $1 == -g ]] && { f=group;  o=4; s='GROUP:PASSWORD:GID:USER LIST'; }
+   [[ $1 == -s ]] && { f=shadow; o=2; s=LOGIN:PASSWORD:LAST:MIN:MAX:WARN:INACTIVITY:EXPIRATION:RESERVED; }
+   if [[ $1 == -* ]]; then
+      sed 's/::/:-:/g' /etc/"$f" | sort -k"$o" -t: | sed "1i$s" | column -ts:
+      return
+   fi
    for user in "$@"; do
-      sudo grep -iE --color "$user" /etc/{passwd,shadow,group}
+      sudo grep -iE --color "$user" /etc/{passwd,shadow}
    done
+   sed 's/::/:-:/g' /etc/group | sort -k4 -t: | column -ts: | grep -iE --color "$1"
 }
 
 hd() {
