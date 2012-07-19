@@ -74,17 +74,30 @@ fi
 warn() { printf '%s\n' "$@" >&2; }
 
 usersee() {
-   [[ $1 == -p ]] && { f=passwd; o=7; s=LOGIN:PASSWORD:UID:GID:GECOS:HOME:SHELL; }
-   [[ $1 == -g ]] && { f=group;  o=4; s='GROUP:PASSWORD:GID:USER LIST'; }
-   [[ $1 == -s ]] && { f=shadow; o=2; s=LOGIN:PASSWORD:LAST:MIN:MAX:WARN:INACTIVITY:EXPIRATION:RESERVED; }
-   if [[ $1 == -* ]]; then
-      sed 's/::/:-:/g' /etc/"$f" | sort -k"$o" -t: | sed "1i$s" | column -ts:
-      return
+   if (($#)); then
+      case "$1" in
+         -p)
+            header=LOGIN:PASSWORD:UID:GID:GECOS:HOME:SHELL
+            sed 's/::/:-:/g' /etc/passwd | sort -k7 -t: | sed "1i$header" |\
+            column -ts:;;
+         -g)
+            header=GROUP:PASSWORD:GID:USERS
+            sort -k4 -t: /etc/group | sed "1i$header" | column -ts:;;
+         -s)
+            header=LOGIN:PASSWORD:LAST:MIN:MAX:WARN:INACTIVITY:EXPIRATION:RESERVED
+            sed 's/::/:-:/g' /etc/shadow | sort -k2 -t: |\
+            awk -F: '{print $1":"substr($2,1,3)":"$3":"$4":"$5":"$6":"$7":"$8":"$9}' |\
+            sed "1i$header" | column -ts:;;
+         *)
+            for user in "$@"; do
+               sudo grep -iE --color "$user" /etc/{passwd,shadow}
+               sort -k4 -t: /etc/group | column -ts: | grep -iE --color "$user"
+            done
+      esac
+   else
+      sudo grep -iE --color "$USER" /etc/{passwd,shadow}
+      sort -k4 -t: /etc/group | column -ts: | grep -iE --color "$USER"
    fi
-   for user in "$@"; do
-      sudo grep -iE --color "$user" /etc/{passwd,shadow}
-   done
-   sed 's/::/:-:/g' /etc/group | sort -k4 -t: | column -ts: | grep -iE --color "$1"
 }
 
 hd() {
