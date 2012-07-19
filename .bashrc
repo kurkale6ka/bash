@@ -562,7 +562,7 @@ alias ua=unalias
 alias se=set
 alias use=unset
 
-mn() { mount | awk '{print $1" "$3" "$5" "$6}' | column -t; }
+alias mn='mount | cut -d" " -f1,3,5,6 | column -t'
 alias umn=umount
 
 alias cg=chgrp
@@ -620,7 +620,7 @@ alias   o='set -o'
 alias  oo=shopt
 alias opt=shopt
 
-p() { if (($#)); then ping -c3 "$@"; else ps fjww; fi; }
+p() { if (($#)); then ping -c3 "$@"; else ps fjww --headers; fi; }
 
 df() {
    if (($#)); then
