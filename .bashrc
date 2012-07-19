@@ -475,23 +475,23 @@ irssi() {
 }
 
 # Misc {{{2
-alias     c='cat -n'
-alias     e=echo
-alias     t=tail
-alias    tf=tailf
-alias     z=fg
-alias    ex=export
-alias    fr=free
-alias    lo='locate -i'
-alias    pf=printf
-alias    pa='(IFS=:; printf "%s\n" $PATH)'
-alias    pw='pwd -P'
-alias    sc=screen
-alias    so=source
-alias    to=touch
-alias   cmd=command
-alias   msg=dmesg
-alias  env-='env -i'
+alias    c='cat -n'
+alias    e=echo
+alias    t=tail
+alias   tf=tailf
+alias    z=fg
+alias   ex=export
+alias   fr=free
+alias   lo='locate -i'
+alias   pf=printf
+alias   pa='(IFS=:; printf "%s\n" $PATH | sort -u)'
+alias   pw='pwd -P'
+alias   sc=screen
+alias   so=source
+alias   to=touch
+alias  cmd=command
+alias  msg=dmesg
+alias env-='env -i'
 
 rc() {
    echo "printf '%s\n%s\n'"\
@@ -610,22 +610,23 @@ b() {
    fi
 }
 
-alias hg='history|grep'
+alias hg='history | grep'
 alias r='netstat -rn'
 alias i='hostname -i'
 alias ii='/sbin/ifconfig'
 alias ia='/sbin/ifconfig -a'
-alias p='ping -c3'
 
 alias   o='set -o'
 alias  oo=shopt
 alias opt=shopt
 
+p() { if (($#)); then ping -c3 "$@"; else ps fjww; fi; }
+
 df() {
    if (($#)); then
-      command df "$@"|sort -k5r
+      command df "$@" | sort -k5r
    else
-      command df -h|sort -k5r
+      command df -h | sort -k5r
    fi
 }
 
