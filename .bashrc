@@ -625,7 +625,7 @@ b() {
    fi
 }
 
-alias hg='history | grep'
+alias hg='history | grep -iE --color'
 alias r='netstat -rn'
 alias i='hostname -i'
 alias ii='/sbin/ifconfig'
