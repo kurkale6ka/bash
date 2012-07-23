@@ -567,15 +567,9 @@ alias pl=perl
 alias py='python -i -c "from math import *"'
 alias rb=irb
 
-awk_snip_a='echo awk -F: "'
-awk_snip_b="'/pattern/ "
-awk_snip_c='{print \$1 \"\\t\" \$2}'
-awk_snip_d="'"
-awk_snip_e='" file'
-alias awks="$awk_snip_a$awk_snip_b$awk_snip_c$awk_snip_d$awk_snip_e"
-
 alias  sed='sed -r'
 alias seds="echo sed \"'s/old/new/'\" file"
+awks() { printf 'awk -F: \047/pattern/ {print $1" "$2}\047 file\n'; }
 
 alias  a=alias
 alias ua=unalias
