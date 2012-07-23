@@ -283,15 +283,10 @@ cl() { column <(compgen -A "$1"); }
 
 # Usage: ee array1, array2 - prints arrays in columns
 ee() {
-
    local i
-
    for arg in "$@"; do
-
-      local arr="$arg[@]" # no {} ?
-
+      local arr="${arg[@]}"
       printf '%s\n' "${!arr}" | column
-
       ((i++))
       [[ $# > 1 && $i != $# ]] && echo
    done
@@ -316,11 +311,8 @@ vim_options[2]='vim no plugins'
 vim_options[3]='gvim no .gvimrc'
 
 vn() {
-
    select vim in "${vim_options[@]}"; do
-
    case "$vim" in
-
       "${vim_options[0]}") "$my_gvim" -nNX -u NONE;;
       "${vim_options[1]}") "$my_gvim" -nNX -u NORC;;
       "${vim_options[2]}") "$my_gvim" -nNX --noplugin;;
