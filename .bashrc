@@ -101,18 +101,16 @@ usersee() {
 }
 
 hd() {
-   if ((1 == $#)); then
-      hdparm -I "$1"
-   else
-      hdparm "$@"
+   if ((1 == $#))
+   then hdparm -I "$1"
+   else hdparm "$@"
    fi
 }
 
 f() {
-   if ((1 == $#)); then
-      find . -iname "$1"
-   else
-      find "$@"
+   if ((1 == $#))
+   then find . -iname "$1"
+   else find "$@"
    fi
 }
 
@@ -160,16 +158,14 @@ u() {
 }
 
 m() {
-   if [[ $(type -at $1) == @(*builtin*|*keyword*) ]]; then
-      help "$@"
-   else
-      man "$@" 2>/dev/null || type -a "$@"
+   if [[ $(type -at $1) == @(*builtin*|*keyword*) ]]
+   then help "$@"
+   else man "$@" 2>/dev/null || type -a "$@"
    fi
 }
 
 # Usage: key mitkofr@yahoo.fr remote_host
 key() {
-
    local options[0]='Create and copy'
          options[1]='copy only'
 
