@@ -40,10 +40,9 @@ set -o notify # about terminated jobs
 # PS1 and title (\e]2; ---- \a) {{{1
 [[ linux != $TERM ]] && title="\e]2;\H\a"
 
-if [[ $SSH_CLIENT || $SSH2_CLIENT ]]; then
-   info=', remote'
-else
-   info=''
+if [[ $SSH_CLIENT || $SSH2_CLIENT ]]
+then info=', remote'
+else info=''
 fi
 
 if ((0 == EUID)); then
