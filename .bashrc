@@ -308,12 +308,12 @@ vim_options[3]='gvim no .gvimrc'
 vn() {
    select vim in "${vim_options[@]}"; do
    case "$vim" in
-      "${vim_options[0]}") "$my_gvim" -nNX -u NONE;;
-      "${vim_options[1]}") "$my_gvim" -nNX -u NORC;;
-      "${vim_options[2]}") "$my_gvim" -nNX --noplugin;;
-      "${vim_options[3]}") "$my_gvim"  -N  -U NONE;;
+      "${vim_options[0]}") "$my_gvim" -nNX -u NONE;    break;;
+      "${vim_options[1]}") "$my_gvim" -nNX -u NORC;    break;;
+      "${vim_options[2]}") "$my_gvim" -nNX --noplugin; break;;
+      "${vim_options[3]}") "$my_gvim"  -N  -U NONE;    break;;
    esac
-   break
+   printf '\nInvalid choice!\n'
    done
 }
 
