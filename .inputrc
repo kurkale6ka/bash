@@ -23,7 +23,12 @@
 
 "\C-xm": "dimitar.dimitrov"
 "\C-xd": "dimitar.dimitrov"
+"\C-xa": "\"${[@]}\"\C-a\C-f\C-f\C-f"
+"\C-xf": "for i in ; do \"$i\"; done\C-a\ef\ef\ef\C-f"
+"\C-xe": "printf '%s\\n' \"\"\C-b"
+"\C-xp": "printf '%s\\n' \"\"\C-b"
 "\eOQ": " >/dev/null 2>&1"
+"\C-xq": "\eb\"\ef\""
 
 # Variable settings
 # -----------------

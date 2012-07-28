@@ -276,17 +276,6 @@ bak() { for arg in "$@"; do cp -- "$arg" "$arg"~; done; }
 # Usage: cl arg - computes a completion list for arg
 cl() { column <(compgen -A "$1"); }
 
-# Usage: ee array1, array2 - prints arrays in columns
-ee() {
-   local i
-   for arg in "$@"; do
-      local arr="${arg[@]}"
-      printf '%s\n' "${!arr}" | column
-      ((i++))
-      [[ $# > 1 && $i != $# ]] && echo
-   done
-}
-
 # Aliases {{{1
 
 # Vim {{{2
