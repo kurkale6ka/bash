@@ -491,7 +491,7 @@ alias env-='env -i'
 rc() {
    inputrc="printf '%s\n' "
    inputrc+="'\"\e[A\": history-search-backward' "
-   inputrc+="'\"\e[B\": history-search-forward' >> .inputrc"
+   inputrc+="'\"\e[B\": history-search-forward' >> $HOME/.inputrc"
    tee <<< "$inputrc" >(xclip)
 }
 
