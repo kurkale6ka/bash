@@ -21,10 +21,10 @@
 # ^d (instead of the default 'delete char before cursor')
 "\C-d": kill-whole-line
 
-"\C-xa": "\"${[@]}\"\C-a\C-f\C-f\C-f"
+"\C-xa": "\"${[@]}\"\C-b\C-b\C-b\C-b\C-b"
 "\C-xd": "dimitar.dimitrov"
 "\C-xe": "printf '%s\\n' \"\"\C-b"
-"\C-xf": "for i in ; do \"$i\"; done\C-a\ef\ef\ef\C-f"
+"\C-xf": "for i in ; do \"$i\"; done\eb\eb\eb\C-b\C-b"
 "\C-xp": "printf '%s\\n' \"\"\C-b"
 "\C-xq": "\eb\"\ef\""
 "\C-x>": "> 2>&1\C-a\C-f"

@@ -4,6 +4,8 @@
 
 shopt -s cdspell
 shopt -s extglob
+shopt -s nocaseglob
+shopt -s nocasematch
 
 set -o notify # about terminated jobs
 
@@ -605,7 +607,6 @@ alias ia='/sbin/ifconfig -a'
 
 alias   o='set -o'
 alias  oo=shopt
-alias opt=shopt
 
 p() { if (($#)); then ping -c3 "$@"; else ps fjww --headers; fi; }
 
@@ -709,8 +710,8 @@ complete -A helptopic      help hlep m # Currently, same as builtin
 complete -A signal         k kill klil
 complete -A job     -P '%' j z fg jobs disown
 complete -A stopped -P '%' bg
-complete -A setopt         set o se-o set-o no se+o set+o
-complete -A shopt          shopt opt
+complete -A setopt         set o
+complete -A shopt          shopt oo
 
 complete -A directory -F _cd cd
 complete -A directory        md mkdir rd rmdir
