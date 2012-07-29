@@ -489,9 +489,10 @@ alias  msg=dmesg
 alias env-='env -i'
 
 rc() {
-   echo "printf '%s\n%s\n'"\
-      "'\"\e[A\": history-search-backward'"\
-      "'\"\e[B\": history-search-forward' >> .inputrc" | tee >(xclip)
+   inputrc="printf '%s\n' "
+   inputrc+="'\"\e[A\": history-search-backward' "
+   inputrc+="'\"\e[B\": history-search-forward' >> .inputrc"
+   tee <<< "$inputrc" >(xclip)
 }
 
 alias ldapsearch='ldapsearch -x -LLL'
