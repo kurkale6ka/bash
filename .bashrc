@@ -84,7 +84,7 @@ usersee() {
             sed 's/::/:-:/g' /etc/shadow | sort -k2 -t: |\
             awk -F: '{print $1":"substr($2,1,3)":"$3":"$4":"$5":"$6":"$7":"$8":"$9}' |\
             sed "1i$header" | column -ts:;;
-         *)
+          *)
             for user in "$@"; do
                sudo grep -iE --color "$user" /etc/{passwd,shadow}
                sort -k4 -t: /etc/group | column -ts: | grep -iE --color "$user"

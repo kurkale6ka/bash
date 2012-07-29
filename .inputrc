@@ -21,14 +21,13 @@
 # ^d (instead of the default 'delete char before cursor')
 "\C-d": kill-whole-line
 
-"\C-xm": "dimitar.dimitrov"
-"\C-xd": "dimitar.dimitrov"
 "\C-xa": "\"${[@]}\"\C-a\C-f\C-f\C-f"
-"\C-xf": "for i in ; do \"$i\"; done\C-a\ef\ef\ef\C-f"
+"\C-xd": "dimitar.dimitrov"
 "\C-xe": "printf '%s\\n' \"\"\C-b"
+"\C-xf": "for i in ; do \"$i\"; done\C-a\ef\ef\ef\C-f"
 "\C-xp": "printf '%s\\n' \"\"\C-b"
-"\eOQ": " >/dev/null 2>&1"
 "\C-xq": "\eb\"\ef\""
+"\C-x>": "> 2>&1\C-a\C-f"
 
 # Variable settings
 # -----------------
