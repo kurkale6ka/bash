@@ -262,6 +262,6 @@ select choice in "${options[@]}"; do
       "${options[4]}") mkr;         break;;
       "${options[5]}") mklinks;     break;;
       "${options[6]}") rmlinks;     break;;
+                    *) echo '*** Wrong choice ***' >&2
    esac
-   echo '*** Wrong choice ***'
 done
