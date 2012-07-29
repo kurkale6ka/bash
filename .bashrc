@@ -69,9 +69,6 @@ fi
 
 # Functions {{{1
 
-# Usage: warn 'message' - print a message to stderr
-warn() { printf '%s\n' "$@" >&2; }
-
 usersee() {
    if (($#)); then
       case "$1" in
@@ -134,10 +131,10 @@ u() {
                                     *.rar ) unrar x    "$arg";;
                                     *.Z   ) uncompress "$arg";;
                                     *.7z  ) 7z x       "$arg";;
-               *) warn "'$arg' cannot be extracted!";;
+               *) echo "'$arg' cannot be extracted!" >&2;;
             esac
          else
-            warn "'$arg' is not a valid file"
+            echo "'$arg' is not a valid file" >&2
          fi
       done
    else
@@ -199,7 +196,7 @@ key() {
             ssh-copy-id "$host"
             break;;
       esac
-      echo '*** Wrong choice ***'
+      echo '*** Wrong choice ***' >&2
    done
 }
 
@@ -207,8 +204,8 @@ key() {
 # the second arg is optional if it is the same arg with a '~' appended to it
 sw() {
 
-   [[ ! -e $1 ]]            && warn "file '$1' does not exist" && return 1
-   [[ 2 == $# && ! -e $2 ]] && warn "file '$2' does not exist" && return 1
+   [[ ! -e $1 ]]            && echo "file '$1' does not exist" >&2 && return 1
+   [[ 2 == $# && ! -e $2 ]] && echo "file '$2' does not exist" >&2 && return 1
 
    local tmpfile=tmp.$$
 
@@ -259,7 +256,7 @@ rrm() {
 
    if [[ 0 == $# || 1 < $# ]]; then
 
-      warn "Usage: $FUNCNAME 'pattern' OR $FUNCNAME -b|--backup"
+      echo "Usage: $FUNCNAME 'pattern' OR $FUNCNAME -b|--backup" >&2
 
    elif [[ $1 == @(-b|--backup) ]]; then
 
@@ -302,7 +299,7 @@ vn() {
       "${vim_options[2]}") "$my_gvim" -nNX --noplugin; break;;
       "${vim_options[3]}") "$my_gvim"  -N  -U NONE;    break;;
    esac
-   printf '\nInvalid choice!\n'
+   printf '\nInvalid choice!\n' >&2
    done
 }
 
@@ -497,7 +494,7 @@ rc() {
 
 alias ldapsearch='ldapsearch -x -LLL'
 
-ir() { ifdown "$1" && ifup "$1" || echo "Couldn't do it."; }
+ir() { ifdown "$1" && ifup "$1" || echo "Couldn't do it." >&2; }
 alias ipconfig=ifconfig
 
 alias dump='dump -u'
@@ -656,7 +653,7 @@ rd() {
             [[ $answer == @(y|yes) ]] && rm -rf "$arg"
          fi
       else
-         warn "$arg is not a directory"
+         echo "$arg is not a directory" >&2
       fi
    done
 }
