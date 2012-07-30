@@ -490,17 +490,24 @@ alias env-='env -i'
 
 rc() {
    if (($#)); then
-      rcfile="$HOME"/.inputrc
+      local rcfile="$HOME"/.inputrc
       xclip -f <(echo "cat >> $rcfile <<'EOF'") "$rcfile" <(echo EOF)
    else
-      inputrc="printf '%s\n' "
+      local inputrc="printf '%s\n' "
       inputrc+="'\"\e[A\": history-search-backward' "
       inputrc+="'\"\e[B\": history-search-forward' >> $HOME/.inputrc"
       xclip -f <<< "$inputrc"
    fi
 }
 
-rmi() { find . -inum "$1" -exec rm -i {} +; }
+rmi() {
+   local i=0 file inods=()
+   for file in "$@"; do
+      (( ++i < $# )) && inods+=(-inum "$file" -o)
+   done
+   inods+=(-inum "$file")
+   find . \( "${inods[@]}" \) -exec rm -i {} +
+}
 
 alias ldapsearch='ldapsearch -x -LLL'
 
