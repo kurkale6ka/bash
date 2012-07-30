@@ -489,11 +489,18 @@ alias  msg=dmesg
 alias env-='env -i'
 
 rc() {
-   inputrc="printf '%s\n' "
-   inputrc+="'\"\e[A\": history-search-backward' "
-   inputrc+="'\"\e[B\": history-search-forward' >> $HOME/.inputrc"
-   tee <<< "$inputrc" >(xclip)
+   if (($#)); then
+      rcfile="$HOME"/.inputrc
+      xclip -f <(echo "cat >> $rcfile <<'EOF'") "$rcfile" <(echo EOF)
+   else
+      inputrc="printf '%s\n' "
+      inputrc+="'\"\e[A\": history-search-backward' "
+      inputrc+="'\"\e[B\": history-search-forward' >> $HOME/.inputrc"
+      xclip -f <<< "$inputrc"
+   fi
 }
+
+rmi() { find . -inum "$1" -exec rm -i {} +; }
 
 alias ldapsearch='ldapsearch -x -LLL'
 
