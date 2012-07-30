@@ -39,6 +39,17 @@ set -o notify # about terminated jobs
   Underline="$(tput smul)"
   Reset="$(tput sgr0)" # No Color
 
+if command -v vimx >/dev/null 2>&1; then
+   my_gvim=vimx
+   my_vim="$my_gvim -v"
+elif command -v gvim >/dev/null 2>&1; then
+   my_gvim=gvim
+   my_vim="$my_gvim -v"
+else
+   my_gvim=vim
+   my_vim="$my_gvim"
+fi
+
 # PS1 and title (\e]2; ---- \a) {{{1
 [[ linux != $TERM ]] && title="\e]2;\H\a"
 
@@ -57,17 +68,6 @@ fi
 export PS2='↪ '
 export PS3='Choose an entry: '
 export PS4='+ '
-
-if command -v vimx >/dev/null 2>&1; then
-   my_gvim=vimx
-   my_vim="$my_gvim -v"
-elif command -v gvim >/dev/null 2>&1; then
-   my_gvim=gvim
-   my_vim="$my_gvim -v"
-else
-   my_gvim=vim
-   my_vim="$my_gvim"
-fi
 
 # Functions {{{1
 
@@ -119,7 +119,7 @@ if ! command -v service >/dev/null 2>&1; then
    service() { /etc/init.d/"$1" "${2:-start}"; }
 fi
 
-# 'unzip' or uname
+# unzip or uname
 u() {
    if (($#)); then
       local arg
@@ -158,6 +158,7 @@ u() {
    fi
 }
 
+# todo: help '(('
 m() {
    if [[ $(type -at $1) == @(*builtin*|*keyword*) ]]
    then help "$@"
@@ -187,23 +188,7 @@ sw() {
    fi
 }
 
-# Usage: wc my_file => 124 lines, 578 words and 1654 characters
-wc() {
-   if (($#)); then
-      local arg
-      for arg in "$@"; do
-         local counts=($(command wc -lwm "$arg"))
-         echo "${counts[0]} lines, ${counts[1]} words and ${counts[2]} characters"
-      done
-   else
-      # Find all not dot files (count the number of dots printf prints)
-      # Rem: I must also exclude those: ./.git/file (not a dot file!)
-      find . -name '[!.]*' -exec printf '.' \; | command wc -c
-   fi
-}
-
-alias wcc="find . -exec printf '.' \; | command wc -c"
-alias wc.="find . -name '.*' \! -name '.' -not -name '..' -exec printf '.' ';' | command wc -c"
+wc() { command wc "$@" | sed '1iL W C File' | column -t; }
 
 # Usage: x - toggle debugging on/off
 x() {
