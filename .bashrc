@@ -73,6 +73,7 @@ fi
 
 usersee() {
    if (($#)); then
+      local header user
       case "$1" in
          -p)
             header=LOGIN:PASSWORD:UID:GID:GECOS:HOME:SHELL
@@ -121,6 +122,7 @@ fi
 # 'unzip' or uname
 u() {
    if (($#)); then
+      local arg
       for arg in "$@"; do
          if [[ -f $arg ]]; then
             case "$arg" in
@@ -140,6 +142,7 @@ u() {
          fi
       done
    else
+      local i
       printf '%23s' 'Distribution: '
       for i in /etc/*{-release,_version}; do
          cat "$i" 2>/dev/null; break
@@ -162,46 +165,6 @@ m() {
    fi
 }
 
-# Usage: key mitkofr@yahoo.fr remote_host
-key() {
-   local options[0]='Create and copy'
-         options[1]='copy only'
-
-   local mail; local host
-
-   select choice in "${options[@]}"; do
-
-      case "$choice" in
-
-         "${options[0]}")
-
-            if [[ ! $1 ]]; then
-               read -p 'Email: ' mail
-            else
-               mail="$1"
-            fi
-            if [[ ! $2 ]]; then
-               read -p 'Remote host: ' host
-            else
-               host="$2"
-            fi
-            ssh-keygen -t rsa -C "$mail" && ssh-copy-id "$host"
-            break;;
-
-         "${options[1]}")
-
-            if [[ ! $2 ]]; then
-               read -p 'Remote host: ' host
-            else
-               host="$2"
-            fi
-            ssh-copy-id "$host"
-            break;;
-      esac
-      echo '*** Wrong choice ***' >&2
-   done
-}
-
 # Usage: sw my_file.c [my_file.c~] - my_file.c <=> my_file.c~
 # the second arg is optional if it is the same arg with a '~' appended to it
 sw() {
@@ -209,6 +172,7 @@ sw() {
    [[ ! -e $1 ]]            && echo "file '$1' does not exist" >&2 && return 1
    [[ 2 == $# && ! -e $2 ]] && echo "file '$2' does not exist" >&2 && return 1
 
+   # todo
    local tmpfile=tmp.$$
 
    if ((2 == $#)); then
@@ -226,9 +190,8 @@ sw() {
 # Usage: wc my_file => 124 lines, 578 words and 1654 characters
 wc() {
    if (($#)); then
-
+      local arg
       for arg in "$@"; do
-
          local counts=($(command wc -lwm "$arg"))
          echo "${counts[0]} lines, ${counts[1]} words and ${counts[2]} characters"
       done
@@ -245,6 +208,7 @@ alias wc.="find . -name '.*' \! -name '.' -not -name '..' -exec printf '.' ';' |
 # Usage: x - toggle debugging on/off
 x() {
    if [[ $- == *x* ]]; then
+      # todo exec 1>/dev/null...
       echo 'debug off'
       set +o xtrace
    else
@@ -255,7 +219,6 @@ x() {
 
 # Usage: rrm/rmm 'pattern' - remove all those files
 rrm() {
-
    if [[ 0 == $# || 1 < $# ]]; then
 
       echo "Usage: $FUNCNAME 'pattern' OR $FUNCNAME -b|--backup" >&2
@@ -270,7 +233,7 @@ rrm() {
 }
 
 # Usage: bak my_file1.c, my_file2.c => my_file1.c~, my_file2.c~
-bak() { for arg in "$@"; do cp -- "$arg" "$arg"~; done; }
+bak() { local arg; for arg in "$@"; do cp -- "$arg" "$arg"~; done; }
 
 # Usage: cl arg - computes a completion list for arg
 cl() { column <(compgen -A "$1"); }
@@ -288,20 +251,20 @@ alias     gvd="$my_gvim -d"
 alias      gv="$my_gvim"
 alias     gvi="$my_gvim"
 
-vim_options[0]='vim'
-vim_options[1]='vim no .vimrc'
-vim_options[2]='vim no plugins'
-vim_options[3]='gvim no .gvimrc'
-
 vn() {
+   local vim_options[0]='vim'
+         vim_options[1]='vim no .vimrc'
+         vim_options[2]='vim no plugins'
+         vim_options[3]='gvim no .gvimrc'
+   local vim
    select vim in "${vim_options[@]}"; do
-   case "$vim" in
-      "${vim_options[0]}") "$my_gvim" -nNX -u NONE;    break;;
-      "${vim_options[1]}") "$my_gvim" -nNX -u NORC;    break;;
-      "${vim_options[2]}") "$my_gvim" -nNX --noplugin; break;;
-      "${vim_options[3]}") "$my_gvim"  -N  -U NONE;    break;;
-   esac
-   printf '\nInvalid choice!\n' >&2
+      case "$vim" in
+         "${vim_options[0]}") "$my_gvim" -nNX -u NONE;    break;;
+         "${vim_options[1]}") "$my_gvim" -nNX -u NORC;    break;;
+         "${vim_options[2]}") "$my_gvim" -nNX --noplugin; break;;
+         "${vim_options[3]}") "$my_gvim"  -N  -U NONE;    break;;
+                           *) printf '\nInvalid choice!\n' >&2
+      esac
    done
 }
 
@@ -312,6 +275,7 @@ alias gvn="$my_gvim -N -U NONE"
 sl() {
    printf '%-8s %-17s %-3s %-4s %-4s %-10s %-12s %-s\n'\
           'Inode' 'Permissions' 'ln' 'UID' 'GID' 'Size' 'Time' 'Name'
+   local args=()
    if (($#)); then args=("$@"); else args=(*); fi
    stat -c "%8i %A (%4a) %3h %4u %4g %10s (%10Y) %n" "${args[@]}"
 }
@@ -336,10 +300,8 @@ alias ll.=lldot
 .() { if (($#)); then source "$@"; else ldot; fi; }
 
 ldot() {
-
-   local i
-
    if (($#)); then
+      local i arg
 
       for arg in "$@"; do
 
@@ -356,10 +318,8 @@ ldot() {
 }
 
 lldot() {
-
-   local i
-
    if (($#)); then
+      local i arg
 
       for arg in "$@"; do
 
@@ -377,11 +337,9 @@ lldot() {
 
 # List all links in a set of directories
 lll() {
-
+   local file
    for file in * .*; do
-
       if [[ -h $file ]]; then
-
          command\
          ls -FBAhl --color=auto --time-style="+(%d %b %y - %H:%M)" "$file"
       fi
@@ -390,13 +348,11 @@ lll() {
 
 # Usage: _l $1: (change|modif|access), $2: options, $@:3: (all other arguments)
 _l() {
-
-   local i
-
    printf '%s%sSorted by %s date:%s \n' "$Purple" "$Underline" "$1" "$Reset"
 
    ((2 == $#)) && ls -FB --color=auto "$2" && return
 
+   local i arg num
    for arg in "${@:3}"; do
 
       [[ $# > 3 ]] && printf '%s:\n' "$arg"
@@ -404,20 +360,18 @@ _l() {
       ls -FB --color=auto "$2" "$arg"
 
       ((i++))
-      local num=$(($# - 2))
+      num=$(($# - 2))
       [[ $# > 3 ]] && ((i != num)) && printf '\n'
    done
 }
 
 # Usage: _ll $1: (change|access|...), $2$3: options, $@:4: (llc's... arguments)
 _ll() {
-
-   local i
-
    printf '%s%sSorted by %s date:%s \n' "$Purple" "$Underline" "$1" "$Reset"
 
    ((3 == $#)) && ls -FB --color=auto "$2" "$3" && return
 
+   local i arg num
    for arg in "${@:4}"; do
 
       [[ $# > 4 ]] && printf '%s:\n' "$arg"
@@ -425,7 +379,7 @@ _ll() {
       ls -FB --color=auto "$2" "$3" "$arg"
 
       ((i++))
-      local num=$(($# - 3))
+      num=$(($# - 3))
       [[ $# > 4 ]] && ((i != num)) && printf '\n'
    done
 }
@@ -454,6 +408,7 @@ alias mm='man -k'
 
 db() {
    PS3='Choose a database to update: '
+   local prgm
    select prgm in locate 'apropos, man -k'; do
       if [[ $prgm == apropos* ]]
       then printf 'makewhatis...\n'; makewhatis & break
@@ -501,12 +456,12 @@ rc() {
 }
 
 rmi() {
-   local i=0 file inods=()
+   local i=0 file inodes=()
    for file in "$@"; do
-      (( ++i < $# )) && inods+=(-inum "$file" -o)
+      ((++i < $#)) && inodes+=(-inum "$file" -o)
    done
-   inods+=(-inum "$file")
-   find . \( "${inods[@]}" \) -exec rm -i {} +
+   inodes+=(-inum "$file")
+   find . \( "${inodes[@]}" \) -exec rm -i {} +
 }
 
 alias ldapsearch='ldapsearch -x -LLL'
@@ -626,21 +581,22 @@ alias  oo=shopt
 p() { if (($#)); then ping -c3 "$@"; else ps fjww --headers; fi; }
 
 df() {
-   if (($#)); then
-      command df "$@" | sort -k5r
-   else
-      command df -h | sort -k5r
+   if (($#))
+   then command df "$@" | sort -k5r
+   else command df -h | sort -k5r
    fi
 }
 
 # Fails with \n in filenames!? Try this instead:
 # for file in *; do read size _ < <(du -sk "$file");...
 d() {
+   local args
    if (($#)); then args=("$@"); else args=(*); fi
    if sort -h /dev/null 2>/dev/null
    then
       du -sh "${args[@]}" | sort -hr
    else
+      local unit size file
       du -sk "${args[@]}" | sort -nr | while read -r size file
       do
          for unit in K M G T P E Z Y
@@ -663,6 +619,7 @@ alias rm='rm -i --preserve-root'
 alias md='mkdir -p'
 
 rd() {
+   local arg answer
    for arg in "$@"; do
       if [[ -d $arg ]]; then
          if read -r -p "rd: remove directory '$arg'? " answer; then
