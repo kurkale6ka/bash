@@ -7,7 +7,7 @@ shopt -s extglob
 shopt -s nocaseglob
 shopt -s nocasematch
 
-set -o notify # about terminated jobs
+set -o notify
 
 if command -v vimx >/dev/null 2>&1; then
    my_gvim=vimx
@@ -58,6 +58,7 @@ then info=', remote'
 else info=''
 fi
 
+unset PROMPT_COMMAND
 if ((0 == EUID)); then
    PS1="$title\n\[$LightRed\]\u \H \[$LightBlue\]\w\[$Reset\] - \A, %\j$info\n# "
    export PATH="$PATH":/sbin:/usr/sbin:/usr/local/sbin:/root/bin
@@ -135,7 +136,7 @@ u() {
                                     *.rar ) unrar x    "$arg";;
                                     *.Z   ) uncompress "$arg";;
                                     *.7z  ) 7z x       "$arg";;
-               *) echo "'$arg' cannot be extracted!" >&2;;
+               *) echo "'$arg' cannot be extracted!" >&2
             esac
          else
             echo "'$arg' is not a valid file" >&2
@@ -200,14 +201,13 @@ sw() {
 # Usage: x - toggle debugging on/off
 x() {
    if [[ $- == *x* ]]; then
-      # todo exec 1>/dev/null...
-      echo 'debug off'
+      echo 'debug OFF'
       set +o xtrace
    else
-      echo 'debug on'
+      echo 'debug ON'
       set -o xtrace
    fi
-}
+} 2>/dev/null
 
 # Usage: rrm/rmm 'pattern' - remove all those files
 rrm() {
