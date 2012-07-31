@@ -9,6 +9,17 @@ shopt -s nocasematch
 
 set -o notify # about terminated jobs
 
+if command -v vimx >/dev/null 2>&1; then
+   my_gvim=vimx
+   my_vim="$my_gvim -v"
+elif command -v gvim >/dev/null 2>&1; then
+   my_gvim=gvim
+   my_vim="$my_gvim -v"
+else
+   my_gvim=vim
+   my_vim="$my_gvim"
+fi
+
 # Colors: set[af|ab] (ANSI [fore|back]ground) {{{1
 
 # Black="$(tput setaf 0)"
@@ -38,17 +49,6 @@ set -o notify # about terminated jobs
 # Bold="$(tput bold)"
   Underline="$(tput smul)"
   Reset="$(tput sgr0)" # No Color
-
-if command -v vimx >/dev/null 2>&1; then
-   my_gvim=vimx
-   my_vim="$my_gvim -v"
-elif command -v gvim >/dev/null 2>&1; then
-   my_gvim=gvim
-   my_vim="$my_gvim -v"
-else
-   my_gvim=vim
-   my_vim="$my_gvim"
-fi
 
 # PS1 and title (\e]2; ---- \a) {{{1
 [[ linux != $TERM ]] && title="\e]2;\H\a"

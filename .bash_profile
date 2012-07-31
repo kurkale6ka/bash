@@ -13,10 +13,6 @@ fi
 export EDITOR="$my_vim"
 export VISUAL="$my_vim"
 
-# tput smso -> sm so -> set mode stand out (bold)
-#      smul -> sm ul -> set mode underline
-#      rmso -> rm so -> remove mode stand out...
-
 # Black="$(tput setaf 0)"
 # BlackBG="$(tput setab 0)"
 # DarkGrey="$(tput bold ; tput setaf 0)"
@@ -49,6 +45,10 @@ export VISUAL="$my_vim"
 # -i ignore case, -M ruler, -F quit if 1 screen, -PM long prompt
 # ?test ok:else:else. The . ends the test
 export LESS='-r -i -M -F -PM?f%f - :.?L%L lines, :.?ltL\:%lt:.?pB, %pB\% : .?e(Bottom)%t'
+
+# tput smso -> sm so -> set mode stand out (bold)
+#      smul -> sm ul -> set mode underline
+#      rmso -> rm so -> remove mode stand out...
 
 export LESS_TERMCAP_mb=$LightGreen # begin blinking
 export LESS_TERMCAP_md=$LightBlue  # begin bold
