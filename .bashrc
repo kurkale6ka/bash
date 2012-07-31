@@ -197,8 +197,6 @@ sw() {
    fi
 }
 
-wc() { command wc "$@" | sed '1iL W C File' | column -t; }
-
 # Usage: x - toggle debugging on/off
 x() {
    if [[ $- == *x* ]]; then
