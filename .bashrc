@@ -180,7 +180,6 @@ m() {
 
 # Usage: sw file1 [file2]. If file2 is omitted, file1 is swapped with file1.bak
 sw() {
-   [[ ! -e $1 ]] && { echo "file $1 does not exist" >&2; return 1; }
    # todo
    local tmpfile=tmp.$$
    if (($# == 1)); then
