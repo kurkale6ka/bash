@@ -198,7 +198,6 @@ sw() {
    fi
 }
 
-# Usage: x - toggle debugging on/off
 x() {
    if [[ $- == *x* ]]; then
       echo 'debug OFF'
