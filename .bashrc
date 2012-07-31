@@ -160,24 +160,25 @@ u() {
 }
 
 m() {
-   local topic choice
+   local topic choice arg
    for topic in "$@"; do
+      ((arg++))
+      [[ $topic == [1-8]* ]] && { man "$topic" "${@:$((arg+1))}"; return; }
       if [[ $(type -a $topic 2>/dev/null) == *builtin*/* ]]; then
-         select choice in builtin command; do
+         select choice in "help $topic" "man $topic"; do
             case "$choice" in
-               builtin) help "$topic"; break;;
-               command) man "$topic"; break;;
-                     *) echo '*** Wrong choice ***' >&2
+               help*) help "$topic"; break;;
+                man*) man "$topic"; break;;
+                   *) echo '*** Wrong choice ***' >&2
             esac
          done
       else
-         { man "$topic" || help "$topic" || type -a "$topic"; } 2>/dev/null
+         { help "$topic" || man "$topic" || type -a "$topic"; } 2>/dev/null
       fi
    done
 }
 
-# Usage: sw my_file.c [my_file.c~] - my_file.c <=> my_file.c~
-# the second arg is optional if it is the same arg with a '~' appended to it
+# Usage: sw file.c [file.c~]
 sw() {
 
    [[ ! -e $1 ]]            && echo "file '$1' does not exist" >&2 && return 1
@@ -199,12 +200,9 @@ sw() {
 }
 
 x() {
-   if [[ $- == *x* ]]; then
-      echo 'debug OFF'
-      set +o xtrace
-   else
-      echo 'debug ON'
-      set -o xtrace
+   if [[ $- == *x* ]]
+   then echo 'debug OFF'; set +o xtrace
+   else echo 'debug ON'; set -o xtrace
    fi
 } 2>/dev/null
 
