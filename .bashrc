@@ -158,13 +158,7 @@ u() {
    fi
 }
 
-# todo: help '(('
-m() {
-   if [[ $(type -at $1) == @(*builtin*|*keyword*) ]]
-   then help "$@"
-   else man "$@" 2>/dev/null || type -a "$@"
-   fi
-}
+m() { local h; for h; do man "$h" || help "$h" || type -a "$h"; done 2>/dev/null; }
 
 # Usage: sw my_file.c [my_file.c~] - my_file.c <=> my_file.c~
 # the second arg is optional if it is the same arg with a '~' appended to it
