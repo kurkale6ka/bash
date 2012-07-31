@@ -158,7 +158,22 @@ u() {
    fi
 }
 
-m() { local h; for h; do man "$h" || help "$h" || type -a "$h"; done 2>/dev/null; }
+m() {
+   local topic
+   for topic in "$@"; do
+      if [[ $(type -a $topic 2>/dev/null) == *builtin*/* ]]; then
+         select choice in builtin command; do
+            case "$choice" in
+               builtin) help "$topic"; break;;
+               command) man "$topic"; break;;
+                     *) echo '*** Wrong choice ***' >&2
+            esac
+         done
+      else
+         { man "$topic" || help "$topic" || type -a "$topic"; } 2>/dev/null
+      fi
+   done
+}
 
 # Usage: sw my_file.c [my_file.c~] - my_file.c <=> my_file.c~
 # the second arg is optional if it is the same arg with a '~' appended to it
