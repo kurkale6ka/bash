@@ -159,7 +159,7 @@ u() {
 }
 
 m() {
-   local topic
+   local topic choice
    for topic in "$@"; do
       if [[ $(type -a $topic 2>/dev/null) == *builtin*/* ]]; then
          select choice in builtin command; do
