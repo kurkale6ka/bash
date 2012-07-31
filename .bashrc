@@ -178,33 +178,22 @@ m() {
    done
 }
 
-# Usage: sw file.c [file.c~]
+# Usage: sw file1 [file2]. If file2 is omitted, file1 is swapped with file1.bak
 sw() {
-
-   [[ ! -e $1 ]]            && echo "file '$1' does not exist" >&2 && return 1
-   [[ 2 == $# && ! -e $2 ]] && echo "file '$2' does not exist" >&2 && return 1
-
+   [[ ! -e $1 ]] && { echo "file $1 does not exist" >&2; return 1; }
    # todo
    local tmpfile=tmp.$$
-
-   if ((2 == $#)); then
-
-      mv -- "$1"       "$tmpfile"
-      mv -- "$2"       "$1"
-      mv -- "$tmpfile" "$2"
+   if (($# == 1)); then
+      [[ ! -e $1.bak ]] && { echo "file $1.bak does not exist" >&2; return 1; }
+      mv -i -- "$1" "$tmpfile" && mv -- "$1".bak "$1" && mv -- "$tmpfile" "$1".bak
    else
-      mv -- "$1"       "$tmpfile"
-      mv -- "$1"~      "$1"
-      mv -- "$tmpfile" "$1"~
+      [[ ! -e $2 ]] && { echo "file $2 does not exist" >&2; return 1; }
+      mv -i -- "$1" "$tmpfile" && mv -- "$2" "$1" && mv -- "$tmpfile" "$2"
    fi
 }
 
-x() {
-   if [[ $- == *x* ]]
-   then echo 'debug OFF'; set +o xtrace
-   else echo 'debug ON'; set -o xtrace
-   fi
-} 2>/dev/null
+# todo
+bak() { local arg; for arg in "$@"; do cp -i -- "$arg" "$arg".bak; done; }
 
 # Usage: rrm/rmm 'pattern' - remove all those files
 rrm() {
@@ -221,8 +210,12 @@ rrm() {
    fi
 }
 
-# Usage: bak my_file1.c, my_file2.c => my_file1.c~, my_file2.c~
-bak() { local arg; for arg in "$@"; do cp -- "$arg" "$arg"~; done; }
+x() {
+   if [[ $- == *x* ]]
+   then echo 'debug OFF'; set +o xtrace
+   else echo 'debug ON'; set -o xtrace
+   fi
+} 2>/dev/null
 
 # Usage: cl arg - computes a completion list for arg
 cl() { column <(compgen -A "$1"); }
