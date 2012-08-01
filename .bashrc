@@ -180,18 +180,17 @@ m() {
 
 # Usage: sw file1 [file2]. If file2 is omitted, file1 is swapped with file1.bak
 sw() {
-   # todo
-   local tmpfile=tmp.$$
+   local tmpfile=$(mktemp tmp.XXXXXXXXXXX) ||
+      { echo "Temporary file creation failure" >&2; return 1; }
    if (($# == 1)); then
-      [[ ! -e $1.bak ]] && { echo "file $1.bak does not exist" >&2; return 1; }
-      mv -i -- "$1" "$tmpfile" && mv -- "$1".bak "$1" && mv -- "$tmpfile" "$1".bak
+      [[ ! -e $1.bak ]] && { echo "file $1.bak does not exist" >&2; return 2; }
+      mv -- "$1" "$tmpfile" && mv -- "$1".bak "$1" && mv -- "$tmpfile" "$1".bak
    else
-      [[ ! -e $2 ]] && { echo "file $2 does not exist" >&2; return 1; }
-      mv -i -- "$1" "$tmpfile" && mv -- "$2" "$1" && mv -- "$tmpfile" "$2"
+      [[ ! -e $2 ]] && { echo "file $2 does not exist" >&2; return 3; }
+      mv -- "$1" "$tmpfile" && mv -- "$2" "$1" && mv -- "$tmpfile" "$2"
    fi
 }
 
-# todo
 bak() { local arg; for arg in "$@"; do cp -i -- "$arg" "$arg".bak; done; }
 
 # Usage: rrm/rmm 'pattern' - remove all those files
