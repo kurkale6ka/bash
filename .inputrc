@@ -22,11 +22,13 @@
 "\C-d": kill-whole-line
 
 "\C-xa": "\"${[@]}\"\C-b\C-b\C-b\C-b\C-b"
+"\C-xc": " | column -t"
 "\C-xd": "dimitar.dimitrov"
 "\C-xe": "printf '%s\\n' \"\"\C-b"
 "\C-xf": "for i in ; do \"$i\"; done\eb\eb\eb\C-b\C-b"
 "\C-xp": "printf '%s\\n' \"\"\C-b"
 "\C-xq": "\eb\"\ef\""
+"\C-x1": "{1..}\C-b"
 "\C-x>": "> 2>&1\C-a\C-f"
 
 # Variable settings
