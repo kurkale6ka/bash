@@ -29,9 +29,11 @@
 "\C-xp": "printf '%s\\n' \"\"\C-b"
 "\C-xq": "\eb\"\ef\""
 "\C-xv": "\"$\"\C-b"
+"\C-xx": " && echo 'This is a test'"
 "\C-x,": "{,}\C-b\C-b"
 "\C-x.": "{1..}\C-b"
-"\C-x=": "$(())\C-b\C-b"
+"\C-x[": "[[  ]]\C-b\C-b\C-b"
+"\C-x=": "echo $((  ))\C-b\C-b\C-b"
 "\C-x>": "> 2>&1\eb\eb\C-b"
 
 # Variable settings
