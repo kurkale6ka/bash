@@ -13,7 +13,7 @@ if [[ -w $HISTFILE ]]; then
       #
       # awk: if not line in a => put it in, print it.
       if tac "$HISTFILE" | awk '!($0 in a){a[$0];print}' | tac > "$tmp"; then
-         mv "$tmp" "$HISTFILE"
+         'mv' "$tmp" "$HISTFILE"
       fi
    fi
 fi
