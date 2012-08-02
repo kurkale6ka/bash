@@ -60,7 +60,7 @@ fi
 
 unset PROMPT_COMMAND
 if ((0 == EUID)); then
-   PS1="$title\n\[$LightRed\]\u \H \[$LightBlue\]\w\[$Reset\] - \A, %\j$info\n# "
+   PS1='$title\n\[$LightRed\]\u \H \[$LightBlue\]\w\[$Reset\] - \A, %\j$info\n# '
    export PATH="$PATH":/sbin:/usr/sbin:/usr/local/sbin:/root/bin
 else
    PS1="$title\n\[$LightGreen\]\u \H \[$LightBlue\]\w\[$Reset\] - \A, %\j$info\n\$ "
@@ -162,7 +162,7 @@ u() {
 m() {
    local topic choice arg
    for topic in "$@"; do
-      ((arg++))
+      let arg++
       [[ $topic == [1-8]* ]] && { man "$topic" "${@:$((arg+1))}"; return; }
       if [[ $(type -a $topic 2>/dev/null) == *builtin*/* ]]; then
          select choice in "help $topic" "man $topic"; do
