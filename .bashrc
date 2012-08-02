@@ -2,12 +2,8 @@
 
 [[ -t 1 ]] || return
 
-shopt -s cdspell
-shopt -s extglob
-shopt -s nocaseglob
-shopt -s nocasematch
-
 set -o notify
+shopt -s cdspell extglob nocaseglob nocasematch
 
 if command -v vimx >/dev/null 2>&1; then
    my_gvim=vimx
@@ -51,7 +47,7 @@ fi
   Reset="$(tput sgr0)" # No Color
 
 # PS1 and title (\e]2; ---- \a) {{{1
-[[ linux != $TERM ]] && title="\e]2;\H\a"
+[[ $TERM != linux ]] && title="\e]2;\H\a"
 
 if [[ $SSH_CLIENT || $SSH2_CLIENT ]]
 then info=', remote'
@@ -59,8 +55,8 @@ else info=''
 fi
 
 unset PROMPT_COMMAND
-if ((0 == EUID)); then
-   PS1='$title\n\[$LightRed\]\u \H \[$LightBlue\]\w\[$Reset\] - \A, %\j$info\n# '
+if ((EUID == 0)); then
+   PS1="$title\n\[$LightRed\]\u \H \[$LightBlue\]\w\[$Reset\] - \A, %\j$info\n# "
    export PATH="$PATH":/sbin:/usr/sbin:/usr/local/sbin:/root/bin
 else
    PS1="$title\n\[$LightGreen\]\u \H \[$LightBlue\]\w\[$Reset\] - \A, %\j$info\n\$ "
@@ -194,16 +190,18 @@ sw() {
 bak() { local arg; for arg in "$@"; do cp -i -- "$arg" "$arg".bak; done; }
 
 # Usage: rrm/rmm 'pattern' - remove all those files
+# todo: bakrm() or cron job ?!
 rrm() {
-   if [[ 0 == $# || 1 < $# ]]; then
+   if (($# != 1)); then
 
       echo "Usage: $FUNCNAME 'pattern' OR $FUNCNAME -b|--backup" >&2
 
    elif [[ $1 == @(-b|--backup) ]]; then
 
-      find -name \*~ -a ! -name \*.un~ -exec rm {} +
+      find . -name '*~' -a ! -name '*.un~' -exec rm {} +
 
    else
+      # todo: delete + interactive -delete
       find . -name "$1" -exec rm {} +
    fi
 }
@@ -215,6 +213,7 @@ x() {
    fi
 } 2>/dev/null
 
+# todo: keep?
 # Usage: cl arg - computes a completion list for arg
 cl() { column <(compgen -A "$1"); }
 
@@ -231,6 +230,7 @@ alias     gvd="$my_gvim -d"
 alias      gv="$my_gvim"
 alias     gvi="$my_gvim"
 
+# todo option 2: 'gvim -v' - no such command
 vn() {
    local vim_options[0]='vim'
          vim_options[1]='vim no .vimrc'
@@ -239,17 +239,14 @@ vn() {
    local vim
    select vim in "${vim_options[@]}"; do
       case "$vim" in
-         "${vim_options[0]}") "$my_gvim" -nNX -u NONE;    break;;
-         "${vim_options[1]}") "$my_gvim" -nNX -u NORC;    break;;
-         "${vim_options[2]}") "$my_gvim" -nNX --noplugin; break;;
-         "${vim_options[3]}") "$my_gvim"  -N  -U NONE;    break;;
+         "${vim_options[0]}") vim        -nNX -u NONE;    break;;
+         "${vim_options[1]}") "$my_vim"  -nNX -u NORC;    break;;
+         "${vim_options[2]}") vim        -nNX --noplugin; break;;
+         "${vim_options[3]}") "$my_gvim" -nN  -U NONE;    break;;
                            *) printf '\nInvalid choice!\n' >&2
       esac
    done
 }
-
-# alias  vn="$my_vim  -N -u NONE -U NONE"
-alias gvn="$my_gvim -N -U NONE"
 
 # List directory contents {{{2
 sl() {
@@ -259,6 +256,7 @@ sl() {
    if (($#)); then args=("$@"); else args=(*); fi
    stat -c "%8i %A (%4a) %3h %4u %4g %10s (%10Y) %n" "${args[@]}"
 }
+
 alias   l='ls -FB --color=auto'
 alias  ll='ls -FB --color=auto -hl --time-style="+(%d %b %y - %H:%M)"'
 alias  ld='ls -FB --color=auto -d'
@@ -276,24 +274,22 @@ alias  lv="ls -FB --color=auto|$my_vim -"
 alias  l.=ldot
 alias ll.=lldot
 
-# todo
 .() { if (($#)); then source "$@"; else ldot; fi; }
 
+# todo: l. -i + l. /tmp <- no slash
 ldot() {
-   if (($#)); then
-      local i arg
-
-      for arg in "$@"; do
-
-         [[ $# > 1 ]] && printf '%s:\n' "$arg"
-
-         ls -FB --color=auto -d "$arg".[^.]*
-
-         ((i++))
-         [[ $# > 1 && $i != $# ]] && echo
-      done
-   else
+   if (($# == 0)); then
       ls -FB --color=auto -d .[^.]*
+   elif (($# == 1)); then
+      ls -FB --color=auto -d "$1".[^.]*
+   else
+      local i arg
+      for arg in "$@"; do
+         printf '%s:\n' "$arg"
+         ls -FB --color=auto -d "$arg".[^.]*
+         let i++
+         (($# > 1 && $# != i)) && echo
+      done
    fi
 }
 
@@ -307,7 +303,7 @@ lldot() {
 
          ls -FB --color=auto -dhl --time-style="+(%d %b %y - %H:%M)" "$arg".[^.]*
 
-         ((i++))
+         let i++
          [[ $# > 1 && $i != $# ]] && echo
       done
    else
@@ -339,7 +335,7 @@ _l() {
 
       ls -FB --color=auto "$2" "$arg"
 
-      ((i++))
+      let i++
       num=$(($# - 2))
       [[ $# > 3 ]] && ((i != num)) && printf '\n'
    done
@@ -358,7 +354,7 @@ _ll() {
 
       ls -FB --color=auto "$2" "$3" "$arg"
 
-      ((i++))
+      let i++
       num=$(($# - 3))
       [[ $# > 4 ]] && ((i != num)) && printf '\n'
    done
@@ -586,7 +582,7 @@ d() {
                printf '%3d%s\t%s\n' "$size" "$unit" "$file"
                break
             fi
-            size=$((size / 1024))
+            size="$((size / 1024))"
          done
       done
    fi
@@ -599,11 +595,11 @@ alias rm='rm -i --preserve-root'
 alias md='mkdir -p'
 
 rd() {
-   local arg answer
+   local arg
    for arg in "$@"; do
       if [[ -d $arg ]]; then
-         if read -r -p "rd: remove directory '$arg'? " answer; then
-            [[ $answer == @(y|yes) ]] && rm -rf "$arg"
+         if read -rp "rd: remove directory '$arg'? "; then
+            [[ $REPLY == @(y|yes) ]] && rm -rf "$arg"
          fi
       else
          echo "$arg is not a directory" >&2
