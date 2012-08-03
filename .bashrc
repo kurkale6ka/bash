@@ -48,13 +48,13 @@ fi
 
 # PS1 and title (\e]2; ---- \a) {{{1
 [[ $TERM != linux ]] && title="\e]2;\H\a"
+unset PROMPT_COMMAND
 
 if [[ $SSH_CLIENT || $SSH2_CLIENT ]]
 then info=', remote'
 else info=''
 fi
 
-unset PROMPT_COMMAND
 if ((EUID == 0)); then
    PS1="$title\n\[$LightRed\]\u \H \[$LightBlue\]\w\[$Reset\] - \A, %\j$info\n# "
    export PATH="$PATH":/sbin:/usr/sbin:/usr/local/sbin:/root/bin
@@ -132,10 +132,10 @@ u() {
                                     *.rar ) unrar x    "$arg";;
                                     *.Z   ) uncompress "$arg";;
                                     *.7z  ) 7z x       "$arg";;
-               *) echo "'$arg' cannot be extracted!" >&2
+               *) echo "$arg cannot be extracted!" >&2
             esac
          else
-            echo "'$arg' is not a valid file" >&2
+            echo "$arg is not a valid file" >&2
          fi
       done
    else
@@ -180,14 +180,14 @@ sw() {
       { echo "Temporary file creation failure" >&2; return 1; }
    if (($# == 1)); then
       [[ ! -e $1.bak ]] && { echo "file $1.bak does not exist" >&2; return 2; }
-      mv -- "$1" "$tmpfile" && mv -- "$1".bak "$1" && mv -- "$tmpfile" "$1".bak
+      'mv' -- "$1" "$tmpfile" && mv -- "$1".bak "$1" && mv -- "$tmpfile" "$1".bak
    else
       [[ ! -e $2 ]] && { echo "file $2 does not exist" >&2; return 3; }
-      mv -- "$1" "$tmpfile" && mv -- "$2" "$1" && mv -- "$tmpfile" "$2"
+      'mv' -- "$1" "$tmpfile" && mv -- "$2" "$1" && mv -- "$tmpfile" "$2"
    fi
 }
 
-bak() { local arg; for arg in "$@"; do cp -i -- "$arg" "$arg".bak; done; }
+bak() { local arg; for arg in "$@"; do 'cp' -i -- "$arg" "$arg".bak; done; }
 
 # Usage: rrm/rmm 'pattern' - remove all those files
 # todo: bakrm() or cron job ?!
@@ -204,6 +204,15 @@ rrm() {
       # todo: delete + interactive -delete
       find . -name "$1" -exec rm {} +
    fi
+}
+
+rmi() {
+   local i=0 file inodes=()
+   for file in "$@"; do
+      ((++i < $#)) && inodes+=(-inum "$file" -o)
+   done
+   inodes+=(-inum "$file")
+   find . \( "${inodes[@]}" \) -exec rm -i {} +
 }
 
 x() {
@@ -223,14 +232,13 @@ cl() { column <(compgen -A "$1"); }
 alias       v="$my_vim"
 alias      vi="$my_vim"
 alias     vim="$my_vim"
-alias    view="$my_vim  -R"
-alias      vd="$my_vim  -d"
-alias vimdiff="$my_vim  -d"
+alias    view="$my_vim -R"
+alias      vd="$my_vim -d"
+alias vimdiff="$my_vim -d"
 alias     gvd="$my_gvim -d"
 alias      gv="$my_gvim"
 alias     gvi="$my_gvim"
 
-# todo option 2: 'gvim -v' - no such command
 vn() {
    local vim_options[0]='bare vim'
          vim_options[1]='vim no .vimrc'
@@ -364,17 +372,17 @@ irssi() {
 }
 
 # Misc {{{2
-alias    c='cat -n'
+alias    c='\cat -n'
 alias    e=echo
 alias    t=tail
 alias   tf=tailf
 alias    z=fg
 alias   ex=export
 alias   fr=free
-alias   lo='locate -i'
+alias   lo='\locate -i'
 alias   pf=printf
 alias   pa='(IFS=:; printf "%s\n" $PATH | sort -u)'
-alias   pw='pwd -P'
+alias   pw='\pwd -P'
 alias   sc=screen
 alias   so=source
 alias   to=touch
@@ -385,7 +393,7 @@ alias env-='env -i'
 rc() {
    if (($#)); then
       local rcfile="$HOME"/.inputrc
-      xclip -f <(echo "cat >> $rcfile <<'EOF'") "$rcfile" <(echo EOF)
+      xclip -f <(echo "'cat' >> $rcfile <<'EOF'") "$rcfile" <(echo EOF)
    else
       local inputrc="printf '%s\n' "
       inputrc+="'\"\e[A\": history-search-backward' "
@@ -394,24 +402,17 @@ rc() {
    fi
 }
 
-rmi() {
-   local i=0 file inodes=()
-   for file in "$@"; do
-      ((++i < $#)) && inodes+=(-inum "$file" -o)
-   done
-   inodes+=(-inum "$file")
-   find . \( "${inodes[@]}" \) -exec rm -i {} +
-}
+alias ldapsearch='\ldapsearch -x -LLL'
 
-alias ldapsearch='ldapsearch -x -LLL'
-
+# todo: keep?
 ir() { ifdown "$1" && ifup "$1" || echo "Couldn't do it." >&2; }
 alias ipconfig=ifconfig
 
-alias dump='dump -u'
-alias bc='bc -l'
+alias dump='\dump -u'
+alias bc='\bc -l'
 alias vish='sudo vipw -s'
 
+# todo
 if ! [[ $(sudo -V) == *1.6* ]]; then
    alias sudo="sudo -p 'Password for %p: '"
 else
@@ -430,7 +431,7 @@ s() {
       else 'grep'    -iE --color "$1" /etc/services
       fi
    else
-      # root bash
+      # root bash (todo)
       if ! [[ $(\sudo -V) == *1.6* ]]
       then sudo -E /bin/bash
       else sudo    /bin/bash
@@ -448,7 +449,7 @@ alias pl=perl
 alias py='python -i -c "from math import *"'
 alias rb=irb
 
-alias  sed='sed -r'
+alias  sed='\sed -r'
 alias seds="echo sed \"'s/old/new/'\" file"
 awks() { printf 'awk -F: \047/pattern/ {print $1" "$2}\047 file\n'; }
 
@@ -458,7 +459,7 @@ alias ua=unalias
 alias se=set
 alias use=unset
 
-alias mn='mount | cut -d" " -f1,3,5,6 | column -t'
+alias mn='\mount | cut -d" " -f1,3,5,6 | column -t'
 alias umn=umount
 
 alias cg=chgrp
@@ -471,6 +472,7 @@ alias setuid='chmod u+s'
 alias setgid='chmod g+s'
 alias setsticky='chmod +t'
 
+# todo: keep?
 alias shutdown='shutdown -h now'
 
 alias pgrep='pgrep -l'
@@ -548,8 +550,7 @@ d() {
 alias cp='cp -i'
 alias mv='mv -i'
 alias rm='rm -i --preserve-root'
-
-alias md='mkdir -p'
+alias md='\mkdir -p'
 
 rd() {
    local arg
@@ -662,7 +663,7 @@ _longopts() {
    # Do not complete if 'cur' doesn't begin with a '-'
    [[ ! $cur || $cur != -* ]] && return
 
-   prog="$1"
+   local prog="$1"
 
    [[ $prog == @(v|vi|vim|vmi|vimx|gv|gvi|gvmi) ]] && prog=gvim
    [[ $prog == @(m|man|mna) ]]                     && prog=man
@@ -671,11 +672,12 @@ _longopts() {
    COMPREPLY=($(\
    \
    "$prog" --help |\
-   grep -oe '--[[:alpha:]][[:alpha:]-]+[=[]{0,2}[[:alpha:]_-]+]?' |\
-   grep -e "$cur" |\
+   'grep' -iEoe '--[[:alpha:]][[:alpha:]-]+[=[]{0,2}[[:alpha:]_-]+]?' |\
+   'grep' -e "$cur" |\
    sort -u\
    ))
 
+   local i
    for i in "${!COMPREPLY[@]}"; do
 
       if [[ ${COMPREPLY[i]} != *[* ]]; then
