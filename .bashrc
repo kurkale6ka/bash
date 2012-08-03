@@ -273,36 +273,30 @@ alias  lv="ls -FB --color=auto|$my_vim -"
 
 ldot() {
    local ls
-   if [[ ${FUNCNAME[1]} == 'l.' ]]; then
-      ls=(ls -FB --color=auto)
-   else
-      ls=(ls -FB --color=auto -hl --time-style="+(%d %b %y - %H:%M)")
+   if [[ ${FUNCNAME[1]} == 'l.' ]]
+   then ls=(ls -FB --color=auto)
+   else ls=(ls -FB --color=auto -hl --time-style="+(%d %b %y - %H:%M)")
    fi
-   if (($# == 0)); then
-      "${ls[@]}" -d .[^.]*
-   elif (($# == 1)); then
-      (cd "$1"; "${ls[@]}" -d .[^.]*)
-   else
-      local i arg
-      for arg in "$@"; do
-         printf '%s:\n' "$arg"
-         (cd "$arg"; "${ls[@]}" -d .[^.]*)
-         let i++
-         (($# > 1 && $# != i)) && echo
-      done
-   fi
+   (($# == 0)) && { "${ls[@]}" -d .[^.]*; return; }
+   (($# == 1)) && { (cd "$1"; "${ls[@]}" -d .[^.]*); return; }
+   local i arg
+   for arg in "$@"; do
+      printf '%s:\n' "$arg"
+      (cd "$arg"; "${ls[@]}" -d .[^.]*)
+      let i++
+      (($# > 1 && $# != i)) && echo
+   done
 }
 .() { if (($#)); then source "$@"; else ls -FB --color=auto -d .[^.]*; fi; }
 l.() { ldot "$@"; }
 ll.() { ldot "$@"; }
 
-# List all links in a set of directories
+# List all links in the current directory
 lll() {
    local file
    for file in * .*; do
       if [[ -h $file ]]; then
-         command\
-         ls -FBAhl --color=auto --time-style="+(%d %b %y - %H:%M)" "$file"
+         'ls' -FBAhl --color=auto --time-style="+(%d %b %y - %H:%M)" "$file"
       fi
    done
 }
