@@ -47,6 +47,7 @@ fi
   Reset="$(tput sgr0)" # No Color
 
 # PS1 and title (\e]2; ---- \a) {{{1
+
 [[ $TERM != linux ]] && title="\e]2;\H\a"
 unset PROMPT_COMMAND
 
@@ -68,47 +69,31 @@ export PS4='+ '
 
 # Functions {{{1
 
-usersee() {
-   if (($#)); then
-      local header user
-      case "$1" in
-         -p)
-            header=LOGIN:PASSWORD:UID:GID:GECOS:HOME:SHELL
-            sed 's/::/:-:/g' /etc/passwd | sort -k7 -t: | sed "1i$header" |\
-            column -ts:;;
-         -g)
-            header=GROUP:PASSWORD:GID:USERS
-            sort -k4 -t: /etc/group | sed "1i$header" | column -ts:;;
-         -s)
-            header=LOGIN:PASSWORD:LAST:MIN:MAX:WARN:INACTIVITY:EXPIRATION:RESERVED
-            sed 's/::/:-:/g' /etc/shadow | sort -k2 -t: |\
-            awk -F: '{print $1":"substr($2,1,3)":"$3":"$4":"$5":"$6":"$7":"$8":"$9}' |\
-            sed "1i$header" | column -ts:;;
-          *)
-            for user in "$@"; do
-               sudo grep -iE --color "$user" /etc/{passwd,shadow}
-               sort -k4 -t: /etc/group | column -ts: | 'grep' -iE --color "$user"
-            done
-      esac
-   else
-      sudo grep -iE --color "$USER" /etc/{passwd,shadow}
-      sort -k4 -t: /etc/group | column -ts: | 'grep' -iE --color "$USER"
-   fi
+m() {
+   local topic choice arg
+   for topic in "$@"; do
+      let arg++
+      [[ $topic == [1-8]* ]] && { man "$topic" "${@:$((arg+1))}"; return; }
+      if [[ $(type -a $topic 2>/dev/null) == *builtin*/* ]]; then
+         select choice in "help $topic" "man $topic"; do
+            case "$choice" in
+               help*) help "$topic"; break;;
+                man*) man "$topic"; break;;
+                   *) echo '*** Wrong choice ***' >&2
+            esac
+         done
+      else
+         { help "$topic" || man "$topic" || type -a "$topic"; } 2>/dev/null
+      fi
+   done
 }
 
-hd() {
-   if ((1 == $#))
-   then hdparm -I "$1"
-   else hdparm "$@"
+x() {
+   if [[ $- == *x* ]]
+   then echo 'debug OFF'; set +o xtrace
+   else echo 'debug ON'; set -o xtrace
    fi
-}
-
-f() {
-   if ((1 == $#))
-   then find . -iname "$1"
-   else find "$@"
-   fi
-}
+} 2>/dev/null
 
 n() { sed -n "$1"p "$2"; }
 
@@ -155,23 +140,32 @@ u() {
    fi
 }
 
-m() {
-   local topic choice arg
-   for topic in "$@"; do
-      let arg++
-      [[ $topic == [1-8]* ]] && { man "$topic" "${@:$((arg+1))}"; return; }
-      if [[ $(type -a $topic 2>/dev/null) == *builtin*/* ]]; then
-         select choice in "help $topic" "man $topic"; do
-            case "$choice" in
-               help*) help "$topic"; break;;
-                man*) man "$topic"; break;;
-                   *) echo '*** Wrong choice ***' >&2
-            esac
-         done
-      else
-         { help "$topic" || man "$topic" || type -a "$topic"; } 2>/dev/null
-      fi
-   done
+usersee() {
+   if (($#)); then
+      local header user
+      case "$1" in
+         -p)
+            header=LOGIN:PASSWORD:UID:GID:GECOS:HOME:SHELL
+            sed 's/::/:-:/g' /etc/passwd | sort -k7 -t: | sed "1i$header" |\
+            column -ts:;;
+         -g)
+            header=GROUP:PASSWORD:GID:USERS
+            sort -k4 -t: /etc/group | sed "1i$header" | column -ts:;;
+         -s)
+            header=LOGIN:PASSWORD:LAST:MIN:MAX:WARN:INACTIVITY:EXPIRATION:RESERVED
+            sed 's/::/:-:/g' /etc/shadow | sort -k2 -t: |\
+            awk -F: '{print $1":"substr($2,1,3)":"$3":"$4":"$5":"$6":"$7":"$8":"$9}' |\
+            sed "1i$header" | column -ts:;;
+          *)
+            for user in "$@"; do
+               sudo grep -iE --color "$user" /etc/{passwd,shadow}
+               sort -k4 -t: /etc/group | column -ts: | 'grep' -iE --color "$user"
+            done
+      esac
+   else
+      sudo grep -iE --color "$USER" /etc/{passwd,shadow}
+      sort -k4 -t: /etc/group | column -ts: | 'grep' -iE --color "$USER"
+   fi
 }
 
 # Usage: sw file1 [file2]. If file2 is omitted, file1 is swapped with file1.bak
@@ -215,29 +209,30 @@ rmi() {
    find . \( "${inodes[@]}" \) -exec rm -i {} +
 }
 
-x() {
-   if [[ $- == *x* ]]
-   then echo 'debug OFF'; set +o xtrace
-   else echo 'debug ON'; set -o xtrace
+f() {
+   if ((1 == $#))
+   then find . -iname "$1"
+   else find "$@"
    fi
-} 2>/dev/null
+}
 
-# todo: keep?
-# Usage: cl arg - computes a completion list for arg
-cl() { column <(compgen -A "$1"); }
+db() {
+   PS3='Choose a database to update: '
+   local prgm
+   select prgm in locate 'apropos, man -k'; do
+      if [[ $prgm == apropos* ]]
+      then printf 'makewhatis...\n'; makewhatis & break
+      else printf 'updatedb...\n'; updatedb & break
+      fi
+   done
+}
 
-# Aliases {{{1
-
-# Vim {{{2
-alias       v="$my_vim"
-alias      vi="$my_vim"
-alias     vim="$my_vim"
-alias    view="$my_vim -R"
-alias      vd="$my_vim -d"
-alias vimdiff="$my_vim -d"
-alias     gvd="$my_gvim -d"
-alias      gv="$my_gvim"
-alias     gvi="$my_gvim"
+irssi() {
+   (cd /var/log/irssi
+   "$HOME"/config/help/.irssi/fnotify.bash &
+   command irssi
+   kill %?fnotify)
+}
 
 vn() {
    local vim_options[0]='bare vim'
@@ -256,7 +251,105 @@ vn() {
    done
 }
 
-# List directory contents {{{2
+rc() {
+   if (($#)); then
+      local rcfile="$HOME"/.inputrc
+      xclip -f <(echo "'cat' >> $rcfile <<'EOF'") "$rcfile" <(echo EOF)
+   else
+      local inputrc="printf '%s\n' "
+      inputrc+="'\"\e[A\": history-search-backward' "
+      inputrc+="'\"\e[B\": history-search-forward' >> $HOME/.inputrc"
+      xclip -f <<< "$inputrc"
+   fi
+}
+
+s() {
+   if (($# == 2)); then
+      # s old new [number|cmd]
+      fc -s "$1"="$2" "$3"
+   elif (($# == 1)); then
+      # s ftp|21
+      if [[ $1 == [[:digit:]]* ]]
+      then 'grep' -w -iE --color "$1" /etc/services
+      else 'grep'    -iE --color "$1" /etc/services
+      fi
+   else
+      # root bash (todo: version?)
+      if ! [[ $(\sudo -V) == *1.6* ]]
+      then sudo -E /bin/bash
+      else sudo    /bin/bash
+      fi
+   fi
+}
+
+h() { if (($#)); then head "$@"; else history; fi; }
+
+p() { if (($#)); then ping -c3 "$@"; else ps fjww --headers; fi; }
+
+# todo: keep?
+ir() { ifdown "$1" && ifup "$1" || echo "Couldn't do it." >&2; }
+
+hd() {
+   if ((1 == $#))
+   then hdparm -I "$1"
+   else hdparm "$@"
+   fi
+}
+
+df() { command df -h "$@" | sort -k5r; }
+
+# todo + change name?
+# Fails with \n in filenames!? Try this instead:
+# for file in *; do read size _ < <(du -sk "$file");...
+d() {
+   local args
+   if (($#)); then args=("$@"); else args=(*); fi
+   if sort -h /dev/null 2>/dev/null
+   then
+      du -sh "${args[@]}" | sort -hr
+   else
+      local unit size file
+      du -sk "${args[@]}" | sort -nr | while read -r size file
+      do
+         for unit in K M G T P E Z Y
+         do
+            if ((size < 1024))
+            then
+               printf '%3d%s\t%s\n' "$size" "$unit" "$file"
+               break
+            fi
+            size="$((size / 1024))"
+         done
+      done
+   fi
+}
+
+rd() {
+   local arg
+   for arg in "$@"; do
+      if [[ -d $arg ]]; then
+         if read -rp "rd: remove directory '$arg'? "; then
+            [[ $REPLY == @(y|yes) ]] && 'rm' -rf "$arg"
+         fi
+      else
+         echo "$arg is not a directory" >&2
+      fi
+   done
+}
+
+ln() {
+   if (($#)); then
+      command ln "$@"
+   else
+      local file
+      for file in * .*; do
+         if [[ -h $file ]]; then
+            'ls' -FBAhl --color=auto --time-style="+(%d %b %y - %H:%M)" "$file"
+         fi
+      done
+   fi
+}
+
 sl() {
    printf '%-8s %-17s %-3s %-4s %-4s %-10s %-12s %-s\n'\
           'Inode' 'Permissions' 'ln' 'UID' 'GID' 'Size' 'Time' 'Name'
@@ -264,20 +357,6 @@ sl() {
    if (($#)); then args=("$@"); else args=(*); fi
    stat -c "%8i %A (%4a) %3h %4u %4g %10s (%10Y) %n" "${args[@]}"
 }
-
-alias   l='\ls -FB --color=auto'
-alias  ll='\ls -FB --color=auto -hl --time-style="+(%d %b %y - %H:%M)"'
-alias  ld='\ls -FB --color=auto -d'
-alias lld='\ls -FB --color=auto -dhl --time-style="+(%d %b %y - %H:%M)"'
-alias  la='\ls -FB --color=auto -A'
-alias lla='\ls -FB --color=auto -Ahl --time-style="+(%d %b %y - %H:%M)"'
-alias  lr='\ls -FB --color=auto -R'
-alias llr='\ls -FB --color=auto -Rhl --time-style="+(%d %b %y - %H:%M)"'
-alias  lk='\ls -FB --color=auto -S'
-alias llk='\ls -FB --color=auto -Shl --time-style="+(%d %b %y - %H:%M)"'
-alias  lx='\ls -FB --color=auto -X'
-alias llx='\ls -FB --color=auto -Xhl --time-style="+(%d %b %y - %H:%M)"'
-alias  lv="\ls | $my_vim -"
 
 ldot() {
    local ls
@@ -324,21 +403,43 @@ llu() {
    'ls' -FB --color=auto -tuhl --time-style='+(%d %b %Y - %H:%M)' "$@"
 }
 
-# List all links in the current directory
-ln() {
-   if (($#)); then
-      command ln "$@"
-   else
-      local file
-      for file in * .*; do
-         if [[ -h $file ]]; then
-            'ls' -FBAhl --color=auto --time-style="+(%d %b %y - %H:%M)" "$file"
-         fi
-      done
+awks() { printf 'awk -F: \047/pattern/ {print $1" "$2}\047 file\n'; }
+
+b() {
+   if (($# == 1)); then figlet -f smslant "$1"
+   elif (($# == 2)); then figlet -f "$1" "${@:2}"
+   else figlist
    fi
 }
 
-# Change directory {{{2
+# Aliases {{{1
+
+alias       v="$my_vim"
+alias      vi="$my_vim"
+alias     vim="$my_vim"
+alias    view="$my_vim -R"
+alias      vd="$my_vim -d"
+alias vimdiff="$my_vim -d"
+alias     gvd="$my_gvim -d"
+alias      gv="$my_gvim"
+alias     gvi="$my_gvim"
+alias vish='sudo vipw -s'
+
+alias   l='\ls -FB --color=auto'
+alias  ld='\ls -FB --color=auto -d'
+alias  la='\ls -FB --color=auto -A'
+alias  lr='\ls -FB --color=auto -R'
+alias  lk='\ls -FB --color=auto -S'
+alias  lx='\ls -FB --color=auto -X'
+alias  ll='\ls -FB --color=auto -hl --time-style="+(%d %b %y - %H:%M)"'
+alias lld='\ls -FB --color=auto -dhl --time-style="+(%d %b %y - %H:%M)"'
+alias lla='\ls -FB --color=auto -Ahl --time-style="+(%d %b %y - %H:%M)"'
+alias llr='\ls -FB --color=auto -Rhl --time-style="+(%d %b %y - %H:%M)"'
+alias llk='\ls -FB --color=auto -Shl --time-style="+(%d %b %y - %H:%M)"'
+alias llx='\ls -FB --color=auto -Xhl --time-style="+(%d %b %y - %H:%M)"'
+alias  lv="\ls | $my_vim -"
+alias mo="$my_vim -"
+
 alias  cd-='cd -'
 alias -- -='cd -'
 alias    1='cd ..'
@@ -347,72 +448,27 @@ alias    3='cd ../../..'
 alias    4='cd ../../../..'
 alias cd..='cd ..'
 alias   ..='cd ..'
-alias  ...='cd ../..'
 
-# Help {{{2
 alias  ?='type -a'
 alias mm='man -k'
 
-db() {
-   PS3='Choose a database to update: '
-   local prgm
-   select prgm in locate 'apropos, man -k'; do
-      if [[ $prgm == apropos* ]]
-      then printf 'makewhatis...\n'; makewhatis & break
-      else printf 'updatedb...\n'; updatedb & break
-      fi
-   done
-}
-
-irssi() {
-   (cd /var/log/irssi
-   "$HOME"/config/help/.irssi/fnotify.bash &
-   command irssi
-   kill %?fnotify)
-}
-
-# Misc {{{2
-alias    c='\cat -n'
 alias    e=echo
+alias   pf=printf
+alias    c='\cat -n'
 alias    t=tail
 alias   tf=tailf
-alias    z=fg
-alias   ex=export
-alias   fr=free
 alias   lo='\locate -i'
-alias   pf=printf
+alias ldapsearch='\ldapsearch -x -LLL'
 alias   pa='(IFS=:; printf "%s\n" $PATH | sort -u)'
 alias   pw='\pwd -P'
-alias   sc=screen
-alias   so=source
 alias   to=touch
 alias  cmd=command
 alias  msg=dmesg
-alias env-='env -i'
-
-rc() {
-   if (($#)); then
-      local rcfile="$HOME"/.inputrc
-      xclip -f <(echo "'cat' >> $rcfile <<'EOF'") "$rcfile" <(echo EOF)
-   else
-      local inputrc="printf '%s\n' "
-      inputrc+="'\"\e[A\": history-search-backward' "
-      inputrc+="'\"\e[B\": history-search-forward' >> $HOME/.inputrc"
-      xclip -f <<< "$inputrc"
-   fi
-}
-
-alias ldapsearch='\ldapsearch -x -LLL'
-
-# todo: keep?
-ir() { ifdown "$1" && ifup "$1" || echo "Couldn't do it." >&2; }
-alias ipconfig=ifconfig
 
 alias dump='\dump -u'
 alias bc='\bc -l'
-alias vish='sudo vipw -s'
 
-# todo
+# todo: version?
 if ! [[ $(sudo -V) == *1.6* ]]; then
    alias sudo="sudo -p 'Password for %p: '"
 else
@@ -421,28 +477,8 @@ fi
 alias sd=sudo
 alias sde=sudoedit
 
-s() {
-   if (($# == 2)); then
-      # s///, s old new [number|cmd]
-      fc -s "$1"="$2" "$3"
-   elif (($# == 1)); then
-      if [[ $1 == [[:digit:]]* ]]
-      then 'grep' -w -iE --color "$1" /etc/services
-      else 'grep'    -iE --color "$1" /etc/services
-      fi
-   else
-      # root bash (todo)
-      if ! [[ $(\sudo -V) == *1.6* ]]
-      then sudo -E /bin/bash
-      else sudo    /bin/bash
-      fi
-   fi
-}
-
-alias en=enable
-alias di='enable -n'
-
-alias     j='jobs -l'
+alias j='jobs -l'
+alias z=fg
 alias -- --='fg %-'
 
 alias pl=perl
@@ -451,11 +487,12 @@ alias rb=irb
 
 alias  sed='\sed -r'
 alias seds="echo sed \"'s/old/new/'\" file"
-awks() { printf 'awk -F: \047/pattern/ {print $1" "$2}\047 file\n'; }
 
 alias  a=alias
 alias ua=unalias
 
+alias   o='set -o'
+alias  oo=shopt
 alias se=set
 alias use=unset
 
@@ -472,9 +509,8 @@ alias setuid='chmod u+s'
 alias setgid='chmod g+s'
 alias setsticky='chmod +t'
 
-# todo: keep?
-alias shutdown='shutdown -h now'
-
+alias g='\grep -iE --color'
+alias hg='history | \grep -iE --color'
 alias pgrep='pgrep -l'
 alias pg='ps j --headers | head -1 && ps fajxww | \grep -v grep | \grep -iE --color'
 
@@ -490,82 +526,19 @@ else
    alias cal='env LC_TIME=bg_BG.utf8 cal -m3'
    alias call='env LC_TIME=bg_BG.utf8 cal -my'
 fi
+alias date="\date '+%d %B [%-m] %Y, %H:%M %Z (%A)'"
 
-alias date="date '+%d %B [%-m] %Y, %H:%M %Z (%A)'"
-
-alias g='\grep -iE --color'
-alias mo="$my_vim -"
-
-h() { if (($#)); then head "$@"; else history; fi; }
-b() {
-   if (($# == 1)); then figlet -f smslant "$1"
-   elif (($# == 2)); then figlet -f "$1" "${@:2}"
-   else figlist
-   fi
-}
-
-alias hg='history | \grep -iE --color'
 alias r='netstat -rn'
 alias i='hostname -i'
 alias ii='/sbin/ifconfig'
 alias ia='/sbin/ifconfig -a'
-
-alias   o='set -o'
-alias  oo=shopt
-
-p() { if (($#)); then ping -c3 "$@"; else ps fjww --headers; fi; }
-
-df() {
-   if (($#))
-   then command df "$@" | sort -k5r
-   else command df -h | sort -k5r
-   fi
-}
-
-# Fails with \n in filenames!? Try this instead:
-# for file in *; do read size _ < <(du -sk "$file");...
-d() {
-   local args
-   if (($#)); then args=("$@"); else args=(*); fi
-   if sort -h /dev/null 2>/dev/null
-   then
-      du -sh "${args[@]}" | sort -hr
-   else
-      local unit size file
-      du -sk "${args[@]}" | sort -nr | while read -r size file
-      do
-         for unit in K M G T P E Z Y
-         do
-            if ((size < 1024))
-            then
-               printf '%3d%s\t%s\n' "$size" "$unit" "$file"
-               break
-            fi
-            size="$((size / 1024))"
-         done
-      done
-   fi
-}
+alias ipconfig=ifconfig
 
 alias cp='cp -i'
 alias mv='mv -i'
 alias rm='rm -i --preserve-root'
 alias md='\mkdir -p'
 
-rd() {
-   local arg
-   for arg in "$@"; do
-      if [[ -d $arg ]]; then
-         if read -rp "rd: remove directory '$arg'? "; then
-            [[ $REPLY == @(y|yes) ]] && 'rm' -rf "$arg"
-         fi
-      else
-         echo "$arg is not a directory" >&2
-      fi
-   done
-}
-
-# Spelling typos {{{2
 alias      akw=awk
 alias     akws=awks
 alias      bka=bak
@@ -582,7 +555,6 @@ alias     hlep=help
 alias  hsitory=history
 alias     jbos=jobs
 alias     klil=kill
-alias      otp=opt
 alias      pdw=pwd
 alias     pnig=ping
 alias      pph=php
@@ -598,7 +570,6 @@ alias     tpye=type
 alias     veiw=view
 alias      vmi=vim
 alias      shh=ssh
-# }}}2
 
 # Programmable completion {{{1
 complete -A alias          a alias unalias
@@ -632,6 +603,10 @@ complete -f -o default -X '!*.php' php    pph
 complete -f -o default -X '!*.pl'  perl   prel   pl
 complete -f -o default -X '!*.py'  python pyhton py
 complete -f -o default -X '!*.rb'  ruby   rbuy   rb
+
+# todo: keep?
+# Usage: cl arg - computes a completion list for arg
+cl() { column <(compgen -A "$1"); }
 
 # Completion of user names
 _cd() {
