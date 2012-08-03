@@ -271,45 +271,30 @@ alias  lx='ls -FB --color=auto -X'
 alias llx='ls -FB --color=auto -Xhl --time-style="+(%d %b %y - %H:%M)"'
 alias  lv="ls -FB --color=auto|$my_vim -"
 
-alias  l.=ldot
-alias ll.=lldot
-
-.() { if (($#)); then source "$@"; else ldot; fi; }
-
-# todo: l. -i + l. /tmp <- no slash
 ldot() {
+   local ls
+   if [[ ${FUNCNAME[1]} == 'l.' ]]; then
+      ls=(ls -FB --color=auto)
+   else
+      ls=(ls -FB --color=auto -hl --time-style="+(%d %b %y - %H:%M)")
+   fi
    if (($# == 0)); then
-      ls -FB --color=auto -d .[^.]*
+      "${ls[@]}" -d .[^.]*
    elif (($# == 1)); then
-      ls -FB --color=auto -d "$1".[^.]*
+      (cd "$1"; "${ls[@]}" -d .[^.]*)
    else
       local i arg
       for arg in "$@"; do
          printf '%s:\n' "$arg"
-         ls -FB --color=auto -d "$arg".[^.]*
+         (cd "$arg"; "${ls[@]}" -d .[^.]*)
          let i++
          (($# > 1 && $# != i)) && echo
       done
    fi
 }
-
-lldot() {
-   if (($#)); then
-      local i arg
-
-      for arg in "$@"; do
-
-         [[ $# > 1 ]] && printf '%s:\n' "$arg"
-
-         ls -FB --color=auto -dhl --time-style="+(%d %b %y - %H:%M)" "$arg".[^.]*
-
-         let i++
-         [[ $# > 1 && $i != $# ]] && echo
-      done
-   else
-      ls -FB --color=auto -dhl --time-style="+(%d %b %y - %H:%M)" .[^.]*
-   fi
-}
+.() { if (($#)); then source "$@"; else ls -FB --color=auto -d .[^.]*; fi; }
+l.() { ldot "$@"; }
+ll.() { ldot "$@"; }
 
 # List all links in a set of directories
 lll() {
