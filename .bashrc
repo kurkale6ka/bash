@@ -275,7 +275,7 @@ ldot() {
    local ls
    if [[ ${FUNCNAME[1]} == 'l.' ]]
    then ls=(ls -FB --color=auto)
-   else ls=(ls -FB --color=auto -hl --time-style="+(%d %b %y - %H:%M)")
+   else ls=(ls -FB --color=auto -hl --time-style='+(%d %b %y - %H:%M)')
    fi
    (($# == 0)) && { "${ls[@]}" -d .[^.]*; return; }
    (($# == 1)) && { (cd "$1"; "${ls[@]}" -d .[^.]*); return; }
@@ -284,12 +284,37 @@ ldot() {
       printf '%s:\n' "$arg"
       (cd "$arg"; "${ls[@]}" -d .[^.]*)
       let i++
-      (($# > 1 && $# != i)) && echo
+      (($# != i)) && echo
    done
 }
 .() { if (($#)); then source "$@"; else ls -FB --color=auto -d .[^.]*; fi; }
 l.() { ldot "$@"; }
 ll.() { ldot "$@"; }
+
+lc() {
+   echo "$Purple${Underline}Sorted by change date:$Reset"
+   'ls' -FB --color=auto -tc "$@"
+}
+lm() {
+   echo "$Purple${Underline}Sorted by modification date:$Reset"
+   'ls' -FB --color=auto -t "$@"
+}
+lu() {
+   echo "$Purple${Underline}Sorted by access date:$Reset"
+   'ls' -FB --color=auto -tu "$@"
+}
+llc() {
+   echo "$Purple${Underline}Sorted by change date:$Reset"
+   'ls' -FB --color=auto -tchl --time-style='+(%d %b %Y - %H:%M)' "$@"
+}
+llm() {
+   echo "$Purple${Underline}Sorted by modification date:$Reset"
+   'ls' -FB --color=auto -thl  --time-style='+(%d %b %Y - %H:%M)' "$@"
+}
+llu() {
+   echo "$Purple${Underline}Sorted by access date:$Reset"
+   'ls' -FB --color=auto -tuhl --time-style='+(%d %b %Y - %H:%M)' "$@"
+}
 
 # List all links in the current directory
 ln() {
@@ -304,51 +329,6 @@ ln() {
       done
    fi
 }
-
-# Usage: _l $1: (change|modif|access), $2: options, $@:3: (all other arguments)
-_l() {
-   printf '%s%sSorted by %s date:%s \n' "$Purple" "$Underline" "$1" "$Reset"
-
-   ((2 == $#)) && ls -FB --color=auto "$2" && return
-
-   local i arg num
-   for arg in "${@:3}"; do
-
-      [[ $# > 3 ]] && printf '%s:\n' "$arg"
-
-      ls -FB --color=auto "$2" "$arg"
-
-      let i++
-      num=$(($# - 2))
-      [[ $# > 3 ]] && ((i != num)) && printf '\n'
-   done
-}
-
-# Usage: _ll $1: (change|access|...), $2$3: options, $@:4: (llc's... arguments)
-_ll() {
-   printf '%s%sSorted by %s date:%s \n' "$Purple" "$Underline" "$1" "$Reset"
-
-   ((3 == $#)) && ls -FB --color=auto "$2" "$3" && return
-
-   local i arg num
-   for arg in "${@:4}"; do
-
-      [[ $# > 4 ]] && printf '%s:\n' "$arg"
-
-      ls -FB --color=auto "$2" "$3" "$arg"
-
-      let i++
-      num=$(($# - 3))
-      [[ $# > 4 ]] && ((i != num)) && printf '\n'
-   done
-}
-
-lc()  { _l  change       -tc                                      "$@"; }
-lm()  { _l  modification -t                                       "$@"; }
-lu()  { _l  access       -tu                                      "$@"; }
-llc() { _ll change       -tchl --time-style='+(%d %b %Y - %H:%M)' "$@"; }
-llm() { _ll modification -thl  --time-style='+(%d %b %Y - %H:%M)' "$@"; }
-llu() { _ll access       -tuhl --time-style='+(%d %b %Y - %H:%M)' "$@"; }
 
 # Change directory {{{2
 alias  cd-='cd -'
