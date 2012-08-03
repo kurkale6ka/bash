@@ -232,17 +232,17 @@ alias     gvi="$my_gvim"
 
 # todo option 2: 'gvim -v' - no such command
 vn() {
-   local vim_options[0]='vim'
+   local vim_options[0]='bare vim'
          vim_options[1]='vim no .vimrc'
          vim_options[2]='vim no plugins'
          vim_options[3]='gvim no .gvimrc'
    local vim
    select vim in "${vim_options[@]}"; do
       case "$vim" in
-         "${vim_options[0]}") vim        -nNX -u NONE;    break;;
-         "${vim_options[1]}") "$my_vim"  -nNX -u NORC;    break;;
-         "${vim_options[2]}") vim        -nNX --noplugin; break;;
-         "${vim_options[3]}") "$my_gvim" -nN  -U NONE;    break;;
+         "${vim_options[0]}") vim        -nNX  -u NONE;    break;;
+         "${vim_options[1]}") "$my_gvim" -nNXv -u NORC;    break;;
+         "${vim_options[2]}") vim        -nNX  --noplugin; break;;
+         "${vim_options[3]}") "$my_gvim" -nN   -U NONE;    break;;
                            *) printf '\nInvalid choice!\n' >&2
       esac
    done
@@ -269,7 +269,7 @@ alias  lk='\ls -FB --color=auto -S'
 alias llk='\ls -FB --color=auto -Shl --time-style="+(%d %b %y - %H:%M)"'
 alias  lx='\ls -FB --color=auto -X'
 alias llx='\ls -FB --color=auto -Xhl --time-style="+(%d %b %y - %H:%M)"'
-alias  lv="\ls -FB --color=auto|$my_vim -"
+alias  lv="\ls | $my_vim -"
 
 ldot() {
    local ls
