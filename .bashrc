@@ -292,13 +292,17 @@ l.() { ldot "$@"; }
 ll.() { ldot "$@"; }
 
 # List all links in the current directory
-lll() {
-   local file
-   for file in * .*; do
-      if [[ -h $file ]]; then
-         'ls' -FBAhl --color=auto --time-style="+(%d %b %y - %H:%M)" "$file"
-      fi
-   done
+ln() {
+   if (($#)); then
+      command ln "$@"
+   else
+      local file
+      for file in * .*; do
+         if [[ -h $file ]]; then
+            'ls' -FBAhl --color=auto --time-style="+(%d %b %y - %H:%M)" "$file"
+         fi
+      done
+   fi
 }
 
 # Usage: _l $1: (change|modif|access), $2: options, $@:3: (all other arguments)
