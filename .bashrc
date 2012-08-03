@@ -87,12 +87,12 @@ usersee() {
           *)
             for user in "$@"; do
                sudo grep -iE --color "$user" /etc/{passwd,shadow}
-               sort -k4 -t: /etc/group | column -ts: | grep -iE --color "$user"
+               sort -k4 -t: /etc/group | column -ts: | 'grep' -iE --color "$user"
             done
       esac
    else
       sudo grep -iE --color "$USER" /etc/{passwd,shadow}
-      sort -k4 -t: /etc/group | column -ts: | grep -iE --color "$USER"
+      sort -k4 -t: /etc/group | column -ts: | 'grep' -iE --color "$USER"
    fi
 }
 
@@ -257,19 +257,19 @@ sl() {
    stat -c "%8i %A (%4a) %3h %4u %4g %10s (%10Y) %n" "${args[@]}"
 }
 
-alias   l='ls -FB --color=auto'
-alias  ll='ls -FB --color=auto -hl --time-style="+(%d %b %y - %H:%M)"'
-alias  ld='ls -FB --color=auto -d'
-alias lld='ls -FB --color=auto -dhl --time-style="+(%d %b %y - %H:%M)"'
-alias  la='ls -FB --color=auto -A'
-alias lla='ls -FB --color=auto -Ahl --time-style="+(%d %b %y - %H:%M)"'
-alias  lr='ls -FB --color=auto -R'
-alias llr='ls -FB --color=auto -Rhl --time-style="+(%d %b %y - %H:%M)"'
-alias  lk='ls -FB --color=auto -S'
-alias llk='ls -FB --color=auto -Shl --time-style="+(%d %b %y - %H:%M)"'
-alias  lx='ls -FB --color=auto -X'
-alias llx='ls -FB --color=auto -Xhl --time-style="+(%d %b %y - %H:%M)"'
-alias  lv="ls -FB --color=auto|$my_vim -"
+alias   l='\ls -FB --color=auto'
+alias  ll='\ls -FB --color=auto -hl --time-style="+(%d %b %y - %H:%M)"'
+alias  ld='\ls -FB --color=auto -d'
+alias lld='\ls -FB --color=auto -dhl --time-style="+(%d %b %y - %H:%M)"'
+alias  la='\ls -FB --color=auto -A'
+alias lla='\ls -FB --color=auto -Ahl --time-style="+(%d %b %y - %H:%M)"'
+alias  lr='\ls -FB --color=auto -R'
+alias llr='\ls -FB --color=auto -Rhl --time-style="+(%d %b %y - %H:%M)"'
+alias  lk='\ls -FB --color=auto -S'
+alias llk='\ls -FB --color=auto -Shl --time-style="+(%d %b %y - %H:%M)"'
+alias  lx='\ls -FB --color=auto -X'
+alias llx='\ls -FB --color=auto -Xhl --time-style="+(%d %b %y - %H:%M)"'
+alias  lv="\ls -FB --color=auto|$my_vim -"
 
 ldot() {
    local ls
@@ -287,7 +287,7 @@ ldot() {
       (($# != i)) && echo
    done
 }
-.() { if (($#)); then source "$@"; else ls -FB --color=auto -d .[^.]*; fi; }
+.() { if (($#)); then source "$@"; else 'ls' -FB --color=auto -d .[^.]*; fi; }
 l.() { ldot "$@"; }
 ll.() { ldot "$@"; }
 
@@ -425,17 +425,15 @@ s() {
       # s///, s old new [number|cmd]
       fc -s "$1"="$2" "$3"
    elif (($# == 1)); then
-      if [[ $1 == [[:digit:]]* ]]; then
-         grep -w -iE --color "$1" /etc/services
-      else
-         grep    -iE --color "$1" /etc/services
+      if [[ $1 == [[:digit:]]* ]]
+      then 'grep' -w -iE --color "$1" /etc/services
+      else 'grep'    -iE --color "$1" /etc/services
       fi
    else
       # root bash
-      if ! [[ $(\sudo -V) == *1.6* ]]; then
-         sudo -E /bin/bash
-      else
-         sudo    /bin/bash
+      if ! [[ $(\sudo -V) == *1.6* ]]
+      then sudo -E /bin/bash
+      else sudo    /bin/bash
       fi
    fi
 }
@@ -476,7 +474,7 @@ alias setsticky='chmod +t'
 alias shutdown='shutdown -h now'
 
 alias pgrep='pgrep -l'
-alias pg='ps j --headers | head -1 && ps fajxww | grep -v grep | grep'
+alias pg='ps j --headers | head -1 && ps fajxww | \grep -v grep | \grep -iE --color'
 
 alias  k=kill
 alias kl='kill -l'
@@ -493,22 +491,18 @@ fi
 
 alias date="date '+%d %B [%-m] %Y, %H:%M %Z (%A)'"
 
-alias    g='grep -iE --color'
-
-alias   mo="$my_vim -"
+alias g='\grep -iE --color'
+alias mo="$my_vim -"
 
 h() { if (($#)); then head "$@"; else history; fi; }
 b() {
-   if (($# == 1)); then
-      figlet -f smslant "$1"
-   elif (($# == 2)); then
-      figlet -f "$1" "${@:2}"
-   else
-      figlist
+   if (($# == 1)); then figlet -f smslant "$1"
+   elif (($# == 2)); then figlet -f "$1" "${@:2}"
+   else figlist
    fi
 }
 
-alias hg='history | grep -iE --color'
+alias hg='history | \grep -iE --color'
 alias r='netstat -rn'
 alias i='hostname -i'
 alias ii='/sbin/ifconfig'
@@ -562,7 +556,7 @@ rd() {
    for arg in "$@"; do
       if [[ -d $arg ]]; then
          if read -rp "rd: remove directory '$arg'? "; then
-            [[ $REPLY == @(y|yes) ]] && rm -rf "$arg"
+            [[ $REPLY == @(y|yes) ]] && 'rm' -rf "$arg"
          fi
       else
          echo "$arg is not a directory" >&2
@@ -613,7 +607,7 @@ complete -A disabled       en enable
 complete -A enabled        di builtin
 complete -A export         printenv
 complete -A function       function
-complete -A hostname       dig n nslookup snlookup host p ping pnig ssh
+complete -A hostname       dig nslookup snlookup host p ping pnig ssh
 complete -A user           chage chfn finger groups mail passwd slay su userdel usermod w write
 complete -A variable       export local readonly unset
 
