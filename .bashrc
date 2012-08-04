@@ -559,7 +559,6 @@ alias     prel=perl
 alias       pt=tput
 alias   pyhton=python
 alias     rbuy=ruby
-alias      rmm=rrm
 alias      rmp=rpm
 alias    shotp=shopt
 alias snlookup=nslookup
@@ -569,37 +568,43 @@ alias      vmi=vim
 alias      shh=ssh
 
 # Programmable completion {{{1
-complete -A alias          a alias unalias
-complete -A binding        bind bnid
-complete -A command        ? which wihch type tpye sudo
-complete -A disabled       en enable
-complete -A enabled        di builtin
+complete -A helptopic      help hlep m # Currently, same as builtin, man?
+# Complete commands and long options for: man
+complete -A command -F _longopts m man mna
+complete -A alias          alias a unalias ua
+complete -A enabled        builtin
+complete -A disabled       enable
+complete -A command        which wihch type ? tpye sudo whereis
 complete -A export         printenv
+complete -A variable       export local readonly unset use
 complete -A function       function
-complete -A hostname       dig nslookup snlookup host p ping pnig ssh
+complete -A binding        bind bnid
 complete -A user           chage chfn finger groups mail passwd slay su userdel usermod w write
-complete -A variable       export local readonly unset
-
-complete -A helptopic      help hlep m # Currently, same as builtin
-complete -A signal         k kill klil
-complete -A job     -P '%' j z fg jobs disown
+complete -A hostname       dig nslookup snlookup host p ping pnig ssh
+complete -A signal         kill k klil
+complete -A job     -P '%' jobs j fg z disown
 complete -A stopped -P '%' bg
 complete -A setopt         set o
 complete -A shopt          shopt oo
-
-complete -A directory -F _cd cd
-complete -A directory        md mkdir rd rmdir
-
-complete -A file n
+complete -A file           n
+complete -A directory      mkdir md rmdir rd
+# complete -A directory -F _cd cd
 
 # eXclude what is not(!) matched by the pattern
 complete -f -o default -X '!*.@(tar.gz|tgz|tar.bz2|tbz2|tbz|tar|bz2|gz|zip|rar|Z|7z)' u
 complete -f -o default -X '!*.@(tar.gz|tgz|tar.bz2|tbz2|tbz|tar)' tar
-
 complete -f -o default -X '!*.php' php    pph
 complete -f -o default -X '!*.pl'  perl   prel   pl
 complete -f -o default -X '!*.py'  python pyhton py
 complete -f -o default -X '!*.rb'  ruby   rbuy   rb
+
+complete -W 'bold dim rev setab setaf sgr0 smul' tp pt tput
+complete -W 'eth0 eth1 lo' ir
+complete -W 'if=/dev/zero' dd
+
+complete -W 'alias arrayvar binding builtin command directory disabled enabled
+export file function group helptopic hostname job keyword running service
+setopt shopt signal stopped user variable' cl compgen complete
 
 # todo: keep?
 # Usage: cl arg - computes a completion list for arg
@@ -662,17 +667,6 @@ _longopts() {
 # Complete long options for: bash, ls, vim
 complete -o default -F _longopts bash ls l ll ld lld l. ll. la lla lr llr lk\
 llk lx llx lv lc llc lm llm lu llu v vi vim vmi vimx gv gvi gvim gvmi rpm
-
-# Complete commands and long options for: man
-complete -A command -F _longopts m man mna
-
-complete -W 'bold dim rev setab setaf sgr0 smul' tp pt tput
-complete -W 'eth0 eth1 lo' ir
-complete -W 'if=/dev/zero' dd
-
-complete -W 'alias arrayvar binding builtin command directory disabled enabled
-export file function group helptopic hostname job keyword running service
-setopt shopt signal stopped user variable' cl compgen complete
 
 # Business specific or system dependant stuff
 [[ -r ~/.bashrc_after ]] && source ~/.bashrc_after

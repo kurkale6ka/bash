@@ -2,10 +2,9 @@
 
 # Git
 gc() {
-   if [[ 0 == $# ]]; then
-      git commit -a
-   else
-      git commit "$@"
+   if (($#))
+   then git commit "$@"
+   else git commit -a
    fi
 }
 alias gp='git push origin master'
