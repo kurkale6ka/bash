@@ -70,11 +70,21 @@ export PS4='+ '
 # Functions {{{1
 
 m() {
-   local topic choice arg
+   local choice
+   (($#)) || {
+      select choice in help man; do
+         case "$choice" in
+            help) help help; return;;
+             man) man man; return;;
+               *) echo '*** Wrong choice ***' >&2
+         esac
+      done
+   }
+   local topic arg
    for topic in "$@"; do
       let arg++
       [[ $topic == [1-8]* ]] && { man "$topic" "${@:$((arg+1))}"; return; }
-      if [[ $(type -a $topic 2>/dev/null) == *builtin*/* ]]; then
+      if [[ $(type -at $topic 2>/dev/null) == builtin*file ]]; then
          select choice in "help $topic" "man $topic"; do
             case "$choice" in
                help*) help "$topic"; break;;
@@ -87,6 +97,7 @@ m() {
       fi
    done
 }
+_type() { (($#)) || { help type; return; }; type -a "$@"; }
 
 x() {
    if [[ $- == *x* ]]
@@ -449,9 +460,8 @@ alias    4='cd ../../../..'
 alias cd..='cd ..'
 alias   ..='cd ..'
 
-alias  ?='type -a'
+alias ?=_type
 alias mm='man -k'
-
 alias    e=echo
 alias   pf=printf
 alias    c='\cat -n'
