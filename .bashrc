@@ -97,6 +97,7 @@ m() {
       fi
    done
 }
+
 _type() { (($#)) || { help type; return; }; type -a "$@"; }
 
 x() {
@@ -194,22 +195,8 @@ sw() {
 
 bak() { local arg; for arg in "$@"; do 'cp' -i -- "$arg" "$arg".bak; done; }
 
-# Usage: rrm/rmm 'pattern' - remove all those files
-# todo: bakrm() or cron job ?!
-rrm() {
-   if (($# != 1)); then
-
-      echo "Usage: $FUNCNAME 'pattern' OR $FUNCNAME -b|--backup" >&2
-
-   elif [[ $1 == @(-b|--backup) ]]; then
-
-      find . -name '*~' -a ! -name '*.un~' -exec rm {} +
-
-   else
-      # todo: delete + interactive -delete
-      find . -name "$1" -exec rm {} +
-   fi
-}
+# todo: 'rm' not 'rm' -i + cron job ?!
+bakrm() { find . -name '*~' -a ! -name '*.un~' -exec 'rm' -i {} +; }
 
 rmi() {
    local i=0 file inodes=()
@@ -217,7 +204,7 @@ rmi() {
       ((++i < $#)) && inodes+=(-inum "$file" -o)
    done
    inodes+=(-inum "$file")
-   find . \( "${inodes[@]}" \) -exec rm -i {} +
+   find . \( "${inodes[@]}" \) -exec 'rm' -i {} +
 }
 
 f() {
@@ -231,10 +218,11 @@ db() {
    PS3='Choose a database to update: '
    local prgm
    select prgm in locate 'apropos, man -k'; do
-      if [[ $prgm == apropos* ]]
-      then printf 'makewhatis...\n'; makewhatis & break
-      else printf 'updatedb...\n'; updatedb & break
-      fi
+      case "$prgm" in
+           locate) printf 'updatedb...\n'; updatedb & return;;
+         apropos*) printf 'makewhatis...\n'; makewhatis & return;;
+                *) echo '*** Wrong choice ***' >&2
+      esac
    done
 }
 
@@ -285,8 +273,7 @@ s() {
       else 'grep'    -iE --color "$1" /etc/services
       fi
    else
-      # root bash (todo: version?)
-      if ! [[ $(\sudo -V) == *1.6* ]]
+      if sudo -E true 2>/dev/null
       then sudo -E /bin/bash
       else sudo    /bin/bash
       fi
@@ -478,8 +465,8 @@ alias  msg=dmesg
 alias dump='\dump -u'
 alias bc='\bc -l'
 
-# todo: version?
 if ! [[ $(sudo -V) == *1.6* ]]; then
+   # todo: if sudo -E true 2>/dev/null OR [[ version > 1.6 ]] ...
    alias sudo="sudo -p 'Password for %p: '"
 else
    alias sudo="sudo -p 'Password for %u: '"
