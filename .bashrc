@@ -67,6 +67,162 @@ export PS2='↪ '
 export PS3='Choose an entry: '
 export PS4='+ '
 
+# Aliases {{{1
+
+alias       v="$my_vim"
+alias      vi="$my_vim"
+alias     vim="$my_vim"
+alias    view="$my_vim -R"
+alias      vd="$my_vim -d"
+alias vimdiff="$my_vim -d"
+alias     gvd="$my_gvim -d"
+alias      gv="$my_gvim"
+alias     gvi="$my_gvim"
+alias vish='sudo vipw -s'
+
+alias   l='\ls -FB --color=auto'
+alias  ld='\ls -FB --color=auto -d'
+alias  la='\ls -FB --color=auto -A'
+alias  lr='\ls -FB --color=auto -R'
+alias  lk='\ls -FB --color=auto -S'
+alias  lx='\ls -FB --color=auto -X'
+alias  ll='\ls -FB --color=auto -hl --time-style="+(%d %b %y - %H:%M)"'
+alias lld='\ls -FB --color=auto -dhl --time-style="+(%d %b %y - %H:%M)"'
+alias lla='\ls -FB --color=auto -Ahl --time-style="+(%d %b %y - %H:%M)"'
+alias llr='\ls -FB --color=auto -Rhl --time-style="+(%d %b %y - %H:%M)"'
+alias llk='\ls -FB --color=auto -Shl --time-style="+(%d %b %y - %H:%M)"'
+alias llx='\ls -FB --color=auto -Xhl --time-style="+(%d %b %y - %H:%M)"'
+alias  lv="\ls | $my_vim -"
+alias mo="$my_vim -"
+
+alias  cd-='cd -'
+alias -- -='cd -'
+alias    1='cd ..'
+alias    2='cd ../..'
+alias    3='cd ../../..'
+alias    4='cd ../../../..'
+alias cd..='cd ..'
+alias   ..='cd ..'
+
+alias ?=_type
+alias mm='man -k'
+alias    e=echo
+alias   pf=printf
+alias    c='\cat -n'
+alias    t=tail
+alias   tf=tailf
+alias   lo='\locate -i'
+alias ldapsearch='\ldapsearch -x -LLL'
+alias   pa='(IFS=:; printf "%s\n" $PATH | sort -u)'
+alias   pw='\pwd -P'
+alias   to=touch
+alias  cmd=command
+alias  msg=dmesg
+
+alias dump='\dump -u'
+alias bc='\bc -l'
+
+if sudo -V |
+   { read _ _ ver; IFS=. read maj min _ <<<"$ver"; ((maj > 0 && min > 6)); }
+then alias sudo="sudo -p 'Password for %p: '"
+else alias sudo="sudo -p 'Password for %u: '"
+fi
+alias sd=sudo
+alias sde=sudoedit
+
+alias j='jobs -l'
+alias z=fg
+alias -- --='fg %-'
+
+alias pl=perl
+alias py='python -i -c "from math import *"'
+alias rb=irb
+
+alias  sed='\sed -r'
+alias seds="echo sed \"'s/old/new/'\" file"
+
+alias  a=alias
+alias ua=unalias
+
+alias   o='set -o'
+alias  oo=shopt
+alias se=set
+alias use=unset
+
+alias mn='\mount | cut -d" " -f1,3,5,6 | column -t'
+alias umn=umount
+
+alias cg=chgrp
+alias co=chown
+alias cm=chmod
+alias cr='chmod u+r'
+alias cw='chmod u+w'
+alias cx='chmod u+x'
+alias setuid='chmod u+s'
+alias setgid='chmod g+s'
+alias setsticky='chmod +t'
+
+alias g='\grep -iE --color'
+alias hg='history | \grep -iE --color'
+alias pgrep='pgrep -l'
+alias pg='ps j --headers | head -1 && ps fajxww | \grep -v grep | \grep -iE --color'
+
+alias  k=kill
+alias kl='kill -l'
+alias ka=killall
+alias pk=pkill
+
+if command -v ncal >/dev/null 2>&1; then
+   alias cal='env LC_TIME=bg_BG.utf8 ncal -3 -M -C'
+   alias call='env LC_TIME=bg_BG.utf8 ncal -y -M -C'
+else
+   alias cal='env LC_TIME=bg_BG.utf8 cal -m3'
+   alias call='env LC_TIME=bg_BG.utf8 cal -my'
+fi
+alias date="\date '+%d %B [%-m] %Y, %H:%M %Z (%A)'"
+
+alias r='netstat -rn'
+alias i='hostname -i'
+alias ii='/sbin/ifconfig'
+alias ia='/sbin/ifconfig -a'
+alias ipconfig=ifconfig
+
+alias cp='cp -i'
+alias mv='mv -i'
+alias rm='rm -i --preserve-root'
+alias md='\mkdir -p'
+
+alias      akw=awk
+alias     akws=awks
+alias      bka=bak
+alias     bnid=bind
+alias      cdm=cmd
+alias      cta=cat
+alias     ehco=echo
+alias   exprot=export
+alias     gerp=grep
+alias    gveiw=gview
+alias     gvmi=gvim
+alias  histroy=history
+alias     hlep=help
+alias  hsitory=history
+alias     jbos=jobs
+alias     klil=kill
+alias      pdw=pwd
+alias     pnig=ping
+alias      pph=php
+alias     prel=perl
+alias       pt=tput
+alias   pyhton=python
+alias     rbuy=ruby
+alias      rmp=rpm
+alias    shotp=shopt
+alias snlookup=nslookup
+alias     tpye=type
+alias     veiw=view
+alias      vmi=vim
+alias      shh=ssh
+
 # Functions {{{1
 
 m() {
@@ -273,7 +429,8 @@ s() {
       else 'grep'    -iE --color "$1" /etc/services
       fi
    else
-      if sudo -E true 2>/dev/null
+      if 'sudo' -V |
+         { read _ _ ver; IFS=. read maj min _ <<<"$ver"; ((maj > 0 && min > 6)); }
       then sudo -E /bin/bash
       else sudo    /bin/bash
       fi
@@ -409,163 +566,6 @@ b() {
    else figlist
    fi
 }
-
-# Aliases {{{1
-
-alias       v="$my_vim"
-alias      vi="$my_vim"
-alias     vim="$my_vim"
-alias    view="$my_vim -R"
-alias      vd="$my_vim -d"
-alias vimdiff="$my_vim -d"
-alias     gvd="$my_gvim -d"
-alias      gv="$my_gvim"
-alias     gvi="$my_gvim"
-alias vish='sudo vipw -s'
-
-alias   l='\ls -FB --color=auto'
-alias  ld='\ls -FB --color=auto -d'
-alias  la='\ls -FB --color=auto -A'
-alias  lr='\ls -FB --color=auto -R'
-alias  lk='\ls -FB --color=auto -S'
-alias  lx='\ls -FB --color=auto -X'
-alias  ll='\ls -FB --color=auto -hl --time-style="+(%d %b %y - %H:%M)"'
-alias lld='\ls -FB --color=auto -dhl --time-style="+(%d %b %y - %H:%M)"'
-alias lla='\ls -FB --color=auto -Ahl --time-style="+(%d %b %y - %H:%M)"'
-alias llr='\ls -FB --color=auto -Rhl --time-style="+(%d %b %y - %H:%M)"'
-alias llk='\ls -FB --color=auto -Shl --time-style="+(%d %b %y - %H:%M)"'
-alias llx='\ls -FB --color=auto -Xhl --time-style="+(%d %b %y - %H:%M)"'
-alias  lv="\ls | $my_vim -"
-alias mo="$my_vim -"
-
-alias  cd-='cd -'
-alias -- -='cd -'
-alias    1='cd ..'
-alias    2='cd ../..'
-alias    3='cd ../../..'
-alias    4='cd ../../../..'
-alias cd..='cd ..'
-alias   ..='cd ..'
-
-alias ?=_type
-alias mm='man -k'
-alias    e=echo
-alias   pf=printf
-alias    c='\cat -n'
-alias    t=tail
-alias   tf=tailf
-alias   lo='\locate -i'
-alias ldapsearch='\ldapsearch -x -LLL'
-alias   pa='(IFS=:; printf "%s\n" $PATH | sort -u)'
-alias   pw='\pwd -P'
-alias   to=touch
-alias  cmd=command
-alias  msg=dmesg
-
-alias dump='\dump -u'
-alias bc='\bc -l'
-
-if ! [[ $(sudo -V) == *1.6* ]]; then
-   # todo: if sudo -E true 2>/dev/null OR [[ version > 1.6 ]] ...
-   alias sudo="sudo -p 'Password for %p: '"
-else
-   alias sudo="sudo -p 'Password for %u: '"
-fi
-alias sd=sudo
-alias sde=sudoedit
-
-alias j='jobs -l'
-alias z=fg
-alias -- --='fg %-'
-
-alias pl=perl
-alias py='python -i -c "from math import *"'
-alias rb=irb
-
-alias  sed='\sed -r'
-alias seds="echo sed \"'s/old/new/'\" file"
-
-alias  a=alias
-alias ua=unalias
-
-alias   o='set -o'
-alias  oo=shopt
-alias se=set
-alias use=unset
-
-alias mn='\mount | cut -d" " -f1,3,5,6 | column -t'
-alias umn=umount
-
-alias cg=chgrp
-alias co=chown
-alias cm=chmod
-alias cr='chmod u+r'
-alias cw='chmod u+w'
-alias cx='chmod u+x'
-alias setuid='chmod u+s'
-alias setgid='chmod g+s'
-alias setsticky='chmod +t'
-
-alias g='\grep -iE --color'
-alias hg='history | \grep -iE --color'
-alias pgrep='pgrep -l'
-alias pg='ps j --headers | head -1 && ps fajxww | \grep -v grep | \grep -iE --color'
-
-alias  k=kill
-alias kl='kill -l'
-alias ka=killall
-alias pk=pkill
-
-if command -v ncal >/dev/null 2>&1; then
-   alias cal='env LC_TIME=bg_BG.utf8 ncal -3 -M -C'
-   alias call='env LC_TIME=bg_BG.utf8 ncal -y -M -C'
-else
-   alias cal='env LC_TIME=bg_BG.utf8 cal -m3'
-   alias call='env LC_TIME=bg_BG.utf8 cal -my'
-fi
-alias date="\date '+%d %B [%-m] %Y, %H:%M %Z (%A)'"
-
-alias r='netstat -rn'
-alias i='hostname -i'
-alias ii='/sbin/ifconfig'
-alias ia='/sbin/ifconfig -a'
-alias ipconfig=ifconfig
-
-alias cp='cp -i'
-alias mv='mv -i'
-alias rm='rm -i --preserve-root'
-alias md='\mkdir -p'
-
-alias      akw=awk
-alias     akws=awks
-alias      bka=bak
-alias     bnid=bind
-alias      cdm=cmd
-alias      cta=cat
-alias     ehco=echo
-alias   exprot=export
-alias     gerp=grep
-alias    gveiw=gview
-alias     gvmi=gvim
-alias  histroy=history
-alias     hlep=help
-alias  hsitory=history
-alias     jbos=jobs
-alias     klil=kill
-alias      pdw=pwd
-alias     pnig=ping
-alias      pph=php
-alias     prel=perl
-alias       pt=tput
-alias   pyhton=python
-alias     rbuy=ruby
-alias      rmp=rpm
-alias    shotp=shopt
-alias snlookup=nslookup
-alias     tpye=type
-alias     veiw=view
-alias      vmi=vim
-alias      shh=ssh
 
 # Programmable completion {{{1
 complete -A helptopic      help hlep m # Currently, same as builtin, man?
