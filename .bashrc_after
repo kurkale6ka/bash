@@ -9,9 +9,11 @@ gc() {
 }
 alias gp='git push origin master'
 
-complete -F _longopts -W 'HEAD add bisect branch checkout clone commit diff
-fetch grep init log merge mv pull push rebase revert reset rm show status tag' \
-git
+complete -W 'HEAD add bisect branch checkout clone commit diff fetch grep init
+log merge mv pull push rebase revert reset rm show status tag' git
+
+# Gentoo
+alias exi=eix
 
 # Debian
 alias ap='sudo aptitude'

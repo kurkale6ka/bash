@@ -192,36 +192,15 @@ alias mv='mv -i'
 alias rm='rm -i --preserve-root'
 alias md='\mkdir -p'
 
-alias      akw=awk
-alias     akws=awks
-alias      bka=bak
-alias     bnid=bind
-alias      cdm=cmd
-alias      cta=cat
-alias     ehco=echo
-alias   exprot=export
-alias     gerp=grep
-alias    gveiw=gview
-alias     gvmi=gvim
-alias  histroy=history
-alias     hlep=help
-alias  hsitory=history
-alias     jbos=jobs
-alias     klil=kill
-alias      pdw=pwd
-alias     pnig=ping
-alias      pph=php
-alias     prel=perl
-alias       pt=tput
-alias   pyhton=python
-alias     rbuy=ruby
-alias      rmp=rpm
-alias    shotp=shopt
-alias snlookup=nslookup
-alias     tpye=type
-alias     veiw=view
-alias      vmi=vim
-alias      shh=ssh
+alias   akw=awk
+alias   cta=cat
+alias  pnig=ping
+alias  prel=perl
+alias   rmp=rpm
+alias shotp=shopt
+alias  tpye=type
+alias   vmi=vim
+alias   shh=ssh
 
 # Functions {{{1
 
@@ -568,45 +547,38 @@ b() {
 }
 
 # Programmable completion {{{1
-complete -A helptopic      help hlep m # Currently, same as builtin, man?
-# Complete commands and long options for: man
-complete -A command -F _longopts m man mna
-complete -A alias          alias a unalias ua
-complete -A enabled        builtin
-complete -A disabled       enable
-complete -A command        which wihch type ? tpye sudo whereis
-complete -A export         printenv
-complete -A variable       export local readonly unset use
-complete -A function       function
-complete -A binding        bind bnid
-complete -A user           chage chfn finger groups mail passwd slay su userdel usermod w write
-complete -A hostname       dig nslookup snlookup host p ping pnig ssh
-complete -A signal         kill k klil
-complete -A job     -P '%' jobs j fg z disown
-complete -A stopped -P '%' bg
-complete -A setopt         set o
-complete -A shopt          shopt oo
-complete -A file           n
-complete -A directory      mkdir md rmdir rd
-# complete -A directory -F _cd cd
+complete -A helptopic        help # Currently, same as builtin
+complete -A command          man m which whereis type ? tpye sudo
+complete -A alias            alias a unalias ua
+complete -A enabled          builtin
+complete -A disabled         enable
+complete -A export           printenv
+complete -A variable         export local readonly unset use
+complete -A function         function
+complete -A binding          bind
+complete -A user             chage chfn finger groups mail passwd slay su userdel usermod w write
+complete -A hostname         dig nslookup snlookup host p ping pnig ssh shh
+complete -A signal           kill k
+complete -A job -P '%'       jobs j fg z disown
+complete -A stopped -P '%'   bg
+complete -A setopt           set o
+complete -A shopt            shopt oo
+complete -A file             n
+complete -A directory        mkdir md rmdir rd
+complete -A directory -F _cd cd
 
 # eXclude what is not(!) matched by the pattern
 complete -f -o default -X '!*.@(tar.gz|tgz|tar.bz2|tbz2|tbz|tar|bz2|gz|zip|rar|Z|7z)' u
 complete -f -o default -X '!*.@(tar.gz|tgz|tar.bz2|tbz2|tbz|tar)' tar
-complete -f -o default -X '!*.php' php    pph
-complete -f -o default -X '!*.pl'  perl   prel   pl
-complete -f -o default -X '!*.py'  python pyhton py
-complete -f -o default -X '!*.rb'  ruby   rbuy   rb
+complete -f -o default -X '!*.pl' perl   prel pl
+complete -f -o default -X '!*.py' python py
+complete -f -o default -X '!*.rb' ruby   rb
 
-complete -W 'bold dim rev setab setaf sgr0 smul' tp pt tput
 complete -W 'eth0 eth1 lo' ir
-complete -W 'if=/dev/zero' dd
-
 complete -W 'alias arrayvar binding builtin command directory disabled enabled
 export file function group helptopic hostname job keyword running service
 setopt shopt signal stopped user variable' cl compgen complete
 
-# todo: keep?
 # Usage: cl arg - computes a completion list for arg
 cl() { column <(compgen -A "$1"); }
 
@@ -629,44 +601,6 @@ _cd() {
       fi
    fi
 }
-
-# --option
-_longopts() {
-
-   COMP_WORDBREAKS="${COMP_WORDBREAKS/=/}"
-
-   local cur="${COMP_WORDS[COMP_CWORD]}"
-
-   # Do not complete if 'cur' doesn't begin with a '-'
-   [[ ! $cur || $cur != -* ]] && return
-
-   local prog="$1"
-
-   [[ $prog == @(v|vi|vim|vmi|vimx|gv|gvi|gvmi) ]] && prog=gvim
-   [[ $prog == @(m|man|mna) ]]                     && prog=man
-   [[ $prog == @(l|ll|ld|lld|l.|ll.|la|lla|lr|llr|lk|llk|lx|llx|lv|lc|llc|lm|llm|lu|llu) ]] && prog=ls
-
-   COMPREPLY=($(\
-   \
-   "$prog" --help |\
-   'grep' -iEoe '--[[:alpha:]][[:alpha:]-]+[=[]{0,2}[[:alpha:]_-]+]?' |\
-   'grep' -e "$cur" |\
-   sort -u\
-   ))
-
-   local i
-   for i in "${!COMPREPLY[@]}"; do
-
-      if [[ ${COMPREPLY[i]} != *[* ]]; then
-
-         COMPREPLY[i]="${COMPREPLY[i]%]}"
-      fi
-   done
-}
-
-# Complete long options for: bash, ls, vim
-complete -o default -F _longopts bash ls l ll ld lld l. ll. la lla lr llr lk\
-llk lx llx lv lc llc lm llm lu llu v vi vim vmi vimx gv gvi gvim gvmi rpm
 
 # Business specific or system dependant stuff
 [[ -r ~/.bashrc_after ]] && source ~/.bashrc_after

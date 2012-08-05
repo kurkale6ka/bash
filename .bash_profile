@@ -50,22 +50,22 @@ export LESS='-r -i -M -F -PM?f%f - :.?L%L lines, :.?ltL\:%lt:.?pB, %pB\% : .?e(B
 #      smul -> sm ul -> set mode underline
 #      rmso -> rm so -> remove mode stand out...
 
-export LESS_TERMCAP_mb=$LightGreen # begin blinking
-export LESS_TERMCAP_md=$LightBlue  # begin bold
-export LESS_TERMCAP_me=$Reset      # end mode
-export LESS_TERMCAP_so=$(tput bold; tput setaf 3; tput setab 4) # so -> stand out - info box
-export LESS_TERMCAP_se=$(tput rmso; tput sgr0)                  # se -> stand out end
+export LESS_TERMCAP_mb="$LightGreen" # begin blinking
+export LESS_TERMCAP_md="$LightBlue"  # begin bold
+export LESS_TERMCAP_me="$Reset"      # end mode
+export LESS_TERMCAP_so="$(tput bold; tput setaf 3; tput setab 4)" # so -> stand out - info box
+export LESS_TERMCAP_se="$(tput rmso; tput sgr0)"                  # se -> stand out end
 # export LESS_TERMCAP_so=$'\E[01;47;34m'
 # export LESS_TERMCAP_se=$'\E[0m'
-export LESS_TERMCAP_us=$(tput smul; tput bold; tput setaf 5) # us -> underline start
-export LESS_TERMCAP_ue=$(tput rmul; tput sgr0)               # ue -> underline end
+export LESS_TERMCAP_us="$(tput smul; tput bold; tput setaf 5)" # us -> underline start
+export LESS_TERMCAP_ue="$(tput rmul; tput sgr0)"               # ue -> underline end
 
-# export LESS_TERMCAP_mr=$(tput rev)
-# export LESS_TERMCAP_mh=$(tput dim)
-# export LESS_TERMCAP_ZN=$(tput ssubm)
-# export LESS_TERMCAP_ZV=$(tput rsubm)
-# export LESS_TERMCAP_ZO=$(tput ssupm)
-# export LESS_TERMCAP_ZW=$(tput rsupm)
+# export LESS_TERMCAP_mr="$(tput rev)"
+# export LESS_TERMCAP_mh="$(tput dim)"
+# export LESS_TERMCAP_ZN="$(tput ssubm)"
+# export LESS_TERMCAP_ZV="$(tput rsubm)"
+# export LESS_TERMCAP_ZO="$(tput ssupm)"
+# export LESS_TERMCAP_ZW="$(tput rsupm)"
 
 # Completion
 export FIGNORE='~'
