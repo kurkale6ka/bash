@@ -106,7 +106,6 @@ alias   ..='cd ..'
 
 alias ?=_type
 alias mm='man -k'
-alias    e=echo
 alias   pf=printf
 alias    c='\cat -n'
 alias    t=tail
@@ -217,7 +216,7 @@ m() {
    }
    local topic arg
    for topic in "$@"; do
-      let arg++
+      ((arg++))
       [[ $topic == [1-8]* ]] && { man "$topic" "${@:$((arg+1))}"; return; }
       if [[ $(type -at $topic 2>/dev/null) == builtin*file ]]; then
          select choice in "help $topic" "man $topic"; do
@@ -231,6 +230,14 @@ m() {
          { help "$topic" || man "$topic" || type -a "$topic"; } 2>/dev/null
       fi
    done
+}
+
+e() {
+   local status="$?"
+   if (($#))
+   then echo "$@"
+   else echo "The exit status \$? was: $status"
+   fi
 }
 
 _type() { (($#)) || { help type; return; }; type -a "$@"; }
@@ -293,16 +300,16 @@ usersee() {
       case "$1" in
          -p)
             header=LOGIN:PASSWORD:UID:GID:GECOS:HOME:SHELL
-            sed 's/::/:-:/g' /etc/passwd | sort -k7 -t: | sed "1i$header" |\
+            sort -k7 -t: /etc/passwd | sed -e "1i$header" -e 's/::/:-:/g' |\
             column -ts:;;
          -g)
             header=GROUP:PASSWORD:GID:USERS
             sort -k4 -t: /etc/group | sed "1i$header" | column -ts:;;
          -s)
             header=LOGIN:PASSWORD:LAST:MIN:MAX:WARN:INACTIVITY:EXPIRATION:RESERVED
-            sed 's/::/:-:/g' /etc/shadow | sort -k2 -t: |\
+            sudo sort -k2 -t: /etc/shadow |\
             awk -F: '{print $1":"substr($2,1,3)":"$3":"$4":"$5":"$6":"$7":"$8":"$9}' |\
-            sed "1i$header" | column -ts:;;
+            sed -e "1i$header" -e 's/::/:-:/g' | column -ts:;;
           *)
             for user in "$@"; do
                sudo grep -iE --color "$user" /etc/{passwd,shadow}
@@ -504,8 +511,7 @@ ldot() {
    for arg in "$@"; do
       printf '%s:\n' "$arg"
       (cd "$arg"; "${ls[@]}" -d .[^.]*)
-      let i++
-      (($# != i)) && echo
+      (($# != ++i)) && echo
    done
 }
 .() { if (($#)); then source "$@"; else 'ls' -FB --color=auto -d .[^.]*; fi; }
