@@ -22,13 +22,18 @@
 "\C-d": kill-whole-line
 
 "\C-xa": "\"${[@]}\"\C-b\C-b\C-b\C-b\C-b"
+"\C-xb": "(())\C-b\C-b"
 "\C-xc": " | column -t"
 "\C-xd": "dimitar.dimitrov"
 "\C-xe": "printf '%s\\n' "
 "\C-xf": "for i in ; do \"$i\"; done\eb\eb\eb\C-b\C-b"
+"\C-xm": "find . -iname '*' -print0 | while IFS= read -r -d ''; do mv \"$REPLY\" \"${REPLY%.*}\". ; done\eb\eb\eb\eb\eb\eb\eb\eb\eb\eb\eb\C-b\C-b\C-b"
+"\C-xn": "unset latest; for f in ; do [[ $f -nt $latest ]] && latest=\"$f\"; done; echo \"$latest\"\eb\eb\eb\eb\eb\eb\eb\eb\eb\C-b\C-b"
+"\C-xo": "unset oldest; for f in ; do [[ $f -ot $oldest || ! $oldest ]] && oldest=\"$f\"; done; echo \"$oldest\"\eb\eb\eb\eb\eb\eb\eb\eb\eb\eb\C-b\C-b"
 "\C-xp": "printf '%s\\n' \"\"\C-b"
 "\C-xq": "\eb\"\ef\""
 "\C-xr": "IFS= read -ra  <<< \"$\"\eb\eb\C-b"
+"\C-xs": "find . -iname '*' -print\eb\C-b\C-b\C-b"
 "\C-xv": "\"$\"\C-b"
 "\C-xx": " && echo 'This is a test'"
 "\C-x,": "{,}\C-b\C-b"
@@ -38,7 +43,13 @@
 "\C-x1": "\"$()\"\C-b\C-b"
 "\C-x2": "\"$(())\"\C-b\C-b\C-b"
 "\C-x>": "> 2>&1\eb\eb\C-b"
-"\C-x\e[3~": "find . -iname '' -exec 'rm' -i {} +\eb\eb\eb\C-b\C-b\C-b"
+"\C-x<": "while read -r; do echo \"$REPLY\"; done < "
+"\C-x#": "\"${#}\"\C-b\C-b\C-b"
+"\C-x/": "\"${/}\"\C-b\C-b\C-b"
+"\C-x%": "\"${%}\"\C-b\C-b\C-b"
+"\C-x:": "\"${:}\"\C-b\C-b\C-b"
+"\C-x*": "(shopt -s nullglob dotglob; shopt -u failglob; files=(*); echo There are \"${#files[@]}\" files)"
+"\C-x\e[3~": "find . -iname '*' -exec 'rm' -i {} +\eb\eb\eb\C-b\C-b\C-b"
 
 # Variable settings
 # -----------------

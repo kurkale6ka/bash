@@ -13,38 +13,38 @@ elif command -v gvim >/dev/null 2>&1; then
    my_vim="$my_gvim -v"
 else
    my_gvim=vim
-   my_vim="$my_gvim"
+   my_vim=$my_gvim
 fi
 
 # Colors: set[af|ab] (ANSI [fore|back]ground) {{{1
 
-# Black="$(tput setaf 0)"
-# BlackBG="$(tput setab 0)"
-# DarkGrey="$(tput bold ; tput setaf 0)"
-# LightGrey="$(tput setaf 7)"
-# LightGreyBG="$(tput setab 7)"
-# White="$(tput bold ; tput setaf 7)"
-# Red="$(tput setaf 1)"
-# RedBG="$(tput setab 1)"
-  LightRed="$(tput bold ; tput setaf 1)"
-# Green="$(tput setaf 2)"
-# GreenBG="$(tput setab 2)"
-  LightGreen="$(tput bold ; tput setaf 2)"
-# Brown="$(tput setaf 3)"
-# BrownBG="$(tput setab 3)"
-# Yellow="$(tput bold ; tput setaf 3)"
-# Blue="$(tput setaf 4)"
-# BlueBG="$(tput setab 4)"
-  LightBlue="$(tput bold ; tput setaf 4)"
-  Purple="$(tput setaf 5)"
-# PurpleBG="$(tput setab 5)"
-# Pink="$(tput bold ; tput setaf 5)"
-# Cyan="$(tput setaf 6)"
-# CyanBG="$(tput setab 6)"
-# LightCyan="$(tput bold ; tput setaf 6)"
-# Bold="$(tput bold)"
-  Underline="$(tput smul)"
-  Reset="$(tput sgr0)" # No Color
+# Black=$(tput setaf 0)
+# BlackBG=$(tput setab 0)
+# DarkGrey=$(tput bold ; tput setaf 0)
+# LightGrey=$(tput setaf 7)
+# LightGreyBG=$(tput setab 7)
+# White=$(tput bold ; tput setaf 7)
+# Red=$(tput setaf 1)
+# RedBG=$(tput setab 1)
+  LightRed=$(tput bold ; tput setaf 1)
+# Green=$(tput setaf 2)
+# GreenBG=$(tput setab 2)
+  LightGreen=$(tput bold ; tput setaf 2)
+# Brown=$(tput setaf 3)
+# BrownBG=$(tput setab 3)
+# Yellow=$(tput bold ; tput setaf 3)
+# Blue=$(tput setaf 4)
+# BlueBG=$(tput setab 4)
+  LightBlue=$(tput bold ; tput setaf 4)
+  Purple=$(tput setaf 5)
+# PurpleBG=$(tput setab 5)
+# Pink=$(tput bold ; tput setaf 5)
+# Cyan=$(tput setaf 6)
+# CyanBG=$(tput setab 6)
+# LightCyan=$(tput bold ; tput setaf 6)
+# Bold=$(tput bold)
+  Underline=$(tput smul)
+  Reset=$(tput sgr0) # No Color
 
 # PS1 and title (\e]2; ---- \a) {{{1
 
@@ -69,15 +69,15 @@ export PS4='+ '
 
 # Aliases {{{1
 
-alias       v="$my_vim"
-alias      vi="$my_vim"
-alias     vim="$my_vim"
+alias       v=$my_vim
+alias      vi=$my_vim
+alias     vim=$my_vim
 alias    view="$my_vim -R"
 alias      vd="$my_vim -d"
 alias vimdiff="$my_vim -d"
 alias     gvd="$my_gvim -d"
-alias      gv="$my_gvim"
-alias     gvi="$my_gvim"
+alias      gv=$my_gvim
+alias     gvi=$my_gvim
 alias vish='sudo vipw -s'
 
 alias   l='\ls -FB --color=auto'
@@ -233,7 +233,7 @@ m() {
 }
 
 e() {
-   local status="$?"
+   local status=$?
    if (($#))
    then echo "$@"
    else echo "The exit status \$? was: $status"
@@ -394,7 +394,7 @@ vn() {
 
 rc() {
    if (($#)); then
-      local rcfile="$HOME"/.inputrc
+      local rcfile=$HOME/.inputrc
       xclip -f <(echo "'cat' >> $rcfile <<'EOF'") "$rcfile" <(echo EOF)
    else
       local inputrc="printf '%s\n' "
@@ -459,7 +459,7 @@ d() {
                printf '%3d%s\t%s\n' "$size" "$unit" "$file"
                break
             fi
-            size="$((size / 1024))"
+            size=$((size / 1024))
          done
       done
    fi
@@ -485,7 +485,7 @@ ln() {
       local file
       for file in * .*; do
          if [[ -h $file ]]; then
-            'ls' -FBAhl --color=auto --time-style="+(%d %b %y - %H:%M)" "$file"
+            'ls' -FBAhl --color=auto --time-style="+(%d %b %y - %H:%M)" -- "$file"
          fi
       done
    fi
@@ -591,7 +591,7 @@ cl() { column <(compgen -A "$1"); }
 # Completion of user names
 _cd() {
 
-   local cur="${COMP_WORDS[COMP_CWORD]}"
+   local cur=${COMP_WORDS[COMP_CWORD]}
    local userlist
 
    # ex: ~user, not ~/dev
