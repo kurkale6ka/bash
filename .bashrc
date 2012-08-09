@@ -249,7 +249,7 @@ x() {
    fi
 } 2>/dev/null
 
-n() { sed -n "$1"p "$2"; }
+n() { 'sed' -n "$1{p;q}" "$2"; }
 
 if ! command -v service >/dev/null 2>&1; then
    service() { /etc/init.d/"$1" "${2:-start}"; }
@@ -470,7 +470,7 @@ rd() {
    for arg in "$@"; do
       if [[ -d $arg ]]; then
          if read -rp "rd: remove directory '$arg'? "; then
-            [[ $REPLY == @(y|yes) ]] && 'rm' -rf "$arg"
+            [[ $REPLY == @(y|yes) ]] && 'rm' -rf -- "$arg"
          fi
       else
          echo "$arg is not a directory" >&2
