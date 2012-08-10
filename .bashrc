@@ -107,7 +107,6 @@ alias   ..='cd ..'
 alias ?=_type
 alias mm='man -k'
 alias   pf=printf
-alias    c='\cat -n'
 alias    t=tail
 alias   tf=tailf
 alias   lo='\locate -i'
@@ -178,7 +177,6 @@ else
    alias cal='env LC_TIME=bg_BG.utf8 cal -m3'
    alias call='env LC_TIME=bg_BG.utf8 cal -my'
 fi
-alias date="\date '+%d %B [%-m] %Y, %H:%M %Z (%A)'"
 
 alias r='netstat -rn'
 alias i='hostname -i'
@@ -240,6 +238,8 @@ e() {
    fi
 }
 
+c() { [[ -t 1 ]] && { 'cat' -n "$@"; return; }; 'cat' "$@"; }
+
 _type() { (($#)) || { help type; return; }; type -a "$@"; }
 
 x() {
@@ -254,6 +254,11 @@ n() { 'sed' -n "$1{p;q}" "$2"; }
 if ! command -v service >/dev/null 2>&1; then
    service() { /etc/init.d/"$1" "${2:-start}"; }
 fi
+
+date() {
+   (($#)) && { command date "$@"; return; }
+   command date '+%d %B [%-m] %Y, %H:%M %Z (%A)'
+}
 
 # unzip or uname
 u() {
