@@ -58,7 +58,7 @@ fi
 
 if ((EUID == 0)); then
    PS1="$title\n\[$LightRed\]\u \H \[$LightBlue\]\w\[$Reset\] - \A, %\j$info\n# "
-   export PATH="$PATH":/sbin:/usr/sbin:/usr/local/sbin:/root/bin
+   export PATH=$PATH:/sbin:/usr/sbin:/usr/local/sbin:/root/bin
 else
    PS1="$title\n\[$LightGreen\]\u \H \[$LightBlue\]\w\[$Reset\] - \A, %\j$info\n\$ "
 fi
@@ -111,7 +111,6 @@ alias    t=tail
 alias   tf=tailf
 alias   lo='\locate -i'
 alias ldapsearch='\ldapsearch -x -LLL'
-alias   pa='(IFS=:; printf "%s\n" $PATH | sort -u)'
 alias   pw='\pwd -P'
 alias   to=touch
 alias  cmd=command
@@ -121,7 +120,7 @@ alias dump='\dump -u'
 alias bc='\bc -l'
 
 if sudo -V |
-   { read _ _ ver; IFS=. read maj min _ <<<"$ver"; ((maj > 0 && min > 6)); }
+   { read -r _ _ ver; IFS=. read -r maj min _ <<<"$ver"; ((maj > 0 && min > 6)); }
 then alias sudo="sudo -p 'Password for %p: '"
 else alias sudo="sudo -p 'Password for %u: '"
 fi
@@ -215,17 +214,17 @@ m() {
    local topic arg
    for topic in "$@"; do
       ((arg++))
-      [[ $topic == [1-8]* ]] && { man "$topic" "${@:$((arg+1))}"; return; }
-      if [[ $(type -at $topic 2>/dev/null) == builtin*file ]]; then
+      [[ $topic == [1-8]* ]] && { man "$topic" -- "${@:$((arg+1))}"; return; }
+      if [[ $(type -at -- $topic 2>/dev/null) == builtin*file ]]; then
          select choice in "help $topic" "man $topic"; do
             case "$choice" in
-               help*) help "$topic"; break;;
-                man*) man "$topic"; break;;
+               help*) help -- "$topic"; break;;
+                man*) man -- "$topic"; break;;
                    *) echo '*** Wrong choice ***' >&2
             esac
          done
       else
-         { help "$topic" || man "$topic" || type -a "$topic"; } 2>/dev/null
+         { help -- "$topic" || man -- "$topic" || type -a -- "$topic"; } 2>/dev/null
       fi
    done
 }
@@ -238,9 +237,11 @@ e() {
    fi
 }
 
-c() { [[ -t 1 ]] && { 'cat' -n "$@"; return; }; 'cat' "$@"; }
+c() { [[ -t 1 ]] && { 'cat' -n -- "$@"; return; }; 'cat' -- "$@"; }
 
-_type() { (($#)) || { help type; return; }; type -a "$@"; }
+_type() { (($#)) || { help type; return; }; type -a -- "$@"; }
+
+pa() { (IFS=: read -ra paths <<< "$PATH"; printf '%s\n' "${paths[@]}" | sort -u); }
 
 x() {
    if [[ $- == *x* ]]
@@ -249,7 +250,7 @@ x() {
    fi
 } 2>/dev/null
 
-n() { 'sed' -n "$1{p;q}" "$2"; }
+n() { 'sed' -n "$1{p;q}" -- "$2"; }
 
 if ! command -v service >/dev/null 2>&1; then
    service() { /etc/init.d/"$1" "${2:-start}"; }
@@ -267,15 +268,15 @@ u() {
       for arg in "$@"; do
          if [[ -f $arg ]]; then
             case "$arg" in
-               *.tar.gz  | *.tgz          ) tar zxvf   "$arg";;
-               *.tar.bz2 | *.tbz2 | *.tbz ) tar jxvf   "$arg";;
-                                    *.tar ) tar xvf    "$arg";;
-                                    *.bz2 ) bunzip2    "$arg";;
-                                    *.gz  ) gunzip     "$arg";;
-                                    *.zip ) unzip      "$arg";;
-                                    *.rar ) unrar x    "$arg";;
-                                    *.Z   ) uncompress "$arg";;
-                                    *.7z  ) 7z x       "$arg";;
+               *.tar.gz  | *.tgz          ) tar zxvf      "$arg";;
+               *.tar.bz2 | *.tbz2 | *.tbz ) tar jxvf      "$arg";;
+                                    *.tar ) tar xvf       "$arg";;
+                                    *.bz2 ) bunzip2    -- "$arg";;
+                                    *.gz  ) gunzip     -- "$arg";;
+                                    *.zip ) unzip      -- "$arg";;
+                                    *.rar ) unrar x    -- "$arg";;
+                                    *.Z   ) uncompress -- "$arg";;
+                                    *.7z  ) 7z x       -- "$arg";;
                *) echo "$arg cannot be extracted!" >&2
             esac
          else
@@ -305,16 +306,16 @@ usersee() {
       case "$1" in
          -p)
             header=LOGIN:PASSWORD:UID:GID:GECOS:HOME:SHELL
-            sort -k7 -t: /etc/passwd | sed -e "1i$header" -e 's/::/:-:/g' |\
+            sort -k7 -t: /etc/passwd | 'sed' -e "1i$header" -e 's/::/:-:/g' |\
             column -ts:;;
          -g)
             header=GROUP:PASSWORD:GID:USERS
-            sort -k4 -t: /etc/group | sed "1i$header" | column -ts:;;
+            sort -k4 -t: /etc/group | 'sed' "1i$header" | column -ts:;;
          -s)
             header=LOGIN:PASSWORD:LAST:MIN:MAX:WARN:INACTIVITY:EXPIRATION:RESERVED
             sudo sort -k2 -t: /etc/shadow |\
             awk -F: '{print $1":"substr($2,1,3)":"$3":"$4":"$5":"$6":"$7":"$8":"$9}' |\
-            sed -e "1i$header" -e 's/::/:-:/g' | column -ts:;;
+            'sed' -e "1i$header" -e 's/::/:-:/g' | column -ts:;;
           *)
             for user in "$@"; do
                sudo grep -iE --color "$user" /etc/{passwd,shadow}
@@ -343,7 +344,7 @@ sw() {
 bak() { local arg; for arg in "$@"; do 'cp' -i -- "$arg" "$arg".bak; done; }
 
 # todo: 'rm' not 'rm' -i + cron job ?!
-bakrm() { find . -name '*~' -a ! -name '*.un~' -exec 'rm' -i {} +; }
+bakrm() { find . -name '*~' -a ! -name '*.un~' -exec 'rm' -i -- {} +; }
 
 rmi() {
    local i=0 file inodes=()
@@ -351,12 +352,12 @@ rmi() {
       ((++i < $#)) && inodes+=(-inum "$file" -o)
    done
    inodes+=(-inum "$file")
-   find . \( "${inodes[@]}" \) -exec 'rm' -i {} +
+   find . \( "${inodes[@]}" \) -exec 'rm' -i -- {} +
 }
 
 f() {
    if ((1 == $#))
-   then find . -iname "$1"
+   then find . -iname -- "$1"
    else find "$@"
    fi
 }
@@ -416,12 +417,12 @@ s() {
    elif (($# == 1)); then
       # s ftp|21
       if [[ $1 == [[:digit:]]* ]]
-      then 'grep' -w -iE --color "$1" /etc/services
-      else 'grep'    -iE --color "$1" /etc/services
+      then 'grep' -w -iE --color -- "$1" /etc/services
+      else 'grep'    -iE --color -- "$1" /etc/services
       fi
    else
       if 'sudo' -V |
-         { read _ _ ver; IFS=. read maj min _ <<<"$ver"; ((maj > 0 && min > 6)); }
+         { read -r _ _ ver; IFS=. read -r maj min _ <<<"$ver"; ((maj > 0 && min > 6)); }
       then sudo -E /bin/bash
       else sudo    /bin/bash
       fi
@@ -437,7 +438,7 @@ ir() { ifdown "$1" && ifup "$1" || echo "Couldn't do it." >&2; }
 
 hd() {
    if ((1 == $#))
-   then hdparm -I "$1"
+   then hdparm -I -- "$1"
    else hdparm "$@"
    fi
 }
