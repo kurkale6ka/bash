@@ -431,7 +431,7 @@ s() {
 
 h() { if (($#)); then head "$@"; else history; fi; }
 
-p() { if (($#)); then ping -c3 "$@"; else ps fjww --headers; fi; }
+p() { if (($#)); then ping -c3 -- "$@"; else ps fjww --headers; fi; }
 
 # todo: keep?
 ir() { ifdown "$1" && ifup "$1" || echo "Couldn't do it." >&2; }
@@ -453,10 +453,10 @@ d() {
    if (($#)); then args=("$@"); else args=(*); fi
    if sort -h /dev/null 2>/dev/null
    then
-      du -sh "${args[@]}" | sort -hr
+      du -sh -- "${args[@]}" | sort -hr
    else
       local unit size file
-      du -sk "${args[@]}" | sort -nr | while read -r size file
+      du -sk -- "${args[@]}" | sort -nr | while read -r size file
       do
          for unit in K M G T P E Z Y
          do
@@ -502,7 +502,7 @@ sl() {
           'Inode' 'Permissions' 'ln' 'UID' 'GID' 'Size' 'Time' 'Name'
    local args=()
    if (($#)); then args=("$@"); else args=(*); fi
-   stat -c "%8i %A (%4a) %3h %4u %4g %10s (%10Y) %n" "${args[@]}"
+   stat -c "%8i %A (%4a) %3h %4u %4g %10s (%10Y) %n" -- "${args[@]}"
 }
 
 ldot() {
@@ -516,7 +516,7 @@ ldot() {
    local i arg
    for arg in "$@"; do
       printf '%s:\n' "$arg"
-      (cd "$arg"; "${ls[@]}" -d .[^.]*)
+      (cd -- "$arg"; "${ls[@]}" -d .[^.]*)
       (($# != ++i)) && echo
    done
 }
@@ -526,34 +526,34 @@ ll.() { ldot "$@"; }
 
 lc() {
    echo "$Purple${Underline}Sorted by change date:$Reset"
-   'ls' -FB --color=auto -tc "$@"
+   'ls' -FB --color=auto -tc -- "$@"
 }
 lm() {
    echo "$Purple${Underline}Sorted by modification date:$Reset"
-   'ls' -FB --color=auto -t "$@"
+   'ls' -FB --color=auto -t -- "$@"
 }
 lu() {
    echo "$Purple${Underline}Sorted by access date:$Reset"
-   'ls' -FB --color=auto -tu "$@"
+   'ls' -FB --color=auto -tu -- "$@"
 }
 llc() {
    echo "$Purple${Underline}Sorted by change date:$Reset"
-   'ls' -FB --color=auto -tchl --time-style='+(%d %b %Y - %H:%M)' "$@"
+   'ls' -FB --color=auto -tchl --time-style='+(%d %b %Y - %H:%M)' -- "$@"
 }
 llm() {
    echo "$Purple${Underline}Sorted by modification date:$Reset"
-   'ls' -FB --color=auto -thl  --time-style='+(%d %b %Y - %H:%M)' "$@"
+   'ls' -FB --color=auto -thl  --time-style='+(%d %b %Y - %H:%M)' -- "$@"
 }
 llu() {
    echo "$Purple${Underline}Sorted by access date:$Reset"
-   'ls' -FB --color=auto -tuhl --time-style='+(%d %b %Y - %H:%M)' "$@"
+   'ls' -FB --color=auto -tuhl --time-style='+(%d %b %Y - %H:%M)' -- "$@"
 }
 
 awks() { printf 'awk -F: \047/pattern/ {print $1" "$2}\047 file\n'; }
 
 b() {
-   if (($# == 1)); then figlet -f smslant "$1"
-   elif (($# == 2)); then figlet -f "$1" "${@:2}"
+   if (($# == 1)); then figlet -f smslant -- "$1"
+   elif (($# == 2)); then figlet -f -- "$1" "${@:2}"
    else figlist
    fi
 }
