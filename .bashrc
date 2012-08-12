@@ -249,7 +249,7 @@ cv() {
          "${cvs[0]}")
             while read -r; do
                printf '%d -> %d\n' "$1" "$REPLY"; shift
-            done < <(IFS=';'; 'bc' -q <<< "obase=2; $*"; unset IFS)
+            done < <(IFS=';'; 'bc' -q <<< "obase=2; $*")
             break;;
          "${cvs[1]}")
             while (($#)); do printf '%d -> %o\n' "$1" "$1"; shift; done
