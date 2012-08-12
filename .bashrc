@@ -115,6 +115,7 @@ alias   pw='\pwd -P'
 alias   to=touch
 alias  cmd=command
 alias  msg=dmesg
+alias  sed='\sed -r'
 
 alias dump='\dump -u'
 alias bc='\bc -l'
@@ -134,9 +135,6 @@ alias -- --='fg %-'
 alias pl=perl
 alias py='python -i -c "from math import *"'
 alias rb=irb
-
-alias  sed='\sed -r'
-alias seds="echo sed \"'s/old/new/'\" file"
 
 alias  a=alias
 alias ua=unalias
@@ -389,9 +387,9 @@ vn() {
    local vim
    select vim in "${vim_options[@]}"; do
       case "$vim" in
-         "${vim_options[0]}") vim        -nNX  -u NONE;    break;;
+         "${vim_options[0]}") 'vim'      -nNX  -u NONE;    break;;
          "${vim_options[1]}") "$my_gvim" -nNXv -u NORC;    break;;
-         "${vim_options[2]}") vim        -nNX  --noplugin; break;;
+         "${vim_options[2]}") 'vim'      -nNX  --noplugin; break;;
          "${vim_options[3]}") "$my_gvim" -nN   -U NONE;    break;;
                            *) printf '\nInvalid choice!\n' >&2
       esac
@@ -548,8 +546,6 @@ llu() {
    echo "$Purple${Underline}Sorted by access date:$Reset"
    'ls' -FB --color=auto -tuhl --time-style='+(%d %b %Y - %H:%M)' -- "$@"
 }
-
-awks() { printf 'awk -F: \047/pattern/ {print $1" "$2}\047 file\n'; }
 
 b() {
    if (($# == 1)); then figlet -f smslant -- "$1"
