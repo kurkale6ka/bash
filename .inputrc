@@ -60,7 +60,9 @@
 "\C-x.": "{1..}\C-b"
 "\C-x>": "> 2>&1\e2\eb\C-b"
 "\C-x\\": "$'\\n'"
-"\C-x=": "bc <<< ''\C-b"
+"\C-x=": "'bc' <<< 'scale=20; '\C-b"
+# Function...
+# "\C-x2": "echo -n 'Converting from decimal to binary: '; 'bc' <<< 'obase=2; '\C-b"
 "\C-x*": "(shopt -s nullglob dotglob; shopt -u failglob; files=(*); echo There are \"${#files[@]}\" files)"
 "\C-x\e[3~": "find . -iname '*' -exec 'rm' -i -- {} +\e3\eb\e3\C-b"
 

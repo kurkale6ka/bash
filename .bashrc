@@ -110,15 +110,15 @@ alias   pf=printf
 alias    t=tail
 alias   tf=tailf
 alias   lo='\locate -i'
-alias ldapsearch='\ldapsearch -x -LLL'
+alias ldapsearch='ldapsearch -x -LLL'
 alias   pw='\pwd -P'
 alias   to=touch
 alias  cmd=command
 alias  msg=dmesg
-alias  sed='\sed -r'
+alias  sed='sed -r'
 
-alias dump='\dump -u'
-alias bc='\bc -l'
+alias dump='dump -u'
+alias bc='bc -ql'
 
 if sudo -V |
    { read -r _ _ ver; IFS=. read -r maj min _ <<<"$ver"; ((maj > 0 && min > 6)); }
@@ -235,9 +235,45 @@ e() {
    fi
 }
 
+cv() {
+   (($#)) || { echo 'Usage: cv digit ...' >&2; return 1; }
+   cvs[0]='Decimal to binary'
+   cvs[1]='Decimal to octal'
+   cvs[2]='Decimal to hexadecimal'
+   cvs[3]='Binary to decimal'
+   cvs[4]='Octal to decimal'
+   cvs[5]='Hexadecimal to decimal'
+   local cv
+   select cv in "${cvs[@]}"; do
+      case "$cv" in
+         "${cvs[0]}")
+            while read -r; do
+               printf '%d -> %d\n' "$1" "$REPLY"; shift
+            done < <(IFS=';'; 'bc' -q <<< "obase=2; $*"; unset IFS)
+            break;;
+         "${cvs[1]}")
+            while (($#)); do printf '%d -> %o\n' "$1" "$1"; shift; done
+            break;;
+         "${cvs[2]}")
+            while (($#)); do printf '%d -> %x\n' "$1" "$1"; shift; done
+            break;;
+         "${cvs[3]}")
+            while (($#)); do printf '%d -> %d\n' "$1" "$((2#$1))"; shift; done
+            break;;
+         "${cvs[4]}")
+            while (($#)); do printf '%d -> %d\n' "$1" "$((8#$1))"; shift; done
+            break;;
+         "${cvs[5]}")
+            while (($#)); do printf '%s -> %d\n' "$1" "$((16#$1))"; shift; done
+            break;;
+                   *) printf '\nInvalid choice!\n' >&2
+      esac
+   done
+}
+
 c() { [[ -t 1 ]] && { 'cat' -n -- "$@"; return; }; 'cat' -- "$@"; }
 
-_type() { (($#)) || { help type; return; }; type -a -- "$@"; }
+_type() { (($#)) || { help type; return 1; }; type -a -- "$@"; }
 
 pa() { (IFS=: read -ra paths <<< "$PATH"; printf '%s\n' "${paths[@]}" | sort -u); }
 
