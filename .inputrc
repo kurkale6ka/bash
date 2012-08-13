@@ -22,7 +22,8 @@
 "\C-d": kill-whole-line
 
 "\C-xd": "dimitar.dimitrov"
-"\C-xm": "find . -iname '*' -print0 | while IFS= read -rd ''; do mv -- \"$REPLY\" \"${REPLY%.*}\". ; done\e10\eb\e3\C-b"
+"\C-xm": "for file in *; do mv -- \"$file\" \"${file%.*}\".; done; unset file\e7\eb\e2\C-b"
+"\C-xM": "find . -type f -iname '*' -print0 | while IFS= read -rd ''; do mv -- \"$REPLY\" \"${REPLY%.*}\". ; done\e10\eb\e3\C-b"
 "\C-xq": "\eb\"\ef\""
 "\C-x ": "IFS=; ; unset IFS\e2\eb\e4\C-b"
 
@@ -62,7 +63,6 @@
 "\C-x\\": "$'\\n'"
 "\C-x=": "'bc' <<< 'scale=20; '\C-b"
 "\C-x*": "(shopt -s nullglob dotglob; shopt -u failglob; files=(*); echo There are \"${#files[@]}\" files)"
-"\C-x\e[3~": "find . -iname '*' -exec 'rm' -i -- {} +\e3\eb\e3\C-b"
 
 # Variable settings
 # -----------------
