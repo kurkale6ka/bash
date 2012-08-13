@@ -403,8 +403,7 @@ f() {
 }
 
 db() {
-   PS3='Choose a database to update: '
-   local prgm
+   local prgm PS3='Choose a database to update: '
    select prgm in locate 'apropos, man -k'; do
       case "$prgm" in
            locate) printf 'updatedb...\n'; updatedb & return;;
