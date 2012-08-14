@@ -2,7 +2,7 @@
 
 mkrepos() {
 
-   [[ ! -d "$HOME"/config ]] && mkdir -p "$HOME"/config
+   [[ ! -d $HOME/config ]] && mkdir -p "$HOME"/config
 
    cd "$HOME"/config
 
@@ -41,7 +41,7 @@ mkrepos() {
 
 mkr() {
 
-   [[ ! -d "$HOME"/config ]] && mkdir -p "$HOME"/config
+   [[ ! -d $HOME/config ]] && mkdir -p "$HOME"/config
 
    cd "$HOME"/config
 
@@ -171,6 +171,7 @@ cprepos() {
       # wget --no-check-certificate https://github.com/spiiph/vim-space/tarball/master
    fi
 
+   local repo
    for repo in master*; do
       tar zxvf "$repo" # -C <dir>
       rm "$repo"
@@ -183,7 +184,7 @@ mklinks() {
    ln -s  "$HOME"/config/vimfiles/.vimrc            "$HOME"
    ln -s  "$HOME"/config/vimfiles/.gvimrc           "$HOME"
 
-   if [[ 0 == $# ]]; then
+   if ((! $#)); then
       ln -s "$HOME"/config/vimfiles/bundle/vim-pathogen/autoload/pathogen.vim\
             "$HOME"/config/vimfiles/autoload
    fi

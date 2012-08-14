@@ -68,7 +68,7 @@ export LESS_TERMCAP_ue=$(tput rmul; tput sgr0)               # ue -> underline e
 # export LESS_TERMCAP_ZW=$(tput rsupm)
 
 # Completion
-export FIGNORE=~
+export FIGNORE='~'
 export HOSTFILE=$HOME/.hosts
 
 export HISTFILE=$HOME/.bash_history
