@@ -281,7 +281,10 @@ c() { [[ -t 1 ]] && { 'cat' -n -- "$@"; return; }; 'cat' -- "$@"; }
 
 _type() { (($#)) || { help type; return 1; }; type -a -- "$@"; }
 
-pa() { (IFS=: read -ra paths <<< "$PATH"; printf '%s\n' "${paths[@]}" | sort -u); }
+pa() {
+   local paths
+   IFS=: read -ra paths <<< "$PATH"; printf '%s\n' "${paths[@]}" | sort -u
+}
 
 x() {
    if [[ $- == *x* ]]
