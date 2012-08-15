@@ -116,6 +116,9 @@ alias   to=touch
 alias  cmd=command
 alias  msg=dmesg
 alias  sed='sed -r'
+alias  _=combine
+
+if command -v colordiff >/dev/null 2>&1; then alias diff=colordiff; fi
 
 alias dump='dump -u'
 alias bc='bc -ql'

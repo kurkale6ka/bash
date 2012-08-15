@@ -252,10 +252,9 @@ options[4]='Create bashfiles and vimfiles'
 options[5]='Make links'
 options[6]='Remove links'
 
-select choice in "${options[@]}"; do
-
+select choice in "${options[@]}"
+do
    case "$choice" in
-
       "${options[0]}") updaterepos; break;;
       "${options[1]}") mkrepos;     break;;
       "${options[2]}") cprepos;     break;;
