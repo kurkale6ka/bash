@@ -419,12 +419,13 @@ db() {
    done
 }
 
-irssi() {
-   (cd /var/log/irssi
-   "$HOME"/config/help/.irssi/fnotify.bash &
-   command irssi
-   kill %?fnotify)
-}
+irssi() {(
+   if cd /var/log/irssi; then
+      "$HOME"/config/help/.irssi/fnotify.bash &
+      command irssi
+      kill %?fnotify
+   fi
+)}
 
 vn() {
    local vim_options[0]='bare vim'
@@ -557,11 +558,11 @@ ldot() {
    else ls=(ls -FB --color=auto -hl --time-style='+(%d %b %y - %H:%M)')
    fi
    (($# == 0)) && { "${ls[@]}" -d .[^.]*; return; }
-   (($# == 1)) && { (cd "$1"; "${ls[@]}" -d .[^.]*); return; }
+   (($# == 1)) && { (cd "$1" && "${ls[@]}" -d .[^.]*); return; }
    local i arg
    for arg in "$@"; do
       printf '%s:\n' "$arg"
-      (cd -- "$arg"; "${ls[@]}" -d .[^.]*)
+      (cd -- "$arg" && "${ls[@]}" -d .[^.]*)
       (($# != ++i)) && echo
    done
 }
