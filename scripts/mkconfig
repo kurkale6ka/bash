@@ -2,141 +2,146 @@
 
 mkrepos() {
 
-   [[ ! -d $HOME/config ]] && mkdir -p "$HOME"/config
+   mkdir -p "$HOME"/config
 
-   cd "$HOME"/config
+   if cd "$HOME"/config; then
 
-   git clone git@github.com:kurkale6ka/bashfiles.git
-   git clone git@github.com:kurkale6ka/help.git
+      git clone git@github.com:kurkale6ka/bashfiles.git
+      git clone git@github.com:kurkale6ka/help.git
 
-   if git clone git@github.com:kurkale6ka/vimfiles.git; then
+      if git clone git@github.com:kurkale6ka/vimfiles.git; then
 
-      cd vimfiles/bundle
+         if cd vimfiles/bundle; then
 
-      git clone git@github.com:kurkale6ka/vim-blanklines.git
-      git clone git@github.com:kurkale6ka/vim-blockinsert.git
-      git clone git@github.com:kurkale6ka/vim-quotes.git
-      git clone git@github.com:kurkale6ka/vim-sequence.git
-      git clone git@github.com:kurkale6ka/vim-swap.git
-      git clone git://github.com/godlygeek/csapprox.git
-      git clone git://github.com/godlygeek/tabular.git
-      git clone git://github.com/tpope/vim-pathogen.git
-      git clone git://github.com/tpope/vim-abolish.git
-      git clone git://github.com/tpope/vim-endwise.git
-      git clone git://github.com/tpope/vim-unimpaired.git
-      git clone git://github.com/tpope/vim-surround.git
-      git clone git://github.com/tpope/vim-repeat.git
-      git clone git://github.com/tpope/vim-ragtag.git
-      git clone git://github.com/tpope/vim-flatfoot.git
-      git clone git://github.com/scrooloose/nerdcommenter.git
-      git clone git://github.com/vim-scripts/MarkLines.git
-      git clone git://github.com/vim-scripts/bufkill.vim.git
-      # git clone git://github.com/vim-scripts/L9.git
-      # git clone git://github.com/vim-scripts/FuzzyFinder.git
-      # git clone git://github.com/vim-scripts/YankRing.vim.git
-      # git clone git://github.com/ervandew/supertab.git
-      # git clone git://github.com/spiiph/vim-space.git
+            git clone git@github.com:kurkale6ka/vim-blanklines.git
+            git clone git@github.com:kurkale6ka/vim-blockinsert.git
+            git clone git@github.com:kurkale6ka/vim-quotes.git
+            git clone git@github.com:kurkale6ka/vim-sequence.git
+            git clone git@github.com:kurkale6ka/vim-swap.git
+            git clone git://github.com/godlygeek/csapprox.git
+            git clone git://github.com/godlygeek/tabular.git
+            git clone git://github.com/tpope/vim-pathogen.git
+            git clone git://github.com/tpope/vim-abolish.git
+            git clone git://github.com/tpope/vim-endwise.git
+            git clone git://github.com/tpope/vim-unimpaired.git
+            git clone git://github.com/tpope/vim-surround.git
+            git clone git://github.com/tpope/vim-repeat.git
+            git clone git://github.com/tpope/vim-ragtag.git
+            git clone git://github.com/tpope/vim-flatfoot.git
+            git clone git://github.com/scrooloose/nerdcommenter.git
+            git clone git://github.com/vim-scripts/MarkLines.git
+            git clone git://github.com/vim-scripts/bufkill.vim.git
+            # git clone git://github.com/vim-scripts/L9.git
+            # git clone git://github.com/vim-scripts/FuzzyFinder.git
+            # git clone git://github.com/vim-scripts/YankRing.vim.git
+            # git clone git://github.com/ervandew/supertab.git
+            # git clone git://github.com/spiiph/vim-space.git
+         fi
+      fi
    fi
 }
 
 mkr() {
 
-   [[ ! -d $HOME/config ]] && mkdir -p "$HOME"/config
+   mkdir -p "$HOME"/config
 
-   cd "$HOME"/config
+   if cd "$HOME"/config; then
 
-   git clone git@github.com:kurkale6ka/bashfiles.git
-   git clone git@github.com:kurkale6ka/vimfiles.git
+      git clone git@github.com:kurkale6ka/bashfiles.git
+      git clone git@github.com:kurkale6ka/vimfiles.git
+   fi
 }
 
 updaterepos() {
 
-   cd "$HOME"/config/bashfiles
-   git pull git@github.com:kurkale6ka/bashfiles.git master
-
-   cd "$HOME"/config/help
-   git pull git@github.com:kurkale6ka/help.git master
-
-   cd "$HOME"/config/vimfiles
-   git pull git@github.com:kurkale6ka/vimfiles.git master
-
-   cd "$HOME"/config/vimfiles/bundle/vim-blanklines
-   git pull git@github.com:kurkale6ka/vim-blanklines.git master
-
-   cd "$HOME"/config/vimfiles/bundle/vim-blockinsert
-   git pull git@github.com:kurkale6ka/vim-blockinsert.git master
-
-   cd "$HOME"/config/vimfiles/bundle/vim-quotes
-   git pull git@github.com:kurkale6ka/vim-quotes.git master
-
-   cd "$HOME"/config/vimfiles/bundle/vim-sequence
-   git pull git@github.com:kurkale6ka/vim-sequence.git master
-
-   cd "$HOME"/config/vimfiles/bundle/vim-swap
-   git pull git@github.com:kurkale6ka/vim-swap.git master
-
-   cd "$HOME"/config/vimfiles/bundle/csapprox
-   git pull git://github.com/godlygeek/csapprox.git master
-
-   cd "$HOME"/config/vimfiles/bundle/tabular
-   git pull git://github.com/godlygeek/tabular.git master
-
-   cd "$HOME"/config/vimfiles/bundle/vim-pathogen
-   git pull git://github.com/tpope/vim-pathogen.git master
-
-   cd "$HOME"/config/vimfiles/bundle/vim-abolish
-   git pull git://github.com/tpope/vim-abolish.git master
-
-   cd "$HOME"/config/vimfiles/bundle/vim-endwise
-   git pull git://github.com/tpope/vim-endwise.git master
-
-   cd "$HOME"/config/vimfiles/bundle/vim-unimpaired
-   git pull git://github.com/tpope/vim-unimpaired.git master
-
-   cd "$HOME"/config/vimfiles/bundle/vim-surround
-   git pull git://github.com/tpope/vim-surround.git master
-
-   cd "$HOME"/config/vimfiles/bundle/vim-repeat
-   git pull git://github.com/tpope/vim-repeat.git master
-
-   cd "$HOME"/config/vimfiles/bundle/vim-ragtag
-   git pull git://github.com/tpope/vim-ragtag.git master
-
-   cd "$HOME"/config/vimfiles/bundle/vim-flatfoot
-   git pull git://github.com/tpope/vim-flatfoot.git master
-
-   cd "$HOME"/config/vimfiles/bundle/nerdcommenter
-   git pull git://github.com/scrooloose/nerdcommenter.git master
-
-   cd "$HOME"/config/vimfiles/bundle/MarkLines
-   git pull git://github.com/vim-scripts/MarkLines.git master
-
-   cd "$HOME"/config/vimfiles/bundle/bufkill.vim
-   git pull git://github.com/vim-scripts/bufkill.vim.git master
-
-   # cd "$HOME"/config/vimfiles/bundle/L9
-   # git pull git://github.com/vim-scripts/L9.git master
-
-   # cd "$HOME"/config/vimfiles/bundle/FuzzyFinder
-   # git pull git://github.com/vim-scripts/FuzzyFinder.git master
-
-   # cd "$HOME"/config/vimfiles/bundle/YankRing.vim
-   # git pull git://github.com/vim-scripts/YankRing.vim.git master
-
-   # cd "$HOME"/config/vimfiles/bundle/supertab
-   # git pull git://github.com/ervandew/supertab.git master
-
-   # cd "$HOME"/config/vimfiles/bundle/vim-space
-   # git pull git://github.com/spiiph/vim-space.git master
+   if cd "$HOME"/config/bashfiles; then
+      git pull git@github.com:kurkale6ka/bashfiles.git master
+   fi
+   if cd "$HOME"/config/help; then
+      git pull git@github.com:kurkale6ka/help.git master
+   fi
+   if cd "$HOME"/config/vimfiles; then
+      git pull git@github.com:kurkale6ka/vimfiles.git master
+   fi
+   if cd "$HOME"/config/vimfiles/bundle/vim-blanklines; then
+      git pull git@github.com:kurkale6ka/vim-blanklines.git master
+   fi
+   if cd "$HOME"/config/vimfiles/bundle/vim-blockinsert; then
+      git pull git@github.com:kurkale6ka/vim-blockinsert.git master
+   fi
+   if cd "$HOME"/config/vimfiles/bundle/vim-quotes; then
+      git pull git@github.com:kurkale6ka/vim-quotes.git master
+   fi
+   if cd "$HOME"/config/vimfiles/bundle/vim-sequence; then
+      git pull git@github.com:kurkale6ka/vim-sequence.git master
+   fi
+   if cd "$HOME"/config/vimfiles/bundle/vim-swap; then
+      git pull git@github.com:kurkale6ka/vim-swap.git master
+   fi
+   if cd "$HOME"/config/vimfiles/bundle/csapprox; then
+      git pull git://github.com/godlygeek/csapprox.git master
+   fi
+   if cd "$HOME"/config/vimfiles/bundle/tabular; then
+      git pull git://github.com/godlygeek/tabular.git master
+   fi
+   if cd "$HOME"/config/vimfiles/bundle/vim-pathogen; then
+      git pull git://github.com/tpope/vim-pathogen.git master
+   fi
+   if cd "$HOME"/config/vimfiles/bundle/vim-abolish; then
+      git pull git://github.com/tpope/vim-abolish.git master
+   fi
+   if cd "$HOME"/config/vimfiles/bundle/vim-endwise; then
+      git pull git://github.com/tpope/vim-endwise.git master
+   fi
+   if cd "$HOME"/config/vimfiles/bundle/vim-unimpaired; then
+      git pull git://github.com/tpope/vim-unimpaired.git master
+   fi
+   if cd "$HOME"/config/vimfiles/bundle/vim-surround; then
+      git pull git://github.com/tpope/vim-surround.git master
+   fi
+   if cd "$HOME"/config/vimfiles/bundle/vim-repeat; then
+      git pull git://github.com/tpope/vim-repeat.git master
+   fi
+   if cd "$HOME"/config/vimfiles/bundle/vim-ragtag; then
+      git pull git://github.com/tpope/vim-ragtag.git master
+   fi
+   if cd "$HOME"/config/vimfiles/bundle/vim-flatfoot; then
+      git pull git://github.com/tpope/vim-flatfoot.git master
+   fi
+   if cd "$HOME"/config/vimfiles/bundle/nerdcommenter; then
+      git pull git://github.com/scrooloose/nerdcommenter.git master
+   fi
+   if cd "$HOME"/config/vimfiles/bundle/MarkLines; then
+      git pull git://github.com/vim-scripts/MarkLines.git master
+   fi
+   if cd "$HOME"/config/vimfiles/bundle/bufkill.vim; then
+      git pull git://github.com/vim-scripts/bufkill.vim.git master
+   fi
+   # if cd "$HOME"/config/vimfiles/bundle/L9; then
+   #    git pull git://github.com/vim-scripts/L9.git master
+   # fi
+   # if cd "$HOME"/config/vimfiles/bundle/FuzzyFinder; then
+   #    git pull git://github.com/vim-scripts/FuzzyFinder.git master
+   # fi
+   # if cd "$HOME"/config/vimfiles/bundle/YankRing.vim; then
+   #    git pull git://github.com/vim-scripts/YankRing.vim.git master
+   # fi
+   # if cd "$HOME"/config/vimfiles/bundle/supertab; then
+   #    git pull git://github.com/ervandew/supertab.git master
+   # fi
+   # if cd "$HOME"/config/vimfiles/bundle/vim-space; then
+   #    git pull git://github.com/spiiph/vim-space.git master
+   # fi
 }
 
 updater() {
 
-   cd "$HOME"/config/bashfiles
-   git pull git@github.com:kurkale6ka/bashfiles.git master
-
-   cd "$HOME"/config/vimfiles
-   git pull git@github.com:kurkale6ka/vimfiles.git master
+   if cd "$HOME"/config/bashfiles; then
+      git pull git@github.com:kurkale6ka/bashfiles.git master
+   fi
+   if cd "$HOME"/config/vimfiles; then
+      git pull git@github.com:kurkale6ka/vimfiles.git master
+   fi
 }
 
 cprepos() {
@@ -144,8 +149,8 @@ cprepos() {
    wget --no-check-certificate https://github.com/kurkale6ka/bashfiles/tarball/master
    wget --no-check-certificate https://github.com/kurkale6ka/help/tarball/master
 
-   if wget --no-check-certificate https://github.com/kurkale6ka/vimfiles/tarball/master; then
-
+   if wget --no-check-certificate https://github.com/kurkale6ka/vimfiles/tarball/master
+   then
       wget --no-check-certificate https://github.com/kurkale6ka/vim-blanklines/tarball/master
       wget --no-check-certificate https://github.com/kurkale6ka/vim-blockinsert/tarball/master
       wget --no-check-certificate https://github.com/kurkale6ka/vim-quotes/tarball/master
@@ -173,8 +178,8 @@ cprepos() {
 
    local repo
    for repo in master*; do
-      tar zxvf "$repo" # -C <dir>
-      rm "$repo"
+      # Use tar with -C <dir> ...?
+      tar zxvf "$repo" && rm "$repo"
    done
 }
 
@@ -210,10 +215,11 @@ mklinks() {
    ln -sT "$HOME"/config/bashfiles                  "$HOME"/bashfiles
    ln -sT "$HOME"/config/help                       "$HOME"/help
 
-   [[ ! -d $HOME/bin ]] && mkdir -p "$HOME"/bin
-
-   ln -s  "$HOME"/config/bashfiles/scripts/mkconfig "$HOME"/bin
-   ln -s  "$HOME"/config/vimfiles/scripts/vimcat    "$HOME"/bin/vc
+   mkdir -p "$HOME"/bin
+   if [[ -d "$HOME"/bin ]]; then
+      ln -s  "$HOME"/config/bashfiles/scripts/mkconfig "$HOME"/bin
+      ln -s  "$HOME"/config/vimfiles/scripts/vimcat    "$HOME"/bin/vc
+   fi
 }
 
 rmlinks() {
