@@ -22,7 +22,7 @@
 "\C-d": kill-whole-line
 
 "\C-xq": "\eb\"\ef\""
-"\C-x ": "IFS=; ; unset IFS\e2\eb\e4\C-b"
+"\C-x ": "IFS=;  \"$*\"; unset IFS\e3\eb\e4\C-f"
 
 "\C-xa": "\"${[@]}\"\e5\C-b"
 "\C-xA": "awk '// {print $}' \eb\e3\C-b"
