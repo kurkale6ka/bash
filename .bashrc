@@ -117,6 +117,7 @@ alias  cmd=command
 alias  msg=dmesg
 alias  sed='sed -r'
 alias  _=combine
+alias bx='bash -x'
 
 if command -v colordiff >/dev/null 2>&1; then alias diff=colordiff; fi
 
@@ -428,18 +429,15 @@ irssi() {(
 )}
 
 vn() {
-   local vim_options[0]='bare vim'
-         vim_options[1]='vim no .vimrc'
-         vim_options[2]='vim no plugins'
-         vim_options[3]='gvim no .gvimrc'
-   local vim
-   select vim in "${vim_options[@]}"; do
-      case "$vim" in
-         "${vim_options[0]}") 'vim'      -nNX  -u NONE;    break;;
-         "${vim_options[1]}") "$my_gvim" -nNXv -u NORC;    break;;
-         "${vim_options[2]}") 'vim'      -nNX  --noplugin; break;;
-         "${vim_options[3]}") "$my_gvim" -nN   -U NONE;    break;;
-                           *) printf '\nInvalid choice!\n' >&2
+   (($#)) && { 'vim' -NX -u NONE "$@"; return; }
+   local opt opts=('bare vim' 'vim no .vimrc' 'vim no plugins' 'gvim no .gvimrc')
+   select opt in "${opts[@]}"; do
+      case "$opt" in
+         "${opts[0]}") 'vim'      -nNX  -u NONE;    break;;
+         "${opts[1]}") "$my_gvim" -nNXv -u NORC;    break;;
+         "${opts[2]}") 'vim'      -nNX  --noplugin; break;;
+         "${opts[3]}") "$my_gvim" -nN   -U NONE;    break;;
+                    *) printf '\nInvalid choice!\n' >&2
       esac
    done
 }
