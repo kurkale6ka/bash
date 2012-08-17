@@ -13,34 +13,12 @@ fi
 export EDITOR=$my_vim
 export VISUAL=$my_vim
 
-# Black=$(tput setaf 0)
-# BlackBG=$(tput setab 0)
-# DarkGrey=$(tput bold ; tput setaf 0)
-# LightGrey=$(tput setaf 7)
-# LightGreyBG=$(tput setab 7)
-# White=$(tput bold ; tput setaf 7)
-# Red=$(tput setaf 1)
-# RedBG=$(tput setab 1)
-  LightRed=$(tput bold ; tput setaf 1)
-# Green=$(tput setaf 2)
-# GreenBG=$(tput setab 2)
-  LightGreen=$(tput bold ; tput setaf 2)
-# Brown=$(tput setaf 3)
-# BrownBG=$(tput setab 3)
-# LightBrown=$(tput setaf 3) bogus
-# Yellow=$(tput bold ; tput setaf 3)
-# Blue=$(tput setaf 4)
-# BlueBG=$(tput setab 4)
-  LightBlue=$(tput bold ; tput setaf 4)
-  Purple=$(tput setaf 5)
-# PurpleBG=$(tput setab 5)
-# Pink=$(tput bold ; tput setaf 5)
-# Cyan=$(tput setaf 6)
-# CyanBG=$(tput setab 6)
-# LightCyan=$(tput bold ; tput setaf 6)
-# Bold=$(tput bold)
-  Underline=$(tput smul)
-  Reset=$(tput sgr0) # No Color
+LightRed=$(tput bold; tput setaf 1)
+LightGreen=$(tput bold; tput setaf 2)
+LightBlue=$(tput bold; tput setaf 4)
+Purple=$(tput setaf 5)
+Underline=$(tput smul)
+Reset=$(tput sgr0)
 
 # -i ignore case, -M ruler, -F quit if 1 screen, -PM long prompt
 # ?test ok:else:else. The . ends the test

@@ -18,50 +18,33 @@ fi
 
 # Colors: set[af|ab] (ANSI [fore|back]ground) {{{1
 
-# Black=$(tput setaf 0)
-# BlackBG=$(tput setab 0)
-# DarkGrey=$(tput bold ; tput setaf 0)
-# LightGrey=$(tput setaf 7)
-# LightGreyBG=$(tput setab 7)
-# White=$(tput bold ; tput setaf 7)
-# Red=$(tput setaf 1)
-# RedBG=$(tput setab 1)
-  LightRed=$(tput bold ; tput setaf 1)
-# Green=$(tput setaf 2)
-# GreenBG=$(tput setab 2)
-  LightGreen=$(tput bold ; tput setaf 2)
-# Brown=$(tput setaf 3)
-# BrownBG=$(tput setab 3)
-# Yellow=$(tput bold ; tput setaf 3)
-# Blue=$(tput setaf 4)
-# BlueBG=$(tput setab 4)
-  LightBlue=$(tput bold ; tput setaf 4)
-  Purple=$(tput setaf 5)
-# PurpleBG=$(tput setab 5)
-# Pink=$(tput bold ; tput setaf 5)
-# Cyan=$(tput setaf 6)
-# CyanBG=$(tput setab 6)
-# LightCyan=$(tput bold ; tput setaf 6)
-# Bold=$(tput bold)
-  Underline=$(tput smul)
-  Reset=$(tput sgr0) # No Color
+Purple=$(tput setaf 5)
+Underline=$(tput smul)
+Reset=$(tput sgr0)
 
-# PS1 and title (\e]2; ---- \a) {{{1
+# PS1 + title (\e]2; ---- \a), PS2, PS3 and PS4 {{{1
 
-[[ $TERM != linux ]] && title="\e]2;\H\a"
-unset PROMPT_COMMAND
+PS1() {
+   local LightRed=$(tput bold; tput setaf 1)
+   local LightGreen=$(tput bold; tput setaf 2)
+   local LightBlue=$(tput bold; tput setaf 4)
 
-if [[ $SSH_CLIENT || $SSH2_CLIENT ]]
-then info=', remote'
-else info=''
-fi
+   [[ $TERM != linux ]] && title="\e]2;\H\a"
+   unset PROMPT_COMMAND
 
-if ((EUID == 0)); then
-   PS1="$title\n\[$LightRed\]\u \H \[$LightBlue\]\w\[$Reset\] - \A, %\j$info\n# "
-   export PATH=$PATH:/sbin:/usr/sbin:/usr/local/sbin:/root/bin
-else
-   PS1="$title\n\[$LightGreen\]\u \H \[$LightBlue\]\w\[$Reset\] - \A, %\j$info\n\$ "
-fi
+   if [[ $SSH_CLIENT || $SSH2_CLIENT ]]
+   then info=', remote'
+   else info=''
+   fi
+
+   if ((EUID == 0)); then
+      PS1="$title\n\[$LightRed\]\u \H \[$LightBlue\]\w\[$Reset\] - \A, %\j$info\n# "
+      export PATH=$PATH:/sbin:/usr/sbin:/usr/local/sbin:/root/bin
+   else
+      PS1="$title\n\[$LightGreen\]\u \H \[$LightBlue\]\w\[$Reset\] - \A, %\j$info\n\\$ "
+   fi
+}
+PS1
 
 export PS2='↪ '
 export PS3='Choose an entry: '
