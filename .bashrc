@@ -403,13 +403,13 @@ db() {
    done
 }
 
-irssi() (
-   if cd /var/log/irssi; then
+irssi() {
+   if (cd /var/log/irssi); then
       "$HOME"/config/help/.irssi/fnotify.bash &
       command irssi
       kill %?fnotify
    fi
-)
+}
 
 vn() {
    (($#)) && { 'vim' -NX -u NONE "$@"; return; }
