@@ -45,7 +45,7 @@
 "\C-xn": "shopt -s nullglob; unset latest; for f in ; do [[ $f -nt $latest ]] && latest=\"$f\"; done; echo \"$latest\"\e9\eb\e2\C-b"
 "\C-xo": "shopt -s nullglob; unset oldest; for f in ; do [[ $f -ot $oldest || ! $oldest ]] && oldest=\"$f\"; done; echo \"$oldest\"\e10\eb\e2\C-b"
 "\C-xp": "printf '%s\\n' "
-"\C-xP": "\"$(which )\"\e2\C-b"
+"\C-xP": "\"$(type -P )\"\e2\C-b"
 "\C-xS": "s///\e2\C-b"
 "\C-xs": " | sort -u"
 # g -v '^[[:space:]]*#' /etc/login.defs | g -v '^[[:space:]]*$'
