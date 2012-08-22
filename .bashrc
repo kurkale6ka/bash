@@ -63,19 +63,49 @@ alias      gv=$my_gvim
 alias     gvi=$my_gvim
 alias vish='sudo vipw -s'
 
-alias   l='\ls -FB --color=auto'
-alias  ld='\ls -FB --color=auto -d'
-alias  la='\ls -FB --color=auto -A'
-alias  lr='\ls -FB --color=auto -R'
-alias  lk='\ls -FB --color=auto -S'
-alias  lx='\ls -FB --color=auto -X'
-alias  ll='\ls -FB --color=auto -hl --time-style="+(%d %b %y - %H:%M)"'
-alias lld='\ls -FB --color=auto -dhl --time-style="+(%d %b %y - %H:%M)"'
-alias lla='\ls -FB --color=auto -Ahl --time-style="+(%d %b %y - %H:%M)"'
-alias llr='\ls -FB --color=auto -Rhl --time-style="+(%d %b %y - %H:%M)"'
-alias llk='\ls -FB --color=auto -Shl --time-style="+(%d %b %y - %H:%M)"'
-alias llx='\ls -FB --color=auto -Xhl --time-style="+(%d %b %y - %H:%M)"'
-alias  lv="\ls | $my_vim -"
+l() { [[ -t 1 ]] && command ls -FB --color=auto -- "$@" || command ls -FB -- "$@"; }
+ld() { [[ -t 1 ]] && command ls -FBd --color=auto -- "$@" || command ls -FBd -- "$@"; }
+la() { [[ -t 1 ]] && command ls -FBA --color=auto -- "$@" || command ls -FBA -- "$@"; }
+lr() { [[ -t 1 ]] && command ls -FBR --color=auto -- "$@" || command ls -FBR -- "$@"; }
+lk() { [[ -t 1 ]] && command ls -FBS --color=auto -- "$@" || command ls -FBS -- "$@"; }
+lx() { [[ -t 1 ]] && command ls -FBX --color=auto -- "$@" || command ls -FBX -- "$@"; }
+ll() {
+   if [[ -t 1 ]]
+   then command ls -FBhl --color=auto --time-style='+(%d %b %y - %H:%M)' -- "$@"
+   else command ls -FBhl --time-style='+(%d %b %y - %H:%M)' -- "$@"
+   fi
+}
+lld() {
+   if [[ -t 1 ]]
+   then command ls -FBdhl --color=auto --time-style='+(%d %b %y - %H:%M)' -- "$@"
+   else command ls -FBdhl --time-style='+(%d %b %y - %H:%M)' -- "$@"
+   fi
+}
+lla() {
+   if [[ -t 1 ]]
+   then command ls -FBAhl --color=auto --time-style='+(%d %b %y - %H:%M)' -- "$@"
+   else command ls -FBAhl --time-style='+(%d %b %y - %H:%M)' -- "$@"
+   fi
+}
+llr() {
+   if [[ -t 1 ]]
+   then command ls -FBRhl --color=auto --time-style='+(%d %b %y - %H:%M)' -- "$@"
+   else command ls -FBRhl --time-style='+(%d %b %y - %H:%M)' -- "$@"
+   fi
+}
+llk() {
+   if [[ -t 1 ]]
+   then command ls -FBShl --color=auto --time-style='+(%d %b %y - %H:%M)' -- "$@"
+   else command ls -FBShl --time-style='+(%d %b %y - %H:%M)' -- "$@"
+   fi
+}
+llx() {
+   if [[ -t 1 ]]
+   then command ls -FBXhl --color=auto --time-style='+(%d %b %y - %H:%M)' -- "$@"
+   else command ls -FBXhl --time-style='+(%d %b %y - %H:%M)' -- "$@"
+   fi
+}
+alias  lv="command ls -B | $my_vim -"
 alias mo="$my_vim -"
 
 alias  cd-='cd -'
@@ -92,17 +122,23 @@ alias mm='man -k'
 alias   pf=printf
 alias    t=tail
 alias   tf=tailf
-alias   lo='\locate -i'
+alias   lo='command locate -i'
 alias ldapsearch='ldapsearch -x -LLL'
-alias   pw='\pwd -P'
+alias   pw='command pwd -P'
 alias   to=touch
 alias  cmd=command
 alias  msg=dmesg
 alias  sed='sed -r'
 alias  _=combine
 alias bx='bash -x'
+alias builtins='enable -a | cut -d" " -f2  | column'
 
-if command -v colordiff >/dev/null 2>&1; then alias diff=colordiff; fi
+diff() {
+   if [[ -t 1 ]] && command -v colordiff >/dev/null 2>&1
+   then colordiff -- "$@"
+   else command diff -- "$@"
+   fi
+}
 
 alias dump='dump -u'
 alias bc='bc -ql'
@@ -131,7 +167,7 @@ alias  oo=shopt
 alias se=set
 alias use=unset
 
-alias mn='\mount | cut -d" " -f1,3,5,6 | column -t'
+alias mn='command mount | cut -d" " -f1,3,5,6 | column -t'
 alias umn=umount
 
 alias cg=chgrp
@@ -144,10 +180,11 @@ alias setuid='chmod u+s'
 alias setgid='chmod g+s'
 alias setsticky='chmod +t'
 
-alias g='\grep -iE --color'
-alias hg='history | \grep -iE --color'
+alias g='command grep -iE --color'
+alias hg='history | command grep -iE --color'
 alias pgrep='pgrep -l'
-alias pg='ps j --headers | head -1 && ps fajxww | \grep -v grep | \grep -iE --color'
+alias pg='ps j --headers | head -1 && ps fajxww | command grep -v grep |
+          command grep -iE --color'
 
 alias  k=kill
 alias kl='kill -l'
@@ -171,7 +208,7 @@ alias ipconfig=ifconfig
 alias cp='cp -i'
 alias mv='mv -i'
 alias rm='rm -i --preserve-root'
-alias md='\mkdir -p'
+alias md='command mkdir -p'
 
 alias   akw=awk
 alias   cta=cat
@@ -236,35 +273,35 @@ cv() {
          "${cvs[0]}")
             while read -r; do
                printf '%d -> %d\n' "$1" "$REPLY"; shift
-            done < <(IFS=';'; 'bc' -q <<< "obase=2; $*") |\
-            'sed' '1iDec -> Bin' | column -t
+            done < <(IFS=';'; command bc -q <<< "obase=2; $*") |\
+            command sed '1iDec -> Bin' | column -t
             break;;
          "${cvs[1]}")
             while (($#)); do printf '%d -> %o\n' "$1" "$1"; shift; done |\
-            'sed' '1iDec -> Oct' | column -t
+            command sed '1iDec -> Oct' | column -t
             break;;
          "${cvs[2]}")
             while (($#)); do printf '%d -> %x\n' "$1" "$1"; shift; done |\
-            'sed' '1iDec -> Hex' | column -t
+            command sed '1iDec -> Hex' | column -t
             break;;
          "${cvs[3]}")
             while (($#)); do printf '%d -> %d\n' "$1" "$((2#$1))"; shift; done |\
-            'sed' '1iBin -> Dec' | column -t
+            command sed '1iBin -> Dec' | column -t
             break;;
          "${cvs[4]}")
             while (($#)); do printf '%d -> %d\n' "$1" "$((8#$1))"; shift; done |\
-            'sed' '1iOct -> Dec' | column -t
+            command sed '1iOct -> Dec' | column -t
             break;;
          "${cvs[5]}")
             while (($#)); do printf '%s -> %d\n' "$1" "$((16#$1))"; shift; done |\
-            'sed' '1iHex -> Dec' | column -t
+            command sed '1iHex -> Dec' | column -t
             break;;
                    *) printf '\nInvalid choice!\n' >&2
       esac
    done
 }
 
-c() { [[ -t 1 ]] && { 'cat' -n -- "$@"; return; }; 'cat' -- "$@"; }
+c() { [[ -t 1 ]] && { command cat -n -- "$@"; return; }; command cat -- "$@"; }
 
 _type() { (($#)) || { help type; return 1; }; type -a -- "$@"; }
 
@@ -280,7 +317,7 @@ x() {
    fi
 } 2>/dev/null
 
-n() { 'sed' -n "$1{p;q}" -- "$2"; }
+n() { command sed -n "$1{p;q}" -- "$2"; }
 
 if ! command -v service >/dev/null 2>&1; then
    service() { /etc/init.d/"$1" "${2:-start}"; }
@@ -336,25 +373,25 @@ usersee() {
       case "$1" in
          -p)
             header=LOGIN:PASSWORD:UID:GID:GECOS:HOME:SHELL
-            sort -k7 -t: /etc/passwd | 'sed' -e "1i$header" -e 's/::/:-:/g' |\
+            sort -k7 -t: /etc/passwd | command sed -e "1i$header" -e 's/::/:-:/g' |\
             column -ts:;;
          -g)
             header=GROUP:PASSWORD:GID:USERS
-            sort -k4 -t: /etc/group | 'sed' "1i$header" | column -ts:;;
+            sort -k4 -t: /etc/group | command sed "1i$header" | column -ts:;;
          -s)
             header=LOGIN:PASSWORD:LAST:MIN:MAX:WARN:INACTIVITY:EXPIRATION:RESERVED
             sudo sort -k2 -t: /etc/shadow |\
             awk -F: '{print $1":"substr($2,1,3)":"$3":"$4":"$5":"$6":"$7":"$8":"$9}' |\
-            'sed' -e "1i$header" -e 's/::/:-:/g' | column -ts:;;
+            command sed -e "1i$header" -e 's/::/:-:/g' | column -ts:;;
           *)
             for user in "$@"; do
                sudo grep -iE --color "$user" /etc/{passwd,shadow}
-               sort -k4 -t: /etc/group | column -ts: | 'grep' -iE --color "$user"
+               sort -k4 -t: /etc/group | column -ts: | command grep -iE --color "$user"
             done
       esac
    else
       sudo grep -iE --color "$USER" /etc/{passwd,shadow}
-      sort -k4 -t: /etc/group | column -ts: | 'grep' -iE --color "$USER"
+      sort -k4 -t: /etc/group | column -ts: | command grep -iE --color "$USER"
    fi
 }
 
@@ -364,17 +401,17 @@ sw() {
       { echo "Temporary file creation failure" >&2; return 1; }
    if (($# == 1)); then
       [[ ! -e $1.bak ]] && { echo "file $1.bak does not exist" >&2; return 2; }
-      'mv' -- "$1" "$tmpfile" && mv -- "$1".bak "$1" && mv -- "$tmpfile" "$1".bak
+      command mv -- "$1" "$tmpfile" && mv -- "$1".bak "$1" && mv -- "$tmpfile" "$1".bak
    else
       [[ ! -e $2 ]] && { echo "file $2 does not exist" >&2; return 3; }
-      'mv' -- "$1" "$tmpfile" && mv -- "$2" "$1" && mv -- "$tmpfile" "$2"
+      command mv -- "$1" "$tmpfile" && mv -- "$2" "$1" && mv -- "$tmpfile" "$2"
    fi
 }
 
-bak() { local arg; for arg in "$@"; do 'cp' -i -- "$arg" "$arg".bak; done; }
+bak() { local arg; for arg in "$@"; do command cp -i -- "$arg" "$arg".bak; done; }
 
 # todo: 'rm' not 'rm' -i + cron job ?!
-bakrm() { find . -name '*~' -a ! -name '*.un~' -exec 'rm' -i -- {} +; }
+bakrm() { find . -name '*~' -a ! -name '*.un~' -exec command rm -i -- {} +; }
 
 rmi() {
    local i=0 file inodes=()
@@ -382,7 +419,7 @@ rmi() {
       ((++i < $#)) && inodes+=(-inum "$file" -o)
    done
    inodes+=(-inum "$file")
-   find . \( "${inodes[@]}" \) -exec 'rm' -i -- {} +
+   find . \( "${inodes[@]}" \) -exec command rm -i -- {} +
 }
 
 f() {
@@ -412,14 +449,14 @@ irssi() {
 }
 
 vn() {
-   (($#)) && { 'vim' -NX -u NONE "$@"; return; }
+   (($#)) && { command vim -NX -u NONE "$@"; return; }
    local opt opts=('bare vim' 'vim no .vimrc' 'vim no plugins' 'gvim no .gvimrc')
    select opt in "${opts[@]}"; do
       case "$opt" in
-         "${opts[0]}") 'vim'      -nNX  -u NONE;    break;;
-         "${opts[1]}") "$my_gvim" -nNXv -u NORC;    break;;
-         "${opts[2]}") 'vim'      -nNX  --noplugin; break;;
-         "${opts[3]}") "$my_gvim" -nN   -U NONE;    break;;
+         "${opts[0]}") command vim -nNX  -u NONE;    break;;
+         "${opts[1]}") "$my_gvim"  -nNXv -u NORC;    break;;
+         "${opts[2]}") command vim -nNX  --noplugin; break;;
+         "${opts[3]}") "$my_gvim"  -nN   -U NONE;    break;;
                     *) printf '\nInvalid choice!\n' >&2
       esac
    done
@@ -428,7 +465,7 @@ vn() {
 rc() {
    if (($#)); then
       local rcfile=$HOME/.inputrc
-      xclip -f <(echo "'cat' >> $rcfile <<'EOF'") "$rcfile" <(echo EOF)
+      xclip -f <(echo "command cat >> $rcfile <<'EOF'") "$rcfile" <(echo EOF)
    else
       local inputrc="printf '%s\n' "
       inputrc+="'\"\e[A\": history-search-backward' "
@@ -444,11 +481,11 @@ s() {
    elif (($# == 1)); then
       # s ftp|21
       if [[ $1 == [[:digit:]]* ]]
-      then 'grep' -w -iE --color -- "$1" /etc/services
-      else 'grep'    -iE --color -- "$1" /etc/services
+      then command grep -w -iE --color -- "$1" /etc/services
+      else command grep    -iE --color -- "$1" /etc/services
       fi
    else
-      if 'sudo' -V |
+      if command sudo -V |
          { read -r _ _ ver; IFS=. read -r maj min _ <<<"$ver"; ((maj > 0 && min > 6)); }
       then sudo -E /bin/bash
       else sudo    /bin/bash
@@ -503,7 +540,7 @@ rd() {
    for arg in "$@"; do
       if [[ -d $arg ]]; then
          if read -rp "rd: remove directory '$arg'? "; then
-            [[ $REPLY == @(y|yes) ]] && 'rm' -rf -- "$arg"
+            [[ $REPLY == @(y|yes) ]] && command rm -rf -- "$arg"
          fi
       else
          echo "$arg is not a directory" >&2
@@ -518,7 +555,7 @@ ln() {
       local file
       for file in * .*; do
          if [[ -h $file ]]; then
-            'ls' -FBAhl --color=auto --time-style="+(%d %b %y - %H:%M)" -- "$file"
+            command ls -FBAhl --color=auto --time-style="+(%d %b %y - %H:%M)" -- "$file"
          fi
       done
    fi
@@ -535,8 +572,12 @@ sl() {
 ldot() {
    local ls
    if [[ ${FUNCNAME[1]} == 'l.' ]]
-   then ls=(ls -FB --color=auto)
-   else ls=(ls -FB --color=auto -hl --time-style='+(%d %b %y - %H:%M)')
+   then [[ -t 1 ]] && ls=(ls -FB --color=auto) || ls=(ls -FB)
+   else
+      if [[ -t 1 ]]
+      then ls=(ls -FBhl --color=auto --time-style='+(%d %b %y - %H:%M)')
+      else ls=(ls -FBhl --time-style='+(%d %b %y - %H:%M)')
+      fi
    fi
    (($# == 0)) && { "${ls[@]}" -d .[^.]*; return; }
    (($# == 1)) && { (cd "$1" && "${ls[@]}" -d .[^.]*); return; }
@@ -547,33 +588,51 @@ ldot() {
       (($# != ++i)) && echo
    done
 }
-.() { if (($#)); then source "$@"; else 'ls' -FB --color=auto -d .[^.]*; fi; }
+.() {
+   if (($#)); then
+      source "$@"
+   else
+      if [[ -t 1 ]]
+      then command ls -FB --color=auto -d .[^.]*
+      else command ls -FB -d .[^.]*
+      fi
+   fi
+}
 l.() { ldot "$@"; }
 ll.() { ldot "$@"; }
 
 lc() {
    echo "$Purple${Underline}Sorted by change date:$Reset"
-   'ls' -FB --color=auto -tc -- "$@"
+   [[ -t 1 ]] && command ls -FBtc --color=auto -- "$@" || command ls -FBtc -- "$@"
 }
 lm() {
    echo "$Purple${Underline}Sorted by modification date:$Reset"
-   'ls' -FB --color=auto -t -- "$@"
+   [[ -t 1 ]] && command ls -FBt --color=auto -- "$@" || command ls -FBt -- "$@"
 }
 lu() {
    echo "$Purple${Underline}Sorted by access date:$Reset"
-   'ls' -FB --color=auto -tu -- "$@"
+   [[ -t 1 ]] && command ls -FBtu --color=auto -- "$@" || command ls -FBtu -- "$@"
 }
 llc() {
    echo "$Purple${Underline}Sorted by change date:$Reset"
-   'ls' -FB --color=auto -tchl --time-style='+(%d %b %Y - %H:%M)' -- "$@"
+   if [[ -t 1 ]]
+   then command ls -FBtchl --color=auto --time-style='+(%d %b %Y - %H:%M)' -- "$@"
+   else command ls -FBtchl --time-style='+(%d %b %Y - %H:%M)' -- "$@"
+   fi
 }
 llm() {
    echo "$Purple${Underline}Sorted by modification date:$Reset"
-   'ls' -FB --color=auto -thl  --time-style='+(%d %b %Y - %H:%M)' -- "$@"
+   if [[ -t 1 ]]
+   then command ls -FBthl --color=auto --time-style='+(%d %b %Y - %H:%M)' -- "$@"
+   else command ls -FBthl --time-style='+(%d %b %Y - %H:%M)' -- "$@"
+   fi
 }
 llu() {
    echo "$Purple${Underline}Sorted by access date:$Reset"
-   'ls' -FB --color=auto -tuhl --time-style='+(%d %b %Y - %H:%M)' -- "$@"
+   if [[ -t 1 ]]
+   then command ls -FBtuhl --color=auto --time-style='+(%d %b %Y - %H:%M)' -- "$@"
+   else command ls -FBtuhl --time-style='+(%d %b %Y - %H:%M)' -- "$@"
+   fi
 }
 
 b() {
