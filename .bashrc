@@ -251,13 +251,7 @@ m() {
    done
 }
 
-e() {
-   local status=$?
-   if (($#))
-   then echo "$@"
-   else echo "The exit status \$? was: $status"
-   fi
-}
+e() { local status=$?; (($#)) && echo "$@" || echo "$status"; }
 
 cv() {
    (($#)) || { echo 'Usage: cv digit ...' >&2; return 1; }
