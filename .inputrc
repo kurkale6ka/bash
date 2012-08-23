@@ -30,6 +30,7 @@
 "\C-xC": " | cut -d -f\e2\eb\C-f"
 "\C-xd": "comm <(sort ) <(sort )\eb\e4\C-b"
 "\C-xD": "xclip <<< dimitar.dimitrov\C-M"
+"\C-xi": "ed -s  <<< $'0i\\n\\n.\\nwq'\e5\eb\e2\C-f"
 "\C-xe": "ed -s  <<< $'\\nwq'\e2\eb\e2\C-f"
 "\C-xE": "sed '' \e2\C-b"
 "\C-xh": "\eb\ed\C-y --help || \C-y -h || \C-y help\C-M"
@@ -60,7 +61,7 @@
 "\C-x`": "\"$()\"\e2\C-b"
 "\C-xb": "\"$()\"\e2\C-b"
 "\C-xB": "\"$(())\"\e3\C-b"
-"\C-x+": "'vim' -nNX -u NONE -c '|wq'\eb\C-b"
+"\C-x+": "command vim -nNX -u NONE -c '|wq'\eb\C-b"
 "\C-x<": "<()\C-b"
 "\C-x[": "[[  ]]\e3\C-b"
 "\C-x]": "[[  ]]\e3\C-b"
@@ -70,7 +71,7 @@
 "\C-x.": "{1..}\C-b"
 "\C-x>": "> 2>&1\e2\eb\C-b"
 "\C-x\\": "$'\\n'"
-"\C-x=": "'bc' <<< 'scale=20; '\C-b"
+"\C-x=": "command bc <<< 'scale=20; '\C-b"
 "\C-x*": "(shopt -s nullglob dotglob; shopt -u failglob; files=(*); echo There are \"${#files[@]}\" files)"
 
 # Variable settings
