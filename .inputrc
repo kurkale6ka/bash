@@ -49,7 +49,6 @@
 "\C-xP": "\"$(type -P )\"\e2\C-b"
 "\C-xS": "s///\e2\C-b"
 "\C-xs": " | sort -u"
-# g -v '^[[:space:]]*#' /etc/login.defs | g -v '^[[:space:]]*$'
 "\C-xv": "\"$\"\C-b"
 "\C-xV": "\"${}\"\e2\C-b"
 "\C-xu": "until ; do ; done\e2\eb\e2\C-b"

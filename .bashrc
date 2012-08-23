@@ -295,6 +295,8 @@ cv() {
    done
 }
 
+sq() { command grep -v '^[[:space:]]*#' -- "$1" | command grep -v '^[[:space:]]*$'; }
+
 c() { [[ -t 1 ]] && { command cat -n -- "$@"; return; }; command cat -- "$@"; }
 
 _type() { (($#)) || { help type; return 1; }; type -a -- "$@"; }
