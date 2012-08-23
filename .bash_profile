@@ -50,6 +50,7 @@ export FIGNORE='~'
 export HOSTFILE=$HOME/.hosts
 
 shopt -s histappend
+
 export HISTFILE=$HOME/.bash_history
 export HISTFILESIZE=3000
 export HISTSIZE=3000 # size allowed in memory
@@ -70,8 +71,7 @@ export SHELL=/bin/bash
 # directory default 777 (drwxrwxrwx) => 750 (drwxr-x---)
 umask 027
 
-# .bashrc exists and I can read it
-[[ -r ~/.bashrc ]] && source ~/.bashrc
+[[ -r ~/.bashrc ]] && . "$HOME"/.bashrc
 
 # Business specific or system dependant stuff
-[[ -r ~/.bash_profile_after ]] && source ~/.bash_profile_after
+[[ -r ~/.bash_profile_after ]] && . "$HOME"/.bash_profile_after
