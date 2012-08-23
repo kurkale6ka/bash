@@ -297,9 +297,9 @@ cv() {
 
 sq() { command grep -v '^[[:space:]]*#\|^[[:space:]]*$' -- "$@"; }
 
-c() { [[ -t 1 ]] && { command cat -n -- "$@"; return; }; command cat -- "$@"; }
+c() { [[ -t 1 ]] && command cat -n -- "$@" || command cat -- "$@"; }
 
-_type() { (($#)) || { help type; return 1; }; type -a -- "$@"; }
+_type() { (($#)) || { help type; return; }; type -a -- "$@"; }
 
 pa() {
    local paths
@@ -320,8 +320,10 @@ if ! command -v service >/dev/null 2>&1; then
 fi
 
 date() {
-   (($#)) && { command date "$@"; return; }
-   command date '+%d %B [%-m] %Y, %H:%M %Z (%A)'
+   if (($#))
+   then command date "$@"
+   else command date '+%d %B [%-m] %Y, %H:%M %Z (%A)'
+   fi
 }
 
 # unzip or uname
@@ -418,12 +420,7 @@ rmi() {
    find . \( "${inodes[@]}" \) -exec command rm -i -- {} +
 }
 
-f() {
-   if ((1 == $#))
-   then find . -iname -- "$1"
-   else find "$@"
-   fi
-}
+f() { ((1 == $#)) && find . -iname -- "$1" || find "$@"; }
 
 db() {
    local prgm PS3='Choose a database to update: '
@@ -489,19 +486,14 @@ s() {
    fi
 }
 
-h() { if (($#)); then head "$@"; else history; fi; }
+h() { (($#)) && head "$@" || history; }
 
-p() { if (($#)); then ping -c3 -- "$@"; else ps fjww --headers; fi; }
+p() { (($#)) && ping -c3 -- "$@" || ps fjww --headers; }
 
 # todo: keep?
 ir() { ifdown "$1" && ifup "$1" || echo "Couldn't do it." >&2; }
 
-hd() {
-   if ((1 == $#))
-   then hdparm -I -- "$1"
-   else hdparm "$@"
-   fi
-}
+hd() { ((1 == $#)) && hdparm -I -- "$1" || hdparm "$@"; }
 
 df() { command df -h "$@" | sort -k5r; }
 
