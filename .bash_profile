@@ -49,9 +49,10 @@ export LESS_TERMCAP_ue=$(tput rmul; tput sgr0)               # ue -> underline e
 export FIGNORE='~'
 export HOSTFILE=$HOME/.hosts
 
+shopt -s histappend
 export HISTFILE=$HOME/.bash_history
-export HISTSIZE=1000
-export HISTFILESIZE=1000
+export HISTFILESIZE=3000
+export HISTSIZE=3000 # size allowed in memory
 export HISTCONTROL=ignorespace:ignoredups:erasedups
 # export HISTIGNORE='@(?|??|???|????)*([[:space:]]):*([[:space:]])'
 export HISTIGNORE="@(?|??|???|????)*( |$'\t'):*( |$'\t')"
