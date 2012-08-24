@@ -21,9 +21,6 @@
 # ^d (instead of the default 'delete char before cursor')
 "\C-d": kill-whole-line
 
-"\C-xq": "\eb\"\ef\""
-"\C-x ": "IFS=;  \"$*\"; unset IFS\e3\eb\e4\C-f"
-
 "\C-xa": "\"${[@]}\"\e5\C-b"
 "\C-xA": "awk '// {print $}' \eb\e3\C-b"
 "\C-xc": " | column -t"
@@ -72,6 +69,9 @@
 "\C-x\\": "$'\\n'"
 "\C-x=": "command bc <<< 'scale=20; '\C-b"
 "\C-x*": "(shopt -s nullglob dotglob; shopt -u failglob; files=(*); echo There are \"${#files[@]}\" files)"
+"\C-x_": "/dev/null"
+"\C-xq": "\eb\"\ef\""
+"\C-x ": "IFS=;  \"$*\"; unset IFS\e3\eb\e4\C-f"
 
 # Variable settings
 # -----------------
