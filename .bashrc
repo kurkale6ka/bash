@@ -29,7 +29,7 @@ PS1() {
    local LightGreen=$(tput bold; tput setaf 2)
    local LightBlue=$(tput bold; tput setaf 4)
 
-   [[ $TERM != linux ]] && title="\e]2;\H\a"
+   [[ $TERM != linux ]] && printf "\e]2;$HOSTNAME\a"
    unset PROMPT_COMMAND
 
    if [[ $SSH_CLIENT || $SSH2_CLIENT ]]
@@ -38,10 +38,10 @@ PS1() {
    fi
 
    if ((EUID == 0)); then
-      PS1="$title\n\[$LightRed\]\u \H \[$LightBlue\]\w\[$Reset\] - \A, %\j$info\n# "
+      PS1="\n\[$LightRed\]\u \H \[$LightBlue\]\w\[$Reset\] - \A, %\j$info\n# "
       export PATH=$PATH:/sbin:/usr/sbin:/usr/local/sbin:/root/bin
    else
-      PS1="$title\n\[$LightGreen\]\u \H \[$LightBlue\]\w\[$Reset\] - \A, %\j$info\n\\$ "
+      PS1="\n\[$LightGreen\]\u \H \[$LightBlue\]\w\[$Reset\] - \A, %\j$info\n\\$ "
    fi
 }
 PS1
