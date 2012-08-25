@@ -50,6 +50,7 @@
 "\C-xV": "\"${}\"\e2\C-b"
 "\C-xu": "until ; do ; done\e2\eb\e2\C-b"
 "\C-xw": "while ; do ; done\e2\eb\e2\C-b"
+"\C-xW": " >&2"
 "\C-x#": "\"${#}\"\e3\C-b"
 "\C-x%": "\"${%}\"\e3\C-b"
 "\C-x:": "\"${:}\"\e3\C-b"

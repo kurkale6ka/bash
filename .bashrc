@@ -32,10 +32,7 @@ PS1() {
    [[ $TERM != linux ]] && printf "\e]2;$HOSTNAME\a"
    unset PROMPT_COMMAND
 
-   if [[ $SSH_CLIENT || $SSH2_CLIENT ]]
-   then info=', remote'
-   else info=''
-   fi
+   [[ $SSH_CLIENT || $SSH2_CLIENT ]] && info=', remote' || info=''
 
    if ((EUID == 0)); then
       PS1="\n\[$LightRed\]\u \H \[$LightBlue\]\w\[$Reset\] - \A, %\j$info\n# "
