@@ -244,7 +244,7 @@ m() {
       select choice in help man; do
          case "$choice" in
             help) help help; return;;
-             man) man man; return;;
+             man) man   man; return;;
                *) echo '*** Wrong choice ***' >&2
          esac
       done
@@ -257,7 +257,7 @@ m() {
          select choice in "help $topic" "man $topic"; do
             case "$choice" in
                help*) help -- "$topic"; break;;
-                man*) man -- "$topic"; break;;
+                man*) man  -- "$topic"; break;;
                    *) echo '*** Wrong choice ***' >&2
             esac
          done
@@ -271,8 +271,8 @@ e() { local status=$?; (($#)) && echo "$@" || echo "$status"; }
 
 diff() {
    if [[ -t 1 ]] && command -v colordiff >/dev/null 2>&1
-   then colordiff -- "$@"
-   else command diff -- "$@"
+   then    colordiff "$@"
+   else command diff "$@"
    fi
 }
 
@@ -320,7 +320,7 @@ cv() {
 
 sq() { command grep -v '^[[:space:]]*#\|^[[:space:]]*$' -- "$@"; }
 
-c() { [[ -t 1 ]] && command cat -n -- "$@" || command cat -- "$@"; }
+c() { [[ -t 1 ]] && command cat -n -- "$@" || command cat "$@"; }
 
 _type() { (($#)) || { help type; return; }; type -a -- "$@"; }
 
@@ -332,7 +332,7 @@ pa() {
 x() {
    if [[ $- == *x* ]]
    then echo 'debug OFF'; set +o xtrace
-   else echo 'debug ON'; set -o xtrace
+   else echo 'debug ON' ; set -o xtrace
    fi
 } 2>/dev/null
 
@@ -416,20 +416,24 @@ usersee() {
    fi
 }
 
+bak() { local arg; for arg in "$@"; do command cp -i -- "$arg" "$arg".bak; done; }
+
 # Usage: sw file1 [file2]. If file2 is omitted, file1 is swapped with file1.bak
 sw() {
    local tmpfile=$(mktemp tmp.XXXXXXXXXXX) ||
       { echo "Temporary file creation failure" >&2; return 1; }
    if (($# == 1)); then
       [[ ! -e $1.bak ]] && { echo "file $1.bak does not exist" >&2; return 2; }
-      command mv -- "$1" "$tmpfile" && mv -- "$1".bak "$1" && mv -- "$tmpfile" "$1".bak
+      command mv -- "$1"       "$tmpfile" &&
+              mv -- "$1".bak   "$1"       &&
+              mv -- "$tmpfile" "$1".bak
    else
       [[ ! -e $2 ]] && { echo "file $2 does not exist" >&2; return 3; }
-      command mv -- "$1" "$tmpfile" && mv -- "$2" "$1" && mv -- "$tmpfile" "$2"
+      command mv -- "$1"       "$tmpfile" &&
+              mv -- "$2"       "$1"       &&
+              mv -- "$tmpfile" "$2"
    fi
 }
-
-bak() { local arg; for arg in "$@"; do command cp -i -- "$arg" "$arg".bak; done; }
 
 # todo: 'rm' not 'rm' -i + cron job ?!
 bakrm() { find . -name '*~' -a ! -name '*.un~' -exec command rm -i -- {} +; }
