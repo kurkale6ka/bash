@@ -460,13 +460,13 @@ db() {
    done
 }
 
-irssi() {
-   if (cd /var/log/irssi); then
+irssi() (
+   if cd /var/log/irssi; then
       "$HOME"/config/help/.irssi/fnotify.bash &
       command irssi
       kill %?fnotify
    fi
-}
+)
 
 vn() {
    (($#)) && { command vim -NX -u NONE "$@"; return; }
@@ -533,8 +533,8 @@ df() { command df -h "$@" | sort -k5r; }
 # Fails with \n in filenames!? Try this instead:
 # for file in *; do read size _ < <(du -sk "$file");...
 d() {
-   local args
-   if (($#)); then args=("$@"); else args=(*); fi
+   local args=()
+   (($#)) && args=("$@") || args=(*)
    if sort -h /dev/null 2>/dev/null
    then
       du -sh -- "${args[@]}" | sort -hr
@@ -575,7 +575,8 @@ ln() {
       local file
       for file in * .*; do
          if [[ -h $file ]]; then
-            command ls -FBAhl --color=auto --time-style="+(%d %b %y - %H:%M)" -- "$file"
+            command ls -FBAhl --color=auto --time-style="+(%d %b %y - %H:%M)" \
+                       -- "$file"
          fi
       done
    fi
@@ -585,21 +586,21 @@ sl() {
    printf '%-8s %-17s %-3s %-4s %-4s %-10s %-12s %-s\n'\
           'Inode' 'Permissions' 'ln' 'UID' 'GID' 'Size' 'Time' 'Name'
    local args=()
-   if (($#)); then args=("$@"); else args=(*); fi
+   (($#)) && args=("$@") || args=(*)
    stat -c "%8i %A (%4a) %3h %4u %4g %10s (%10Y) %n" -- "${args[@]}"
 }
 
 ldot() {
    local ls
-   if [[ ${FUNCNAME[1]} == 'l.' ]]
-   then [[ -t 1 ]] && ls=(ls -FB --color=auto) || ls=(ls -FB)
+   if [[ ${FUNCNAME[1]} == 'l.' ]]; then
+      [[ -t 1 ]] && ls=(ls -FB --color=auto) || ls=(ls -FB)
    else
       if [[ -t 1 ]]
       then ls=(ls -FBhl --color=auto --time-style='+(%d %b %y - %H:%M)')
-      else ls=(ls -FBhl --time-style='+(%d %b %y - %H:%M)')
+      else ls=(ls -FBhl              --time-style='+(%d %b %y - %H:%M)')
       fi
    fi
-   (($# == 0)) && { "${ls[@]}" -d .[^.]*; return; }
+   (($# == 0)) && {             "${ls[@]}" -d .[^.]* ; return; }
    (($# == 1)) && { (cd "$1" && "${ls[@]}" -d .[^.]*); return; }
    local i arg
    for arg in "$@"; do
@@ -614,50 +615,65 @@ ldot() {
    else
       if [[ -t 1 ]]
       then command ls -FB --color=auto -d .[^.]*
-      else command ls -FB -d .[^.]*
+      else command ls -FB              -d .[^.]*
       fi
    fi
 }
-l.() { ldot "$@"; }
+ l.() { ldot "$@"; }
 ll.() { ldot "$@"; }
 
 lm() {
-   echo "$Purple${Underline}Sorted by modification date:$Reset"
-   [[ -t 1 ]] && command ls -FBt --color=auto -- "$@" || command ls -FBt -- "$@"
+   if [[ -t 1 ]]; then
+      echo "$Purple${Underline}Sorted by modification date:$Reset"
+      command ls -FBt --color=auto "$@"
+   else
+      command ls -FBt              "$@"
+   fi
 }
 lc() {
-   echo "$Purple${Underline}Sorted by change date:$Reset"
-   [[ -t 1 ]] && command ls -FBtc --color=auto -- "$@" || command ls -FBtc -- "$@"
+   if [[ -t 1 ]]; then
+      echo "$Purple${Underline}Sorted by change date:$Reset"
+      command ls -FBtc --color=auto "$@"
+   else
+      command ls -FBtc              "$@"
+   fi
 }
 lu() {
-   echo "$Purple${Underline}Sorted by access date:$Reset"
-   [[ -t 1 ]] && command ls -FBtu --color=auto -- "$@" || command ls -FBtu -- "$@"
+   if [[ -t 1 ]]; then
+      echo "$Purple${Underline}Sorted by access date:$Reset"
+      command ls -FBtu --color=auto "$@"
+   else
+      command ls -FBtu              "$@"
+   fi
 }
 llm() {
-   echo "$Purple${Underline}Sorted by modification date:$Reset"
-   if [[ -t 1 ]]
-   then command ls -FBhlt --color=auto --time-style='+(%d %b %Y - %H:%M)' -- "$@"
-   else command ls -FBhlt --time-style='+(%d %b %Y - %H:%M)' -- "$@"
+   if [[ -t 1 ]]; then
+      echo "$Purple${Underline}Sorted by modification date:$Reset"
+      command ls -FBhlt --color=auto --time-style='+(%d %b %Y - %H:%M)' "$@"
+   else
+      command ls -FBhlt              --time-style='+(%d %b %Y - %H:%M)' "$@"
    fi
 }
 llc() {
-   echo "$Purple${Underline}Sorted by change date:$Reset"
-   if [[ -t 1 ]]
-   then command ls -FBhltc --color=auto --time-style='+(%d %b %Y - %H:%M)' -- "$@"
-   else command ls -FBhltc --time-style='+(%d %b %Y - %H:%M)' -- "$@"
+   if [[ -t 1 ]]; then
+      echo "$Purple${Underline}Sorted by change date:$Reset"
+      command ls -FBhltc --color=auto --time-style='+(%d %b %Y - %H:%M)' "$@"
+   else
+      command ls -FBhltc              --time-style='+(%d %b %Y - %H:%M)' "$@"
    fi
 }
 llu() {
-   echo "$Purple${Underline}Sorted by access date:$Reset"
-   if [[ -t 1 ]]
-   then command ls -FBhltu --color=auto --time-style='+(%d %b %Y - %H:%M)' -- "$@"
-   else command ls -FBhltu --time-style='+(%d %b %Y - %H:%M)' -- "$@"
+   if [[ -t 1 ]]; then
+      echo "$Purple${Underline}Sorted by access date:$Reset"
+      command ls -FBhltu --color=auto --time-style='+(%d %b %Y - %H:%M)' "$@"
+   else
+      command ls -FBhltu              --time-style='+(%d %b %Y - %H:%M)' "$@"
    fi
 }
 
 b() {
-   if (($# == 1)); then figlet -f smslant -- "$1"
-   elif (($# == 2)); then figlet -f -- "$1" "${@:2}"
+   if   (($# == 1)); then figlet -f    smslant -- "$1"
+   elif (($# == 2)); then figlet -f -- "$1"       "${@:2}"
    else figlist
    fi
 }
