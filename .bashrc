@@ -18,16 +18,16 @@ fi
 
 # Colors: set[af|ab] (ANSI [fore|back]ground) {{{1
 
-Purple=$(tput setaf 5)
+   Purple=$(tput setaf 5)
 Underline=$(tput smul)
-Reset=$(tput sgr0)
+    Reset=$(tput sgr0)
 
 # PS1 + title (\e]2; ---- \a), PS2, PS3 and PS4 {{{1
 
 PS1() {
-   local LightRed=$(tput bold; tput setaf 1)
+   local   LightRed=$(tput bold; tput setaf 1)
    local LightGreen=$(tput bold; tput setaf 2)
-   local LightBlue=$(tput bold; tput setaf 4)
+   local  LightBlue=$(tput bold; tput setaf 4)
 
    [[ $TERM != linux ]] && printf "\e]2;$HOSTNAME\a"
    unset PROMPT_COMMAND
@@ -49,61 +49,27 @@ export PS4='+ '
 
 # Aliases {{{1
 
-alias       v=$my_vim
-alias      vi=$my_vim
-alias     vim=$my_vim
-alias    view="$my_vim -R"
-alias      vd="$my_vim -d"
-alias vimdiff="$my_vim -d"
-alias     gvd="$my_gvim -d"
-alias      gv=$my_gvim
-alias     gvi=$my_gvim
-alias vish='sudo vipw -s'
+alias        cg=chgrp
+alias        co=chown
+alias        cm=chmod
+alias        cr='chmod u+r'
+alias        cw='chmod u+w'
+alias        cx='chmod u+x'
+alias    setuid='chmod u+s'
+alias    setgid='chmod g+s'
+alias setsticky='chmod +t'
 
-l() { [[ -t 1 ]] && command ls -FB --color=auto -- "$@" || command ls -FB -- "$@"; }
-ld() { [[ -t 1 ]] && command ls -FBd --color=auto -- "$@" || command ls -FBd -- "$@"; }
-la() { [[ -t 1 ]] && command ls -FBA --color=auto -- "$@" || command ls -FBA -- "$@"; }
-lr() { [[ -t 1 ]] && command ls -FBR --color=auto -- "$@" || command ls -FBR -- "$@"; }
-lk() { [[ -t 1 ]] && command ls -FBS --color=auto -- "$@" || command ls -FBS -- "$@"; }
-lx() { [[ -t 1 ]] && command ls -FBX --color=auto -- "$@" || command ls -FBX -- "$@"; }
-ll() {
-   if [[ -t 1 ]]
-   then command ls -FBhl --color=auto --time-style='+(%d %b %y - %H:%M)' -- "$@"
-   else command ls -FBhl --time-style='+(%d %b %y - %H:%M)' -- "$@"
-   fi
-}
-lld() {
-   if [[ -t 1 ]]
-   then command ls -FBdhl --color=auto --time-style='+(%d %b %y - %H:%M)' -- "$@"
-   else command ls -FBdhl --time-style='+(%d %b %y - %H:%M)' -- "$@"
-   fi
-}
-lla() {
-   if [[ -t 1 ]]
-   then command ls -FBAhl --color=auto --time-style='+(%d %b %y - %H:%M)' -- "$@"
-   else command ls -FBAhl --time-style='+(%d %b %y - %H:%M)' -- "$@"
-   fi
-}
-llr() {
-   if [[ -t 1 ]]
-   then command ls -FBRhl --color=auto --time-style='+(%d %b %y - %H:%M)' -- "$@"
-   else command ls -FBRhl --time-style='+(%d %b %y - %H:%M)' -- "$@"
-   fi
-}
-llk() {
-   if [[ -t 1 ]]
-   then command ls -FBShl --color=auto --time-style='+(%d %b %y - %H:%M)' -- "$@"
-   else command ls -FBShl --time-style='+(%d %b %y - %H:%M)' -- "$@"
-   fi
-}
-llx() {
-   if [[ -t 1 ]]
-   then command ls -FBXhl --color=auto --time-style='+(%d %b %y - %H:%M)' -- "$@"
-   else command ls -FBXhl --time-style='+(%d %b %y - %H:%M)' -- "$@"
-   fi
-}
-alias  lv="command ls -B | $my_vim -"
-alias mo="$my_vim -"
+alias cp='cp -i'
+alias mv='mv -i'
+alias rm='rm -i --preserve-root'
+alias md='command mkdir -p'
+alias pw='command pwd -P'
+alias lo='command locate -i'
+alias to=touch
+alias  g='command grep -iE --color'
+alias  t=tail
+alias tf=tailf
+alias  _=combine
 
 alias  cd-='cd -'
 alias -- -='cd -'
@@ -114,98 +80,77 @@ alias    4='cd ../../../..'
 alias cd..='cd ..'
 alias   ..='cd ..'
 
-alias ?=_type
-alias mm='man -k'
-alias   pf=printf
-alias    t=tail
-alias   tf=tailf
-alias   lo='command locate -i'
-alias ldapsearch='ldapsearch -x -LLL'
-alias   pw='command pwd -P'
-alias   to=touch
-alias  cmd=command
-alias  msg=dmesg
-alias  sed='sed -r'
-alias  _=combine
-alias bx='bash -x'
-alias builtins='enable -a | cut -d" " -f2  | column'
-
-diff() {
-   if [[ -t 1 ]] && command -v colordiff >/dev/null 2>&1
-   then colordiff -- "$@"
-   else command diff -- "$@"
-   fi
-}
-
-alias dump='dump -u'
-alias bc='bc -ql'
+alias       v=$my_vim
+alias      vi=$my_vim
+alias     vim=$my_vim
+alias    view="$my_vim  -R"
+alias      vd="$my_vim  -d"
+alias vimdiff="$my_vim  -d"
+alias     gvd="$my_gvim -d"
+alias      gv=$my_gvim
+alias     gvi=$my_gvim
+alias    vish='sudo vipw -s'
+alias      lv="command ls -B | $my_vim -"
+alias      mo="$my_vim -"
 
 if sudo -V |
    { read -r _ _ ver; IFS=. read -r maj min _ <<<"$ver"; ((maj > 0 && min > 6)); }
 then alias sudo="sudo -p 'Password for %p: '"
 else alias sudo="sudo -p 'Password for %u: '"
 fi
-alias sd=sudo
+alias  sd=sudo
 alias sde=sudoedit
 
-alias j='jobs -l'
-alias z=fg
+alias   a=alias
+alias  ua=unalias
+alias   o='set -o'
+alias  oo=shopt
+alias  se=set
+alias use=unset
+
+alias          ?=_type
+alias         mm='man -k'
+alias         mn='command mount | cut -d" " -f1,3,5,6 | column -t'
+alias        umn=umount
+alias         bx='bash -x'
+alias   builtins='enable -a | cut -d" " -f2  | column'
+alias         pf=printf
+alias        cmd=command
+alias ldapsearch='ldapsearch -x -LLL'
+alias        msg=dmesg
+alias        sed='sed -r'
+alias       dump='dump -u'
+alias         bc='bc -ql'
+alias         hg='history | command grep -iE --color'
+
+alias     j='jobs -l'
+alias     z=fg
 alias -- --='fg %-'
+alias     k=kill
+alias    kl='kill -l'
+alias    ka=killall
+alias    pk=pkill
+alias pgrep='pgrep -l'
+alias    pg='ps j --headers | head -1 && ps fajxww | command grep -v grep |
+             command grep -iE --color'
+
+alias        r='netstat -rn'
+alias        i='hostname -i'
+alias       ii='/sbin/ifconfig'
+alias       ia='/sbin/ifconfig -a'
+alias ipconfig=ifconfig
+
+if command -v ncal >/dev/null 2>&1; then
+   alias  cal='env LC_TIME=bg_BG.utf8 ncal -3 -M -C'
+   alias call='env LC_TIME=bg_BG.utf8 ncal -y -M -C'
+else
+   alias  cal='env LC_TIME=bg_BG.utf8 cal -m3'
+   alias call='env LC_TIME=bg_BG.utf8 cal -my'
+fi
 
 alias pl=perl
 alias py='python -i -c "from math import *"'
 alias rb=irb
-
-alias  a=alias
-alias ua=unalias
-
-alias   o='set -o'
-alias  oo=shopt
-alias se=set
-alias use=unset
-
-alias mn='command mount | cut -d" " -f1,3,5,6 | column -t'
-alias umn=umount
-
-alias cg=chgrp
-alias co=chown
-alias cm=chmod
-alias cr='chmod u+r'
-alias cw='chmod u+w'
-alias cx='chmod u+x'
-alias setuid='chmod u+s'
-alias setgid='chmod g+s'
-alias setsticky='chmod +t'
-
-alias g='command grep -iE --color'
-alias hg='history | command grep -iE --color'
-alias pgrep='pgrep -l'
-alias pg='ps j --headers | head -1 && ps fajxww | command grep -v grep |
-          command grep -iE --color'
-
-alias  k=kill
-alias kl='kill -l'
-alias ka=killall
-alias pk=pkill
-
-if command -v ncal >/dev/null 2>&1; then
-   alias cal='env LC_TIME=bg_BG.utf8 ncal -3 -M -C'
-   alias call='env LC_TIME=bg_BG.utf8 ncal -y -M -C'
-else
-   alias cal='env LC_TIME=bg_BG.utf8 cal -m3'
-   alias call='env LC_TIME=bg_BG.utf8 cal -my'
-fi
-
-alias r='netstat -rn'
-alias i='hostname -i'
-alias ii='/sbin/ifconfig'
-alias ia='/sbin/ifconfig -a'
-alias ipconfig=ifconfig
-
-alias cp='cp -i'
-alias mv='mv -i'
-alias rm='rm -i --preserve-root'
-alias md='command mkdir -p'
 
 alias   akw=awk
 alias   cta=cat
@@ -218,6 +163,80 @@ alias   vmi=vim
 alias   shh=ssh
 
 # Functions {{{1
+
+l() {
+   if [[ -t 1 ]]
+   then command ls -FB --color=auto "$@"
+   else command ls -FB              "$@"
+   fi
+}
+ld() {
+   if [[ -t 1 ]]
+   then command ls -FBd --color=auto "$@"
+   else command ls -FBd              "$@"
+   fi
+}
+la() {
+   if [[ -t 1 ]]
+   then command ls -FBA --color=auto "$@"
+   else command ls -FBA              "$@"
+   fi
+}
+lr() {
+   if [[ -t 1 ]]
+   then command ls -FBR --color=auto "$@"
+   else command ls -FBR              "$@"
+   fi
+}
+lk() {
+   if [[ -t 1 ]]
+   then command ls -FBS --color=auto "$@"
+   else command ls -FBS              "$@"
+   fi
+}
+lx() {
+   if [[ -t 1 ]]
+   then command ls -FBX --color=auto "$@"
+   else command ls -FBX              "$@"
+   fi
+}
+
+ll() {
+   if [[ -t 1 ]]
+   then command ls -FBhl --color=auto --time-style='+(%d %b %y - %H:%M)' "$@"
+   else command ls -FBhl              --time-style='+(%d %b %y - %H:%M)' "$@"
+   fi
+}
+lld() {
+   if [[ -t 1 ]]
+   then command ls -FBdhl --color=auto --time-style='+(%d %b %y - %H:%M)' "$@"
+   else command ls -FBdhl              --time-style='+(%d %b %y - %H:%M)' "$@"
+   fi
+}
+lla() {
+   if [[ -t 1 ]]
+   then command ls -FBAhl --color=auto --time-style='+(%d %b %y - %H:%M)' "$@"
+   else command ls -FBAhl              --time-style='+(%d %b %y - %H:%M)' "$@"
+   fi
+}
+llr() {
+   if [[ -t 1 ]]
+   then command ls -FBRhl --color=auto --time-style='+(%d %b %y - %H:%M)' "$@"
+   else command ls -FBRhl              --time-style='+(%d %b %y - %H:%M)' "$@"
+   fi
+}
+llk() {
+   if [[ -t 1 ]]
+   then command ls -FBShl --color=auto --time-style='+(%d %b %y - %H:%M)' "$@"
+   else command ls -FBShl              --time-style='+(%d %b %y - %H:%M)' "$@"
+   fi
+}
+llx() {
+   if [[ -t 1 ]]
+   then command ls -FBXhl --color=auto --time-style='+(%d %b %y - %H:%M)' "$@"
+   else command ls -FBXhl              --time-style='+(%d %b %y - %H:%M)' "$@"
+   fi
+}
 
 m() {
    local choice
@@ -249,6 +268,13 @@ m() {
 }
 
 e() { local status=$?; (($#)) && echo "$@" || echo "$status"; }
+
+diff() {
+   if [[ -t 1 ]] && command -v colordiff >/dev/null 2>&1
+   then colordiff -- "$@"
+   else command diff -- "$@"
+   fi
+}
 
 cv() {
    (($#)) || { echo 'Usage: cv digit ...' >&2; return 1; }
@@ -519,7 +545,7 @@ d() {
                printf '%3d%s\t%s\n' "$size" "$unit" "$file"
                break
             fi
-            size=$((size / 1024))
+            ((size = size / 1024))
          done
       done
    fi
