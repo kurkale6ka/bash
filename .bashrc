@@ -16,8 +16,6 @@ else
    my_vim=$my_gvim
 fi
 
-# Colors: set[af|ab] (ANSI [fore|back]ground) {{{1
-
    Purple=$(tput setaf 5)
 Underline=$(tput smul)
     Reset=$(tput sgr0)
@@ -162,7 +160,7 @@ alias  tpye=type
 alias   vmi=vim
 alias   shh=ssh
 
-# Functions {{{1
+# ls {{{1
 
 ldot() {
    local ls
@@ -269,6 +267,7 @@ llx() {
    else command ls -FBXhl              --time-style='+(%d %b %y - %H:%M)' "$@"
    fi
 }
+
 lm() {
    if [[ -t 1 ]]; then
       echo "$Purple${Underline}Sorted by modification date:$Reset"
@@ -339,6 +338,8 @@ sl() {
    stat -c "%8i %A (%4a) %3h %4u %4g %10s (%10Y) %n" -- "${args[@]}"
 }
 
+# Functions {{{1
+
 m() {
    local choice
    (($#)) || {
@@ -368,7 +369,13 @@ m() {
    done
 }
 
+_type() { (($#)) || { help type; return; }; type -a -- "$@"; }
+
 e() { local status=$?; (($#)) && echo "$@" || echo "$status"; }
+
+c() { [[ -t 1 ]] && command cat -n -- "$@" || command cat "$@"; }
+
+n() { command sed -n "$1{p;q}" -- "$2"; }
 
 diff() {
    if [[ -t 1 ]] && command -v colordiff >/dev/null 2>&1
@@ -421,10 +428,6 @@ cv() {
 
 sq() { command grep -v '^[[:space:]]*#\|^[[:space:]]*$' -- "$@"; }
 
-c() { [[ -t 1 ]] && command cat -n -- "$@" || command cat "$@"; }
-
-_type() { (($#)) || { help type; return; }; type -a -- "$@"; }
-
 pa() {
    local paths
    IFS=: read -ra paths <<< "$PATH"; printf '%s\n' "${paths[@]}" | sort -u
@@ -436,8 +439,6 @@ x() {
    else echo 'debug ON' ; set -o xtrace
    fi
 } 2>/dev/null
-
-n() { command sed -n "$1{p;q}" -- "$2"; }
 
 if ! command -v service >/dev/null 2>&1; then
    service() { /etc/init.d/"$1" "${2:-start}"; }
@@ -691,6 +692,7 @@ b() {
 }
 
 # Programmable completion {{{1
+
 complete -A helptopic        help # Currently, same as builtin
 complete -A command          man m which whereis type ? tpye sudo
 complete -A alias            alias a unalias ua
