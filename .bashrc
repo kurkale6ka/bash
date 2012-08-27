@@ -164,6 +164,38 @@ alias   shh=ssh
 
 # Functions {{{1
 
+ldot() {
+   local ls
+   if [[ ${FUNCNAME[1]} == 'l.' ]]; then
+      [[ -t 1 ]] && ls=(ls -FB --color=auto) || ls=(ls -FB)
+   else
+      if [[ -t 1 ]]
+      then ls=(ls -FBhl --color=auto --time-style='+(%d %b %y - %H:%M)')
+      else ls=(ls -FBhl              --time-style='+(%d %b %y - %H:%M)')
+      fi
+   fi
+   (($# == 0)) && {             "${ls[@]}" -d .[^.]* ; return; }
+   (($# == 1)) && { (cd "$1" && "${ls[@]}" -d .[^.]*); return; }
+   local i arg
+   for arg in "$@"; do
+      printf '%s:\n' "$arg"
+      (cd -- "$arg" && "${ls[@]}" -d .[^.]*)
+      (($# != ++i)) && echo
+   done
+}
+.() {
+   if (($#)); then
+      source "$@"
+   else
+      if [[ -t 1 ]]
+      then command ls -FB --color=auto -d .[^.]*
+      else command ls -FB              -d .[^.]*
+      fi
+   fi
+}
+ l.() { ldot "$@"; }
+ll.() { ldot "$@"; }
+
 l() {
    if [[ -t 1 ]]
    then command ls -FB --color=auto "$@"
@@ -237,6 +269,75 @@ llx() {
    else command ls -FBXhl              --time-style='+(%d %b %y - %H:%M)' "$@"
    fi
 }
+lm() {
+   if [[ -t 1 ]]; then
+      echo "$Purple${Underline}Sorted by modification date:$Reset"
+      command ls -FBt --color=auto "$@"
+   else
+      command ls -FBt              "$@"
+   fi
+}
+lc() {
+   if [[ -t 1 ]]; then
+      echo "$Purple${Underline}Sorted by change date:$Reset"
+      command ls -FBtc --color=auto "$@"
+   else
+      command ls -FBtc              "$@"
+   fi
+}
+lu() {
+   if [[ -t 1 ]]; then
+      echo "$Purple${Underline}Sorted by access date:$Reset"
+      command ls -FBtu --color=auto "$@"
+   else
+      command ls -FBtu              "$@"
+   fi
+}
+llm() {
+   if [[ -t 1 ]]; then
+      echo "$Purple${Underline}Sorted by modification date:$Reset"
+      command ls -FBhlt --color=auto --time-style='+(%d %b %Y - %H:%M)' "$@"
+   else
+      command ls -FBhlt              --time-style='+(%d %b %Y - %H:%M)' "$@"
+   fi
+}
+llc() {
+   if [[ -t 1 ]]; then
+      echo "$Purple${Underline}Sorted by change date:$Reset"
+      command ls -FBhltc --color=auto --time-style='+(%d %b %Y - %H:%M)' "$@"
+   else
+      command ls -FBhltc              --time-style='+(%d %b %Y - %H:%M)' "$@"
+   fi
+}
+llu() {
+   if [[ -t 1 ]]; then
+      echo "$Purple${Underline}Sorted by access date:$Reset"
+      command ls -FBhltu --color=auto --time-style='+(%d %b %Y - %H:%M)' "$@"
+   else
+      command ls -FBhltu              --time-style='+(%d %b %Y - %H:%M)' "$@"
+   fi
+}
+
+ln() {
+   if (($#)); then
+      command ln "$@"
+   else
+      local file
+      for file in * .*; do
+         if [[ -h $file ]]; then
+            command ls -FBAhl --color=auto --time-style="+(%d %b %y - %H:%M)" \
+                       -- "$file"
+         fi
+      done
+   fi
+}
+
+sl() {
+   printf '%-8s %-17s %-3s %-4s %-4s %-10s %-12s %-s\n'\
+          'Inode' 'Permissions' 'ln' 'UID' 'GID' 'Size' 'Time' 'Name'
+   local args=(); (($#)) && args=("$@") || args=(*)
+   stat -c "%8i %A (%4a) %3h %4u %4g %10s (%10Y) %n" -- "${args[@]}"
+}
 
 m() {
    local choice
@@ -244,7 +345,7 @@ m() {
       select choice in help man; do
          case "$choice" in
             help) help help; return;;
-             man) man   man; return;;
+             man) man  man ; return;;
                *) echo '*** Wrong choice ***' >&2
          esac
       done
@@ -271,8 +372,8 @@ e() { local status=$?; (($#)) && echo "$@" || echo "$status"; }
 
 diff() {
    if [[ -t 1 ]] && command -v colordiff >/dev/null 2>&1
-   then    colordiff "$@"
-   else command diff "$@"
+   then         colordiff "$@"
+   else command      diff "$@"
    fi
 }
 
@@ -447,13 +548,18 @@ rmi() {
    find . \( "${inodes[@]}" \) -exec command rm -i -- {} +
 }
 
-f() { ((1 == $#)) && find . -iname -- "$1" || find "$@"; }
+f() {
+   if ((1 == $#))
+   then find . -iname "$1"
+   else find "$@"
+   fi
+}
 
 db() {
    local prgm PS3='Choose a database to update: '
    select prgm in locate 'apropos, man -k'; do
       case "$prgm" in
-           locate) printf 'updatedb...\n'; updatedb & return;;
+           locate) printf 'updatedb...\n'  ; updatedb   & return;;
          apropos*) printf 'makewhatis...\n'; makewhatis & return;;
                 *) echo '*** Wrong choice ***' >&2
       esac
@@ -520,12 +626,22 @@ h() {
    fi
 }
 
-p() { (($#)) && ping -c3 -- "$@" || ps fjww --headers; }
+p() {
+   if (($#))
+   then ping -c3 "$@"
+   else ps fjww --headers
+   fi
+}
 
 # todo: keep?
 ir() { ifdown "$1" && ifup "$1" || echo "Couldn't do it." >&2; }
 
-hd() { ((1 == $#)) && hdparm -I -- "$1" || hdparm "$@"; }
+hd() {
+   if ((1 == $#))
+   then hdparm -I -- "$1"
+   else hdparm       "$@"
+   fi
+}
 
 df() { command df -h "$@" | sort -k5r; }
 
@@ -533,8 +649,7 @@ df() { command df -h "$@" | sort -k5r; }
 # Fails with \n in filenames!? Try this instead:
 # for file in *; do read size _ < <(du -sk "$file");...
 d() {
-   local args=()
-   (($#)) && args=("$@") || args=(*)
+   local args=(); (($#)) && args=("$@") || args=(*)
    if sort -h /dev/null 2>/dev/null
    then
       du -sh -- "${args[@]}" | sort -hr
@@ -566,109 +681,6 @@ rd() {
          echo "$arg is not a directory" >&2
       fi
    done
-}
-
-ln() {
-   if (($#)); then
-      command ln "$@"
-   else
-      local file
-      for file in * .*; do
-         if [[ -h $file ]]; then
-            command ls -FBAhl --color=auto --time-style="+(%d %b %y - %H:%M)" \
-                       -- "$file"
-         fi
-      done
-   fi
-}
-
-sl() {
-   printf '%-8s %-17s %-3s %-4s %-4s %-10s %-12s %-s\n'\
-          'Inode' 'Permissions' 'ln' 'UID' 'GID' 'Size' 'Time' 'Name'
-   local args=()
-   (($#)) && args=("$@") || args=(*)
-   stat -c "%8i %A (%4a) %3h %4u %4g %10s (%10Y) %n" -- "${args[@]}"
-}
-
-ldot() {
-   local ls
-   if [[ ${FUNCNAME[1]} == 'l.' ]]; then
-      [[ -t 1 ]] && ls=(ls -FB --color=auto) || ls=(ls -FB)
-   else
-      if [[ -t 1 ]]
-      then ls=(ls -FBhl --color=auto --time-style='+(%d %b %y - %H:%M)')
-      else ls=(ls -FBhl              --time-style='+(%d %b %y - %H:%M)')
-      fi
-   fi
-   (($# == 0)) && {             "${ls[@]}" -d .[^.]* ; return; }
-   (($# == 1)) && { (cd "$1" && "${ls[@]}" -d .[^.]*); return; }
-   local i arg
-   for arg in "$@"; do
-      printf '%s:\n' "$arg"
-      (cd -- "$arg" && "${ls[@]}" -d .[^.]*)
-      (($# != ++i)) && echo
-   done
-}
-.() {
-   if (($#)); then
-      source "$@"
-   else
-      if [[ -t 1 ]]
-      then command ls -FB --color=auto -d .[^.]*
-      else command ls -FB              -d .[^.]*
-      fi
-   fi
-}
- l.() { ldot "$@"; }
-ll.() { ldot "$@"; }
-
-lm() {
-   if [[ -t 1 ]]; then
-      echo "$Purple${Underline}Sorted by modification date:$Reset"
-      command ls -FBt --color=auto "$@"
-   else
-      command ls -FBt              "$@"
-   fi
-}
-lc() {
-   if [[ -t 1 ]]; then
-      echo "$Purple${Underline}Sorted by change date:$Reset"
-      command ls -FBtc --color=auto "$@"
-   else
-      command ls -FBtc              "$@"
-   fi
-}
-lu() {
-   if [[ -t 1 ]]; then
-      echo "$Purple${Underline}Sorted by access date:$Reset"
-      command ls -FBtu --color=auto "$@"
-   else
-      command ls -FBtu              "$@"
-   fi
-}
-llm() {
-   if [[ -t 1 ]]; then
-      echo "$Purple${Underline}Sorted by modification date:$Reset"
-      command ls -FBhlt --color=auto --time-style='+(%d %b %Y - %H:%M)' "$@"
-   else
-      command ls -FBhlt              --time-style='+(%d %b %Y - %H:%M)' "$@"
-   fi
-}
-llc() {
-   if [[ -t 1 ]]; then
-      echo "$Purple${Underline}Sorted by change date:$Reset"
-      command ls -FBhltc --color=auto --time-style='+(%d %b %Y - %H:%M)' "$@"
-   else
-      command ls -FBhltc              --time-style='+(%d %b %Y - %H:%M)' "$@"
-   fi
-}
-llu() {
-   if [[ -t 1 ]]; then
-      echo "$Purple${Underline}Sorted by access date:$Reset"
-      command ls -FBhltu --color=auto --time-style='+(%d %b %Y - %H:%M)' "$@"
-   else
-      command ls -FBhltu              --time-style='+(%d %b %Y - %H:%M)' "$@"
-   fi
 }
 
 b() {
@@ -735,7 +747,7 @@ _cd() {
 }
 
 # Business specific or system dependant stuff
-[[ -r ~/.bashrc_after ]] && source ~/.bashrc_after
+[[ -r $HOME/.bashrc_after ]] && . "$HOME"/.bashrc_after
 
 # enable bash completion in interactive shells
 if [[ -f /etc/profile.d/bash-completion.sh ]] && ! shopt -oq posix; then
