@@ -4,7 +4,7 @@
 if [[ -w $HISTFILE ]]; then
 
    # First, remove all leading or trailing white spaces
-   ed -s "$HISTFILE" <<< $',s/^[[:space:]]+|[[:space:]]+$//g\nwq'
+   ed -s "$HISTFILE" <<< $',s/^[[:space:]]\+\|[[:space:]]\+$//g\nwq'
 
    if tmp=$(mktemp); then
 
