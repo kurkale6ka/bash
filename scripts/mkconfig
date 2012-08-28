@@ -230,8 +230,12 @@ rmlinks() {
 
 mkenv() {
    mkrepos
-   mkdir -p "$HOME"/backups
    emerge sudo vixie-cron moreutils
+   # rc-update add vixie-cron default
+   # rc-update add ntpd default
+
+   mkdir -p "$HOME"/backups
+   # crontab -u "$USER" "$HOME"/help/crontab.backups
 }
 
  options=('Update repositories' 'Create repositories' 'Copy repositories')
