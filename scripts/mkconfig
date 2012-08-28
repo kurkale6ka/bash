@@ -188,22 +188,22 @@ cprepos() {
    done
 }
 
-      rcs=(.gitignore .{screen,curl,top}rc .my.cnf)
- vimfiles=(.{,g}vimrc)
-bashfiles=(.profile .bash_{profile,login,logout} .bashrc{,after} .logout)
+    rcs=(.gitignore .{screen,curl,top}rc .my.cnf)
+ vimrcs=(.{,g}vimrc)
+bashrcs=(.profile .bash_{profile,login,logout} .bashrc{,after} .logout)
 
 mklinks() {
 
    ln -sT "$HOME"/config/vimfiles                   "$HOME"/.vim
-   ln -s  "${vimfiles[@]/#/"$HOME/config/vimfiles/"}" "$HOME"
+   ln -s  "${vimrcs[@]/#/"$HOME/config/vimfiles/"}" "$HOME"
 
    if ((! $#)); then
       ln -s "$HOME"/config/vimfiles/bundle/vim-pathogen/autoload/pathogen.vim\
             "$HOME"/config/vimfiles/autoload
    fi
 
-   ln -s  "${bashfiles[@]/#/"$HOME/config/bashfiles/"}" "$HOME"
-   ln -s        "${rcs[@]/#/"$HOME/config/help/"}"      "$HOME"
+   ln -s  "${bashrcs[@]/#/"$HOME/config/bashfiles/"}" "$HOME"
+   ln -s      "${rcs[@]/#/"$HOME/config/help/"}"      "$HOME"
 
    ln -s  "$HOME"/config/bashfiles/.inputrc         "$HOME"
    ln -s  "$HOME"/config/bashfiles/.irbrc           "$HOME"
@@ -216,17 +216,17 @@ mklinks() {
 
    mkdir -p "$HOME"/bin
    if [[ -d $HOME/bin ]]; then
-      ln -s  "$HOME"/config/bashfiles/scripts/mkconfig "$HOME"/bin
-      ln -s  "$HOME"/config/vimfiles/scripts/vimcat    "$HOME"/bin/vc
+      ln -s "$HOME"/config/bashfiles/scripts/mkconfig "$HOME"/bin
+      ln -s "$HOME"/config/vimfiles/scripts/vimcat    "$HOME"/bin/vc
    fi
 }
 
 rmlinks() {
    rm "$HOME"/{.vim,config/vimfiles/autoload/pathogen.vim,\
                .inputrc,.irbrc,vimfiles,bashfiles,help,bin/mkconfig,bin/vc} \
-                "${vimfiles[@]/#/"$HOME/"}" \
-               "${bashfiles[@]/#/"$HOME/"}" \
-                     "${rcs[@]/#/"$HOME/"}"
+                "${vimrcs[@]/#/"$HOME/"}" \
+               "${bashrcs[@]/#/"$HOME/"}" \
+                   "${rcs[@]/#/"$HOME/"}"
    rm -r "$HOME"/.irssi
 }
 
