@@ -197,7 +197,7 @@ mklinks() {
 
    local rcdir
    for rcdir in "${rcdirs[@]}"
-   do ln -sT "${rcdir/#/$HOME'/config/'}" "${rcdir/#/$HOME'/'}"
+   do ln -sT "${rcdir/#/$HOME/config/}" "${rcdir/#/$HOME/}"
    done
 
    ln -sT "$HOME"/config/vimfiles    "$HOME"/.vim
@@ -208,9 +208,9 @@ mklinks() {
             "$HOME"/config/vimfiles/autoload
    fi
 
-   ln -s "${rcs[@]/#/$HOME'/config/help/'}"      \
-      "${vimrcs[@]/#/$HOME'/config/vimfiles/'}"  \
-     "${bashrcs[@]/#/$HOME'/config/bashfiles/'}" "$HOME"
+   ln -s "${rcs[@]/#/$HOME/config/help/}"      \
+      "${vimrcs[@]/#/$HOME/config/vimfiles/}"  \
+     "${bashrcs[@]/#/$HOME/config/bashfiles/}" "$HOME"
 
    mkdir -p "$HOME"/bin
    if [[ -d $HOME/bin ]]; then
@@ -221,10 +221,10 @@ mklinks() {
 
 rmlinks() {
    rm "$HOME"/{.vim,config/vimfiles/autoload/pathogen.vim,bin/mkconfig,bin/vc} \
-                "${rcdirs[@]/#/$HOME'/'}" \
-                "${vimrcs[@]/#/$HOME'/'}" \
-               "${bashrcs[@]/#/$HOME'/'}" \
-                   "${rcs[@]/#/$HOME'/'}"
+                "${rcdirs[@]/#/$HOME/}" \
+                "${vimrcs[@]/#/$HOME/}" \
+               "${bashrcs[@]/#/$HOME/}" \
+                   "${rcs[@]/#/$HOME/}"
    rm -r "$HOME"/.irssi
 }
 
