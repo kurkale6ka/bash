@@ -568,11 +568,10 @@ db() {
 }
 
 irssi() (
-   if cd /var/log/irssi; then
-      "$HOME"/config/help/.irssi/fnotify.bash &
-      command irssi
-      kill %?fnotify
-   fi
+   cd /var/log/irssi || exit 1
+   "$HOME"/config/help/.irssi/fnotify.bash &
+   command irssi
+   kill %?fnotify
 )
 
 vn() {
