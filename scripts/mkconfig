@@ -31,11 +31,6 @@ mkrepos() {
             git clone git://github.com/scrooloose/nerdcommenter.git
             git clone git://github.com/vim-scripts/MarkLines.git
             git clone git://github.com/vim-scripts/bufkill.vim.git
-            # git clone git://github.com/vim-scripts/L9.git
-            # git clone git://github.com/vim-scripts/FuzzyFinder.git
-            # git clone git://github.com/vim-scripts/YankRing.vim.git
-            # git clone git://github.com/ervandew/supertab.git
-            # git clone git://github.com/spiiph/vim-space.git
          fi
       fi
    fi
@@ -126,26 +121,6 @@ updaterepos() {
    if cd "$HOME"/config/vimfiles/bundle/bufkill.vim
    then git pull git://github.com/vim-scripts/bufkill.vim.git master
    fi
-
-   # if cd "$HOME"/config/vimfiles/bundle/L9
-   # then git pull git://github.com/vim-scripts/L9.git master
-   # fi
-
-   # if cd "$HOME"/config/vimfiles/bundle/FuzzyFinder
-   # then git pull git://github.com/vim-scripts/FuzzyFinder.git master
-   # fi
-
-   # if cd "$HOME"/config/vimfiles/bundle/YankRing.vim
-   # then git pull git://github.com/vim-scripts/YankRing.vim.git master
-   # fi
-
-   # if cd "$HOME"/config/vimfiles/bundle/supertab
-   # then git pull git://github.com/ervandew/supertab.git master
-   # fi
-
-   # if cd "$HOME"/config/vimfiles/bundle/vim-space
-   # then git pull git://github.com/spiiph/vim-space.git master
-   # fi
 }
 
 cprepos() {
@@ -175,11 +150,6 @@ cprepos() {
          https://github.com/scrooloose/nerdcommenter/tarball/master   \
          https://github.com/vim-scripts/MarkLines/tarball/master      \
          https://github.com/vim-scripts/bufkill.vim/tarball/master    \
-         # https://github.com/vim-scripts/L9/tarball/master           \
-         # https://github.com/vim-scripts/FuzzyFinder/tarball/master  \
-         # https://github.com/vim-scripts/YankRing.vim/tarball/master \
-         # https://github.com/ervandew/supertab/tarball/master        \
-         # https://github.com/spiiph/vim-space/tarball/master
    fi
    local repo
    for repo in master*; do
@@ -220,12 +190,13 @@ mklinks() {
 }
 
 rmlinks() {
-   rm "$HOME"/{.vim,config/vimfiles/autoload/pathogen.vim,bin/mkconfig,bin/vc} \
-                "${rcdirs[@]/#/$HOME/}" \
-                "${vimrcs[@]/#/$HOME/}" \
-               "${bashrcs[@]/#/$HOME/}" \
-                   "${rcs[@]/#/$HOME/}"
-   rm -r "$HOME"/.irssi
+   command \
+      rm "$HOME"/{.vim,config/vimfiles/autoload/pathogen.vim,bin/{mkconfig,vc}} \
+                  "${rcdirs[@]/#/$HOME/}"                                       \
+                  "${vimrcs[@]/#/$HOME/}"                                       \
+                 "${bashrcs[@]/#/$HOME/}"                                       \
+                     "${rcs[@]/#/$HOME/}"
+   command rm -r "$HOME"/.irssi
 }
 
 mkenv() {
