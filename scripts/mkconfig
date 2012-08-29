@@ -146,7 +146,7 @@ cprepos() {
          https://github.com/tpope/vim-flatfoot/tarball/master         \
          https://github.com/scrooloose/nerdcommenter/tarball/master   \
          https://github.com/vim-scripts/MarkLines/tarball/master      \
-         https://github.com/vim-scripts/bufkill.vim/tarball/master    \
+         https://github.com/vim-scripts/bufkill.vim/tarball/master
    fi
    local repo
    for repo in master*; do
