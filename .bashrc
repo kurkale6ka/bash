@@ -522,15 +522,19 @@ bak() { local arg; for arg in "$@"; do command cp -i -- "$arg" "$arg".bak; done;
 
 # Usage: sw file1 [file2]. If file2 is omitted, file1 is swapped with file1.bak
 sw() {
-   local tmpfile=$(mktemp tmp.XXXXXXXXXXX) ||
-      { echo "Temporary file creation failure" >&2; return 1; }
    if (($# == 1)); then
       [[ ! -e $1.bak ]] && { echo "file $1.bak does not exist" >&2; return 2; }
+      local tmpfile
+      tmpfile=$(mktemp tmp.XXXXXXXXXXX) ||
+         { echo "Temporary file creation failure" >&2; return 11; }
       command mv -- "$1"       "$tmpfile" &&
               mv -- "$1".bak   "$1"       &&
               mv -- "$tmpfile" "$1".bak
-   else
+   elif (($# == 2));then
       [[ ! -e $2 ]] && { echo "file $2 does not exist" >&2; return 3; }
+      local tmpfile
+      tmpfile=$(mktemp tmp.XXXXXXXXXXX) ||
+         { echo "Temporary file creation failure" >&2; return 12; }
       command mv -- "$1"       "$tmpfile" &&
               mv -- "$2"       "$1"       &&
               mv -- "$tmpfile" "$2"
