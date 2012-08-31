@@ -27,7 +27,7 @@ PS1() {
    local LightGreen=$(tput bold; tput setaf 2)
    local  LightBlue=$(tput bold; tput setaf 4)
 
-   [[ $TERM != linux ]] && printf "\e]2;$HOSTNAME\a"
+   [[ $TERM != linux ]] && printf '\e]2;%s\a' "$HOSTNAME"
    unset PROMPT_COMMAND
 
    [[ $SSH_CLIENT || $SSH2_CLIENT ]] && info=', remote' || info=''
