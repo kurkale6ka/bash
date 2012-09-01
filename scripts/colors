@@ -52,8 +52,11 @@ echo
 set -- "${1:-0-}" "${2:-77}" "${@:3}"
 
 for lc in "$@"; do
-                      fg=$(tput setaf "${lc%?}")
-   [[ $lc != *- ]] && bg=$(tput setab "${lc#?}") || unset bg
+              fg=$(tput setaf "${lc%?}")
+   if [[ $lc != *- ]]
+   then       bg=$(tput setab "${lc#?}")
+   else unset bg
+   fi
    echo "$lc: $fg${bg}Lorem ipsum dolor ${u}sit amet, consectetur$r$fg$bg$b"\
         "adipisicing elit, ${u}sed do eiusmod!$r"
 done
