@@ -1,0 +1,5 @@
+#! /usr/bin/env bash
+
+# ~/mydir/uk00probst00 ls -l -> ssh uk00probst00 ls -l
+# why exec?
+exec ssh "${0##*/}" "$@"

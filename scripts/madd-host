@@ -1,0 +1,33 @@
+#! /usr/bin/env bash
+
+# Reading a file with 'host ip' entries: madd-host myfile
+if (($# == 1)); then
+
+   while read -r host ip; do
+
+      [[ $host == \#* ]] && continue
+
+      # printf "host $host\n   hostname $ip\n" >> "$HOME"/.ssh/config
+
+      ln -s "$HOME"/bin/{mssh,"$host"}
+
+   done < "$1"
+
+# Adding a single host: madd-host {host} {ip}
+#                       will add it to my ssh config file and link it in bin
+elif (($# > 1)); then
+
+   if ! command grep -qi "$1" "$HOME"/.ssh/config; then
+      if printf 'host %s\n   hostname %s\n' "$1" "$2" >> "$HOME"/.ssh/config
+      then
+         # goto last line
+         command vim -nNX -u NONE -c 'silent $' "$_"
+      fi
+   fi
+   # printf '%s %s\n' "$2" "$1" >> "$HOME"/.hosts
+   # sudo bash -c 'printf '%s %s\n' "$2" "$1" >> /etc/hosts' "$0" "$@"
+
+   ln -s "$HOME"/bin/{mssh,"$1"}
+
+   # command vim -nNX -u NONE -c 'silent bufdo$' "$HOME"/.{ssh/config,hosts}
+fi
