@@ -168,8 +168,8 @@ ldot() {
       [[ -t 1 ]] && ls=(ls -FB --color=auto) || ls=(ls -FB)
    else
       if [[ -t 1 ]]
-      then ls=(ls -FBhl --color=auto --time-style='+(%d %b %y - %H:%M)')
-      else ls=(ls -FBhl              --time-style='+(%d %b %y - %H:%M)')
+      then ls=(ls -FBhl --color=auto --time-style='+(%d %b %Y - %H:%M)')
+      else ls=(ls -FBhl              --time-style='+(%d %b %Y - %H:%M)')
       fi
    fi
    (($# == 0)) && {             "${ls[@]}" -d .[^.]* ; return; }
@@ -233,38 +233,38 @@ lx() {
 
 ll() {
    if [[ -t 1 ]]
-   then command ls -FBhl --color=auto --time-style='+(%d %b %y - %H:%M)' "$@"
-   else command ls -FBhl              --time-style='+(%d %b %y - %H:%M)' "$@"
+   then command ls -FBhl --color=auto --time-style='+(%d %b %Y - %H:%M)' "$@"
+   else command ls -FBhl              --time-style='+(%d %b %Y - %H:%M)' "$@"
    fi
 }
 lld() {
    if [[ -t 1 ]]
-   then command ls -FBdhl --color=auto --time-style='+(%d %b %y - %H:%M)' "$@"
-   else command ls -FBdhl              --time-style='+(%d %b %y - %H:%M)' "$@"
+   then command ls -FBdhl --color=auto --time-style='+(%d %b %Y - %H:%M)' "$@"
+   else command ls -FBdhl              --time-style='+(%d %b %Y - %H:%M)' "$@"
    fi
 }
 lla() {
    if [[ -t 1 ]]
-   then command ls -FBAhl --color=auto --time-style='+(%d %b %y - %H:%M)' "$@"
-   else command ls -FBAhl              --time-style='+(%d %b %y - %H:%M)' "$@"
+   then command ls -FBAhl --color=auto --time-style='+(%d %b %Y - %H:%M)' "$@"
+   else command ls -FBAhl              --time-style='+(%d %b %Y - %H:%M)' "$@"
    fi
 }
 llr() {
    if [[ -t 1 ]]
-   then command ls -FBRhl --color=auto --time-style='+(%d %b %y - %H:%M)' "$@"
-   else command ls -FBRhl              --time-style='+(%d %b %y - %H:%M)' "$@"
+   then command ls -FBRhl --color=auto --time-style='+(%d %b %Y - %H:%M)' "$@"
+   else command ls -FBRhl              --time-style='+(%d %b %Y - %H:%M)' "$@"
    fi
 }
 llk() {
    if [[ -t 1 ]]
-   then command ls -FBShl --color=auto --time-style='+(%d %b %y - %H:%M)' "$@"
-   else command ls -FBShl              --time-style='+(%d %b %y - %H:%M)' "$@"
+   then command ls -FBShl --color=auto --time-style='+(%d %b %Y - %H:%M)' "$@"
+   else command ls -FBShl              --time-style='+(%d %b %Y - %H:%M)' "$@"
    fi
 }
 llx() {
    if [[ -t 1 ]]
-   then command ls -FBXhl --color=auto --time-style='+(%d %b %y - %H:%M)' "$@"
-   else command ls -FBXhl              --time-style='+(%d %b %y - %H:%M)' "$@"
+   then command ls -FBXhl --color=auto --time-style='+(%d %b %Y - %H:%M)' "$@"
+   else command ls -FBXhl              --time-style='+(%d %b %Y - %H:%M)' "$@"
    fi
 }
 
@@ -324,7 +324,7 @@ ln() {
       local file
       for file in * .*; do
          if [[ -h $file ]]; then
-            command ls -FBAhl --color=auto --time-style="+(%d %b %y - %H:%M)" \
+            command ls -FBAhl --color=auto --time-style="+(%d %b %Y - %H:%M)" \
                        -- "$file"
          fi
       done
