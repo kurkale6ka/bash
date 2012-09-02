@@ -1,7 +1,8 @@
 #! /usr/bin/env bash
 
-# Will add a host to my ssh config file and link it in ~/bin -> mssh
-# madd-host {host} {ip}
+# This script will add a host to my ssh config file and link it in ~/bin -> mssh
+# Usage: 1. madd-host {host} {ip} or
+#        2. madd-host {file}
 
 mkhost() {
    ln -s "$HOME"/bin/{mssh,"$1"}
@@ -15,10 +16,18 @@ mkhost() {
    fi
 }
 
-# Reading a file with 'host ip' entries
-# madd-host {myfile}
+# 1. Adding a single host
+if (($# == 2)); then
+
+   if mkhost "$1" "$2"
+   then gvim -vc 'silent $' "$HOME"/.ssh/config
+   fi
+   #      gvim -vc 'silent bufdo$' "$HOME"/.{ssh/config,hosts}
+   # sudo gvim -vc 'silent bufdo$' /etc/hosts
+
+# 2. Reading a file with 'host ip' entries
 # todo: read in an array in order to avoid multiple greps, lns ...?
-if (($# == 1)); then
+elif (($# == 1)); then
 
    unset added
    while read -r host ip; do
@@ -28,11 +37,9 @@ if (($# == 1)); then
    done < "$1"
 
    # edit ssh config's last line
-   [[ $added ]] && vim -c 'silent $' "$HOME"/.ssh/config
-   # command vim -nNX -u NONE -c 'silent bufdo$' "$HOME"/.{ssh/config,hosts}
-
-# Adding a single host
-# madd-host {host} {ip}
-elif (($# == 2)); then
-   mkhost "$1" "$2" && vim -c 'silent $' "$HOME"/.ssh/config
+   if [[ $added ]]
+   then gvim -vc 'silent $' "$HOME"/.ssh/config
+   fi
+   #      gvim -vc 'silent bufdo$' "$HOME"/.{ssh/config,hosts}
+   # sudo gvim -vc 'silent bufdo$' /etc/hosts
 fi
