@@ -6,11 +6,12 @@
 # directory default 777 (drwxrwxrwx) => 750 (drwxr-x---)
 umask 027
 
-if   command -v vimx >/dev/null 2>&1
-then my_vim='vimx -v'
-elif command -v gvim >/dev/null 2>&1
-then my_vim='gvim -v'
-else my_vim=vim
+if command -v vimx >/dev/null 2>&1; then
+   my_vim='vimx -v'
+elif command -v gvim >/dev/null 2>&1; then
+   my_vim='gvim -v'
+else
+   my_vim=vim
 fi
 
 export EDITOR=$my_vim
@@ -41,9 +42,11 @@ export CDPATH=$HOME:..:../..
 export       LANG=en_GB.UTF-8
 export LC_COLLATE=C
 
-LightGreen=$(tput bold; tput setaf 2)
- LightBlue=$(tput bold; tput setaf 4)
+      Bold=$(tput bold)
+ Underline=$(tput smul)
      Reset=$(tput sgr0)
+LightGreen=$(printf %s "$Bold"; tput setaf 2)
+ LightBlue=$(printf %s "$Bold"; tput setaf 4)
 
 # tput smso -> sm so -> set mode stand out (bold)
 #      smul -> sm ul -> set mode underline
@@ -52,12 +55,16 @@ LightGreen=$(tput bold; tput setaf 2)
 export LESS_TERMCAP_mb=$LightGreen # begin blinking
 export LESS_TERMCAP_md=$LightBlue  # begin bold
 export LESS_TERMCAP_me=$Reset      # end mode
-export LESS_TERMCAP_so=$(tput bold; tput setaf 3; tput setab 4) # so -> stand out - info box
-export LESS_TERMCAP_se=$(tput rmso; tput sgr0)                  # se -> stand out end
+# so -> stand out - info box
+export LESS_TERMCAP_so=$(printf %s "$Bold"; tput setaf 3; tput setab 4)
+# se -> stand out end
+export LESS_TERMCAP_se=$(tput rmso; printf %s "$Reset")
 # export LESS_TERMCAP_so=$'\E[01;47;34m'
 # export LESS_TERMCAP_se=$'\E[0m'
-export LESS_TERMCAP_us=$(tput smul; tput bold; tput setaf 5) # us -> underline start
-export LESS_TERMCAP_ue=$(tput rmul; tput sgr0)               # ue -> underline end
+# us -> underline start
+export LESS_TERMCAP_us=$(printf %s%s "$Bold$Underline"; tput setaf 5)
+# ue -> underline end
+export LESS_TERMCAP_ue=$(tput rmul; printf %s "$Reset")
 
 # export LESS_TERMCAP_mr=$(tput rev)
 # export LESS_TERMCAP_mh=$(tput dim)

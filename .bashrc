@@ -7,13 +7,13 @@ shopt -s cdspell extglob nocaseglob nocasematch
 
 if command -v vimx >/dev/null 2>&1; then
    my_gvim=vimx
-   my_vim="$my_gvim -v"
+    my_vim="vimx -v"
 elif command -v gvim >/dev/null 2>&1; then
    my_gvim=gvim
-   my_vim="$my_gvim -v"
+    my_vim="gvim -v"
 else
    my_gvim=vim
-   my_vim=$my_gvim
+    my_vim=vim
 fi
 
    Purple=$(tput setaf 5)
@@ -689,9 +689,9 @@ rd() {
 }
 
 b() {
-   if   (($# == 1)); then figlet -f    smslant -- "$1"
-   elif (($# == 2)); then figlet -f -- "$1"       "${@:2}"
-   else figlist
+   if   (($# == 1)); then figlet -f smslant -- "$1"
+   elif (($# == 2)); then figlet -f "$1"    -- "${@:2}"
+   else figlist | column -c"$COLUMNS"
    fi
 }
 
