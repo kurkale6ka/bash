@@ -19,13 +19,14 @@ fi
    Purple=$(tput setaf 5)
 Underline=$(tput smul)
     Reset=$(tput sgr0)
+     Bold=$(tput bold)
 
 # PS1 + title (\e]2; ---- \a), PS2, PS3 and PS4 {{{1
 
 PS1() {
-   local   LightRed=$(tput bold; tput setaf 1)
-   local LightGreen=$(tput bold; tput setaf 2)
-   local  LightBlue=$(tput bold; tput setaf 4)
+   local   LightRed=$(printf %s "$Bold"; tput setaf 1)
+   local LightGreen=$(printf %s "$Bold"; tput setaf 2)
+   local  LightBlue=$(printf %s "$Bold"; tput setaf 4)
 
    [[ $TERM != linux ]] && printf '\e]2;%s\a' "$HOSTNAME"
    unset PROMPT_COMMAND
