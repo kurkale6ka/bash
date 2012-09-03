@@ -2,7 +2,7 @@
 
 [[ -t 1 ]] || return
 
-set -o notify
+set   -o notify
 shopt -s cdspell extglob nocaseglob nocasematch
 
 if command -v vimx >/dev/null 2>&1; then
@@ -42,18 +42,13 @@ PS1() {
 }
 PS1
 
-export PS2='↪ '
-export PS3='Choose an entry: '
-export PS4='+ '
+PS2='↪ '; PS3='Choose an entry: '; PS4='+ ';
 
 # Aliases {{{1
 
 alias        cg=chgrp
 alias        co=chown
 alias        cm=chmod
-alias        cr='chmod u+r'
-alias        cw='chmod u+w'
-alias        cx='chmod u+x'
 alias    setuid='chmod u+s'
 alias    setgid='chmod g+s'
 alias setsticky='chmod +t'
@@ -133,7 +128,6 @@ alias pgrep='pgrep -l'
 alias    pg='ps j --headers | head -1 && ps fajxww | command grep -v grep |
              command grep -iE --color'
 
-alias        r='netstat -rn'
 alias        i='hostname -i'
 alias       ii='/sbin/ifconfig'
 alias       ia='/sbin/ifconfig -a'
@@ -434,7 +428,22 @@ pa() {
    IFS=: read -ra paths <<< "$PATH"; printf '%s\n' "${paths[@]}" | sort -u
 }
 
+r() {
+   if [[ -d $1 || -f $1 ]]
+   then chmod u+r -- "$@"
+   else netstat -rn
+   fi
+}
+
+w() {
+   if [[ -d $1 || -f $1 ]]
+   then chmod u+w -- "$@"
+   else w "$@"
+   fi
+}
+
 x() {
+   (($#)) && { chmod u+x -- "$@"; return; }
    if [[ $- == *x* ]]
    then echo 'debug OFF'; set +o xtrace
    else echo 'debug ON' ; set -o xtrace
@@ -478,16 +487,16 @@ u() {
       local i
       printf '%23s' 'Distribution: '
       for i in /etc/*{-release,_version}; do
-         cat "$i" 2>/dev/null; break
+         command sed -n '/\S/{p;q}' "$i" 2>/dev/null; break
       done
-      printf '%23s' 'Network node hostname: ' && uname -n
-      printf '%23s' 'Machine hardware name: ' && uname -m
-      printf '%23s' 'Hardware platform: '     && uname -i
-      printf '%23s' 'Processor type: '        && uname -p
-      printf '%23s' 'Kernel name: '           && uname -s
-      printf '%23s' 'Kernel release: '        && uname -r
-      printf '%23s' 'Compiled on: '           && uname -v
-      printf '%23s' 'Operating system: '      && uname -o
+      printf '%23s' 'Network node hostname: '; uname -n
+      printf '%23s' 'Machine hardware name: '; uname -m
+      printf '%23s' 'Hardware platform: '    ; uname -i
+      printf '%23s' 'Processor type: '       ; uname -p
+      printf '%23s' 'Kernel name: '          ; uname -s
+      printf '%23s' 'Kernel release: '       ; uname -r
+      printf '%23s' 'Compiled on: '          ; uname -v
+      printf '%23s' 'Operating system: '     ; uname -o
    fi
 }
 
