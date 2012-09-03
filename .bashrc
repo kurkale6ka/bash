@@ -41,7 +41,6 @@ PS1() {
    fi
 }
 PS1
-
 PS2='↪ '; PS3='Choose an entry: '; PS4='+ ';
 
 # Aliases {{{1
@@ -88,9 +87,9 @@ alias      lv="command ls -B | $my_vim -"
 alias      mo="$my_vim -"
 
 if sudo -V |
-   { read -r _ _ ver; IFS=. read -r maj min _ <<<"$ver"; ((maj > 0 && min > 6)); }
-then alias sudo="sudo -p 'Password for %p: '"
-else alias sudo="sudo -p 'Password for %u: '"
+   { read -r _ _ ver; ver="${ver%.*}"; ((${ver%.*} > 0 && ${ver#*.} > 6)); }
+then alias sudo="sudo -p 'Password for %p: '"; sudo_version_ok=1
+else alias sudo="sudo -p 'Password for %u: '"; unset sudo_version_ok
 fi
 alias  sd=sudo
 alias sde=sudoedit
@@ -486,8 +485,8 @@ u() {
    else
       local i
       printf '%23s' 'Distribution: '
-      for i in /etc/*{-release,_version}; do
-         command sed -n '/\S/{p;q}' "$i" 2>/dev/null; break
+      for i in /etc/*{-release,_version}
+      do command sed -n '/\S/{p;q}' "$i"; break
       done
       printf '%23s' 'Network node hostname: '; uname -n
       printf '%23s' 'Machine hardware name: '; uname -m
@@ -625,8 +624,7 @@ s() {
       else command grep    -iE --color -- "$1" /etc/services
       fi
    else
-      if command sudo -V |
-         { read -r _ _ ver; IFS=. read -r maj min _ <<<"$ver"; ((maj > 0 && min > 6)); }
+      if [[ $sudo_version_ok ]]
       then sudo -E /bin/bash
       else sudo    /bin/bash
       fi
