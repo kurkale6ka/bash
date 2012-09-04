@@ -445,7 +445,7 @@ fi
 date() {
    if (($#))
    then command date "$@"
-   else command date '+%d %B [%-m] %Y, %H:%M %Z (%A)'
+   else command date '+%A %d %B %Y, %H:%M %Z (%d/%m/%Y)'
    fi
 }
 
