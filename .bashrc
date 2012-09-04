@@ -367,7 +367,7 @@ _type() { (($#)) || { help type; return; }; type -a -- "$@"; }
 
 e() { local status=$?; (($#)) && echo "$@" || echo "$status"; }
 
-c() { [[ -t 1 ]] && command cat -n -- "$@" || command cat "$@"; }
+c() { if [[ -t 1 ]]; then command cat -n -- "$@"; else command cat "$@"; fi }
 
 n() { command sed -n "$1{p;q}" -- "$2"; }
 
@@ -427,19 +427,8 @@ pa() {
    IFS=: read -ra paths <<< "$PATH"; printf '%s\n' "${paths[@]}" | sort -u
 }
 
-r() {
-   if [[ -d $1 || -f $1 ]]
-   then chmod u+r -- "$@"
-   else netstat -rn
-   fi
-}
-
-w() {
-   if [[ -d $1 || -f $1 ]]
-   then chmod u+w -- "$@"
-   else w "$@"
-   fi
-}
+r() { if [[ -d $1 || -f $1 ]]; then chmod u+r -- "$@"; else netstat -rn; fi; }
+w() { if [[ -d $1 || -f $1 ]]; then chmod u+w -- "$@"; else command w "$@"; fi; }
 
 x() {
    (($#)) && { chmod u+x -- "$@"; return; }
@@ -449,8 +438,8 @@ x() {
    fi
 } 2>/dev/null
 
-if ! command -v service >/dev/null 2>&1; then
-   service() { /etc/init.d/"$1" "${2:-start}"; }
+if ! command -v service >/dev/null 2>&1
+then service() { /etc/init.d/"$1" "${2:-start}"; }
 fi
 
 date() {
@@ -562,12 +551,7 @@ rmi() {
    find . \( "${inodes[@]}" \) -exec command rm -i -- {} +
 }
 
-f() {
-   if ((1 == $#))
-   then find . -iname "$1"
-   else find "$@"
-   fi
-}
+f() { if ((1 == $#)); then find . -iname "$1"; else find "$@"; fi; }
 
 db() {
    local prgm PS3='Choose a database to update: '
@@ -631,29 +615,14 @@ s() {
    fi
 }
 
-h() {
-   if (($#)) || [[ ! -t 0 ]]
-   then head "$@"
-   else history
-   fi
-}
+h() { if (($#)) || [[ ! -t 0 ]]; then head "$@"; else history; fi; }
 
-p() {
-   if (($#))
-   then ping -c3 "$@"
-   else ps fjww --headers
-   fi
-}
+p() { if (($#)); then ping -c3 "$@"; else ps fjww --headers; fi; }
 
 # todo: keep?
 ir() { ifdown "$1" && ifup "$1" || echo "Couldn't do it." >&2; }
 
-hd() {
-   if ((1 == $#))
-   then hdparm -I -- "$1"
-   else hdparm       "$@"
-   fi
-}
+hd() { if ((1 == $#)); then hdparm -I -- "$1"; else hdparm "$@"; fi; }
 
 df() { command df -h "$@" | sort -k5r; }
 
@@ -686,8 +655,8 @@ rd() {
    local arg
    for arg in "$@"; do
       if [[ -d $arg ]]; then
-         if read -rp "rd: remove directory '$arg'? "; then
-            [[ $REPLY == @(y|yes) ]] && command rm -rf -- "$arg"
+         if read -rp "rd: remove directory '$arg'? "
+         then [[ $REPLY == @(y|yes) ]] && command rm -rf -- "$arg"
          fi
       else
          echo "$arg is not a directory" >&2
@@ -698,7 +667,7 @@ rd() {
 b() {
    if   (($# == 1)); then figlet -f smslant -- "$1"
    elif (($# == 2)); then figlet -f "$1"    -- "${@:2}"
-   else figlist | column -c"$COLUMNS"
+   else                   figlist | column -c"$COLUMNS"
    fi
 }
 
