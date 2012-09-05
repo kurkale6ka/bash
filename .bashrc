@@ -473,18 +473,18 @@ u() {
       done
    else
       local i
-      printf '%23s' 'Distribution: '
+      printf %23s 'Distribution: '
       for i in /etc/*{-release,_version}
       do command sed -n '/\S/{p;q}' "$i"; break
       done
-      printf '%23s' 'Network node hostname: '; uname -n
-      printf '%23s' 'Machine hardware name: '; uname -m
-      printf '%23s' 'Hardware platform: '    ; uname -i
-      printf '%23s' 'Processor type: '       ; uname -p
-      printf '%23s' 'Kernel name: '          ; uname -s
-      printf '%23s' 'Kernel release: '       ; uname -r
-      printf '%23s' 'Compiled on: '          ; uname -v
-      printf '%23s' 'Operating system: '     ; uname -o
+      printf %23s 'Network node hostname: '; uname -n
+      printf %23s 'Machine hardware name: '; uname -m
+      printf %23s 'Hardware platform: '    ; uname -i
+      printf %23s 'Processor type: '       ; uname -p
+      printf %23s 'Kernel name: '          ; uname -s
+      printf %23s 'Kernel release: '       ; uname -r
+      printf %23s 'Compiled on: '          ; uname -v
+      printf %23s 'Operating system: '     ; uname -o
    fi
 }
 
