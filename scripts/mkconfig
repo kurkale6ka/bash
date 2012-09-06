@@ -199,9 +199,12 @@ rmlinks() {
 
 mkenv() {
    mkrepos
-   emerge sudo vixie-cron moreutils
+   emerge sudo vixie-cron moreutils bind-tools
    # rc-update add vixie-cron default
    # rc-update add ntpd default
+
+   # visudo
+   # Defaults:mitko timestamp_timeout=50 # min before asking for password again
 
    mkdir -p "$HOME"/backups
    # crontab -u "$USER" "$HOME"/help/crontab.backups

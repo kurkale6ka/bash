@@ -127,10 +127,13 @@ alias pgrep='pgrep -l'
 alias    pg='ps j --headers | head -1 && ps fajxww | command grep -v grep |
              command grep -iE --color'
 
-alias        i='hostname -i'
-alias       ii='/sbin/ifconfig'
-alias       ia='/sbin/ifconfig -a'
-alias ipconfig=ifconfig
+i() {
+   local mac_ip_regex='((hw|ll)addr|inet)\s+(addr:)?'
+   /sbin/ifconfig eth0 | command grep -oiE "$mac_ip_regex[^[:space:]]+" |
+                         command sed  -r   "s/$mac_ip_regex//i"
+}
+alias ii='curl ifconfig.me/ip'
+alias ia='curl ifconfig.me/all 2>/dev/null | column -t'
 
 if command -v ncal >/dev/null 2>&1; then
    alias  cal='env LC_TIME=bg_BG.utf8 ncal -3 -M -C'
