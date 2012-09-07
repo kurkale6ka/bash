@@ -366,7 +366,15 @@ m() {
    done
 }
 
-_type() { (($#)) || { help type; return; }; type -a -- "$@"; }
+_type() {
+   (($#)) || { type -a -- "$FUNCNAME"; return; }
+   local i path parameter
+   for parameter in "$@"; do
+      type -a -- "$parameter"
+      path=$(type -P -- "$parameter"); [[ $path ]] && file -b "$path"
+      (($# != ++i)) && echo
+   done
+}
 
 e() { local status=$?; (($#)) && echo "$@" || echo "$status"; }
 
