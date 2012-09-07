@@ -371,7 +371,7 @@ _type() {
    local i path parameter
    for parameter in "$@"; do
       type -a -- "$parameter"
-      path=$(type -P -- "$parameter"); [[ $path ]] && file -b "$path"
+      path=$(type -P -- "$parameter"); [[ $path ]] && file -bL "$path"
       (($# != ++i)) && echo
    done
 }
