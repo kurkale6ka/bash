@@ -88,7 +88,7 @@ alias      mo="$my_vim -"
 
 if sudo -V |
    { read -r _ _ ver; ver="${ver%.*}"; ((${ver%.*} > 0 && ${ver#*.} > 6)); }
-then alias sudo="sudo -p 'Password for %p: '"; sudo_version_ok=1
+then alias sudo="sudo -p 'Password for %p: '";       sudo_version_ok=1
 else alias sudo="sudo -p 'Password for %u: '"; unset sudo_version_ok
 fi
 alias  sd=sudo
@@ -177,16 +177,6 @@ ldot() {
       (cd -- "$arg" && "${ls[@]}" -d .[^.]*)
       (($# != ++i)) && echo
    done
-}
-.() {
-   if (($#)); then
-      source "$@"
-   else
-      if [[ -t 1 ]]
-      then command ls -FB --color=auto -d .[^.]*
-      else command ls -FB              -d .[^.]*
-      fi
-   fi
 }
  l.() { ldot "$@"; }
 ll.() { ldot "$@"; }
@@ -619,6 +609,7 @@ s() {
       else command grep    -iE --color -- "$1" /etc/services
       fi
    else
+      history -w
       if [[ $sudo_version_ok ]]
       then sudo -E /bin/bash
       else sudo    /bin/bash
