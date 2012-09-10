@@ -52,10 +52,9 @@ alias    setuid='chmod u+s'
 alias    setgid='chmod g+s'
 alias setsticky='chmod +t'
 
-alias cp='cp -i'
-alias mv='mv -i'
-alias rm='rm -i --preserve-root'
-alias md='command mkdir -p'
+alias  y='cp -i --'
+alias  d='rm -i --preserve-root --'
+alias md='command mkdir -p --'
 alias pw='command pwd -P'
 alias lo='command locate -i'
 alias to=touch
@@ -88,8 +87,8 @@ alias      mo="$my_vim -"
 
 if sudo -V |
    { read -r _ _ ver; ver="${ver%.*}"; ((${ver%.*} > 0 && ${ver#*.} > 6)); }
-then alias sudo="sudo -p 'Password for %p: '";       sudo_version_ok=1
-else alias sudo="sudo -p 'Password for %u: '"; unset sudo_version_ok
+then alias sudo="sudo -p 'Password for %p: ' ";       sudo_version_ok=1
+else alias sudo="sudo -p 'Password for %u: ' "; unset sudo_version_ok
 fi
 alias  sd=sudo
 alias sde=sudoedit
@@ -348,6 +347,7 @@ m() {
          esac
       done
    }
+   (($# >= 2)) && [[ -f $1 ]] && { command mv -i -- "$@"; return; }
    local topic arg
    for topic in "$@"; do
       ((arg++))
@@ -619,7 +619,7 @@ s() {
       else command grep    -iE --color -- "$1" /etc/services
       fi
    else
-      history -w
+      history -a
       if [[ $sudo_version_ok ]]
       then sudo -E /bin/bash
       else sudo    /bin/bash
@@ -641,7 +641,7 @@ df() { command df -h "$@" | sort -k5r; }
 # todo + change name?
 # Fails with \n in filenames!? Try this instead:
 # for file in *; do read size _ < <(du -sk "$file");...
-d() {
+duu() {
    local args=(); (($#)) && args=("$@") || args=(*)
    if sort -h /dev/null 2>/dev/null
    then
