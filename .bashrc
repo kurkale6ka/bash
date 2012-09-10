@@ -178,6 +178,16 @@ ldot() {
       (($# != ++i)) && echo
    done
 }
+.() {
+   if (($#)); then
+      source "$@"
+   else
+      if [[ -t 1 ]]
+      then command ls -FB --color=auto -d .[^.]*
+      else command ls -FB              -d .[^.]*
+      fi
+   fi
+}
  l.() { ldot "$@"; }
 ll.() { ldot "$@"; }
 
