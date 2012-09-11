@@ -159,7 +159,7 @@ cprepos() {
     rcs=(.gitignore .my.cnf .{curl,input,irb,screen,top}rc)
  vimrcs=(.{,g}vimrc)
 bashrcs=(.profile .bash_{profile,login,logout} .bashrc{,_after} .logout)
- bashxs=(colors mkconfig em madd-host mssh)
+ bashxs=(colors em mkconfig madd-host mssh)
 
 mklinks() {
 
@@ -182,18 +182,19 @@ mklinks() {
 
    mkdir -p "$HOME"/bin
    if [[ -d $HOME/bin ]]; then
-      ln -s "${bashxs[@]/#/$HOME/config/bashfiles/scripts/}" "$HOME"/bin
-      ln -s "$HOME"/config/vimfiles/scripts/vimcat           "$HOME"/bin/vc
+      ln -s "${bashxs[@]/#/$HOME/config/bashfiles/scripts/}" \
+            "$HOME"/config/vimfiles/scripts/vc               "$HOME"/bin
    fi
 }
 
 rmlinks() {
    command \
-      rm "$HOME"/{.vim,config/vimfiles/autoload/pathogen.vim,bin/{mkconfig,vc}} \
-                  "${rcdirs[@]/#/$HOME/}"                                       \
-                  "${vimrcs[@]/#/$HOME/}"                                       \
-                 "${bashrcs[@]/#/$HOME/}"                                       \
-                     "${rcs[@]/#/$HOME/}"
+      rm "$HOME"/{.vim,config/vimfiles/autoload/pathogen.vim,bin/vc} \
+                  "${rcdirs[@]/#/$HOME/}"                            \
+                     "${rcs[@]/#/$HOME/}"                            \
+                  "${vimrcs[@]/#/$HOME/}"                            \
+                 "${bashrcs[@]/#/$HOME/}"                            \
+                  "${bashxs[@]/#/$HOME/bin/}"
    command rm -r "$HOME"/.irssi
 }
 
