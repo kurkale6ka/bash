@@ -1,0 +1,17 @@
+#! /usr/bin/env bash
+
+# eix-sync
+emerge --sync
+eix-update
+
+if emerge -vauND --with-bdeps=y world; then
+   emerge --depclean # (-c)
+   revdep-rebuild
+fi
+
+if [[ $1 == '-a' ]]; then
+   eclean -i distfiles
+   if emaint --check world; then
+      emaint --fix   world
+   fi
+fi
