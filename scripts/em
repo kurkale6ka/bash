@@ -4,7 +4,8 @@
 emerge --sync
 eix-update
 
-if emerge -vauND --with-bdeps=y world; then
+# -vauND
+if emerge --verbose --ask --update --newuse --deep --with-bdeps=y world; then
    emerge --depclean # (-c)
    revdep-rebuild
 fi
