@@ -1,18 +1,19 @@
 #! /usr/bin/env bash
 
 # eix-sync
-emerge --sync
-eix-update
+sudo emerge --sync
+sudo eix-update
 
 # -vauND
-if emerge --verbose --ask --update --newuse --deep --with-bdeps=y world; then
-   emerge --depclean # (-c)
-   revdep-rebuild
+if sudo emerge --verbose --ask --update --newuse --deep --with-bdeps=y world
+then
+   sudo emerge --ask --depclean # (-c)
+   sudo revdep-rebuild
 fi
 
 if [[ $1 == '-a' ]]; then
-   eclean -i distfiles
-   if emaint --check world; then
-      emaint --fix   world
+   sudo eclean -i distfiles
+   if sudo emaint --check world; then
+      sudo emaint --fix   world
    fi
 fi

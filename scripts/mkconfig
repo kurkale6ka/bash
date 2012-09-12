@@ -200,7 +200,7 @@ rmlinks() {
 
 mkenv() {
    mkrepos
-   emerge sudo vixie-cron moreutils bind-tools evince
+   emerge sudo vixie-cron moreutils bind-tools evince ntp
    # emerge sys-process/parallel ?
    # rc-update add vixie-cron default
    # rc-update add ntpd default
