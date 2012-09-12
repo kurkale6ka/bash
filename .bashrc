@@ -1,10 +1,17 @@
 # Author: Dimitar Dimitrov: mitkofr@yahoo.fr, kurkale6ka
 
+# todo: keep part of the file ?
 [[ -t 1 ]] || return
 
 set   -o notify
 shopt -s cdspell extglob nocaseglob nocasematch
 
+   Purple=$(tput setaf 5)
+Underline=$(tput smul   )
+    Reset=$(tput sgr0   )
+     Bold=$(tput bold   )
+
+# Vim, sudoedit, sed {{{1
 if   command -v vimx; then
    my_gvim=vimx
     my_vim="vimx -v"
@@ -15,62 +22,6 @@ else
    my_gvim=vim
     my_vim=vim
 fi >/dev/null 2>&1
-
-   Purple=$(tput setaf 5)
-Underline=$(tput smul)
-    Reset=$(tput sgr0)
-     Bold=$(tput bold)
-
-# PS1 + title (\e]2; ---- \a), PS2, PS3 and PS4 {{{1
-
-PS1() {
-   local   LightRed=$(printf %s "$Bold"; tput setaf 1)
-   local LightGreen=$(printf %s "$Bold"; tput setaf 2)
-   local  LightBlue=$(printf %s "$Bold"; tput setaf 4)
-
-   [[ $TERM != linux ]] && printf '\e]2;%s\a' "$HOSTNAME"
-   unset PROMPT_COMMAND
-
-   [[ $SSH_CLIENT || $SSH2_CLIENT ]] && info=', remote' || info=''
-
-   if ((EUID == 0)); then
-      PS1="\n\[$LightRed\]\u \H \[$LightBlue\]\w - \A, %\j$info\n#\[$Reset\] "
-      export PATH=$PATH:/sbin:/usr/sbin:/usr/local/sbin:/root/bin
-   else
-      PS1="\n\[$LightGreen\]\u \H \[$LightBlue\]\w - \A, %\j$info\n\\$\[$Reset\] "
-   fi
-}
-PS1
-PS2='↪ '; export PS3='Choose an entry: '; PS4='+ '
-
-# Aliases {{{1
-
-alias        cg=chgrp
-alias        co=chown
-alias        cm=chmod
-alias    setuid='chmod u+s'
-alias    setgid='chmod g+s'
-alias setsticky='chmod +t'
-
-alias  y='cp -i --'
-alias  d='rm -i --preserve-root --'
-alias md='command mkdir -p --'
-alias pw='command pwd -P'
-alias lo='command locate -i'
-alias to=touch
-alias  g='command grep -iE --color'
-alias  t=tail
-alias tf=tailf
-alias  _=combine
-
-alias  cd-='cd -'
-alias -- -='cd -'
-alias    1='cd ..'
-alias    2='cd ../..'
-alias    3='cd ../../..'
-alias    4='cd ../../../..'
-alias cd..='cd ..'
-alias   ..='cd ..'
 
 alias       v=$my_vim
 alias      vi=$my_vim
@@ -85,6 +36,20 @@ alias    vish='sudo vipw -s'
 alias      lv="command ls -B | $my_vim -"
 alias      mo="$my_vim -"
 
+vn() {
+   (($#)) && { command vim -NX -u NONE "$@"; return; }
+   local opt opts=('bare vim' 'vim no .vimrc' 'vim no plugins' 'gvim no .gvimrc')
+   select opt in "${opts[@]}"; do
+      case "$opt" in
+         "${opts[0]}") command vim -nNX  -u NONE;    break;;
+         "${opts[1]}") "$my_gvim"  -nNXv -u NORC;    break;;
+         "${opts[2]}") command vim -nNX  --noplugin; break;;
+         "${opts[3]}") "$my_gvim"  -nN   -U NONE;    break;;
+                    *) printf '\nInvalid choice!\n' >&2
+      esac
+   done
+}
+
 if sudo -V |
    { read -r _ _ ver; ver="${ver%.*}"; ((${ver%.*} > 0 && ${ver#*.} > 6)); }
 then alias sudo="sudo -p 'Password for %p: ' ";       sudo_version_ok=1
@@ -93,39 +58,78 @@ fi
 alias  sd=sudo
 alias sde=sudoedit
 
-alias   a=alias
-alias  ua=unalias
-alias   o='set -o'
-alias  oo=shopt
-alias  se=set
-alias use=unset
+alias sed='sed -r'
 
-alias          ?=_type
-alias         mm='man -k'
-alias         mn='command mount | cut -d" " -f1,3,5,6 | column -t'
-alias        umn=umount
-alias         bx='bash -x'
-alias   builtins='enable -a | cut -d" " -f2  | column'
-alias         pf=printf
-alias        cmd=command
-alias ldapsearch='ldapsearch -x -LLL'
-alias        msg=dmesg
-alias        sed='sed -r'
-alias       dump='dump -u'
-alias         bc='bc -ql'
-alias         hg='history | command grep -iE --color'
+# PS1 + title (\e]2; ---- \a) {{{1
+PS1() {
+   local   LightRed=$(printf %s "$Bold"; tput setaf 1)
+   local LightGreen=$(printf %s "$Bold"; tput setaf 2)
+   local  LightBlue=$(printf %s "$Bold"; tput setaf 4)
 
-alias     j='jobs -l'
-alias     z=fg
-alias -- --='fg %-'
-alias     k=kill
-alias    kl='kill -l'
-alias    ka=killall
-alias    pk=pkill
-alias pgrep='pgrep -l'
-alias    pg='ps j --headers | head -1 && ps fajxww | command grep -v grep |
-             command grep -iE --color'
+   unset PROMPT_COMMAND
+   [[ $TERM != linux ]] && printf '\e]2;%s\a' "$HOSTNAME"
 
+   [[ $SSH_CLIENT || $SSH2_CLIENT ]] && info=', remote' || info=''
+
+   if ((EUID == 0)); then
+      PS1="\n\[$LightRed\]\u \H \[$LightBlue\]\w - \A, %\j$info\n#\[$Reset\] "
+      export PATH=$PATH:/sbin:/usr/sbin:/usr/local/sbin:/root/bin
+   else
+      PS1="\n\[$LightGreen\]\u \H \[$LightBlue\]\w - \A, %\j$info\n\\$\[$Reset\] "
+   fi
+}
+PS1
+PS2='↪ '; export PS3='Choose an entry: '; PS4='+ '
+
+# cd, mkdir | touch, rmdir, pwd {{{1
+alias  cd-='cd -'
+alias -- -='cd -'
+alias    1='cd ..'
+alias    2='cd ../..'
+alias    3='cd ../../..'
+alias    4='cd ../../../..'
+alias cd..='cd ..'
+alias   ..='cd ..'
+alias   pw='command pwd -P'
+alias   to=touch
+alias   md='command mkdir -p --'
+
+rd() {
+   local arg
+   for arg in "$@"; do
+      if [[ -d $arg ]]; then
+         if read -rp "rd: remove directory '$arg'? "
+         then [[ $REPLY == @(y|yes) ]] && command rm -rf -- "$arg"
+         fi
+      else
+         echo "$arg is not a directory" >&2
+      fi
+   done
+}
+complete -A directory mkdir md rmdir rd
+
+# Completion of user names
+_cd() {
+
+   local cur=${COMP_WORDS[COMP_CWORD]}
+   local userlist
+
+   # ex: ~user, not ~/dev
+   if [[ $2 == ~[!/]* || $2 == '~' ]]; then
+
+      # the default delimiter is \n, IFS '' - read reads several lines
+      # [dir1 \n dir2 \n ... dirn \0 ]      - read reads one line
+      IFS=$'\n' read -r -d $'\0' -a userlist < <(compgen -A user -- "$cur")
+
+      if [[ $userlist ]]; then
+
+         IFS=$'\n' read -r -d $'\0' -a COMPREPLY < <(printf '%q\n' "${userlist[@]}")
+      fi
+   fi
+}
+complete -A directory -F _cd cd
+
+# Networking: ip | mac, ping, (ir?). Processes and jobs {{{1
 i() {
    local mac_ip_regex='((hw|ll)addr|inet)\s+(addr:)?'
    /sbin/ifconfig eth0 | command grep -oiE "$mac_ip_regex[^[:space:]]+" |
@@ -134,30 +138,81 @@ i() {
 alias ii='curl ifconfig.me/ip'
 alias ia='curl ifconfig.me/all 2>/dev/null | column -t'
 
-if command -v ncal >/dev/null 2>&1; then
-   alias  cal='env LC_TIME=bg_BG.utf8 ncal -3 -M -C'
-   alias call='env LC_TIME=bg_BG.utf8 ncal -y -M -C'
-else
-   alias  cal='env LC_TIME=bg_BG.utf8 cal -m3'
-   alias call='env LC_TIME=bg_BG.utf8 cal -my'
-fi
+p() { if (($#)); then ping -c3 "$@"; else ps fjww --headers; fi; }
 
-alias pl=perl
-alias py='python -i -c "from math import *"'
-alias rb=irb
+alias     k=kill
+alias    kl='kill -l'
+alias    ka=killall
+alias    pk=pkill
+alias pgrep='pgrep -l'
+alias    pg='ps j --headers | head -1 && ps fajxww | command grep -v grep |
+             command grep -iE --color'
+complete -A signal kill k
 
-alias   akw=awk
-alias   cta=cat
-alias  pnig=ping
-alias  prel=perl
-alias   rmp=rpm
-alias shotp=shopt
-alias  tpye=type
-alias   vmi=vim
-alias   shh=ssh
+alias     j='jobs -l'
+alias     z=fg
+alias -- --='fg %-'
+complete -A job     -P '%' fg z jobs j disown
+complete -A stopped -P '%' bg
+
+# todo: keep?
+ir() { ifdown "$1" && ifup "$1" || echo "Couldn't do it." >&2; }
+complete -W 'eth0 eth1 lo' ir
+
+# Permissions + debug + netstat, w {{{1
+r() { if [[ -d $1 || -f $1 ]]; then chmod u+r -- "$@"; else netstat -rn; fi; }
+w() { if [[ -d $1 || -f $1 ]]; then chmod u+w -- "$@"; else command w "$@"; fi; }
+alias    setuid='chmod u+s'
+alias    setgid='chmod g+s'
+alias setsticky='chmod  +t'
+alias        cg=chgrp
+alias        co=chown
+alias        cm=chmod
+
+x() {
+   (($#)) && { chmod u+x -- "$@"; return; }
+   if [[ $- == *x* ]]
+   then echo 'debug OFF'; set +o xtrace
+   else echo 'debug ON' ; set -o xtrace
+   fi
+} 2>/dev/null
+alias bx='bash -x'
+
+# Info: pa, usersee {{{1
+pa() {
+   local paths
+   IFS=: read -ra paths <<< "$PATH"; printf '%s\n' "${paths[@]}" | sort -u
+}
+
+usersee() {
+   if (($#)); then
+      local header user
+      case "$1" in
+         -p)
+            header=LOGIN:PASSWORD:UID:GID:GECOS:HOME:SHELL
+            sort -k7 -t: /etc/passwd | command sed -e "1i$header" -e 's/::/:-:/g' |\
+            column -ts:;;
+         -g)
+            header=GROUP:PASSWORD:GID:USERS
+            sort -k4 -t: /etc/group | command sed "1i$header" | column -ts:;;
+         -s)
+            header=LOGIN:PASSWORD:LAST:MIN:MAX:WARN:INACTIVITY:EXPIRATION:RESERVED
+            sudo sort -k2 -t: /etc/shadow |\
+            awk -F: '{print $1":"substr($2,1,3)":"$3":"$4":"$5":"$6":"$7":"$8":"$9}' |\
+            command sed -e "1i$header" -e 's/::/:-:/g' | column -ts:;;
+          *)
+            for user in "$@"; do
+               sudo grep -iE --color "$user" /etc/{passwd,shadow}
+               sort -k4 -t: /etc/group | column -ts: | command grep -iE --color "$user"
+            done
+      esac
+   else
+      sudo grep -iE --color "$USER" /etc/{passwd,shadow}
+      sort -k4 -t: /etc/group | column -ts: | command grep -iE --color "$USER"
+   fi
+}
 
 # ls {{{1
-
 ldot() {
    local ls
    if [[ ${FUNCNAME[1]} == 'l.' ]]; then
@@ -334,8 +389,7 @@ sl() {
    stat -c "%8i %A (%4a) %3h %4u %4g %10s (%10Y) %n" -- "${args[@]}"
 }
 
-# Functions {{{1
-
+# Help, mv, cp ,rm {{{1
 m() {
    local choice
    (($#)) || {
@@ -365,6 +419,10 @@ m() {
       fi
    done
 }
+alias mm='man -k'
+
+complete -A helptopic help m # Currently, same as builtin
+complete -A command   man m which whereis type ? tpye sudo
 
 _type() {
    (($#)) || { type -a -- "$FUNCNAME"; return; }
@@ -375,12 +433,36 @@ _type() {
       (($# != ++i)) && echo
    done
 }
+alias ?=_type
 
-e() { local status=$?; (($#)) && echo "$@" || echo "$status"; }
+db() {
+   local prgm PS3='Choose a database to update: '
+   select prgm in locate 'apropos, man -k'; do
+      case "$prgm" in
+           locate) printf 'updatedb...\n'  ; updatedb   & return;;
+         apropos*) printf 'makewhatis...\n'; makewhatis & return;;
+                *) echo '*** Wrong choice ***' >&2
+      esac
+   done
+}
 
-c() { if [[ -t 1 ]]; then command cat -n -- "$@"; else command cat "$@"; fi }
+alias y='cp -i --'
+alias d='rm -i --preserve-root --'
 
-n() { command sed -n "$1{p;q}" -- "$2"; }
+di() {
+   local i=0 file inodes=()
+   for file in "$@"; do
+      ((++i < $#)) && inodes+=(-inum "$file" -o)
+   done
+   inodes+=(-inum "$file")
+   find . \( "${inodes[@]}" \) -exec command rm -i -- {} +
+}
+
+# Find files, text, differences. 'Cat' files, echo text {{{1
+f() { if ((1 == $#)); then find . -iname "$1"; else find "$@"; fi; }
+alias         lo='command locate -i'
+alias          g='command grep -iE --color'
+alias ldapsearch='ldapsearch -x -LLL'
 
 diff() {
    if [[ -t 1 ]] && command -v colordiff >/dev/null 2>&1
@@ -388,7 +470,18 @@ diff() {
    else command      diff "$@"
    fi
 }
+alias _=combine
 
+alias pf=printf
+ e() { local status=$?; (($#)) && echo "$@" || echo "$status"; }
+ c() { if [[ -t 1 ]]; then command cat -n -- "$@"; else command cat "$@"; fi }
+ n() { command sed -n "$1{p;q}" -- "$2"; }
+sq() { command grep -v '^[[:space:]]*#\|^[[:space:]]*$' -- "$@"; }
+ h() { if (($#)) || [[ ! -t 0 ]]; then head "$@"; else history; fi; }
+alias  t=tail
+alias tf=tailf
+
+# Convert to dec, bin, oct, hex + bc {{{1
 cv() {
    (($#)) || { echo 'Usage: cv digit ...' >&2; return 1; }
    cvs[0]='Decimal to binary'
@@ -430,37 +523,24 @@ cv() {
       esac
    done
 }
+alias bc='bc -ql'
 
-sq() { command grep -v '^[[:space:]]*#\|^[[:space:]]*$' -- "$@"; }
-
-pa() {
-   local paths
-   IFS=: read -ra paths <<< "$PATH"; printf '%s\n' "${paths[@]}" | sort -u
-}
-
-r() { if [[ -d $1 || -f $1 ]]; then chmod u+r -- "$@"; else netstat -rn; fi; }
-w() { if [[ -d $1 || -f $1 ]]; then chmod u+w -- "$@"; else command w "$@"; fi; }
-
-x() {
-   (($#)) && { chmod u+x -- "$@"; return; }
-   if [[ $- == *x* ]]
-   then echo 'debug OFF'; set +o xtrace
-   else echo 'debug ON' ; set -o xtrace
-   fi
-} 2>/dev/null
-
-if ! command -v service >/dev/null 2>&1
-then service() { /etc/init.d/"$1" "${2:-start}"; }
-fi
-
+# Date and calendar {{{1
 date() {
    if (($#))
    then command date "$@"
    else command date '+%A %d %B %Y, %H:%M %Z (%d/%m/%Y)'
    fi
 }
+if command -v ncal >/dev/null 2>&1; then
+   alias  cal='env LC_TIME=bg_BG.utf8 ncal -3 -M -C'
+   alias call='env LC_TIME=bg_BG.utf8 ncal -y -M -C'
+else
+   alias  cal='env LC_TIME=bg_BG.utf8 cal -m3'
+   alias call='env LC_TIME=bg_BG.utf8 cal -my'
+fi
 
-# unzip or uname
+# unzip or uname {{{1
 u() {
    if (($#)); then
       local arg
@@ -499,34 +579,10 @@ u() {
    fi
 }
 
-usersee() {
-   if (($#)); then
-      local header user
-      case "$1" in
-         -p)
-            header=LOGIN:PASSWORD:UID:GID:GECOS:HOME:SHELL
-            sort -k7 -t: /etc/passwd | command sed -e "1i$header" -e 's/::/:-:/g' |\
-            column -ts:;;
-         -g)
-            header=GROUP:PASSWORD:GID:USERS
-            sort -k4 -t: /etc/group | command sed "1i$header" | column -ts:;;
-         -s)
-            header=LOGIN:PASSWORD:LAST:MIN:MAX:WARN:INACTIVITY:EXPIRATION:RESERVED
-            sudo sort -k2 -t: /etc/shadow |\
-            awk -F: '{print $1":"substr($2,1,3)":"$3":"$4":"$5":"$6":"$7":"$8":"$9}' |\
-            command sed -e "1i$header" -e 's/::/:-:/g' | column -ts:;;
-          *)
-            for user in "$@"; do
-               sudo grep -iE --color "$user" /etc/{passwd,shadow}
-               sort -k4 -t: /etc/group | column -ts: | command grep -iE --color "$user"
-            done
-      esac
-   else
-      sudo grep -iE --color "$USER" /etc/{passwd,shadow}
-      sort -k4 -t: /etc/group | column -ts: | command grep -iE --color "$USER"
-   fi
-}
+complete -f -o default -X '!*.@(tar.gz|tgz|tar.bz2|tbz2|tbz|tar|bz2|gz|zip|rar|Z|7z)' u
+complete -f -o default -X '!*.@(tar.gz|tgz|tar.bz2|tbz2|tbz|tar)' tar
 
+# Backups {{{1
 bak() { local arg; for arg in "$@"; do command cp -i -- "$arg" "$arg".bak; done; }
 
 # Usage: sw file1 [file2]. If file2 is omitted, file1 is swapped with file1.bak
@@ -553,27 +609,63 @@ sw() {
 # todo: 'rm' not 'rm' -i + cron job ?!
 bakrm() { find . -name '*~' -a ! -name '*.un~' -exec command rm -i -- {} +; }
 
-rmi() {
-   local i=0 file inodes=()
-   for file in "$@"; do
-      ((++i < $#)) && inodes+=(-inum "$file" -o)
-   done
-   inodes+=(-inum "$file")
-   find . \( "${inodes[@]}" \) -exec command rm -i -- {} +
+alias dump='dump -u'
+
+# df, du, hd {{{1
+df() { command df -h "$@" | sort -k5r; }
+
+# todo + change name?
+# Fails with \n in filenames!? Try this instead:
+# for file in *; do read size _ < <(du -sk "$file");...
+duu() {
+   local args=(); (($#)) && args=("$@") || args=(*)
+   if sort -h /dev/null 2>/dev/null
+   then
+      du -sh -- "${args[@]}" | sort -hr
+   else
+      local unit size file
+      du -sk -- "${args[@]}" | sort -nr | while read -r size file
+      do
+         for unit in K M G T P E Z Y
+         do
+            if ((size < 1024))
+            then
+               printf '%3d%s\t%s\n' "$size" "$unit" "$file"
+               break
+            fi
+            ((size = size / 1024))
+         done
+      done
+   fi
 }
 
-f() { if ((1 == $#)); then find . -iname "$1"; else find "$@"; fi; }
+hd() { if ((1 == $#)); then hdparm -I -- "$1"; else hdparm "$@"; fi; }
 
-db() {
-   local prgm PS3='Choose a database to update: '
-   select prgm in locate 'apropos, man -k'; do
-      case "$prgm" in
-           locate) printf 'updatedb...\n'  ; updatedb   & return;;
-         apropos*) printf 'makewhatis...\n'; makewhatis & return;;
-                *) echo '*** Wrong choice ***' >&2
-      esac
-   done
-}
+# Misc: irssi, .inputrc, s(fc, services, sudo bash), figlet, service + aliases {{{1
+alias  a=alias
+alias ua=unalias
+complete -A alias alias a unalias ua
+
+alias  o='set -o'
+alias oo=shopt
+complete -A setopt set   o
+complete -A  shopt shopt oo
+
+alias       se=set
+alias      use=unset
+alias       mn='command mount | cut -d" " -f1,3,5,6 | column -t'
+alias      umn=umount
+alias      msg=dmesg
+alias      cmd=command
+alias builtins='enable -a | cut -d" " -f2  | column'
+
+alias pl=perl
+alias py='python -i -c "from math import *"'
+alias rb=irb
+
+complete -f -o default -X '!*.pl' perl   prel pl
+complete -f -o default -X '!*.py' python py
+complete -f -o default -X '!*.rb' ruby   rb
 
 irssi() (
    cd /var/log/irssi || exit 1
@@ -581,20 +673,6 @@ irssi() (
    command irssi
    kill %?fnotify
 )
-
-vn() {
-   (($#)) && { command vim -NX -u NONE "$@"; return; }
-   local opt opts=('bare vim' 'vim no .vimrc' 'vim no plugins' 'gvim no .gvimrc')
-   select opt in "${opts[@]}"; do
-      case "$opt" in
-         "${opts[0]}") command vim -nNX  -u NONE;    break;;
-         "${opts[1]}") "$my_gvim"  -nNXv -u NORC;    break;;
-         "${opts[2]}") command vim -nNX  --noplugin; break;;
-         "${opts[3]}") "$my_gvim"  -nN   -U NONE;    break;;
-                    *) printf '\nInvalid choice!\n' >&2
-      esac
-   done
-}
 
 rc() {
    if (($#)); then
@@ -626,55 +704,11 @@ s() {
       fi
    fi
 }
+alias hg='history | command grep -iE --color'
 
-h() { if (($#)) || [[ ! -t 0 ]]; then head "$@"; else history; fi; }
-
-p() { if (($#)); then ping -c3 "$@"; else ps fjww --headers; fi; }
-
-# todo: keep?
-ir() { ifdown "$1" && ifup "$1" || echo "Couldn't do it." >&2; }
-
-hd() { if ((1 == $#)); then hdparm -I -- "$1"; else hdparm "$@"; fi; }
-
-df() { command df -h "$@" | sort -k5r; }
-
-# todo + change name?
-# Fails with \n in filenames!? Try this instead:
-# for file in *; do read size _ < <(du -sk "$file");...
-duu() {
-   local args=(); (($#)) && args=("$@") || args=(*)
-   if sort -h /dev/null 2>/dev/null
-   then
-      du -sh -- "${args[@]}" | sort -hr
-   else
-      local unit size file
-      du -sk -- "${args[@]}" | sort -nr | while read -r size file
-      do
-         for unit in K M G T P E Z Y
-         do
-            if ((size < 1024))
-            then
-               printf '%3d%s\t%s\n' "$size" "$unit" "$file"
-               break
-            fi
-            ((size = size / 1024))
-         done
-      done
-   fi
-}
-
-rd() {
-   local arg
-   for arg in "$@"; do
-      if [[ -d $arg ]]; then
-         if read -rp "rd: remove directory '$arg'? "
-         then [[ $REPLY == @(y|yes) ]] && command rm -rf -- "$arg"
-         fi
-      else
-         echo "$arg is not a directory" >&2
-      fi
-   done
-}
+if ! command -v service >/dev/null 2>&1
+then service() { /etc/init.d/"$1" "${2:-start}"; }
+fi
 
 b() {
    if   (($# == 1)); then figlet -f smslant -- "$1"
@@ -683,69 +717,37 @@ b() {
    fi
 }
 
+# Typos {{{1
+alias akw=awk
+alias rmp=rpm
+alias shh=ssh
+
 # Programmable completion {{{1
-
-complete -A helptopic        help # Currently, same as builtin
-complete -A command          man m which whereis type ? tpye sudo
-complete -A alias            alias a unalias ua
-complete -A enabled          builtin
-complete -A disabled         enable
-complete -A export           printenv
-complete -A variable         export local readonly unset use
-complete -A function         function
-complete -A binding          bind
-complete -A user             chage chfn finger groups mail passwd slay su userdel usermod w write
-complete -A hostname         dig nslookup snlookup host p ping pnig ssh shh
-complete -A signal           kill k
-complete -A job -P '%'       jobs j fg z disown
-complete -A stopped -P '%'   bg
-complete -A setopt           set o
-complete -A shopt            shopt oo
-complete -A file             n
-complete -A directory        mkdir md rmdir rd
-complete -A directory -F _cd cd
-
-# eXclude what is not(!) matched by the pattern
-complete -f -o default -X '!*.@(tar.gz|tgz|tar.bz2|tbz2|tbz|tar|bz2|gz|zip|rar|Z|7z)' u
-complete -f -o default -X '!*.@(tar.gz|tgz|tar.bz2|tbz2|tbz|tar)' tar
-complete -f -o default -X '!*.pl' perl   prel pl
-complete -f -o default -X '!*.py' python py
-complete -f -o default -X '!*.rb' ruby   rb
-
-complete -W 'eth0 eth1 lo' ir
-complete -W 'alias arrayvar binding builtin command directory disabled enabled
-export file function group helptopic hostname job keyword running service
-setopt shopt signal stopped user variable' cl compgen complete
+complete -A enabled  builtin
+complete -A disabled enable
+complete -A export   printenv
+complete -A variable export local readonly unset use
+complete -A function function
+complete -A binding  bind
+complete -A user     chage chfn finger groups mail passwd slay su userdel \
+                     usermod w write
+complete -A hostname dig nslookup snlookup host p ping pnig ssh shh
 
 # Usage: cl arg - computes a completion list for arg
 cl() { column <(compgen -A "$1"); }
 
-# Completion of user names
-_cd() {
+complete -W 'alias arrayvar binding builtin command directory disabled enabled
+export file function group helptopic hostname job keyword running service
+setopt shopt signal stopped user variable' cl compgen complete
 
-   local cur=${COMP_WORDS[COMP_CWORD]}
-   local userlist
-
-   # ex: ~user, not ~/dev
-   if [[ $2 == ~[!/]* || $2 == '~' ]]; then
-
-      # the default delimiter is \n, IFS '' - read reads several lines
-      # [dir1 \n dir2 \n ... dirn \0 ]      - read reads one line
-      IFS=$'\n' read -r -d $'\0' -a userlist < <(compgen -A user -- "$cur")
-
-      if [[ $userlist ]]; then
-
-         IFS=$'\n' read -r -d $'\0' -a COMPREPLY < <(printf '%q\n' "${userlist[@]}")
-      fi
-   fi
-}
-
-# Business specific or system dependant stuff
-[[ -r $HOME/.bashrc_after ]] && . "$HOME"/.bashrc_after
-
-# enable bash completion in interactive shells
-if [[ -f /etc/profile.d/bash-completion.sh ]] && ! shopt -oq posix; then
-   . /etc/profile.d/bash-completion.sh >/dev/null 2>&1
-elif [[ -f /etc/bash_completion ]] && ! shopt -oq posix; then
-   . /etc/bash_completion >/dev/null 2>&1
+# enable bash completion in non posix shells
+if ! shopt -oq posix; then
+   if [[ -f /etc/profile.d/bash-completion.sh ]]; then
+      . /etc/profile.d/bash-completion.sh
+   elif [[ -f /etc/bash_completion ]]; then
+      . /etc/bash_completion
+   fi >/dev/null 2>&1
 fi
+
+# Business specific or system dependant stuff {{{1
+[[ -r $HOME/.bashrc_after ]] && . "$HOME"/.bashrc_after

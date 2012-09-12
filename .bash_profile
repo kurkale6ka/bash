@@ -6,13 +6,13 @@
 # directory default 777 (drwxrwxrwx) => 750 (drwxr-x---)
 umask 027
 
-if command -v vimx >/dev/null 2>&1; then
+if   command -v vimx; then
    my_vim='vimx -v'
-elif command -v gvim >/dev/null 2>&1; then
+elif command -v gvim; then
    my_vim='gvim -v'
 else
    my_vim=vim
-fi
+fi >/dev/null 2>&1
 
 export EDITOR=$my_vim
 export VISUAL=$my_vim
