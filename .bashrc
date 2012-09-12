@@ -5,16 +5,16 @@
 set   -o notify
 shopt -s cdspell extglob nocaseglob nocasematch
 
-if command -v vimx >/dev/null 2>&1; then
+if   command -v vimx; then
    my_gvim=vimx
     my_vim="vimx -v"
-elif command -v gvim >/dev/null 2>&1; then
+elif command -v gvim; then
    my_gvim=gvim
     my_vim="gvim -v"
 else
    my_gvim=vim
     my_vim=vim
-fi
+fi >/dev/null 2>&1
 
    Purple=$(tput setaf 5)
 Underline=$(tput smul)
@@ -34,14 +34,14 @@ PS1() {
    [[ $SSH_CLIENT || $SSH2_CLIENT ]] && info=', remote' || info=''
 
    if ((EUID == 0)); then
-      PS1="\n\[$LightRed\]\u \H \[$LightBlue\]\w\[$Reset\] - \A, %\j$info\n# "
+      PS1="\n\[$LightRed\]\u \H \[$LightBlue\]\w - \A, %\j$info\n#\[$Reset\] "
       export PATH=$PATH:/sbin:/usr/sbin:/usr/local/sbin:/root/bin
    else
-      PS1="\n\[$LightGreen\]\u \H \[$LightBlue\]\w\[$Reset\] - \A, %\j$info\n\\$ "
+      PS1="\n\[$LightGreen\]\u \H \[$LightBlue\]\w - \A, %\j$info\n\\$\[$Reset\] "
    fi
 }
 PS1
-PS2='↪ '; PS3='Choose an entry: '; PS4='+ ';
+PS2='↪ '; export PS3='Choose an entry: '; PS4='+ '
 
 # Aliases {{{1
 
