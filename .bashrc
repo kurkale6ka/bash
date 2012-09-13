@@ -611,7 +611,7 @@ bakrm() { find . -name '*~' -a ! -name '*.un~' -exec command rm -i -- {} +; }
 
 alias dump='dump -u'
 
-# df, du, hdparm, mount {{{1
+# Disk: df, du, hdparm, mount {{{1
 df() { command df -h "$@" | sort -k5r; }
 
 # todo + change name?
