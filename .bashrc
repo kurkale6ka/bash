@@ -611,7 +611,7 @@ bakrm() { find . -name '*~' -a ! -name '*.un~' -exec command rm -i -- {} +; }
 
 alias dump='dump -u'
 
-# df, du, hd {{{1
+# df, du, hdparm, mount {{{1
 df() { command df -h "$@" | sort -k5r; }
 
 # todo + change name?
@@ -641,6 +641,14 @@ duu() {
 
 hd() { if ((1 == $#)); then hdparm -I -- "$1"; else hdparm "$@"; fi; }
 
+mn() {
+   if (($#))
+   then command mount "$@"
+   else command mount | cut -d" " -f1,3,5,6 | column -t
+   fi
+}
+alias umn=umount
+
 # Misc: irssi, .inputrc, s(fc, services, sudo bash), figlet, service + aliases {{{1
 alias  a=alias
 alias ua=unalias
@@ -653,8 +661,6 @@ complete -A  shopt shopt oo
 
 alias       se=set
 alias      use=unset
-alias       mn='command mount | cut -d" " -f1,3,5,6 | column -t'
-alias      umn=umount
 alias      msg=dmesg
 alias      cmd=command
 alias builtins='enable -a | cut -d" " -f2  | column'
