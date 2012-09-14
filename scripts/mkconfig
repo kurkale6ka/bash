@@ -200,10 +200,16 @@ rmlinks() {
 
 mkenv() {
    mkrepos
-   emerge sudo vixie-cron moreutils bind-tools evince ntp wgetpaste
-   # emerge sys-process/parallel ?
-   # rc-update add vixie-cron default
-   # rc-update add ntpd default
+
+   emerge bind-tools \
+          evince     \
+          moreutils  \
+          ntp        \
+          # sys-process/parallel \ ?
+          sudo       \
+          vixie-cron \
+          wgetpaste
+   # rc-update add ntpd vixie-cron default
 
    # visudo
    # Defaults:mitko timestamp_timeout=50 # min before asking for password again
