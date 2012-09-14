@@ -201,8 +201,10 @@ rmlinks() {
 mkenv() {
    mkrepos
 
+   # Put in @sets ?
    emerge bind-tools \
           evince     \
+          gcalctool  \
           moreutils  \
           ntp        \
           # sys-process/parallel \ ?
