@@ -73,7 +73,7 @@ PS1() {
 
    if ((EUID == 0)); then
       PS1="\n\[$LightRed\]\u \H \[$LightBlue\]\w - \A, %\j$info\n#\[$Reset\] "
-      export PATH=$PATH:/sbin:/usr/sbin:/usr/local/sbin:/root/bin
+      export PATH=$PATH:/sbin:/usr/sbin:/usr/local/sbin:/root/bin:$HOME/bin
    else
       PS1="\n\[$LightGreen\]\u \H \[$LightBlue\]\w - \A, %\j$info\n\\$\[$Reset\] "
    fi
@@ -725,6 +725,7 @@ b() {
 }
 
 # Typos {{{1
+alias ecex=exec
 alias akw=awk
 alias rmp=rpm
 alias shh=ssh
