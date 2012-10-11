@@ -205,13 +205,14 @@ mkenv() {
    emerge bind-tools \
           evince     \
           gcalctool  \
+          gnupg      \
           moreutils  \
           ntp        \
           # sys-process/parallel \ ?
           sudo       \
           vixie-cron \
-          gnupg      \
-          wgetpaste
+          wgetpaste  \
+          xclip
    # rc-update add ntpd vixie-cron default
 
    # visudo
