@@ -210,6 +210,7 @@ mkenv() {
           # sys-process/parallel \ ?
           sudo       \
           vixie-cron \
+          gnupg      \
           wgetpaste
    # rc-update add ntpd vixie-cron default
 
