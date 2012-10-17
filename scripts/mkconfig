@@ -204,6 +204,7 @@ mkenv() {
    # Put in @sets ?
    emerge bind-tools \
           evince     \
+          figlet     \
           gcalctool  \
           gnupg      \
           moreutils  \
