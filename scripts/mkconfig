@@ -211,6 +211,7 @@ mkenv() {
           ntp        \
           # sys-process/parallel \ ?
           sudo       \
+          tcpdump    \
           vixie-cron \
           wgetpaste  \
           xclip
