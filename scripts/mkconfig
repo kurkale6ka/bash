@@ -202,19 +202,19 @@ mkenv() {
    mkrepos
 
    # Put in @sets ?
-   emerge bind-tools \
-          evince     \
-          figlet     \
-          gcalctool  \
-          gnupg      \
-          moreutils  \
-          ntp        \
+   emerge bind-tools     \
+          evince         \
+          figlet         \
+          gcalctool      \
+          gnupg          \
+          moreutils      \
+          ntp            \
           # sys-process/parallel \ ?
-          sudo       \
-          tcpdump    \
-          vixie-cron \
-          wgetpaste  \
-          xclip
+          sudo           \
+          tcpdump        \
+          vixie-cron     \
+          wgetpaste      \
+          x11-misc/xclip
    # rc-update add ntpd vixie-cron default
 
    # visudo
