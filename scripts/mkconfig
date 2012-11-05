@@ -206,6 +206,8 @@ mkenv() {
           evince         \
           figlet         \
           gcalctool      \
+          # dev-vcs/git -gtk
+          git            \
           gnupg          \
           moreutils      \
           ntp            \
