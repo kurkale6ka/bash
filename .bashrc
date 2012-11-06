@@ -159,6 +159,12 @@ complete -A stopped -P '%' bg
 ir() { ifdown "$1" && ifup "$1" || echo "Couldn't do it." >&2; }
 complete -W 'eth0 eth1 lo' ir
 
+rs() {
+   (($# == 2)) || { echo 'Usage: rs USER MACHINE.' >&2; return 1; }
+   rsync -v --recursive --links --stats --progress --exclude-from \
+         ~/help/.rsync_exclude ~/config/ "$2":/"${1:-dimitar.dimitrov}"/config
+}
+
 # Permissions + debug + netstat, w {{{1
 r() { if [[ -d $1 || -f $1 ]]; then chmod u+r -- "$@"; else netstat -rn; fi; }
 w() { if [[ -d $1 || -f $1 ]]; then chmod u+w -- "$@"; else command w "$@"; fi; }
