@@ -160,9 +160,11 @@ ir() { ifdown "$1" && ifup "$1" || echo "Couldn't do it." >&2; }
 complete -W 'eth0 eth1 lo' ir
 
 rs() {
-   (($# == 2)) || { echo 'Usage: rs USER MACHINE.' >&2; return 1; }
+   (($# == 2)) || { echo 'Usage: rs USER SERVER' >&2; return 1; }
+   local home
+   [[ $1 == 'root' ]] && home='' || home=home/
    rsync -v --recursive --links --stats --progress --exclude-from \
-         ~/help/.rsync_exclude ~/config/ "$2":/"${1:-dimitar.dimitrov}"/config
+         ~/help/.rsync_exclude ~/config/ "$2":/"$home$1"/config
 }
 
 # Permissions + debug + netstat, w {{{1
