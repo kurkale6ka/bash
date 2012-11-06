@@ -242,6 +242,10 @@ ldot() {
       fi
    fi
 }
+
+unalias l. ll. l ld la lr lk lx ll lld lla llr llk llx lm lc lu llm llc llu ln \
+   2>/dev/null
+
  l.() { ldot "$@"; }
 ll.() { ldot "$@"; }
 
