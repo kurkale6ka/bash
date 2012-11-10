@@ -1,5 +1,7 @@
 #! /usr/bin/env bash
 
+# For information:
+#
 #        Bold=$(tput bold)
 #   Underline=$(tput smul)
 #       Reset=$(tput sgr0)
@@ -29,11 +31,28 @@
 #   LightCyan=$(printf %s "$Bold"; tput setaf 6)
 
 b=$(tput bold)
-u=$(tput smul)
-r=$(tput sgr0)
+u=$(tput smul) # underline
+r=$(tput sgr0) # reset
 
-# Rows:    0-7 for the fg (eg: tput setaf 3)
-# Columns: 0-7 for the bg (eg: tput setab 7), - means default bg
+if [[ $1 == -* ]]; then
+cat << 'WORD'
+Usage: colors RC RC ... RC (row column)
+       colors 21 35 64
+
+Rows:    0-7 for the fg (eg: tput setaf 3)
+Columns: 0-7 for the bg (eg: tput setab 7), dash (-) means default bg
+
+Ex:
+1- 1- 1- 1- | 10 10 10 10 | ... | 16 16 16 16 | 17 17 17 17
+2- 2- 2- 2- | 20 20 20 20 | ... | 26 26 26 26 | 27 27 27 27
+                                       ^
+            .                          |
+            .                     Second row (green foreground), sixth column (cyan background)
+                                  Normal, Normal underlined, Bold, Bold underlined
+4- 4- 4- 4- | 40 40 40 40 | ... | 46 46 46 46 | 47 47 47 47
+WORD
+exit 0
+fi
 
 for ((i = 0; i < 8; i++)); do
 
@@ -51,6 +70,7 @@ done
 echo
 set -- "${1:-0-}" "${2:-77}" "${@:3}"
 
+# lc - line, column
 for lc in "$@"; do
               fg=$(tput setaf "${lc%?}")
    if [[ $lc != *- ]]
