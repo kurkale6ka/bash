@@ -69,13 +69,13 @@ PS1() {
    unset PROMPT_COMMAND
    [[ $TERM != linux ]] && printf '\e]2;%s\a' "$HOSTNAME"
 
-   [[ $SSH_CLIENT || $SSH2_CLIENT ]] && info=', remote' || info=''
+   [[ $SSH_CLIENT || $SSH2_CLIENT ]] && at='\[$LightBlue\]@' || at='@'
 
    if ((EUID == 0)); then
-      PS1="\n\[$LightRed\]\u \H \[$LightBlue\]\w - \A, %\j$info\n#\[$Reset\] "
+      PS1="\n\[$LightRed\]\u $at \[$LightRed\]\H \[$LightBlue\]\w - \A, %\j\n#\[$Reset\] "
       PATH=$PATH:/sbin:/usr/sbin:/usr/local/sbin:/root/bin:$HOME/bin
    else
-      PS1="\n\[$LightGreen\]\u \H \[$LightBlue\]\w - \A, %\j$info\n\\$\[$Reset\] "
+      PS1="\n\[$LightGreen\]\u $at \[$LightGreen\]\H \[$LightBlue\]\w - \A, %\j\n\\$\[$Reset\] "
    fi
 }
 PS1
