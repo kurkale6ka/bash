@@ -69,6 +69,7 @@ PS1() {
    unset PROMPT_COMMAND
    [[ $TERM != linux ]] && printf '\e]2;%s\a' "$HOSTNAME"
 
+   local at
    if [[ $SSH_CLIENT || $SSH2_CLIENT ]]; then
       if ((EUID == 0))
       then at="\[$LightBlue\]@\[$LightRed\]"
