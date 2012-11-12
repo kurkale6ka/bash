@@ -478,6 +478,9 @@ di() {
    find . \( "${inodes[@]}" \) -exec command rm -i -- {} +
 }
 
+mp() { pe-man puppet-"${1:-help}"; }
+mg() { man git-"${1:-help}"; }
+
 # Find files, text, differences. 'Cat' files, echo text {{{1
 f() { if ((1 == $#)); then find . -iname "$1"; else find "$@"; fi; }
 alias         lo='command locate -i'
@@ -744,6 +747,8 @@ b() {
    fi
 }
 
+alias pu=puppet
+
 # Typos {{{1
 alias ecex=exec
 alias akw=awk
@@ -767,6 +772,8 @@ cl() { column <(compgen -A "$1"); }
 complete -W 'alias arrayvar binding builtin command directory disabled enabled
 export file function group helptopic hostname job keyword running service
 setopt shopt signal stopped user variable' cl compgen complete
+
+complete -W 'resource user file apply' pu puppet
 
 # enable bash completion in non posix shells
 if ! shopt -oq posix; then
