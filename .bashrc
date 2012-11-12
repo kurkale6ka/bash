@@ -773,7 +773,7 @@ complete -W 'alias arrayvar binding builtin command directory disabled enabled
 export file function group helptopic hostname job keyword running service
 setopt shopt signal stopped user variable' cl compgen complete
 
-complete -W 'resource user file apply' pu puppet
+complete -o default -W 'resource user file apply' pu puppet
 
 # enable bash completion in non posix shells
 if ! shopt -oq posix; then
