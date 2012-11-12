@@ -479,6 +479,7 @@ di() {
 }
 
 mp() { pe-man puppet-"${1:-help}"; }
+mpp() { puppet describe "$@" | mo; }
 mg() { man git-"${1:-help}"; }
 
 # Find files, text, differences. 'Cat' files, echo text {{{1
@@ -773,7 +774,8 @@ complete -W 'alias arrayvar binding builtin command directory disabled enabled
 export file function group helptopic hostname job keyword running service
 setopt shopt signal stopped user variable' cl compgen complete
 
-complete -o default -W 'resource user file apply' pu puppet
+complete -o default -W 'apply notify resource file package service exec cron
+user group' mp mpp pu puppet
 
 # enable bash completion in non posix shells
 if ! shopt -oq posix; then
