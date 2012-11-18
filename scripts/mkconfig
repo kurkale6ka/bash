@@ -175,6 +175,9 @@ bashrcs=(.profile .bash_{profile,login,logout} .bashrc{,_after} .logout)
 
 mklinks() {
 
+   # Same as in ${parameter#word to remove} or ${parameter%word to remove},
+   # # <=> \< and % <=> \>, so ${rcdir/#/$HOME/config/} means replace the
+   # beginning of rcdir with $HOME/config/
    local rcdir
    for rcdir in "${rcdirs[@]}"
    do ln -sT "${rcdir/#/$HOME/config/}" "${rcdir/#/$HOME/}"
