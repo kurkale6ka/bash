@@ -139,6 +139,7 @@ complete -A directory -F _cd cd
 
 # Networking: ip | mac, ping, (ir?). Processes and jobs {{{1
 i() {
+   (($#)) && { eix -I "$@"; return 0; }
    local mac_ip_regex='((hw|ll)addr|inet)\s+(addr:)?'
    /sbin/ifconfig eth0 | command grep -oiE "$mac_ip_regex[^[:space:]]+" |
                          command sed  -r   "s/$mac_ip_regex//i"
