@@ -2,7 +2,7 @@
 
 ((EUID == 0)) && sudo='' || sudo=sudo
 
-if (($#)); then
+if (($#)) && [[ $1 != '-a' ]]; then
    $sudo emerge --verbose --ask "$@"
 else
    # eix-sync
