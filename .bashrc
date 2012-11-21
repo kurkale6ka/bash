@@ -751,6 +751,34 @@ b() {
 
 alias pu=puppet
 
+# Debian
+alias ap='sudo aptitude'
+
+complete -W 'update upgrade install remove autoremove purge source build-dep
+dist-upgrade dselect-upgrade clean autoclean check' apt-get
+
+complete -W 'add gencaches showpkg showsrc stats dump dumpavail unmet search
+show depends rdepends pkgnames dotty xvcg policy' apt-cache
+
+complete -W 'install remove purge hold unhold markauto unmarkauto
+forbid-version update safe-upgrade full-upgrade forget-new search show clean
+autoclean changelog download reinstall why why-not' ap aptitude
+
+# Git
+gc() {
+   if (($#))
+   then git commit "$@"
+   else git commit -a
+   fi
+}
+alias gp='git push origin master'
+
+complete -W 'HEAD add bisect branch checkout clone commit diff fetch grep init
+log merge mv pull push rebase revert reset rm show status tag' git
+
+# Gentoo
+alias exi=eix
+
 # Typos {{{1
 alias ecex=exec
 alias akw=awk
