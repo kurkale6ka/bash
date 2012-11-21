@@ -170,7 +170,7 @@ cprepos() {
  rcdirs=({bash,vim}files help)
     rcs=(.gitignore .my.cnf .{curl,input,irb,screen,top}rc)
  vimrcs=(.{,g}vimrc)
-bashrcs=(.profile .bash_{profile,login,logout} .bashrc{,_after} .logout)
+bashrcs=(.profile .bash_{profile,login,logout} .bashrc .logout)
  bashxs=(colors em mkconfig madd-host mssh)
 
 mklinks() {
