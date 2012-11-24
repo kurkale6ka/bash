@@ -765,6 +765,7 @@ forbid-version update safe-upgrade full-upgrade forget-new search show clean
 autoclean changelog download reinstall why why-not' ap aptitude
 
 # Git
+alias git='LESS="-r -i -M -PM?f%f - :.?L%L lines, :.?ltL\:%lt:.?pB, %pB\% : .?e(Bottom)%t" git'
 gc() {
    if (($#))
    then git commit "$@"

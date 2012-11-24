@@ -18,7 +18,7 @@ export EDITOR=$my_vim
 export VISUAL=$my_vim
 
 # -i ignore case, -M ruler, -F quit if 1 screen, -PM long prompt
-# ?test ok:else:else. The . ends the test
+# ?test--true--:--false--. The dot ends the test
 export LESS='-r -i -M -F -PM?f%f - :.?L%L lines, :.?ltL\:%lt:.?pB, %pB\% : .?e(Bottom)%t'
 
 export    SHELL=/bin/bash
