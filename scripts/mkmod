@@ -1,6 +1,6 @@
 #! /usr/bin/env bash
 
-module="$1"
+module="$HOME"/.puppet/modules/"$1"
 code_folder=manifests
 
 mkdir -p "$module"/{"$code_folder",files,lib,templates,tests}

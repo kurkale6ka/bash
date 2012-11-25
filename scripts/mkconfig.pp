@@ -3,14 +3,14 @@
 # replace-wscomments=yes
 # replace-unmodified=yes
 file { '/etc/dispatch-conf.conf':
-  source => 'puppet://path',
-  mode   => mode,
+  source => 'puppet:///modules/module/dispatch-conf.conf',
+  mode   => 644,
 }
 
 # Defaults:mitko timestamp_timeout=560 # min before asking for password again
 file { '/etc/sudoers':
-  source => 'puppet://path',
-  mode   => mode,
+  source => 'puppet:///modules/module/sudoers',
+  mode   => 440,
 }
 
 # git config --global user.name 'Dimitar Dimitrov'
@@ -18,11 +18,11 @@ file { '/etc/sudoers':
 # git config --global color.ui true
 
 package { 'app-editors/gvim':
-  ensure => present,
+  ensure => latest,
 }
 
 package { 'net-print/cups':
-  ensure => present,
+  ensure => latest,
 }
 
 service { 'cupsd':
@@ -33,7 +33,7 @@ service { 'cupsd':
 }
 
 package { 'net-misc/ntp':
-  ensure => present,
+  ensure => latest,
 }
 
 service { 'ntpd':
