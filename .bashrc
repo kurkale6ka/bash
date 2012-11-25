@@ -768,8 +768,8 @@ autoclean changelog download reinstall why why-not' ap aptitude
 alias git='LESS="-r -i -M -PM?f%f - :.?L%L lines, :.?ltL\:%lt:.?pB, %pB\% : .?e(Bottom)%t" git'
 gc() {
    if (($#))
-   then git commit "$@"
-   else git commit -a
+   then git commit -v "$@"
+   else git commit -va
    fi
 }
 alias gp='git push origin master'
