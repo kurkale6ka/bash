@@ -1,0 +1,20 @@
+#! /usr/bin/env bash
+
+module="$1"
+code_folder=manifests
+
+mkdir -p "$module"/{"$code_folder",files,lib,templates,tests}
+
+main="$module"/"$code_folder"/init.pp
+
+if [[ ! -f $main ]]; then
+touch "$main"
+ed -s "$main" << EOT
+H
+0i
+class $module {
+}
+.
+wq
+EOT
+fi

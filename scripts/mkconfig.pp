@@ -32,4 +32,16 @@ service { 'cupsd':
   hasstatus  => true,
 }
 
+package { 'net-misc/ntp':
+  ensure => present,
+}
+
+service { 'ntpd':
+  name       => 'ntpd',
+  ensure     => running,
+  enable     => true,
+  hasrestart => true,
+}
+
+Package['net-misc/ntp'] -> Service['ntpd']
 Package['net-print/cups'] -> Service['cupsd']
