@@ -1,4 +1,7 @@
 class gnome_desktop {
+
+  class { 'git': }
+
   # diff="colordiff -Nu '%s' '%s' | less --no-init --QUIT-AT-EOF -R"
   # merge="vimdiff -c 'saveas '%s'' -c next -c 'setlocal noma readonly' -c prev '%s' '%s'"
   # replace-wscomments=yes
@@ -16,17 +19,6 @@ class gnome_desktop {
 
   package { 'app-editors/gvim':
     ensure => latest,
-  }
-
-  package { 'dev-vcs/git':
-    ensure => latest,
-  }
-
-  exec { 'git-config':
-    command     => ['git config --global user.name "Dimitar Dimitrov"',
-                    'git config --global user.email mitkofr@yahoo.fr',
-                    'git config --global color.ui true'],
-    refreshonly => true,
   }
 
   package { 'net-print/cups':
@@ -51,7 +43,6 @@ class gnome_desktop {
     hasrestart => true,
   }
 
-  Package['dev-vcs/git'] ~> Exec['git-config']
   Package['net-misc/ntp'] -> Service['ntpd']
   Package['net-print/cups'] -> Service['cupsd']
 }
