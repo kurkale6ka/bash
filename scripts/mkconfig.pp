@@ -14,12 +14,19 @@ class gnome_desktop {
     mode   => 440,
   }
 
-  # git config --global user.name 'Dimitar Dimitrov'
-  # git config --global user.email 'mitkofr@yahoo.fr'
-  # git config --global color.ui true
-
   package { 'app-editors/gvim':
     ensure => latest,
+  }
+
+  package { 'dev-vcs/git':
+    ensure => latest,
+  }
+
+  exec { 'git-config':
+    command     => ['git config --global user.name "Dimitar Dimitrov"',
+                    'git config --global user.email mitkofr@yahoo.fr',
+                    'git config --global color.ui true'],
+    refreshonly => true,
   }
 
   package { 'net-print/cups':
@@ -44,6 +51,7 @@ class gnome_desktop {
     hasrestart => true,
   }
 
+  Package['dev-vcs/git'] ~> Exec['git-config']
   Package['net-misc/ntp'] -> Service['ntpd']
   Package['net-print/cups'] -> Service['cupsd']
 }
