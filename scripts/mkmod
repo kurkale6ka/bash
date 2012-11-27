@@ -1,6 +1,11 @@
 #! /usr/bin/env bash
 
-module="$HOME"/.puppet/modules/"$1"
+# -b /modules/directory module
+if (($# > 1))
+then module="${2%%/}"/"$3"
+else module="$HOME"/.puppet/modules/"$1"
+fi
+
 code_folder=manifests
 
 mkdir -p "$module"/{"$code_folder",files,lib,templates,tests}
