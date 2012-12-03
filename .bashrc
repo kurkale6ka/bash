@@ -708,6 +708,7 @@ complete -f -o default -X '!*.rb' ruby   rb
 irssi() (
    cd /var/log/irssi || exit 1
    "$HOME"/config/help/.irssi/fnotify.bash &
+   camper_van localhost 6668 >/dev/null 2>&1 &
    command irssi
    kill %?fnotify
 )
