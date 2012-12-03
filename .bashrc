@@ -98,9 +98,15 @@ alias    3='cd ../../..'
 alias    4='cd ../../../..'
 alias cd..='cd ..'
 alias   ..='cd ..'
-alias   pw='command pwd -P'
 alias   to=touch
 alias   md='command mkdir -p --'
+
+pw() {
+   if (($#))
+   then pws --seconds 25 get "$1"
+   else command pwd -P
+   fi
+}
 
 rd() {
    local arg

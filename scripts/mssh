@@ -2,4 +2,10 @@
 
 # ~/mydir/uk00probst00 ls -l -> ssh uk00probst00 ls -l
 # why exec?
-exec ssh "${0##*/}" "$@"
+
+remote="${0##*/}"
+remote="${remote#?}"
+
+pws get "$remote" 0
+
+exec ssh "$remote" "$@"
