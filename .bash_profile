@@ -2,9 +2,9 @@
 # todo: move to .bashrc?
 [[ -t 1 ]] && hash fortune >/dev/null 2>&1 && fortune
 
-# file default 666 (-rw-rw-rw-) => 640 (-rw-r-----)
-# directory default 777 (drwxrwxrwx) => 750 (drwxr-x---)
-umask 027
+# file default 666 (-rw-rw-rw-) => 640 (-rw-r--r--)
+# directory default 777 (drwxrwxrwx) => 750 (drwxr-xr-x)
+umask 022
 
 if   command -v vimx; then
    my_vim='vimx -v'
