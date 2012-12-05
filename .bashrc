@@ -147,8 +147,8 @@ complete -A directory -F _cd cd
 i() {
    (($#)) && { eix -I "$@"; return 0; }
    local mac_ip_regex='((hw|ll)addr|inet)\s+(addr:)?'
-   /sbin/ifconfig eth0 | command grep -oiE "$mac_ip_regex[^[:space:]]+" |
-                         command sed  -r   "s/$mac_ip_regex//i"
+   ifconfig eth0 | command grep -oiE "$mac_ip_regex[^[:space:]]+" |
+                   command sed  -r   "s/$mac_ip_regex//i"
 }
 alias ii='curl ifconfig.me/ip'
 alias ia='curl ifconfig.me/all 2>/dev/null | column -t'
