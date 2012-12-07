@@ -183,8 +183,7 @@ mklinks() {
    do ln -sT "${rcdir/#/$HOME/config/}" "${rcdir/#/$HOME/}"
    done
 
-   ln -sT "$HOME"/config/vimfiles    "$HOME"/.vim
-   ln -sT "$HOME"/config/help/.irssi "$HOME"/.irssi
+   ln -sT "$HOME"/config/vimfiles "$HOME"/.vim
 
    if ((! $#)); then
       ln -s "$HOME"/config/vimfiles/bundle/vim-pathogen/autoload/pathogen.vim \
@@ -210,7 +209,6 @@ rmlinks() {
                   "${vimrcs[@]/#/$HOME/}"                            \
                  "${bashrcs[@]/#/$HOME/}"                            \
                   "${bashxs[@]/#/$HOME/bin/}"
-   command rm -r "$HOME"/.irssi
 }
 
 mkenv() {
