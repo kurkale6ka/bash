@@ -705,13 +705,11 @@ complete -f -o default -X '!*.pl' perl   prel pl
 complete -f -o default -X '!*.py' python py
 complete -f -o default -X '!*.rb' ruby   rb
 
-irssi() (
-   cd /var/log/irssi || exit 1
-   "$HOME"/config/help/.irssi/fnotify.bash &
-   camper_van localhost 6668 >/dev/null 2>&1 &
-   command irssi
-   kill %?fnotify
-)
+weechat() {
+   flamethrower >/dev/null 2>&1 &
+   weechat-curses
+   kill %?flamethrower
+}
 
 rc() {
    if (($#)); then
@@ -792,6 +790,7 @@ alias ecex=exec
 alias akw=awk
 alias rmp=rpm
 alias shh=ssh
+alias xlcip=xclip
 
 # Programmable completion {{{1
 complete -A enabled  builtin
