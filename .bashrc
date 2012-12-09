@@ -777,6 +777,7 @@ gc() {
    fi
 }
 alias gp='git push origin master'
+alias gits='(echo; for d in {bash,vim}files; do cd "$d" && { git status; echo; }; done; cd help && git status)'
 
 complete -W 'HEAD add bisect branch checkout clone commit diff fetch grep init
 log merge mv pull push rebase revert reset rm show status tag' git
