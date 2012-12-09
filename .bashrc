@@ -153,15 +153,14 @@ i() {
 alias ii='curl ifconfig.me/ip'
 alias ia='curl ifconfig.me/all 2>/dev/null | column -t'
 
-p() { if (($#)); then ping -c3 "$@"; else ps fjww --headers; fi; }
+p() { if (($#)); then ping -c3 "$@"; else ps fww o ppid,pid,pgid,sid,tname,tpgid,stat,euser,start_time,cmd --headers; fi; }
 
 alias     k=kill
 alias    kl='kill -l'
 alias    ka=killall
 alias    pk=pkill
 alias pgrep='pgrep -l'
-alias    pg='ps j --headers | head -1 && ps fajxww | command grep -v grep |
-             command grep -iE --color'
+alias    pg='ps o pid,tname,stat,euser,start_time,cmd --headers | head -1 && ps faxww o pid,tname,stat,euser,start_time,cmd | command grep -v grep | command grep -iE --color'
 complete -A signal kill k
 
 alias     j='jobs -l'
