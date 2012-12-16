@@ -5,8 +5,8 @@ class git ($name = 'Dimitar Dimitrov', $email = 'mitkofr@yahoo.fr') {
   }
 
   exec { 'git-config':
-    command     => ['git config --global user.name $name',
-                    'git config --global user.email $email',
+    command     => ["git config --global user.name $name",
+                    "git config --global user.email $email",
                     'git config --global color.ui true'],
     refreshonly => true,
   }
