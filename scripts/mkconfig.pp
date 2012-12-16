@@ -17,6 +17,31 @@ class gnome_desktop {
     mode   => 440,
   }
 
+  Exec { cwd => ~/vimfiles/bundle, }
+
+  exec {
+    command => 'git clone git@github.com:kurkale6ka/vim-blanklines.git',;
+    command => 'git clone git@github.com:kurkale6ka/vim-blockinsert.git',;
+    command => 'git clone git@github.com:kurkale6ka/vim-quotes.git',;
+    command => 'git clone git@github.com:kurkale6ka/vim-sequence.git',;
+    command => 'git clone git@github.com:kurkale6ka/vim-swap.git',;
+    command => 'git clone git://github.com/godlygeek/csapprox.git',;
+    command => 'git clone git://github.com/godlygeek/tabular.git',;
+    command => 'git clone git://github.com/tpope/vim-pathogen.git',;
+    command => 'git clone git://github.com/tpope/vim-abolish.git',;
+    command => 'git clone git://github.com/tpope/vim-endwise.git',;
+    command => 'git clone git://github.com/tpope/vim-unimpaired.git',;
+    command => 'git clone git://github.com/tpope/vim-surround.git',;
+    command => 'git clone git://github.com/tpope/vim-repeat.git',;
+    command => 'git clone git://github.com/tpope/vim-ragtag.git',;
+    command => 'git clone git://github.com/tpope/vim-flatfoot.git',;
+    command => 'git clone git://github.com/scrooloose/nerdcommenter.git',;
+    command => 'git clone git://github.com/vim-scripts/MarkLines.git',;
+    command => 'git clone git://github.com/vim-scripts/bufkill.vim.git',;
+    command => 'git clone git://github.com/rodjek/vim-puppet.git',;
+    command => 'git clone git://github.com/vim-scripts/UltiSnips.git',;
+  }
+
   package { 'app-editors/gvim':
     ensure => latest,
   }
