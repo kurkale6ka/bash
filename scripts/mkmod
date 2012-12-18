@@ -1,6 +1,10 @@
 #! /usr/bin/env bash
 
-# -b /modules/directory module
+(($#)) || {
+  echo 'Usage [-b /modules/directory] module'
+  exit 1
+}
+
 if (($# > 1))
 then module="${2%%/}"/"$3"
 else module="$HOME"/.puppet/modules/"$1"
@@ -17,7 +21,7 @@ touch "$main"
 ed -s "$main" << EOT
 H
 0i
-class $module {
+class ${module##*/} {
 }
 .
 wq
