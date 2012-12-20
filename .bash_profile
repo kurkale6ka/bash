@@ -22,14 +22,17 @@ export VISUAL=$my_vim
 export LESS='-r -i -M -F -PM?f%f - :.?L%L lines, :.?ltL\:%lt:.?pB, %pB\% : .?e(Bottom)%t'
 
 export    SHELL=/bin/bash
-export  FIGNORE='~' # Completion
+# <tab> completion.
+#  ls: ls -B to ignore backup files (~) in listings
+# Vim: set wildignore+=*~,*.swp
+export  FIGNORE='~:.swp:.o'
 export HOSTFILE=$HOME/.hosts
 
 shopt -s histappend
 
 export       HISTFILE=$HOME/.bash_history
 export   HISTFILESIZE=3000
-export       HISTSIZE=3000 # size allowed in memory
+export       HISTSIZE=1000 # size allowed in memory
 export    HISTCONTROL=ignorespace:ignoredups:erasedups
 export     HISTIGNORE="@(?|??|???|????)*( |$'\t'):*( |$'\t')"
 # export   HISTIGNORE='@(?|??|???|????)*([[:space:]]):*([[:space:]])'

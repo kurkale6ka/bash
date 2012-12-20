@@ -166,6 +166,7 @@ alias pgrep='pgrep -l'
 alias  k=kill
 alias kl='kill -l'
 alias ka=killall
+alias kg='kill -- -'
 alias pk=pkill
 complete -A signal kill k
 
