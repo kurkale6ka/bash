@@ -688,7 +688,7 @@ mn() {
 alias umn=umount
 alias  fu='sudo fuser -mv'
 
-# Misc: irssi, .inputrc, s(fc, services, sudo bash), figlet, service + aliases {{{1
+# Misc: weechat, .inputrc, s(fc, services, sudo bash), figlet, service + aliases {{{1
 alias  a=alias
 alias ua=unalias
 complete -A alias alias a unalias ua
