@@ -499,7 +499,7 @@ mg() { man git-"${1:-help}"; }
 f() { if ((1 == $#)); then find . -iname "$1"; else find "$@"; fi; }
 alias         lo='command locate -i'
 alias          g='command grep -iE --color'
-alias         gr="command grep -IrE --exclude='*~'"
+alias         gr="command grep -IriE --exclude='*~'"
 alias ldapsearch='ldapsearch -x -LLL'
 
 diff() {
