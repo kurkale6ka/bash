@@ -284,41 +284,17 @@ l() {
    else command ls -FB              "$@"
    fi
 }
-ld() {
-   if [[ -t 1 ]]
-   then command ls -FBd --color=auto "$@"
-   else command ls -FBd              "$@"
-   fi
-}
-la() {
-   if [[ -t 1 ]]
-   then command ls -FBA --color=auto "$@"
-   else command ls -FBA              "$@"
-   fi
-}
-lr() {
-   if [[ -t 1 ]]
-   then command ls -FBR --color=auto "$@"
-   else command ls -FBR              "$@"
-   fi
-}
-lk() {
-   if [[ -t 1 ]]
-   then command ls -FBS --color=auto "$@"
-   else command ls -FBS              "$@"
-   fi
-}
-lx() {
-   if [[ -t 1 ]]
-   then command ls -FBX --color=auto "$@"
-   else command ls -FBX              "$@"
-   fi
-}
-
 ll() {
    if [[ -t 1 ]]
    then command ls -FBhl --color=auto --time-style='+(%d %b %Y - %H:%M)' "$@"
    else command ls -FBhl              --time-style='+(%d %b %Y - %H:%M)' "$@"
+   fi
+}
+
+ld() {
+   if [[ -t 1 ]]
+   then command ls -FBd --color=auto "$@"
+   else command ls -FBd              "$@"
    fi
 }
 lld() {
@@ -327,22 +303,45 @@ lld() {
    else command ls -FBdhl              --time-style='+(%d %b %Y - %H:%M)' "$@"
    fi
 }
+
+la() {
+   if [[ -t 1 ]]
+   then command ls -FBA --color=auto "$@"
+   else command ls -FBA              "$@"
+   fi
+}
 lla() {
    if [[ -t 1 ]]
    then command ls -FBAhl --color=auto --time-style='+(%d %b %Y - %H:%M)' "$@"
    else command ls -FBAhl              --time-style='+(%d %b %Y - %H:%M)' "$@"
    fi
 }
+
+alias lr="tree -AC -I '*~'"
 llr() {
    if [[ -t 1 ]]
    then command ls -FBRhl --color=auto --time-style='+(%d %b %Y - %H:%M)' "$@"
    else command ls -FBRhl              --time-style='+(%d %b %Y - %H:%M)' "$@"
    fi
 }
+
+lk() {
+   if [[ -t 1 ]]
+   then command ls -FBS --color=auto "$@"
+   else command ls -FBS              "$@"
+   fi
+}
 llk() {
    if [[ -t 1 ]]
    then command ls -FBShl --color=auto --time-style='+(%d %b %Y - %H:%M)' "$@"
    else command ls -FBShl              --time-style='+(%d %b %Y - %H:%M)' "$@"
+   fi
+}
+
+lx() {
+   if [[ -t 1 ]]
+   then command ls -FBX --color=auto "$@"
+   else command ls -FBX              "$@"
    fi
 }
 llx() {
@@ -360,22 +359,6 @@ lm() {
       command ls -FBt              "$@"
    fi
 }
-lc() {
-   if [[ -t 1 ]]; then
-      echo "$Purple${Underline}Sorted by change date:$Reset"
-      command ls -FBtc --color=auto "$@"
-   else
-      command ls -FBtc              "$@"
-   fi
-}
-lu() {
-   if [[ -t 1 ]]; then
-      echo "$Purple${Underline}Sorted by access date:$Reset"
-      command ls -FBtu --color=auto "$@"
-   else
-      command ls -FBtu              "$@"
-   fi
-}
 llm() {
    if [[ -t 1 ]]; then
       echo "$Purple${Underline}Sorted by modification date:$Reset"
@@ -384,12 +367,30 @@ llm() {
       command ls -FBhlt              --time-style='+(%d %b %Y - %H:%M)' "$@"
    fi
 }
-llc() {
+
+lc() {
    if [[ -t 1 ]]; then
+      echo "$Purple${Underline}Sorted by change date:$Reset"
+      command ls -FBtc --color=auto "$@"
+   else
+      command ls -FBtc              "$@"
+   fi
+}
+llc() {
+   if [[ -t 1 ]]; then;
       echo "$Purple${Underline}Sorted by change date:$Reset"
       command ls -FBhltc --color=auto --time-style='+(%d %b %Y - %H:%M)' "$@"
    else
       command ls -FBhltc              --time-style='+(%d %b %Y - %H:%M)' "$@"
+   fi
+}
+
+lu() {
+   if [[ -t 1 ]]; then
+      echo "$Purple${Underline}Sorted by access date:$Reset"
+      command ls -FBtu --color=auto "$@"
+   else
+      command ls -FBtu              "$@"
    fi
 }
 llu() {
