@@ -317,7 +317,7 @@ lla() {
    fi
 }
 
-alias lr="tree -AC -I '*~'"
+alias lr="tree -AC -I '*~' --noreport"
 llr() {
    if [[ -t 1 ]]
    then command ls -FBRhl --color=auto --time-style='+(%d %b %Y - %H:%M)' "$@"
