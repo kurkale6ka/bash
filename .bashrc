@@ -354,51 +354,51 @@ llx() {
 lm() {
    if [[ -t 1 ]]; then
       echo "$Purple${Underline}Sorted by modification date:$Reset"
-      command ls -FBt --color=auto "$@"
+      command ls -FBtr --color=auto "$@"
    else
-      command ls -FBt              "$@"
+      command ls -FBtr              "$@"
    fi
 }
 llm() {
    if [[ -t 1 ]]; then
       echo "$Purple${Underline}Sorted by modification date:$Reset"
-      command ls -FBhlt --color=auto --time-style='+(%d %b %Y - %H:%M)' "$@"
+      command ls -FBhltr --color=auto --time-style='+(%d %b %Y - %H:%M)' "$@"
    else
-      command ls -FBhlt              --time-style='+(%d %b %Y - %H:%M)' "$@"
+      command ls -FBhltr              --time-style='+(%d %b %Y - %H:%M)' "$@"
    fi
 }
 
 lc() {
    if [[ -t 1 ]]; then
       echo "$Purple${Underline}Sorted by change date:$Reset"
-      command ls -FBtc --color=auto "$@"
+      command ls -FBtrc --color=auto "$@"
    else
-      command ls -FBtc              "$@"
+      command ls -FBtrc              "$@"
    fi
 }
 llc() {
-   if [[ -t 1 ]]; then;
+   if [[ -t 1 ]]; then
       echo "$Purple${Underline}Sorted by change date:$Reset"
-      command ls -FBhltc --color=auto --time-style='+(%d %b %Y - %H:%M)' "$@"
+      command ls -FBhltrc --color=auto --time-style='+(%d %b %Y - %H:%M)' "$@"
    else
-      command ls -FBhltc              --time-style='+(%d %b %Y - %H:%M)' "$@"
+      command ls -FBhltrc              --time-style='+(%d %b %Y - %H:%M)' "$@"
    fi
 }
 
 lu() {
    if [[ -t 1 ]]; then
       echo "$Purple${Underline}Sorted by access date:$Reset"
-      command ls -FBtu --color=auto "$@"
+      command ls -FBtru --color=auto "$@"
    else
-      command ls -FBtu              "$@"
+      command ls -FBtru              "$@"
    fi
 }
 llu() {
    if [[ -t 1 ]]; then
       echo "$Purple${Underline}Sorted by access date:$Reset"
-      command ls -FBhltu --color=auto --time-style='+(%d %b %Y - %H:%M)' "$@"
+      command ls -FBhltru --color=auto --time-style='+(%d %b %Y - %H:%M)' "$@"
    else
-      command ls -FBhltu              --time-style='+(%d %b %Y - %H:%M)' "$@"
+      command ls -FBhltru              --time-style='+(%d %b %Y - %H:%M)' "$@"
    fi
 }
 
