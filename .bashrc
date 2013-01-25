@@ -338,19 +338,6 @@ llk() {
    fi
 }
 
-lx() {
-   if [[ -t 1 ]]
-   then command ls -FBX --color=auto "$@"
-   else command ls -FBX              "$@"
-   fi
-}
-llx() {
-   if [[ -t 1 ]]
-   then command ls -FBXhl --color=auto --time-style='+(%d %b %Y - %H:%M)' "$@"
-   else command ls -FBXhl              --time-style='+(%d %b %Y - %H:%M)' "$@"
-   fi
-}
-
 lm() {
    if [[ -t 1 ]]; then
       echo "$Purple${Underline}Sorted by modification date:$Reset"
@@ -365,40 +352,6 @@ llm() {
       command ls -FBhltr --color=auto --time-style='+(%d %b %Y - %H:%M)' "$@"
    else
       command ls -FBhltr              --time-style='+(%d %b %Y - %H:%M)' "$@"
-   fi
-}
-
-lc() {
-   if [[ -t 1 ]]; then
-      echo "$Purple${Underline}Sorted by change date:$Reset"
-      command ls -FBtrc --color=auto "$@"
-   else
-      command ls -FBtrc              "$@"
-   fi
-}
-llc() {
-   if [[ -t 1 ]]; then
-      echo "$Purple${Underline}Sorted by change date:$Reset"
-      command ls -FBhltrc --color=auto --time-style='+(%d %b %Y - %H:%M)' "$@"
-   else
-      command ls -FBhltrc              --time-style='+(%d %b %Y - %H:%M)' "$@"
-   fi
-}
-
-lu() {
-   if [[ -t 1 ]]; then
-      echo "$Purple${Underline}Sorted by access date:$Reset"
-      command ls -FBtru --color=auto "$@"
-   else
-      command ls -FBtru              "$@"
-   fi
-}
-llu() {
-   if [[ -t 1 ]]; then
-      echo "$Purple${Underline}Sorted by access date:$Reset"
-      command ls -FBhltru --color=auto --time-style='+(%d %b %Y - %H:%M)' "$@"
-   else
-      command ls -FBhltru              --time-style='+(%d %b %Y - %H:%M)' "$@"
    fi
 }
 
