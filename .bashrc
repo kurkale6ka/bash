@@ -210,7 +210,8 @@ alias bx='bash -x'
 # Info: pa, usersee {{{1
 pa() {
    local paths
-   IFS=: read -ra paths <<< "$PATH"; printf '%s\n' "${paths[@]}" | sort -u
+   IFS=: read -ra paths <<< "$PATH"; printf '%s\n' "${paths[@]}" |\
+      awk '{ if (a[$1]++ == 0) print $1; }'
 }
 
 usersee() {
