@@ -234,7 +234,7 @@ mklinks() {
    ln -sT "$HOME"/config/vimfiles "$HOME"/.vim
 
    if ((! $#)); then
-      ln -s "$HOME"/config/vimfiles/bundle/vim-pathogen/autoload/pathogen.vim \
+      ln -s "$HOME"/config/vimfiles/bundle/pathogen/autoload/pathogen.vim \
             "$HOME"/config/vimfiles/autoload
    fi
 
