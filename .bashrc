@@ -450,7 +450,7 @@ mpp() { puppet describe "$@" | mo; }
 mg() { man git-"${1:-help}"; }
 
 # Find files, text, differences. 'Cat' files, echo text {{{1
-f() { if ((1 == $#)); then find . -iname "$1"; else find "$@"; fi; }
+f() { if ((1 == $#)); then find . -iname "*$1*"; else find "$@"; fi; }
 alias         lo='command locate -i'
 alias          g='command grep -iE --color'
 alias         gr="command grep -IriE --exclude='*~'"
