@@ -6,76 +6,20 @@ mkrepos() {
    cd       "$HOME"/config || exit 1
 
    if [[ ! -d bashfiles ]]
-   then git clone git@github.com:kurkale6ka/bashfiles.git
+   then
+      git clone git@github.com:kurkale6ka/bashfiles.git
+      echo
    fi
    if [[ ! -d help ]]
-   then git clone git@github.com:kurkale6ka/help.git
+   then
+      git clone git@github.com:kurkale6ka/help.git
+      echo
    fi
    if [[ ! -d vimfiles ]]
-   then git clone git@github.com:kurkale6ka/vimfiles.git
-   fi
-
-   cd vimfiles/bundle || exit 1
-
-   if [[ ! -d vim-blanklines ]]
-   then git clone git@github.com:kurkale6ka/vim-blanklines.git
-   fi
-   if [[ ! -d vim-blockinsert ]]
-   then git clone git@github.com:kurkale6ka/vim-blockinsert.git
-   fi
-   if [[ ! -d vim-quotes ]]
-   then git clone git@github.com:kurkale6ka/vim-quotes.git
-   fi
-   if [[ ! -d vim-sequence ]]
-   then git clone git@github.com:kurkale6ka/vim-sequence.git
-   fi
-   if [[ ! -d vim-swap ]]
-   then git clone git@github.com:kurkale6ka/vim-swap.git
-   fi
-   if [[ ! -d csapprox ]]
-   then git clone git://github.com/godlygeek/csapprox.git
-   fi
-   if [[ ! -d tabular ]]
-   then git clone git://github.com/godlygeek/tabular.git
-   fi
-   if [[ ! -d vim-pathogen ]]
-   then git clone git://github.com/tpope/vim-pathogen.git
-   fi
-   if [[ ! -d vim-abolish ]]
-   then git clone git://github.com/tpope/vim-abolish.git
-   fi
-   if [[ ! -d vim-endwise ]]
-   then git clone git://github.com/tpope/vim-endwise.git
-   fi
-   if [[ ! -d vim-unimpaired ]]
-   then git clone git://github.com/tpope/vim-unimpaired.git
-   fi
-   if [[ ! -d vim-surround ]]
-   then git clone git://github.com/tpope/vim-surround.git
-   fi
-   if [[ ! -d vim-repeat ]]
-   then git clone git://github.com/tpope/vim-repeat.git
-   fi
-   if [[ ! -d vim-ragtag ]]
-   then git clone git://github.com/tpope/vim-ragtag.git
-   fi
-   if [[ ! -d vim-flatfoot ]]
-   then git clone git://github.com/tpope/vim-flatfoot.git
-   fi
-   if [[ ! -d nerdcommenter ]]
-   then git clone git://github.com/scrooloose/nerdcommenter.git
-   fi
-   if [[ ! -d MarkLines ]]
-   then git clone git://github.com/vim-scripts/MarkLines.git
-   fi
-   if [[ ! -d bufkill.vim ]]
-   then git clone git://github.com/vim-scripts/bufkill.vim.git
-   fi
-   if [[ ! -d vim-puppet ]]
-   then git clone git://github.com/rodjek/vim-puppet.git
-   fi
-   if [[ ! -d UltiSnips ]]
-   then git clone git://github.com/vim-scripts/UltiSnips.git
+   then
+      git clone git@github.com:kurkale6ka/vimfiles.git
+      echo 'Initializing submodules: '
+      git submodule init && git submodule update
    fi
 }
 
@@ -84,97 +28,22 @@ updaterepos() {
    cd "$HOME"/config || exit 1
 
    if cd bashfiles
-   then git pull git@github.com:kurkale6ka/bashfiles.git master
+   then
+      git pull git@github.com:kurkale6ka/bashfiles.git master
+      echo
    fi
 
    if cd help
-   then git pull git@github.com:kurkale6ka/help.git master
+   then
+      git pull git@github.com:kurkale6ka/help.git master
+      echo
    fi
 
    if cd vimfiles
-   then git pull git@github.com:kurkale6ka/vimfiles.git master
-   fi
-
-   cd vimfiles/bundle || exit 1
-
-   if cd vim-blanklines
-   then git pull git@github.com:kurkale6ka/vim-blanklines.git master
-   fi
-
-   if cd vim-blockinsert
-   then git pull git@github.com:kurkale6ka/vim-blockinsert.git master
-   fi
-
-   if cd vim-quotes
-   then git pull git@github.com:kurkale6ka/vim-quotes.git master
-   fi
-
-   if cd vim-sequence
-   then git pull git@github.com:kurkale6ka/vim-sequence.git master
-   fi
-
-   if cd vim-swap
-   then git pull git@github.com:kurkale6ka/vim-swap.git master
-   fi
-
-   if cd csapprox
-   then git pull git://github.com/godlygeek/csapprox.git master
-   fi
-
-   if cd tabular
-   then git pull git://github.com/godlygeek/tabular.git master
-   fi
-
-   if cd vim-pathogen
-   then git pull git://github.com/tpope/vim-pathogen.git master
-   fi
-
-   if cd vim-abolish
-   then git pull git://github.com/tpope/vim-abolish.git master
-   fi
-
-   if cd vim-endwise
-   then git pull git://github.com/tpope/vim-endwise.git master
-   fi
-
-   if cd vim-unimpaired
-   then git pull git://github.com/tpope/vim-unimpaired.git master
-   fi
-
-   if cd vim-surround
-   then git pull git://github.com/tpope/vim-surround.git master
-   fi
-
-   if cd vim-repeat
-   then git pull git://github.com/tpope/vim-repeat.git master
-   fi
-
-   if cd vim-ragtag
-   then git pull git://github.com/tpope/vim-ragtag.git master
-   fi
-
-   if cd vim-flatfoot
-   then git pull git://github.com/tpope/vim-flatfoot.git master
-   fi
-
-   if cd nerdcommenter
-   then git pull git://github.com/scrooloose/nerdcommenter.git master
-   fi
-
-   if cd MarkLines
-   then git pull git://github.com/vim-scripts/MarkLines.git master
-   fi
-
-   if cd bufkill.vim
-   then git pull git://github.com/vim-scripts/bufkill.vim.git master
-   fi
-
-   if cd vim-puppet
-   then git pull git://github.com/rodjek/vim-puppet.git master
-   fi
-
-   if cd UltiSnips
-   then git pull git://github.com/vim-scripts/UltiSnips.git master
+   then
+      git pull git@github.com:kurkale6ka/vimfiles.git master
+      echo 'Updating submodules: '
+      git submodule update
    fi
 }
 
