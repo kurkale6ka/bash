@@ -153,6 +153,8 @@ i() {
 alias ii='curl ifconfig.me/ip'
 alias ia='curl ifconfig.me/all 2>/dev/null | column -t'
 
+alias dig='dig +noall +answer'
+
 ppfields=pid,ppid,pgid,sid,tname,tpgid,stat,euser,start_time,cmd
 pfields=pid,stat,euser,start_time,cmd
 
