@@ -107,7 +107,7 @@ mklinks() {
             "$HOME"/config/vimfiles/autoload
    fi
 
-   ln -s "${rcs[@]/#/$HOME/config/help/}"      \
+   ln -s "${rcs[@]/#/$HOME/config/help/conf/}" \
       "${vimrcs[@]/#/$HOME/config/vimfiles/}"  \
      "${bashrcs[@]/#/$HOME/config/bashfiles/}" "$HOME"
 
@@ -153,7 +153,7 @@ mkenv() {
    # Defaults:mitko timestamp_timeout=50 # min before asking for password again
 
    mkdir -p "$HOME"/backups
-   # crontab -u "$USER" "$HOME"/help/crontab.backups
+   # crontab -u "$USER" "$HOME"/help/crontab/crontab.backups
 }
 
  options=('Update repositories' 'Create repositories' 'Copy repositories')
