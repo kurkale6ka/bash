@@ -187,7 +187,7 @@ rs() {
    local home
    [[ $1 == 'root' ]] && home='' || home=home/
    rsync -v --recursive --links --stats --progress --exclude-from \
-         ~/help/.rsync_exclude ~/config/ "$2":/"$home$1"/config
+         ~/help/conf/.rsync_exclude ~/config/ "$2":/"$home$1"/config
 }
 
 # Permissions + debug + netstat, w {{{1
