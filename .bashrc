@@ -70,20 +70,16 @@ PS1() {
    [[ $TERM != linux ]] && printf '\e]2;%s\a' "$HOSTNAME"
 
    local at
-   if [[ $SSH_CLIENT || $SSH2_CLIENT ]]; then
-      if ((EUID == 0))
-      then at="\[$LightBlue\]@\[$LightRed\]"
-      else at="\[$LightBlue\]@\[$LightGreen\]"
-      fi
-   else
-      at='@'
+   if [[ $SSH_CLIENT || $SSH2_CLIENT ]]
+   then at='->'
+   else at='@'
    fi
 
    if ((EUID == 0)); then
-      PS1="\n\[$LightRed\]\u $at \H \[$LightBlue\]\w - \A, %\j\n#\[$Reset\] "
+      PS1="\n\u \[$LightRed\]$at\[$Reset\] \H \[$LightBlue\]\w\[$Reset\] - \A, %\j\n# "
       PATH=$PATH:/sbin:/usr/sbin:/usr/local/sbin:/root/bin:$HOME/bin
    else
-      PS1="\n\[$LightGreen\]\u $at \H \[$LightBlue\]\w - \A, %\j\n\\$\[$Reset\] "
+      PS1="\n\u \[$LightGreen\]$at\[$Reset\] \H \[$LightBlue\]\w\[$Reset\] - \A, %\j\n\\$ "
    fi
 }
 PS1
