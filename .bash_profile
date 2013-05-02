@@ -76,6 +76,8 @@ export LESS_TERMCAP_ue=$(tput rmul; printf %s "$Reset")
 # export LESS_TERMCAP_ZO=$(tput ssupm)
 # export LESS_TERMCAP_ZW=$(tput rsupm)
 
+export LIBVIRT_DEFAULT_URI=qemu:///system
+
 [[ -r $HOME/.bashrc ]] && . "$HOME"/.bashrc
 
 # Business specific or system dependant stuff
