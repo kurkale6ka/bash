@@ -76,10 +76,10 @@ PS1() {
    fi
 
    if ((EUID == 0)); then
-      PS1="\n\[$LightRed\]\u \[$LightBlue\]$at \[$LightRed\]\H \[$LightBlue\]\w\[$Reset\] - \A, %\j\n# "
+      PS1="\n\[$LightRed\]\u \[$LightBlue\]$at \[$LightRed\]\H \[$LightBlue\]\w\[$Reset\] \A"'$(((\j>0)) && echo , %\j)'"\n# "
       PATH=$PATH:/sbin:/usr/sbin:/usr/local/sbin:/root/bin:$HOME/bin
    else
-      PS1="\n\[$LightGreen\]\u \[$LightBlue\]$at \[$LightGreen\]\H \[$LightBlue\]\w\[$Reset\] - \A, %\j\n\\$ "
+      PS1="\n\[$LightGreen\]\u \[$LightBlue\]$at \[$LightGreen\]\H \[$LightBlue\]\w\[$Reset\] \A"'$(((\j>0)) && echo , %\j)'"\n\\$ "
    fi
 }
 PS1
