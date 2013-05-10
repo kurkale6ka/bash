@@ -58,12 +58,15 @@ LightGreen=$(printf %s "$Bold"; tput setaf 2)
 export LESS_TERMCAP_mb=$LightGreen # begin blinking
 export LESS_TERMCAP_md=$LightBlue  # begin bold
 export LESS_TERMCAP_me=$Reset      # end mode
+
 # so -> stand out - info box
 export LESS_TERMCAP_so=$(printf %s "$Bold"; tput setaf 3; tput setab 4)
 # se -> stand out end
 export LESS_TERMCAP_se=$(tput rmso; printf %s "$Reset")
+
 # export LESS_TERMCAP_so=$'\E[01;47;34m'
 # export LESS_TERMCAP_se=$'\E[0m'
+
 # us -> underline start
 export LESS_TERMCAP_us=$(printf %s%s "$Bold$Underline"; tput setaf 5)
 # ue -> underline end
