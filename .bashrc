@@ -6,6 +6,14 @@
 set   -o notify
 shopt -s cdspell extglob nocaseglob nocasematch
 
+      Bold=$(tput bold)
+ Underline=$(tput smul)
+    Purple=$(tput setaf 5)
+LightGreen=$(printf %s "$Bold"; tput setaf 2)
+ LightBlue=$(printf %s "$Bold"; tput setaf 4)
+  LightRed=$(printf %s "$Bold"; tput setaf 1)
+     Reset=$(tput sgr0)
+
 # Vim, sudoedit, sed {{{1
 if   command -v vimx; then
    my_gvim=vimx
@@ -57,8 +65,6 @@ alias sed='sed -r'
 
 # PS1 + title (\e]2; ---- \a) {{{1
 PS1() {
-   local LightRed=$(printf %s "$Bold"; tput setaf 1)
-
    unset PROMPT_COMMAND
    [[ $TERM != linux ]] && printf '\e]2;%s\a' "$HOSTNAME"
 
@@ -412,13 +418,6 @@ _type() {
    done
 }
 alias ?=_type
-
-      Bold=$(tput bold)
- Underline=$(tput smul)
-    Purple=$(tput setaf 5)
-LightGreen=$(printf %s "$Bold"; tput setaf 2)
- LightBlue=$(printf %s "$Bold"; tput setaf 4)
-     Reset=$(tput sgr0)
 
 # tput smso -> sm so -> set mode stand out (bold)
 #      smul -> sm ul -> set mode underline
