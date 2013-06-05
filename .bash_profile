@@ -31,8 +31,8 @@ export HOSTFILE=$HOME/.hosts
 shopt -s histappend
 
 export       HISTFILE=$HOME/.bash_history
-export   HISTFILESIZE=3000
-export       HISTSIZE=1000 # size allowed in memory
+export   HISTFILESIZE=11000
+export       HISTSIZE=11000 # size allowed in memory
 export    HISTCONTROL=ignorespace:ignoredups:erasedups
 export     HISTIGNORE="@(?|??|???|????)*( |$'\t'):*( |$'\t')"
 # export   HISTIGNORE='@(?|??|???|????)*([[:space:]]):*([[:space:]])'
