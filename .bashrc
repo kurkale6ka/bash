@@ -175,7 +175,7 @@ rs() {
    (($# == 2)) || { echo 'Usage: rs USER SERVER' >&2; return 1; }
    local home
    [[ $1 == 'root' ]] && home='' || home=home/
-   rsync -v --recursive --links --stats --progress --exclude-from \
+   rsync -e "ssh -l $1" -v --recursive --links --stats --progress --exclude-from \
          ~/help/conf/.rsync_exclude ~/config/ "$2":/"$home$1"/config
 }
 
