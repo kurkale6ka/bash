@@ -65,13 +65,12 @@ alias sed='sed -r'
 
 # PS1 + title (\e]2; ---- \a) {{{1
 PS1() {
-   unset PROMPT_COMMAND
-   [[ $TERM != linux ]] && printf '\e]2;%s\a' "$HOSTNAME"
-
    if ((EUID == 0)); then
+      [[ $TERM != linux ]] && export PROMPT_COMMAND='printf "\e]2;%s @ %s # %s\a" "$USER" "$HOSTNAME" "${PWD/#$HOME/~}"'
       PS1="\n\[$LightRed\]\u \[$LightBlue\]@ \[$LightRed\]\H \[$LightBlue\]\w\[$Reset\] \A"'$(((\j>0)) && echo , %\j)'"\n# "
       PATH=$PATH:/sbin:/usr/sbin:/usr/local/sbin:/root/bin:$HOME/bin
    else
+      [[ $TERM != linux ]] && export PROMPT_COMMAND='printf "\e]2;%s @ %s $ %s\a" "$USER" "$HOSTNAME" "${PWD/#$HOME/~}"'
       PS1="\n\[$LightGreen\]\u \[$LightBlue\]@ \[$LightGreen\]\H \[$LightBlue\]\w\[$Reset\] \A"'$(((\j>0)) && echo , %\j)'"\n\\$ "
    fi
 }
