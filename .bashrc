@@ -235,7 +235,7 @@ usersee() {
 ldot() {
    local ls
    if [[ ${FUNCNAME[1]} == 'l.' ]]
-   then ls=(ls -FB --color=auto)
+   then ls=(ls -FB   --color=auto)
    else ls=(ls -FBhl --color=auto --time-style='+(%d %b %Y - %H:%M)')
    fi
    (($# == 0)) && {             "${ls[@]}" -d .[^.]* ; return; }
