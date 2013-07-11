@@ -465,10 +465,21 @@ mpp() { puppet describe "$@" | mo; }
 mg() { man git-"${1:-help}"; }
 
 # Find files, text, differences. 'Cat' files, echo text {{{1
-f() { if ((1 == $#)); then find . -iname "*$1*"; else find "$@"; fi; }
-alias         lo='command locate -i'
+f() { if (($# == 1)); then find . -iname "*$1*"; else find "$@"; fi; }
+gr() {
+   if [[ -t 1 ]]
+   then command grep -IriE --color --exclude='*~' "$@"
+   else command grep -IriE         --exclude='*~' "$@"
+   fi
+}
+grr() {
+   if [[ -t 1 ]]
+   then find "${2:-.}" -type f ! -name '*~' -exec grep -IriE --color "$1" {} +
+   else find "${2:-.}" -type f ! -name '*~' -exec grep -IriE         "$1" {} +
+   fi
+}
 alias          g='command grep -iE --color'
-alias         gr="command grep -IriE --exclude='*~'"
+alias         lo='command locate -i'
 alias ldapsearch='ldapsearch -x -LLL'
 
 diff() {
