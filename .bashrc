@@ -149,8 +149,8 @@ pfields=pid,stat,euser,start_time,cmd
 p() { if (($#)); then ping -c3 "$@"; else ps fww o "$ppfields" --headers; fi; }
 
 alias pp="ps faxww o $ppfields --headers"
-alias pg="ps o $pfields --headers | head -1 && ps faxww o $pfields | command grep -v grep | command grep -iEC1 --color"
-alias ppg="ps o $ppfields --headers | head -1 && ps faxww o $ppfields | command grep -v grep | command grep -iEC1 --color"
+alias pg="ps o $pfields --headers | head -1 && ps faxww o $pfields | command grep -v grep | command grep -iEC1 --color=auto"
+alias ppg="ps o $ppfields --headers | head -1 && ps faxww o $ppfields | command grep -v grep | command grep -iEC1 --color=auto"
 alias pgrep='pgrep -l'
 
 alias  k=kill
@@ -221,26 +221,22 @@ usersee() {
             command sed -e "1i$header" -e 's/::/:-:/g' | column -ts:;;
           *)
             for user in "$@"; do
-               sudo grep -iE --color "$user" /etc/{passwd,shadow}
-               sort -k4 -t: /etc/group | column -ts: | command grep -iE --color "$user"
+               sudo grep -iE --color=auto "$user" /etc/{passwd,shadow}
+               sort -k4 -t: /etc/group | column -ts: | command grep -iE --color=auto "$user"
             done
       esac
    else
-      sudo grep -iE --color "$USER" /etc/{passwd,shadow}
-      sort -k4 -t: /etc/group | column -ts: | command grep -iE --color "$USER"
+      sudo grep -iE --color=auto "$USER" /etc/{passwd,shadow}
+      sort -k4 -t: /etc/group | column -ts: | command grep -iE --color=auto "$USER"
    fi
 }
 
 # ls {{{1
 ldot() {
    local ls
-   if [[ ${FUNCNAME[1]} == 'l.' ]]; then
-      [[ -t 1 ]] && ls=(ls -FB --color=auto) || ls=(ls -FB)
-   else
-      if [[ -t 1 ]]
-      then ls=(ls -FBhl --color=auto --time-style='+(%d %b %Y - %H:%M)')
-      else ls=(ls -FBhl              --time-style='+(%d %b %Y - %H:%M)')
-      fi
+   if [[ ${FUNCNAME[1]} == 'l.' ]]
+   then ls=(ls -FB --color=auto)
+   else ls=(ls -FBhl --color=auto --time-style='+(%d %b %Y - %H:%M)')
    fi
    (($# == 0)) && {             "${ls[@]}" -d .[^.]* ; return; }
    (($# == 1)) && { (cd "$1" && "${ls[@]}" -d .[^.]*); return; }
@@ -252,13 +248,9 @@ ldot() {
    done
 }
 .() {
-   if (($#)); then
-      source "$@"
-   else
-      if [[ -t 1 ]]
-      then command ls -FB --color=auto -d .[^.]*
-      else command ls -FB              -d .[^.]*
-      fi
+   if (($#))
+   then source "$@"
+   else command ls -FB --color=auto -d .[^.]*
    fi
 }
 
@@ -268,81 +260,28 @@ unalias l. ll. l ld la lr lk lx ll lld lla llr llk llx lm lc lu llm llc llu ln \
  l.() { ldot "$@"; }
 ll.() { ldot "$@"; }
 
-l() {
-   if [[ -t 1 ]]
-   then command ls -FB --color=auto "$@"
-   else command ls -FB              "$@"
-   fi
-}
-ll() {
-   if [[ -t 1 ]]
-   then command ls -FBhl --color=auto --time-style='+(%d %b %Y - %H:%M)' "$@"
-   else command ls -FBhl              --time-style='+(%d %b %Y - %H:%M)' "$@"
-   fi
-}
+alias   l='command ls -FB    --color=auto'
+alias  ll='command ls -FBhl  --color=auto --time-style="+(%d %b %Y - %H:%M)"'
 
-ld() {
-   if [[ -t 1 ]]
-   then command ls -FBd --color=auto "$@"
-   else command ls -FBd              "$@"
-   fi
-}
-lld() {
-   if [[ -t 1 ]]
-   then command ls -FBdhl --color=auto --time-style='+(%d %b %Y - %H:%M)' "$@"
-   else command ls -FBdhl              --time-style='+(%d %b %Y - %H:%M)' "$@"
-   fi
-}
+alias  la='command ls -FBA   --color=auto'
+alias lla='command ls -FBAhl --color=auto --time-style="+(%d %b %Y - %H:%M)"'
 
-la() {
-   if [[ -t 1 ]]
-   then command ls -FBA --color=auto "$@"
-   else command ls -FBA              "$@"
-   fi
-}
-lla() {
-   if [[ -t 1 ]]
-   then command ls -FBAhl --color=auto --time-style='+(%d %b %Y - %H:%M)' "$@"
-   else command ls -FBAhl              --time-style='+(%d %b %Y - %H:%M)' "$@"
-   fi
-}
+alias  ld='command ls -FBd   --color=auto'
+alias lld='command ls -FBdhl --color=auto --time-style="+(%d %b %Y - %H:%M)"'
 
-alias lr="tree -AC -I '*~' --noreport"
-llr() {
-   if [[ -t 1 ]]
-   then command ls -FBRhl --color=auto --time-style='+(%d %b %Y - %H:%M)' "$@"
-   else command ls -FBRhl              --time-style='+(%d %b %Y - %H:%M)' "$@"
-   fi
-}
+alias  lk='command ls -FBS   --color=auto'
+alias llk='command ls -FBShl --color=auto --time-style="+(%d %b %Y - %H:%M)"'
 
-lk() {
-   if [[ -t 1 ]]
-   then command ls -FBS --color=auto "$@"
-   else command ls -FBS              "$@"
-   fi
-}
-llk() {
-   if [[ -t 1 ]]
-   then command ls -FBShl --color=auto --time-style='+(%d %b %Y - %H:%M)' "$@"
-   else command ls -FBShl              --time-style='+(%d %b %Y - %H:%M)' "$@"
-   fi
-}
+alias  lr="tree -AC -I '*~' --noreport"
+alias llr='command ls -FBRhl --color=auto --time-style="+(%d %b %Y - %H:%M)"'
 
 lm() {
-   if [[ -t 1 ]]; then
-      echo "$Purple${Underline}Sorted by modification date:$Reset"
-      command ls -FBtr --color=auto "$@"
-   else
-      command ls -FBtr              "$@"
-   fi
+   [[ -t 1 ]] && echo "$Purple${Underline}Sorted by modification date:$Reset"
+   command ls -FBtr --color=auto "$@"
 }
 llm() {
-   if [[ -t 1 ]]; then
-      echo "$Purple${Underline}Sorted by modification date:$Reset"
-      command ls -FBhltr --color=auto --time-style='+(%d %b %Y - %H:%M)' "$@"
-   else
-      command ls -FBhltr              --time-style='+(%d %b %Y - %H:%M)' "$@"
-   fi
+   [[ -t 1 ]] && echo "$Purple${Underline}Sorted by modification date:$Reset"
+   command ls -FBhltr --color=auto --time-style='+(%d %b %Y - %H:%M)' "$@"
 }
 
 ln() {
@@ -466,19 +405,11 @@ mg() { man git-"${1:-help}"; }
 
 # Find files, text, differences. 'Cat' files, echo text {{{1
 f() { if (($# == 1)); then find . -iname "*$1*"; else find "$@"; fi; }
-gr() {
-   if [[ -t 1 ]]
-   then command grep -IriE --color --exclude='*~' "$@"
-   else command grep -IriE         --exclude='*~' "$@"
-   fi
-}
+alias gr='command grep -IriE --color=auto --exclude="*~"'
 grr() {
-   if [[ -t 1 ]]
-   then find "${2:-.}" -type f ! -name '*~' -exec grep -IriE --color "$1" {} +
-   else find "${2:-.}" -type f ! -name '*~' -exec grep -IriE         "$1" {} +
-   fi
+   find "${2:-.}" -type f ! -name '*~' -exec grep -IriE --color=auto "$1" {} +
 }
-alias          g='command grep -iE --color'
+alias          g='command grep -iE --color=auto'
 alias         lo='command locate -i'
 alias ldapsearch='ldapsearch -x -LLL'
 
@@ -717,8 +648,8 @@ s() {
    elif (($# == 1)); then
       # s ftp|21
       if [[ $1 == [[:digit:]]* ]]
-      then command grep -w -iE --color -- "$1" /etc/services
-      else command grep    -iE --color -- "$1" /etc/services
+      then command grep -w -iE --color=auto -- "$1" /etc/services
+      else command grep    -iE --color=auto -- "$1" /etc/services
       fi
    else
       history -a
@@ -728,7 +659,7 @@ s() {
       fi
    fi
 }
-alias hg='history | command grep -iE --color'
+alias hg='history | command grep -iE --color=auto'
 
 if ! command -v service >/dev/null 2>&1
 then service() { /etc/init.d/"$1" "${2:-start}"; }
