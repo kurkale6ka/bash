@@ -42,16 +42,16 @@ alias      mo="$my_vim -"
 vn() {
    (($#)) && { command vim -NX -u NONE "$@"; return; }
    local opt opts
-   opts=('vim')
-   opts+=('vim no .vimrc,    plugins')
-   opts+=('vim    .vimrc, no plugins')
-   opts+=('gvim')
-   opts+=('gvim no .vimrc,    .gvimrc,    plugins')
-   opts+=('gvim    .vimrc, no .gvimrc,    plugins')
-   opts+=('gvim no .vimrc, no .gvimrc,    plugins')
-   opts+=('gvim no .vimrc,    .gvimrc, no plugins')
-   opts+=('gvim    .vimrc, no .gvimrc, no plugins')
-   opts+=('gvim    .vimrc,    .gvimrc, no plugins')
+   opts=("${Bold}vim$Reset")
+   opts+=("vim no .vimrc,    ${LightGreen}plugins$Reset")
+   opts+=("vim    ${LightGreen}.vimrc$Reset, no plugins")
+   opts+=("${Bold}gvim$Reset")
+   opts+=("gvim no .vimrc,    ${LightGreen}.gvimrc$Reset,    ${LightGreen}plugins$Reset")
+   opts+=("gvim    ${LightGreen}.vimrc$Reset, no .gvimrc,    ${LightGreen}plugins$Reset")
+   opts+=("gvim no .vimrc, no .gvimrc,    ${LightGreen}plugins$Reset")
+   opts+=("gvim no .vimrc,    ${LightGreen}.gvimrc$Reset, no plugins")
+   opts+=("gvim    ${LightGreen}.vimrc$Reset, no .gvimrc, no plugins")
+   opts+=("gvim    ${LightGreen}.vimrc$Reset,    ${LightGreen}.gvimrc$Reset, no plugins")
    select opt in "${opts[@]}"; do
       case "$opt" in
          "${opts[0]}") command vim        -nNX  -u NONE;                 break;;
