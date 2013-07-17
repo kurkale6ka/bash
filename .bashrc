@@ -41,13 +41,29 @@ alias      mo="$my_vim -"
 
 vn() {
    (($#)) && { command vim -NX -u NONE "$@"; return; }
-   local opt opts=('bare vim' 'vim no .vimrc' 'vim no plugins' 'gvim no .gvimrc')
+   local opt opts
+   opts=('vim')
+   opts+=('vim no .vimrc,    plugins')
+   opts+=('vim    .vimrc, no plugins')
+   opts+=('gvim')
+   opts+=('gvim no .vimrc,    .gvimrc,    plugins')
+   opts+=('gvim    .vimrc, no .gvimrc,    plugins')
+   opts+=('gvim no .vimrc, no .gvimrc,    plugins')
+   opts+=('gvim no .vimrc,    .gvimrc, no plugins')
+   opts+=('gvim    .vimrc, no .gvimrc, no plugins')
+   opts+=('gvim    .vimrc,    .gvimrc, no plugins')
    select opt in "${opts[@]}"; do
       case "$opt" in
-         "${opts[0]}") command vim -nNX  -u NONE;    break;;
-         "${opts[1]}") "$my_gvim"  -nNXv -u NORC;    break;;
-         "${opts[2]}") command vim -nNX  --noplugin; break;;
-         "${opts[3]}") "$my_gvim"  -nN   -U NONE;    break;;
+         "${opts[0]}") command vim        -nNX  -u NONE;                 break;;
+         "${opts[1]}") command "$my_gvim" -nNXv -u NORC;                 break;;
+         "${opts[2]}") command vim        -nNX               --noplugin; break;;
+         "${opts[3]}") command "$my_gvim" -nN   -u NONE;                 break;;
+         "${opts[4]}") command "$my_gvim" -nN   -u /dev/null;            break;;
+         "${opts[5]}") command "$my_gvim" -nN   -U NONE;                 break;;
+         "${opts[6]}") command "$my_gvim" -nN   -u NORC;                 break;;
+         "${opts[7]}") command "$my_gvim" -nN   -u /dev/null --noplugin; break;;
+         "${opts[8]}") command "$my_gvim" -nN   -U NONE      --noplugin; break;;
+         "${opts[9]}") command "$my_gvim" -nN                --noplugin; break;;
                     *) printf '\nInvalid choice!\n' >&2
       esac
    done
