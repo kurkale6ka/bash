@@ -44,28 +44,31 @@ fi
 vn() {
    (($#)) && { command vim -NX -u NONE "$@"; return; }
    local opt opts
+   local  vimrc="${LightGreen}.vimrc$Reset"   _vimrc="$HOME"/.vimrc
+   local gvimrc="${LightGreen}.gvimrc$Reset" _gvimrc="$HOME"/.gvimrc
+   local plugin="${LightGreen}plugins$Reset"
    opts=("${Bold}vim$Reset")
-   opts+=("vim no .vimrc,    ${LightGreen}plugins$Reset")
-   opts+=("vim    ${LightGreen}.vimrc$Reset, no plugins")
+   opts+=("vim no .vimrc,    $plugin")
+   opts+=("vim    $vimrc, no plugins")
    opts+=("${Bold}gvim$Reset")
-   opts+=("gvim no .vimrc,    ${LightGreen}.gvimrc$Reset,    ${LightGreen}plugins$Reset")
-   opts+=("gvim    ${LightGreen}.vimrc$Reset, no .gvimrc,    ${LightGreen}plugins$Reset")
-   opts+=("gvim no .vimrc, no .gvimrc,    ${LightGreen}plugins$Reset")
-   opts+=("gvim no .vimrc,    ${LightGreen}.gvimrc$Reset, no plugins")
-   opts+=("gvim    ${LightGreen}.vimrc$Reset, no .gvimrc, no plugins")
-   opts+=("gvim    ${LightGreen}.vimrc$Reset,    ${LightGreen}.gvimrc$Reset, no plugins")
+   opts+=("gvim no .vimrc,    $gvimrc,    $plugin")
+   opts+=("gvim    $vimrc, no .gvimrc,    $plugin")
+   opts+=("gvim no .vimrc, no .gvimrc,    $plugin")
+   opts+=("gvim no .vimrc,    $gvimrc, no plugins")
+   opts+=("gvim    $vimrc, no .gvimrc, no plugins")
+   opts+=("gvim    $vimrc,    $gvimrc, no plugins")
    select opt in "${opts[@]}"; do
       case "$opt" in
-         "${opts[0]}") command       vim  -nNX  -u NONE                                        ; break;;
-         "${opts[1]}") command "$my_gvim" -nNXv -u NORC                                        ; break;;
-         "${opts[2]}") command       vim  -nNX  -u "$HOME"/.vimrc                    --noplugin; break;;
-         "${opts[3]}") command "$my_gvim" -nN   -u NONE                                        ; break;;
-         "${opts[4]}") command "$my_gvim" -nN   -u /dev/null      -U "$HOME"/.gvimrc           ; break;;
-         "${opts[5]}") command "$my_gvim" -nN   -u "$HOME"/.vimrc -U NONE                      ; break;;
-         "${opts[6]}") command "$my_gvim" -nN   -u NORC                                        ; break;;
-         "${opts[7]}") command "$my_gvim" -nN   -u /dev/null      -U "$HOME"/.gvimrc --noplugin; break;;
-         "${opts[8]}") command "$my_gvim" -nN   -u "$HOME"/.vimrc -U NONE            --noplugin; break;;
-         "${opts[9]}") command "$my_gvim" -nN   -u "$HOME"/.vimrc -U "$HOME"/.gvimrc --noplugin; break;;
+         "${opts[0]}") command       vim  -nNX  -u NONE                              ; break;;
+         "${opts[1]}") command "$my_gvim" -nNXv -u NORC                              ; break;;
+         "${opts[2]}") command       vim  -nNX  -u "$_vimrc"               --noplugin; break;;
+         "${opts[3]}") command "$my_gvim" -nN   -u NONE                              ; break;;
+         "${opts[4]}") command "$my_gvim" -nN   -u /dev/null -U "$_gvimrc"           ; break;;
+         "${opts[5]}") command "$my_gvim" -nN   -u "$_vimrc" -U NONE                 ; break;;
+         "${opts[6]}") command "$my_gvim" -nN   -u NORC                              ; break;;
+         "${opts[7]}") command "$my_gvim" -nN   -u /dev/null -U "$_gvimrc" --noplugin; break;;
+         "${opts[8]}") command "$my_gvim" -nN   -u "$_vimrc" -U NONE       --noplugin; break;;
+         "${opts[9]}") command "$my_gvim" -nN   -u "$_vimrc" -U "$_gvimrc" --noplugin; break;;
                     *) printf '\nInvalid choice!\n' >&2
       esac
    done
