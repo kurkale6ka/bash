@@ -6,13 +6,13 @@
 set   -o notify
 shopt -s cdspell extglob nocaseglob nocasematch
 
-      Bold=$(tput bold)
- Underline=$(tput smul)
-    Purple=$(tput setaf 5)
-LightGreen=$(printf %s "$Bold"; tput setaf 2)
- LightBlue=$(printf %s "$Bold"; tput setaf 4)
-  LightRed=$(printf %s "$Bold"; tput setaf 1)
-     Reset=$(tput sgr0)
+     Bold=$(tput bold)
+Underline=$(tput smul)
+   Purple=$(tput setaf 5)
+   LGreen=$(printf %s "$Bold"; tput setaf 2)
+    LBlue=$(printf %s "$Bold"; tput setaf 4)
+     LRed=$(printf %s "$Bold"; tput setaf 1)
+    Reset=$(tput sgr0)
 
 # Vim, sudoedit, sed {{{1
 if   command -v vimx; then
@@ -44,9 +44,9 @@ fi
 vn() {
    (($#)) && { command vim -NX -u NONE "$@"; return; }
    local opt opts
-   local  vimrc="${LightGreen}.vimrc$Reset"   _vimrc="$HOME"/.vimrc
-   local gvimrc="${LightGreen}.gvimrc$Reset" _gvimrc="$HOME"/.gvimrc
-   local plugin="${LightGreen}plugins$Reset"
+   local  vimrc="${LGreen}.vimrc$Reset"   _vimrc="$HOME"/.vimrc
+   local gvimrc="${LGreen}.gvimrc$Reset" _gvimrc="$HOME"/.gvimrc
+   local plugin="${LGreen}plugins$Reset"
    opts=("${Bold}vim$Reset")
    opts+=("vim no .vimrc,    $plugin")
    opts+=("vim    $vimrc, no plugins")
@@ -88,11 +88,11 @@ alias sed='sed -r'
 PS1() {
    if ((EUID == 0)); then
       [[ $TERM != linux ]] && export PROMPT_COMMAND='printf "\e]2;%s @ %s # %s\a" "$USER" "${HOSTNAME%%.*}" "${PWD/#$HOME/~}"'
-      PS1="\n\[$LightRed\]\u \[$LightBlue\]@ \[$LightRed\]\H \[$LightBlue\]\w\[$Reset\] \A"'$(((\j>0)) && echo , %\j)'"\n# "
+      PS1="\n\[$LRed\]\u \[$LBlue\]@ \[$LRed\]\H \[$LBlue\]\w\[$Reset\] \A"'$(((\j>0)) && echo , %\j)'"\n# "
       PATH=$PATH:/sbin:/usr/sbin:/usr/local/sbin:/root/bin:$HOME/bin
    else
       [[ $TERM != linux ]] && export PROMPT_COMMAND='printf "\e]2;%s @ %s $ %s\a" "$USER" "${HOSTNAME%%.*}" "${PWD/#$HOME/~}"'
-      PS1="\n\[$LightGreen\]\u \[$LightBlue\]@ \[$LightGreen\]\H \[$LightBlue\]\w\[$Reset\] \A"'$(((\j>0)) && echo , %\j)'"\n\\$ "
+      PS1="\n\[$LGreen\]\u \[$LBlue\]@ \[$LGreen\]\H \[$LBlue\]\w\[$Reset\] \A"'$(((\j>0)) && echo , %\j)'"\n\\$ "
    fi
 }
 PS1
@@ -376,9 +376,9 @@ alias ?=_type
 #      smul -> sm ul -> set mode underline
 #      rmso -> rm so -> remove mode stand out...
 
-export LESS_TERMCAP_mb=$LightGreen # begin blinking
-export LESS_TERMCAP_md=$LightBlue  # begin bold
-export LESS_TERMCAP_me=$Reset      # end mode
+export LESS_TERMCAP_mb=$LGreen # begin blinking
+export LESS_TERMCAP_md=$LBlue  # begin bold
+export LESS_TERMCAP_me=$Reset  # end mode
 
 # so -> stand out - info box
 export LESS_TERMCAP_so=$(printf %s "$Bold"; tput setaf 3; tput setab 4)
