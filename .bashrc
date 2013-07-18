@@ -16,28 +16,30 @@ LightGreen=$(printf %s "$Bold"; tput setaf 2)
 
 # Vim, sudoedit, sed {{{1
 if   command -v vimx; then
+    my_vim="vimx -v -u $HOME/.vimrc"
    my_gvim=vimx
-    my_vim="vimx -v"
 elif command -v gvim; then
+    my_vim="gvim -v -u $HOME/.vimrc"
    my_gvim=gvim
-    my_vim="gvim -v"
 else
-   my_gvim=vim
-    my_vim=vim
+    my_vim="vim -u $HOME/.vimrc"
 fi >/dev/null 2>&1
 
-alias       v=$my_vim
-alias      vi=$my_vim
-alias     vim=$my_vim
-alias    view="$my_vim  -R"
-alias      vd="$my_vim  -d"
-alias vimdiff="$my_vim  -d"
-alias     gvd="$my_gvim -d"
-alias      gv=$my_gvim
-alias     gvi=$my_gvim
+alias       v="command $my_vim"
+alias      vi="command $my_vim"
+alias     vim="command $my_vim"
+alias    view="command $my_vim -R"
+alias      vd="command $my_vim -d"
+alias vimdiff="command $my_vim -d"
 alias    vish='sudo vipw -s'
 alias      lv="command ls -B | $my_vim -"
-alias      mo="$my_vim -"
+alias      mo="command $my_vim -"
+
+if [[ $my_gvim ]]; then
+   alias  gv="command $my_gvim -u $HOME/.vimrc -U $HOME/.gvimrc"
+   alias gvi="command $my_gvim -u $HOME/.vimrc -U $HOME/.gvimrc"
+   alias gvd="command $my_gvim -u $HOME/.vimrc -U $HOME/.gvimrc -d"
+fi
 
 vn() {
    (($#)) && { command vim -NX -u NONE "$@"; return; }
@@ -54,16 +56,16 @@ vn() {
    opts+=("gvim    ${LightGreen}.vimrc$Reset,    ${LightGreen}.gvimrc$Reset, no plugins")
    select opt in "${opts[@]}"; do
       case "$opt" in
-         "${opts[0]}") command vim        -nNX  -u NONE;                 break;;
-         "${opts[1]}") command "$my_gvim" -nNXv -u NORC;                 break;;
-         "${opts[2]}") command vim        -nNX               --noplugin; break;;
-         "${opts[3]}") command "$my_gvim" -nN   -u NONE;                 break;;
-         "${opts[4]}") command "$my_gvim" -nN   -u /dev/null;            break;;
-         "${opts[5]}") command "$my_gvim" -nN   -U NONE;                 break;;
-         "${opts[6]}") command "$my_gvim" -nN   -u NORC;                 break;;
-         "${opts[7]}") command "$my_gvim" -nN   -u /dev/null --noplugin; break;;
-         "${opts[8]}") command "$my_gvim" -nN   -U NONE      --noplugin; break;;
-         "${opts[9]}") command "$my_gvim" -nN                --noplugin; break;;
+         "${opts[0]}") command       vim  -nNX  -u NONE                                        ; break;;
+         "${opts[1]}") command "$my_gvim" -nNXv -u NORC                                        ; break;;
+         "${opts[2]}") command       vim  -nNX  -u "$HOME"/.vimrc                    --noplugin; break;;
+         "${opts[3]}") command "$my_gvim" -nN   -u NONE                                        ; break;;
+         "${opts[4]}") command "$my_gvim" -nN   -u /dev/null      -U "$HOME"/.gvimrc           ; break;;
+         "${opts[5]}") command "$my_gvim" -nN   -u "$HOME"/.vimrc -U NONE                      ; break;;
+         "${opts[6]}") command "$my_gvim" -nN   -u NORC                                        ; break;;
+         "${opts[7]}") command "$my_gvim" -nN   -u /dev/null      -U "$HOME"/.gvimrc --noplugin; break;;
+         "${opts[8]}") command "$my_gvim" -nN   -u "$HOME"/.vimrc -U NONE            --noplugin; break;;
+         "${opts[9]}") command "$my_gvim" -nN   -u "$HOME"/.vimrc -U "$HOME"/.gvimrc --noplugin; break;;
                     *) printf '\nInvalid choice!\n' >&2
       esac
    done
