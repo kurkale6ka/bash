@@ -44,13 +44,15 @@ fi
 vn() {
    (($#)) && { command vim -NX -u NONE "$@"; return; }
    local opt opts
+   local vim="${Bold} vim$Reset"
+   local gvi="${Bold}gvim$Reset"
    local  vimrc="${LGreen}.vimrc$Reset"   _vimrc="$HOME"/.vimrc
    local gvimrc="${LGreen}.gvimrc$Reset" _gvimrc="$HOME"/.gvimrc
    local plugin="${LGreen}plugins$Reset"
-   opts=("${Bold} vim$Reset")
+    opts=("$vim no .vimrc,           , no plugins")
    opts+=(" vim no .vimrc,           ,    $plugin")
    opts+=(" vim    $vimrc,           , no plugins")
-   opts+=("${Bold}gvim$Reset")
+   opts+=("$gvi no .vimrc, no .gvimrc, no plugins")
    opts+=("gvim no .vimrc,    $gvimrc,    $plugin")
    opts+=("gvim    $vimrc, no .gvimrc,    $plugin")
    opts+=("gvim no .vimrc, no .gvimrc,    $plugin")
