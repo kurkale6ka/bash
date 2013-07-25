@@ -30,6 +30,14 @@ alias      vi="command $my_vim"
 alias     vim="command $my_vim"
 alias    view="command $my_vim -R"
 alias      vd="command $my_vim -d"
+rvd() {
+   if (($# < 2)); then
+      printf '%s\n' 'Usage:   rvd {host} {file1} [file2]' \
+                    "example: rvd qa1 ~/.bashrc '~/.bashrc'" >&2
+      return 1
+   fi
+   command $my_vim -d "$2" <(ssh "$1" cat "${3:-$2}")
+}
 alias vimdiff="command $my_vim -d"
 alias    vish='sudo vipw -s'
 alias      lv="command ls -B | $my_vim -"
