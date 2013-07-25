@@ -32,7 +32,7 @@ alias    view="command $my_vim -R"
 alias      vd="command $my_vim -d"
 rvd() {
    if (($# < 2)); then
-      printf '%s\n' 'Usage:   rvd {host} {file1} [file2]' \
+      printf '%s\n' '  Usage: rvd {host} {file1} [file2]' \
                     "example: rvd qa1 ~/.bashrc '~/.bashrc'" >&2
       return 1
    fi
