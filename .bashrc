@@ -15,33 +15,30 @@ Underline=$(tput smul)
     Reset=$(tput sgr0)
 
 # Vim, sudoedit, sed {{{1
-if   command -v vimx; then
-    my_vim="vimx -v -u $HOME/.vimrc"
-   my_gvim=vimx
-elif command -v gvim; then
-    my_vim="gvim -v -u $HOME/.vimrc"
-   my_gvim=gvim
-else
-    my_vim="vim -u $HOME/.vimrc"
-fi >/dev/null 2>&1
+alias       v="command vim -u $HOME/.vimrc"
+alias      vi="command vim -u $HOME/.vimrc"
+alias     vim="command vim -u $HOME/.vimrc"
+alias    view="command vim -u $HOME/.vimrc -R"
+alias      vd="command vim -u $HOME/.vimrc -d"
+alias vimdiff="command vim -u $HOME/.vimrc -d"
+alias    vish='sudo vipw -s'
+alias      lv="command ls -B | vim -u $HOME/.vimrc -"
+alias      mo="command $vim -u $HOME/.vimrc -"
 
-alias       v="command $my_vim"
-alias      vi="command $my_vim"
-alias     vim="command $my_vim"
-alias    view="command $my_vim -R"
-alias      vd="command $my_vim -d"
 rvd() {
    if (($# < 2)); then
       printf '%s\n' '  Usage: rvd {host} {file1} [file2]' \
                     "example: rvd qa1 ~/.bashrc '~/.bashrc'" >&2
       return 1
    fi
-   command $my_vim -d "$2" <(ssh "$1" cat "${3:-$2}")
+   command vim -u "$HOME"/.vimrc -d "$2" <(ssh "$1" cat "${3:-$2}")
 }
-alias vimdiff="command $my_vim -d"
-alias    vish='sudo vipw -s'
-alias      lv="command ls -B | $my_vim -"
-alias      mo="command $my_vim -"
+
+if   command -v vimx; then
+   my_gvim=vimx
+elif command -v gvim; then
+   my_gvim=gvim
+fi >/dev/null 2>&1
 
 if [[ $my_gvim ]]; then
    alias  gv="command $my_gvim -u $HOME/.vimrc -U $HOME/.gvimrc"
