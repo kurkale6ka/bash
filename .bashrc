@@ -433,11 +433,11 @@ mg() { man git-"${1:-help}"; }
 
 # Find files, text, differences. 'Cat' files, echo text {{{1
 f() { if (($# == 1)); then find . -iname "*$1*"; else find "$@"; fi; }
-alias gr='command grep -IriE --color=auto --exclude="*~"'
+alias gr='command grep -nIriE --color=auto --exclude="*~"'
 grr() {
-   find "${2:-.}" -type f ! -name '*~' -exec grep -IriE --color=auto "$1" {} +
+   find "${2:-.}" -type f ! -name '*~' -exec grep -nIriE --color=auto "$1" {} +
 }
-alias          g='command grep -iE --color=auto'
+alias          g='command grep -niE --color=auto'
 alias         lo='command locate -i'
 alias ldapsearch='ldapsearch -x -LLL'
 
