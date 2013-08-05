@@ -437,7 +437,7 @@ alias gr='command grep -nIriE --color=auto --exclude="*~" --exclude tags'
 grr() {
    find "${2:-.}" -type f ! -name '*~' ! -name tags -exec grep -nIriE --color=auto "$1" {} +
 }
-alias          g='command grep -niE --color=auto'
+alias          g='command grep -niE --color=auto --exclude="*~" --exclude tags'
 alias         lo='command locate -i'
 alias ldapsearch='ldapsearch -x -LLL'
 
