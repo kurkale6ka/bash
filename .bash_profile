@@ -47,6 +47,8 @@ export LC_COLLATE=C
 
 export LIBVIRT_DEFAULT_URI=qemu:///system
 
+[[ -r $HOME/.dir_colors ]] && eval "$(dircolors $HOME/.dir_colors)"
+
 [[ -r $HOME/.bashrc ]] && . "$HOME"/.bashrc
 
 # Business specific or system dependant stuff
