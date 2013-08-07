@@ -6,16 +6,8 @@
 # directory default 777 (drwxrwxrwx) => 750 (drwxr-xr-x)
 umask 022
 
-if   command -v vimx; then
-   my_vim='vimx -v'
-elif command -v gvim; then
-   my_vim='gvim -v'
-else
-   my_vim=vim
-fi >/dev/null 2>&1
-
-export EDITOR=$my_vim
-export VISUAL=$my_vim
+export EDITOR="command vim -u $HOME/.vimrc"
+export VISUAL="command vim -u $HOME/.vimrc"
 
 # -i ignore case, -M ruler, -F quit if 1 screen, -PM long prompt
 # ?test--true--:--false--. The dot ends the test
