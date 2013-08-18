@@ -724,6 +724,11 @@ gc() {
    fi
 }
 alias gp='git push origin master'
+alias gs='git status'
+alias go='git checkout '
+alias ga='git add'
+alias gb='git branch'
+alias gd='git diff'
 alias gits='(echo; for d in {bash,vim}files; do cd "$d" && { git status; echo; }; done; cd help && git status)'
 
 complete -W 'HEAD add bisect branch checkout clone commit diff fetch grep init
