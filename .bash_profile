@@ -8,6 +8,8 @@ umask 022
 
 export EDITOR="command vim -u $HOME/.vimrc"
 export VISUAL="command vim -u $HOME/.vimrc"
+export MYVIMRC="$HOME"/.vimrc
+export MYGVIMRC="$HOME"/.gvimrc
 
 # -i ignore case, -M ruler, -F quit if 1 screen, -PM long prompt
 # ?test--true--:--false--. The dot ends the test
