@@ -725,7 +725,8 @@ gc() {
 }
 alias gp='git push origin master'
 alias gs='git status'
-alias go='git checkout '
+alias go='git checkout'
+alias gm='git checkout master'
 alias ga='git add'
 alias gb='git branch'
 alias gd='git diff'
