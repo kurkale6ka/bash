@@ -6,8 +6,8 @@
 # directory default 777 (drwxrwxrwx) => 750 (drwxr-xr-x)
 umask 022
 
-export EDITOR="command vim -u $HOME/.vimrc"
-export VISUAL="command vim -u $HOME/.vimrc"
+export EDITOR="vim -u $HOME/.vimrc"
+export VISUAL="vim -u $HOME/.vimrc"
 export MYVIMRC="$HOME"/.vimrc
 export MYGVIMRC="$HOME"/.gvimrc
 
