@@ -732,6 +732,7 @@ alias gm='git checkout master'
 alias ga='git add'
 alias gb='git branch'
 alias gd='git diff'
+alias gf='git fetch'
 alias gits='(echo; for d in {bash,vim}files; do cd "$d" && { git status; echo; }; done; cd help && git status)'
 
 complete -W 'HEAD add bisect branch checkout clone commit diff fetch grep init
