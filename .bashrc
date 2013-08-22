@@ -118,11 +118,11 @@ alias   to=touch
 alias   md='command mkdir -p --'
 
 cd() {
+   # -d $CDPATH/$1 (after parsing CDPATH...)
    [[ ! $1 || -d $1 || $1 == -@(|L|P) ]] && { builtin cd "$@"; return 0; }
    while read -r dir mark; do
       [[ $mark == *$1* ]] && { builtin cd "${dir/\~/$HOME}"; return 0; }
-   done < "$HOME"/.cdmarks
-   cat "$HOME"/.cdmarks
+   done < <(cat "$HOME"/.{cdmarks,cdmarks_after})
 }
 
 pw() {
