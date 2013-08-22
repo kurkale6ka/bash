@@ -122,8 +122,10 @@ cd() {
    [[ ! $1 || -d $1 || $1 == -@(|L|P) ]] && { builtin cd "$@"; return 0; }
    while read -r dir mark; do
       [[ $mark == *$1* ]] && { builtin cd "${dir/\~/$HOME}"; return 0; }
-   done < <(cat "$HOME"/.{cdmarks,cdmarks_after})
+   done < <(cat "$HOME"/.{cdmarks,cdmarks_after} 2>/dev/null)
+   echo 'No such directory' >&2
 }
+cds() { cat "$HOME"/.{cdmarks,cdmarks_after} 2>/dev/null; }
 
 pw() {
    if (($#))
