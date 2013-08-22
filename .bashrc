@@ -118,9 +118,9 @@ alias   to=touch
 alias   md='command mkdir -p --'
 
 cd() {
-   [[ -d $1 || $1 == -@(|L|P) ]] && { builtin cd "$@"; return 0; }
+   [[ ! $1 || -d $1 || $1 == -@(|L|P) ]] && { builtin cd "$@"; return 0; }
    while read -r dir mark; do
-      [[ $mark == *$1* ]] && { builtin cd "$dir"; return 0; }
+      [[ $mark == *$1* ]] && { builtin cd "${dir/\~/$HOME}"; return 0; }
    done < "$HOME"/.cdmarks
    cat "$HOME"/.cdmarks
 }
