@@ -95,11 +95,11 @@ alias sed='sed -r'
 PS1() {
    if ((EUID == 0)); then
       [[ $TERM != linux ]] && export PROMPT_COMMAND='printf "\e]2;%s @ %s # %s\a" "$USER" "${HOSTNAME%%.*}" "${PWD/#$HOME/~}"'
-      PS1="\n\[$LRed\]\u \[$LBlue\]@ \[$LRed\]\H \[$LBlue\]\w\[$Reset\] \A"'$(((\j>0)) && echo , %\j)'"\n# "
+      PS1="\n\[$LRed\]\u \[$LBlue\]@ \[$LRed\]\h \[$LBlue\]\w\[$Reset\] \A"'$(((\j>0)) && echo , %\j)'"\n# "
       PATH=$PATH:/sbin:/usr/sbin:/usr/local/sbin:/root/bin:$HOME/bin
    else
       [[ $TERM != linux ]] && export PROMPT_COMMAND='printf "\e]2;%s @ %s $ %s\a" "$USER" "${HOSTNAME%%.*}" "${PWD/#$HOME/~}"'
-      PS1="\n\[$LGreen\]\u \[$LBlue\]@ \[$LGreen\]\H \[$LBlue\]\w\[$Reset\] \A"'$(((\j>0)) && echo , %\j)'"\n\\$ "
+      PS1="\n\[$LGreen\]\u \[$LBlue\]@ \[$LGreen\]\h \[$LBlue\]\w\[$Reset\] \A"'$(((\j>0)) && echo , %\j)'"\n\\$ "
    fi
 }
 PS1
