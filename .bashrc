@@ -749,7 +749,7 @@ alias ga='git add'
 alias gb='git branch'
 alias gd='git diff'
 alias gf='git fetch'
-alias gits='(echo; for d in {bash,vim}files; do cd "$d" && { git status; echo; }; done; cd help && git status)'
+alias gsa='(echo; for d in {bash,vim}files; do cd "$d" && { git status; echo; }; done; cd help && git status)'
 
 complete -W 'HEAD add bisect branch checkout clone commit diff fetch grep init
 log merge mv pull push rebase revert reset rm show status tag' git
