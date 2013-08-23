@@ -131,7 +131,7 @@ cd() {
    echo "${folder:-$1}: no such directory" >&2
    return 1
 }
-cds() { cat "$HOME"/.{cdmarks,cdmarks_after} 2>/dev/null; }
+cds() { cat "$HOME"/.{cdmarks,cdmarks_after} 2>/dev/null | column -t; }
 
 pw() {
    if (($#))
