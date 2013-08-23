@@ -118,10 +118,44 @@ alias   to=touch
 alias   md='command mkdir -p --'
 
 cd() {
-   # \grep 'cd\s\+' ~/.bash_history | sed 's:/$::' | sed "s:$HOME:~:" | sort | uniq -c | sort -n
-   builtin cd "$@" 2>/dev/null && return 0
-   while read -r dir mark; do
-      if [[ $mark == *${@:(-1)}* ]]; then
+   local directory="${@:(-1)}"
+   # Won't be registering cd /var/loc...
+   if builtin cd "$@" 2>/dev/null; then
+      if [[ -d $directory ]]; then
+         local found=0
+         local line=0
+         while read -r nb mark; do
+            ((line++))
+            if [[ $mark == *$directory* ]]; then
+               found=1
+               local new_nb="$nb"
+               local new_mark="$((++new_nb)) $mark"
+               break
+            fi
+         done < "$HOME"/.cdmarks
+         if ((found)); then
+# Path without @s
+ed -s "$HOME"/.cdmarks << MARKS
+H
+${line}s@.*@$new_mark@
+wq
+MARKS
+      # >(sort -o file) would probably work, since it won't immediately trash the file like a redirect would
+      sort -rn "$HOME"/.cdmarks > /tmp/.cdmarks && mv /tmp/.cdmarks "$HOME"/.cdmarks
+         else
+ed -s "$HOME"/.cdmarks << MARKS
+H
+a
+1 $directory
+.
+wq
+MARKS
+         fi
+      fi
+      return 0
+   fi
+   while read -r nb dir mark; do
+      if [[ $dir == *$directory* || $mark == *$directory* ]]; then
          if builtin cd "${@:1:((${#@}-1))}" "${dir/\~/$HOME}" 2>/dev/null
          then return 0
          else local folder="$dir"
