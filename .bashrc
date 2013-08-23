@@ -328,6 +328,18 @@ llm() {
    command ls -FBhltr --color=auto --time-style='+(%d %b %Y - %H:%M)' "$@"
 }
 
+_lx() {
+   local exes=()
+   for x in *; do [[ -x $x ]] && exes+=("$x"); done
+   if [[ ${FUNCNAME[1]} == 'lx' ]]; then
+      command ls -FB   --color=auto                                    "${exes[@]}"
+   else
+      command ls -FBhl --color=auto --time-style='+(%d %b %Y - %H:%M)' "${exes[@]}"
+   fi
+}
+ lx() { _lx "$@"; }
+llx() { _lx "$@"; }
+
 ln() {
    if (($#)); then
       command ln "$@"
