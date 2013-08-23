@@ -118,19 +118,14 @@ alias   to=touch
 alias   md='command mkdir -p --'
 
 cd() {
-   [[ ! $1 || -d $1 || $1 == -@(|L|P) ]] && { builtin cd "$@"; return 0; }
-   local paths
-   IFS=: read -ra paths <<< "$CDPATH"
-   for p in "${paths[@]}"; do
-      if [[ -d $p/$1 ]]; then
-         echo "$p/$1"
-         builtin cd "$p/$1"; return 0
-      fi
-   done
+   builtin cd "$@" 2>/dev/null && return 0
    while read -r dir mark; do
-      [[ $mark == *$1* ]] && { builtin cd "${dir/\~/$HOME}"; return 0; }
+      if [[ $mark == *${@:(-1)}* ]]; then
+         builtin cd "${@:1:((${#@}-1))}" "${dir/\~/$HOME}" 2>/dev/null && return 0
+      fi
    done < <(cat "$HOME"/.{cdmarks,cdmarks_after} 2>/dev/null)
    echo 'No such directory' >&2
+   return 1
 }
 cds() { cat "$HOME"/.{cdmarks,cdmarks_after} 2>/dev/null; }
 
