@@ -118,6 +118,7 @@ alias   to=touch
 alias   md='command mkdir -p --'
 
 cd() {
+   # \grep 'cd\s\+' ~/.bash_history | sed 's:/$::' | sed "s:$HOME:~:" | sort | uniq -c | sort -n
    builtin cd "$@" 2>/dev/null && return 0
    while read -r dir mark; do
       if [[ $mark == *${@:(-1)}* ]]; then
