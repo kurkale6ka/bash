@@ -122,8 +122,10 @@ cd() {
    builtin cd "$@" 2>/dev/null && return 0
    while read -r dir mark; do
       if [[ $mark == *${@:(-1)}* ]]; then
-         local folder="$dir"
-         builtin cd "${@:1:((${#@}-1))}" "${dir/\~/$HOME}" 2>/dev/null && return 0
+         if builtin cd "${@:1:((${#@}-1))}" "${dir/\~/$HOME}" 2>/dev/null
+         then return 0
+         else local folder="$dir"
+         fi
       fi
    done < <(cat "$HOME"/.cdmarks "$HOME"/.cdmarks_after 2>/dev/null)
    echo "${folder:-$1}: no such directory" >&2
