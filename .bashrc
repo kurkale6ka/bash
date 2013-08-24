@@ -117,53 +117,83 @@ alias   ..='cd ..'
 alias   to=touch
 alias   md='command mkdir -p --'
 
+# $HOME is never registered
+# Never use ~ when entering bookmarks in .cdmarks,
+#       neither terminate paths with a /
+# TODO: cd keyword1 keyword2 (for refined search)
+#       Completion
 cd() {
+   # Source in order not to change this globally
+   shopt -u nocasematch
+   local current="$PWD"
    local directory="${@:(-1)}"
-   # Won't be registering cd /var/loc...
-   if builtin cd "$@" 2>/dev/null; then
-      if [[ -d $directory ]]; then
-         local found=0
-         local line=0
-         while read -r nb mark; do
-            ((line++))
-            if [[ $mark == *$directory* ]]; then
-               found=1
-               local new_nb="$nb"
-               local new_mark="$((++new_nb)) $mark"
+   [[ $current == $directory ]] && return 0
+   local success=0
+   # cd, cd options only, cd /boot/grub/, cd bookmark
+   if builtin cd "$@" 2>/tmp/cderror; then
+      # For cd - and directory typo (ex: /var/loc Vs log) cases
+      # Also cd /etc/X11/ will not create a different entry than /etc/X11
+      directory="$PWD"
+      success=1
+   # cd wrong options
+   # cd (wrong) options bookmark
+   # cd               bookmark
+   # Exclude cd wrong options
+   elif [[ $directory != '-'* ]]; then
+      # Shrink file size to 100 lines
+      if (( $(wc -l $HOME/.cdmarks | cut -d' ' -f1) > 100 )); then
+         ed -s "$HOME"/.cdmarks <<< $'H\n101,$d\nwq\n'
+      fi
+      while read -r nb dir mark; do
+         if [[ $mark == *$directory* || $dir == *$directory* ]]; then
+            # cd options dir
+            if builtin cd "${@:1:((${#@}-1))}" "$dir" 2>/tmp/cderror; then
+               success=1
+               # We need the directory corresponding to the bookmark in order to
+               # update ~/.cdmarks
+               directory="$dir"
                break
             fi
-         done < "$HOME"/.cdmarks
-         if ((found)); then
-# Path without @s
-ed -s "$HOME"/.cdmarks << MARKS
-H
-${line}s@.*@$new_mark@
-wq
-MARKS
-      # >(sort -o file) would probably work, since it won't immediately trash the file like a redirect would
-      sort -rn "$HOME"/.cdmarks > /tmp/.cdmarks && mv /tmp/.cdmarks "$HOME"/.cdmarks
-         else
-ed -s "$HOME"/.cdmarks << MARKS
-H
-a
-1 $directory
-.
-wq
-MARKS
          fi
-      fi
-      return 0
+      done < <(cat "$HOME"/.cdmarks "$HOME"/.cdmarks_after 2>/dev/null)
    fi
-   while read -r nb dir mark; do
-      if [[ $dir == *$directory* || $mark == *$directory* ]]; then
-         if builtin cd "${@:1:((${#@}-1))}" "${dir/\~/$HOME}" 2>/dev/null
-         then return 0
-         else local folder="$dir"
-         fi
+   # Exclude HOME directory
+   if ((success)) && [[ $directory != $HOME && $directory != $current ]]; then
+      # Shrink file size to 100 lines
+      if (( $(wc -l $HOME/.cdmarks | cut -d' ' -f1) > 100 )); then
+         ed -s "$HOME"/.cdmarks <<< $'H\n101,$d\nwq\n'
       fi
-   done < <(cat "$HOME"/.cdmarks "$HOME"/.cdmarks_after 2>/dev/null)
-   echo "${folder:-$1}: no such directory" >&2
-   return 1
+      local found=0
+      local line=0
+      while read -r nb dir mark; do
+         ((line++))
+         if [[ $dir == $directory ]]; then
+            found=1
+            local new_nb="$nb"
+            local new_entry="$((++new_nb)) $dir $mark"
+            break
+         fi
+      done < "$HOME"/.cdmarks
+      # Increase weight of the directory
+      if ((found)); then
+         # Path must not contain any @s !
+         # $line s @ .* @ $new_entry @
+         printf -v new_dir_weight 'H\n%us@.*@%s@\nwq\n' "$line" "$new_entry"
+         ed -s "$HOME"/.cdmarks <<< "$new_dir_weight"
+         sort -rn -o "$HOME"/.cdmarks "$HOME"/.cdmarks
+      # The directory is a new entry
+      else
+         # a 1 $directory .
+         printf -v new_dir 'H\na\n1 %s\n.\nwq\n' "$directory"
+         ed -s "$HOME"/.cdmarks <<< "$new_dir"
+      fi
+   fi
+   if ((success)); then
+      return 0
+   else
+      cat /tmp/cderror >&2
+      return 1
+   fi
 }
 cds() { cat "$HOME"/.{cdmarks,cdmarks_after} 2>/dev/null | column -t; }
 
