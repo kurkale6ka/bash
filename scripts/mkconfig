@@ -85,7 +85,7 @@ cprepos() {
 }
 
  rcdirs=({bash,vim}files help)
-    rcs=(.cdmarks.skel .dir_colors .gitignore .my.cnf .{curl,input,irb,screen,top}rc)
+    rcs=(.dir_colors .gitignore .my.cnf .{curl,input,irb,screen,top}rc)
  vimrcs=(.{,g}vimrc)
 bashrcs=(.profile .bash_{profile,login,logout} .bashrc .logout)
  bashxs=(colors em mkconfig madd-host mssh)
@@ -109,18 +109,20 @@ mklinks() {
 
    ln -s "${rcs[@]/#/$HOME/config/help/conf/}" \
       "${vimrcs[@]/#/$HOME/config/vimfiles/}"  \
-     "${bashrcs[@]/#/$HOME/config/bashfiles/}" "$HOME"
+     "${bashrcs[@]/#/$HOME/config/bashfiles/}" \
+     "$HOME"/config/bashfiles/scripts/cd/.cdmarks.skel "$HOME"
 
    mkdir -p "$HOME"/bin
    if [[ -d $HOME/bin ]]; then
       ln -s "${bashxs[@]/#/$HOME/config/bashfiles/scripts/}" \
-            "$HOME"/config/vimfiles/scripts/vc               "$HOME"/bin
+            "$HOME"/config/vimfiles/scripts/vc "$HOME"/bin
    fi
 }
 
 rmlinks() {
    command \
       rm "$HOME"/{.vim,config/vimfiles/autoload/pathogen.vim,bin/vc} \
+         "$HOME"/config/bashfiles/scripts/cd/.cdmarks.skel           \
                   "${rcdirs[@]/#/$HOME/}"                            \
                      "${rcs[@]/#/$HOME/}"                            \
                   "${vimrcs[@]/#/$HOME/}"                            \
