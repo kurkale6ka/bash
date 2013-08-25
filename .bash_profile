@@ -28,6 +28,7 @@ export       HISTFILE=$HOME/.bash_history
 export   HISTFILESIZE=11000
 export       HISTSIZE=11000 # size allowed in memory
 export    HISTCONTROL=ignorespace:ignoredups:erasedups
+# TODO: exclude cd ??
 export     HISTIGNORE="@(?|??|???|????)*( |$'\t'):*( |$'\t')"
 # export   HISTIGNORE='@(?|??|???|????)*([[:space:]]):*([[:space:]])'
 export HISTTIMEFORMAT='<%d %b %H:%M>  '
