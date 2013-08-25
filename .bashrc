@@ -117,21 +117,7 @@ alias   ..='cd ..'
 alias   to=touch
 alias   md='command mkdir -p --'
 
-cd() {
-   # \grep 'cd\s\+' ~/.bash_history | sed 's:/$::' | sed "s:$HOME:~:" | sort | uniq -c | sort -n
-   builtin cd "$@" 2>/dev/null && return 0
-   while read -r dir mark; do
-      if [[ $mark == *${@:(-1)}* ]]; then
-         if builtin cd "${@:1:((${#@}-1))}" "${dir/\~/$HOME}" 2>/dev/null
-         then return 0
-         else local folder="$dir"
-         fi
-      fi
-   done < <(cat "$HOME"/.cdmarks "$HOME"/.cdmarks_after 2>/dev/null)
-   echo "${folder:-$1}: no such directory" >&2
-   return 1
-}
-cds() { cat "$HOME"/.{cdmarks,cdmarks_after} 2>/dev/null | column -t; }
+source scripts/cd/cd
 
 pw() {
    if (($#))
