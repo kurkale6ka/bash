@@ -85,7 +85,7 @@ cprepos() {
 }
 
  rcdirs=({bash,vim}files help)
-    rcs=(.cdmarks .dir_colors .gitignore .my.cnf .{curl,input,irb,screen,top}rc)
+    rcs=(.cdmarks.skel .dir_colors .gitignore .my.cnf .{curl,input,irb,screen,top}rc)
  vimrcs=(.{,g}vimrc)
 bashrcs=(.profile .bash_{profile,login,logout} .bashrc .logout)
  bashxs=(colors em mkconfig madd-host mssh)
