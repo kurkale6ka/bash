@@ -1,0 +1,3 @@
+[submodule "scripts/cd"]
+	path = scripts/cd
+	url = git@github.com:kurkale6ka/cd.git
