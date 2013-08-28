@@ -4,7 +4,7 @@
 [[ -t 1 ]] || return
 
 set   -o notify
-shopt -s cdspell extglob nocaseglob nocasematch
+shopt -s cdspell extglob nocaseglob nocasematch autocd
 
      Bold=$(tput bold)
 Underline=$(tput smul)
