@@ -117,7 +117,7 @@ alias   ..='cd ..'
 alias   to=touch
 alias   md='command mkdir -p --'
 
-source "$HOME"/config/bashfiles/scripts/cd/cd
+source "$HOME"/config/bashfiles/scripts/cd/cd.sh
 
 pw() {
    if (($#))
