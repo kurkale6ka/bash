@@ -118,6 +118,7 @@ alias   to=touch
 alias   md='command mkdir -p --'
 
 source "$HOME"/config/bashfiles/scripts/cd/cd.sh
+c() { cd_bookmarks "$@"; }
 
 pw() {
    if (($#))
@@ -467,7 +468,7 @@ alias _=combine
 
 alias pf=printf
  e() { local status=$?; (($#)) && echo "$@" || echo "$status"; }
- c() { if [[ -t 1 ]]; then command cat -n -- "$@"; else command cat "$@"; fi }
+cn() { if [[ -t 1 ]]; then command cat -n -- "$@"; else command cat "$@"; fi; }
  n() { command sed -n "$1{p;q}" -- "$2"; }
 sq() { command grep -v '^[[:space:]]*#\|^[[:space:]]*$' -- "$@"; }
  h() { if (($#)) || [[ ! -t 0 ]]; then head "$@"; else history; fi; }
