@@ -118,7 +118,6 @@ alias   to=touch
 alias   md='command mkdir -p --'
 
 source "$HOME"/config/bashfiles/scripts/cd/cd.sh
-c() { cd_bookmarks "$@"; }
 
 pw() {
    if (($#))
