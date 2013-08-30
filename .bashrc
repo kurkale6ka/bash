@@ -106,14 +106,14 @@ PS1
 PS2='↪ '; export PS3='Choose an entry: '; PS4='+ '
 
 # cd, mkdir | touch, rmdir, pwd {{{1
-alias  cd-='cd -'
-alias -- -='cd -'
-alias    1='cd ..'
-alias    2='cd ../..'
-alias    3='cd ../../..'
-alias    4='cd ../../../..'
-alias cd..='cd ..'
-alias   ..='cd ..'
+alias  cd-='c -'
+alias -- -='c -'
+alias    1='c ..'
+alias    2='c ../..'
+alias    3='c ../../..'
+alias    4='c ../../../..'
+alias cd..='c ..'
+alias   ..='c ..'
 alias   to=touch
 alias   md='command mkdir -p --'
 
