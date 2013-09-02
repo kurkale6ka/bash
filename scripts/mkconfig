@@ -23,20 +23,21 @@ mkrepos() {
    fi
 
    cd "$HOME"/config &&
-   ctags -R --langmap=vim:+.vimrc,sh:+.bashrc.bash_profile \
-   --exclude=bundle --exclude=pathogen.vim \
-   "$HOME"/config/bashfiles/scripts \
-   "$HOME"/config/bashfiles/.bashrc \
-   "$HOME"/config/vimfiles \
-   "$HOME"/config/vimfiles/bundle/blanklines \
-   "$HOME"/config/vimfiles/bundle/blockinsert \
-   "$HOME"/config/vimfiles/bundle/desertEx \
-   "$HOME"/config/vimfiles/bundle/pairs \
-   "$HOME"/config/vimfiles/bundle/pgn \
-   "$HOME"/config/vimfiles/bundle/sequence \
-   "$HOME"/config/vimfiles/bundle/swap \
-   "$HOME"/config/vimfiles/bundle/vsearch \
+   ctags -R --langmap=vim:+.vimrc,sh:+.bashrc.bash_profile                       \
+   --exclude=*~ --exclude=.*~ --exclude=bundle --exclude=colors --exclude=keymap \
+   --exclude=pathogen.vim                                                        \
+   "$HOME"/config/bashfiles/scripts                                              \
+   "$HOME"/config/bashfiles/.bashrc                                              \
+   "$HOME"/config/vimfiles                                                       \
+   "$HOME"/config/vimfiles/bundle/blanklines                                     \
+   "$HOME"/config/vimfiles/bundle/blockinsert                                    \
+   "$HOME"/config/vimfiles/bundle/pairs                                          \
+   "$HOME"/config/vimfiles/bundle/sequence                                       \
+   "$HOME"/config/vimfiles/bundle/swap                                           \
+   "$HOME"/config/vimfiles/bundle/vsearch                                        \
    "$HOME"/config/help
+   # "$HOME"/config/vimfiles/bundle/desertEx
+   # "$HOME"/config/vimfiles/bundle/pgn
 }
 
 updaterepos() {
