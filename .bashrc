@@ -330,13 +330,10 @@ ln() {
    if (($#)); then
       command ln "$@"
    else
-      local file
-      for file in * .*; do
-         if [[ -h $file ]]; then
-            command ls -FBAhl --color=auto --time-style="+(%d %b %Y - %H:%M)" \
-                       -- "$file"
-         fi
-      done
+      if (( $(find . -maxdepth 1 -type l -print -quit | wc -l) == 1 )); then
+         find . -maxdepth 1 -type l -printf '%P\0' |
+         xargs -0 'ls' -FBAhl --color=auto --time-style="+(%d %b %Y - %H:%M)" --
+      fi
    fi
 }
 
