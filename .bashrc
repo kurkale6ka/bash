@@ -115,7 +115,6 @@ alias    4='c ../../../..'
 alias cd..='c ..'
 alias   ..='c ..'
 alias   to=touch
-alias   md='command mkdir -p --'
 
 source "$HOME"/config/bashfiles/scripts/cd/cd.sh
 
@@ -134,6 +133,7 @@ rd() {
    read -r
    [[ $REPLY == @(y|yes) ]] && command rm -rf -- "$@"
 }
+alias md='command mkdir -p --'
 complete -A directory mkdir md rmdir rd
 
 # Completion of user names
