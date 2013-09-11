@@ -127,16 +127,12 @@ pw() {
 }
 
 rd() {
-   local arg
-   for arg in "$@"; do
-      if [[ -d $arg ]]; then
-         if read -rp "rd: remove directory '$arg'? "
-         then [[ $REPLY == @(y|yes) ]] && command rm -rf -- "$arg"
-         fi
-      else
-         echo "$arg is not a directory" >&2
-      fi
-   done
+   echo -n 'rd: remove directories '
+   local warning
+   printf -v warning "'%s', " "$@"
+   warning="${warning%??}"; echo -n "$warning? "
+   read -r
+   [[ $REPLY == @(y|yes) ]] && command rm -rf -- "$@"
 }
 complete -A directory mkdir md rmdir rd
 
