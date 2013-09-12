@@ -1,13 +1,13 @@
 #! /usr/bin/env bash
 
 mkrepos() {
-
    mkdir -p "$HOME"/config
    cd       "$HOME"/config || exit 1
 
    if [[ ! -d bashfiles ]]
    then
       git clone git@github.com:kurkale6ka/bashfiles.git
+      git submodule init && git submodule update
       echo
    fi
    if [[ ! -d help ]]
@@ -18,10 +18,10 @@ mkrepos() {
    if [[ ! -d vimfiles ]]
    then
       git clone git@github.com:kurkale6ka/vimfiles.git
-      echo 'Initializing submodules: '
       git submodule init && git submodule update
    fi
 
+   # tags generation
    cd "$HOME"/config &&
    ctags -R --langmap=vim:+.vimrc,sh:+.bashrc.bash_profile                       \
    --exclude=*~ --exclude=.*~ --exclude=bundle --exclude=colors --exclude=keymap \
@@ -41,12 +41,12 @@ mkrepos() {
 }
 
 updaterepos() {
-
    cd "$HOME"/config || exit 1
 
    if cd bashfiles
    then
       git pull git@github.com:kurkale6ka/bashfiles.git master
+      git submodule update
       echo
    fi
 
@@ -59,7 +59,6 @@ updaterepos() {
    if cd vimfiles
    then
       git pull git@github.com:kurkale6ka/vimfiles.git master
-      echo 'Updating submodules: '
       git submodule update
    fi
 }
@@ -108,7 +107,6 @@ bashrcs=(.profile .bash_{profile,login,logout} .bashrc .logout)
  bashxs=(colors em mkconfig madd-host mssh)
 
 mklinks() {
-
    # Same as in ${parameter#word to remove} or ${parameter%word to remove},
    # # <=> \< and % <=> \>, so ${rcdir/#/$HOME/config/} means replace the
    # beginning of rcdir with $HOME/config/
