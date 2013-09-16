@@ -1,75 +1,73 @@
 #! /usr/bin/env bash
 
 mkrepos() {
-   mkdir -p "$HOME"/config
-   cd       "$HOME"/config || exit 1
+   mkdir -p "$HOME"/me
+   cd       "$HOME"/me || exit 1
 
-   if [[ ! -d bashfiles ]]
-   then
-      git clone git@github.com:kurkale6ka/bashfiles.git
-      git submodule init && git submodule update
+   if [[ ! -d bash ]]; then
+      git clone git@github.com:kurkale6ka/bash.git
+      if cd bash; then
+         git submodule init && git submodule update
+      fi
       echo
    fi
-   if [[ ! -d help ]]
-   then
-      git clone git@github.com:kurkale6ka/help.git
+   if [[ ! -d rc ]]; then
+      git clone git@github.com:kurkale6ka/rc.git
       echo
    fi
-   if [[ ! -d vimfiles ]]
-   then
-      git clone git@github.com:kurkale6ka/vimfiles.git
-      git submodule init && git submodule update
+   if [[ ! -d vim ]]; then
+      git clone git@github.com:kurkale6ka/vim.git
+      if cd vim; then
+         git submodule init && git submodule update
+      fi
    fi
 
    # tags generation
-   cd "$HOME"/config &&
+   cd "$HOME"/me &&
    ctags -R --langmap=vim:+.vimrc,sh:+.bashrc.bash_profile                       \
    --exclude=*~ --exclude=.*~ --exclude=bundle --exclude=colors --exclude=keymap \
    --exclude=pathogen.vim                                                        \
-   "$HOME"/config/bashfiles/scripts                                              \
-   "$HOME"/config/bashfiles/.bashrc                                              \
-   "$HOME"/config/vimfiles                                                       \
-   "$HOME"/config/vimfiles/bundle/blanklines                                     \
-   "$HOME"/config/vimfiles/bundle/blockinsert                                    \
-   "$HOME"/config/vimfiles/bundle/pairs                                          \
-   "$HOME"/config/vimfiles/bundle/sequence                                       \
-   "$HOME"/config/vimfiles/bundle/swap                                           \
-   "$HOME"/config/vimfiles/bundle/vsearch                                        \
-   "$HOME"/config/help
-   # "$HOME"/config/vimfiles/bundle/desertEx
-   # "$HOME"/config/vimfiles/bundle/pgn
+   "$HOME"/me/bash/scripts                                                       \
+   "$HOME"/me/bash/.bashrc                                                       \
+   "$HOME"/me/vim                                                                \
+   "$HOME"/me/vim/bundle/blanklines                                              \
+   "$HOME"/me/vim/bundle/blockinsert                                             \
+   "$HOME"/me/vim/bundle/pairs                                                   \
+   "$HOME"/me/vim/bundle/sequence                                                \
+   "$HOME"/me/vim/bundle/swap                                                    \
+   "$HOME"/me/vim/bundle/vsearch                                                 \
+   "$HOME"/me/rc
+   # "$HOME"/me/vim/bundle/desertEx
+   # "$HOME"/me/vim/bundle/pgn
 }
 
 updaterepos() {
-   cd "$HOME"/config || exit 1
+   cd "$HOME"/me || exit 1
 
-   if cd bashfiles
-   then
-      git pull git@github.com:kurkale6ka/bashfiles.git master
+   if cd bash; then
+      git pull git@github.com:kurkale6ka/bash.git master
       git submodule update
       echo
    fi
 
-   if cd help
-   then
-      git pull git@github.com:kurkale6ka/help.git master
+   if cd rc; then
+      git pull git@github.com:kurkale6ka/rc.git master
       echo
    fi
 
-   if cd vimfiles
-   then
-      git pull git@github.com:kurkale6ka/vimfiles.git master
+   if cd vim; then
+      git pull git@github.com:kurkale6ka/vim.git master
       git submodule update
    fi
 }
 
 cprepos() {
-   wget --no-check-certificate                               \
-      https://github.com/kurkale6ka/bashfiles/tarball/master \
-      https://github.com/kurkale6ka/help/tarball/master
+   wget --no-check-certificate                          \
+      https://github.com/kurkale6ka/bash/tarball/master \
+      https://github.com/kurkale6ka/rc/tarball/master
 
    if wget --no-check-certificate \
-      https://github.com/kurkale6ka/vimfiles/tarball/master
+      https://github.com/kurkale6ka/vim/tarball/master
    then
       wget --no-check-certificate                                     \
          https://github.com/kurkale6ka/vim-blanklines/tarball/master  \
@@ -100,47 +98,47 @@ cprepos() {
    done
 }
 
- rcdirs=({bash,vim}files help)
+ rcdirs=({bash,vim}files rc)
     rcs=(.dir_colors .gitignore .my.cnf .{curl,input,irb,screen,top}rc)
  vimrcs=(.{,g}vimrc)
 bashrcs=(.profile .bash_{profile,login,logout} .bashrc .logout)
- bashxs=(colors em mkconfig madd-host mssh)
+ bashxs=(colors em mkme madd-host mssh)
 
 mklinks() {
    # Same as in ${parameter#word to remove} or ${parameter%word to remove},
-   # # <=> \< and % <=> \>, so ${rcdir/#/$HOME/config/} means replace the
-   # beginning of rcdir with $HOME/config/
+   # # <=> \< and % <=> \>, so ${rcdir/#/$HOME/me/} means replace the
+   # beginning of rcdir with $HOME/me/
    local rcdir
    for rcdir in "${rcdirs[@]}"
-   do ln -sT "${rcdir/#/$HOME/config/}" "${rcdir/#/$HOME/}"
+   do ln -sT "${rcdir/#/$HOME/me/}" "${rcdir/#/$HOME/}"
    done
 
-   ln -sT "$HOME"/config/vimfiles "$HOME"/.vim
+   ln -sT "$HOME"/me/vim "$HOME"/.vim
 
    if ((! $#)); then
-      ln -s "$HOME"/config/vimfiles/bundle/pathogen/autoload/pathogen.vim \
-            "$HOME"/config/vimfiles/autoload
+      ln -s "$HOME"/me/vim/bundle/pathogen/autoload/pathogen.vim \
+            "$HOME"/me/vim/autoload
    fi
 
-   ln -s "${rcs[@]/#/$HOME/config/help/conf/}" \
-      "${vimrcs[@]/#/$HOME/config/vimfiles/}"  \
-     "${bashrcs[@]/#/$HOME/config/bashfiles/}" \
-     "$HOME"/config/bashfiles/scripts/cd/.cdmarks.skel "$HOME"
+   ln -s "${rcs[@]/#/$HOME/me/rc/}"   \
+      "${vimrcs[@]/#/$HOME/me/vim/}"  \
+     "${bashrcs[@]/#/$HOME/me/bash/}" \
+     "$HOME"/me/bash/scripts/cd/.cdmarks.skel "$HOME"
 
    mkdir -p "$HOME"/bin
    if [[ -d $HOME/bin ]]; then
-      ln -s "${bashxs[@]/#/$HOME/config/bashfiles/scripts/}" \
-            "$HOME"/config/vimfiles/scripts/vc "$HOME"/bin
+      ln -s "${bashxs[@]/#/$HOME/me/bash/scripts/}" \
+            "$HOME"/me/vim/scripts/vc "$HOME"/bin
    fi
 }
 
 rmlinks() {
    command \
-      rm "$HOME"/{.cdmarks.skel,.vim,config/vimfiles/autoload/pathogen.vim,bin/vc} \
-                  "${rcdirs[@]/#/$HOME/}"                                          \
-                     "${rcs[@]/#/$HOME/}"                                          \
-                  "${vimrcs[@]/#/$HOME/}"                                          \
-                 "${bashrcs[@]/#/$HOME/}"                                          \
+      rm "$HOME"/{.cdmarks.skel,.vim,me/vim/autoload/pathogen.vim,bin/vc} \
+                  "${rcdirs[@]/#/$HOME/}"                                 \
+                     "${rcs[@]/#/$HOME/}"                                 \
+                  "${vimrcs[@]/#/$HOME/}"                                 \
+                 "${bashrcs[@]/#/$HOME/}"                                 \
                   "${bashxs[@]/#/$HOME/bin/}"
 }
 
@@ -169,7 +167,7 @@ mkenv() {
    # Defaults:mitko timestamp_timeout=50 # min before asking for password again
 
    mkdir -p "$HOME"/backups
-   # crontab -u "$USER" "$HOME"/help/crontab/crontab.backups
+   # crontab -u "$USER" "$HOME"/rc/crontab/crontab.backups
 }
 
  options=('Update repositories' 'Create repositories' 'Copy repositories')
