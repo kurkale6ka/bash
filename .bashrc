@@ -116,7 +116,7 @@ alias cd..='c ..'
 alias   ..='c ..'
 alias   to=touch
 
-[[ -r $HOME/config/bashfiles/scripts/cd/cd.sh ]] && . "$HOME"/config/bashfiles/scripts/cd/cd.sh
+[[ -r $HOME/config/bashfiles/scripts/cd/cd.bash ]] && . "$HOME"/config/bashfiles/scripts/cd/cd.bash
 
 pw() {
    if (($#))
