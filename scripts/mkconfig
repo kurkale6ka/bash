@@ -119,11 +119,11 @@ cprepos() {
    done
 }
 
- rcdirs=({bash,vim}files config)
+ rcdirs=(bash config help scripts vim)
     rcs=(.dir_colors .gitignore .my.cnf .{curl,input,irb,screen,top}rc)
  vimrcs=(.{,g}vimrc)
 bashrcs=(.profile .bash_{profile,login,logout} .bashrc .logout)
- bashxs=(colors em mkme madd-host mssh)
+ bashxs=(colors em mkconfig madd-host mssh)
 
 mklinks() {
    # Same as in ${parameter#word to remove} or ${parameter%word to remove},
@@ -136,7 +136,7 @@ mklinks() {
 
    ln -sT "$HOME"/github/vim "$HOME"/.vim
 
-   if ((! $#)); then
+   if mkdir -p $HOME/github/vim/autoload; then
       ln -s "$HOME"/github/vim/bundle/pathogen/autoload/pathogen.vim \
             "$HOME"/github/vim/autoload
    fi
