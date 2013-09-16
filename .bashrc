@@ -438,7 +438,7 @@ mp() { pe-man puppet-"${1:-help}"; }
 mpp() { puppet describe "$@" | mo; }
 mg() { man git-"${1:-help}"; }
 
-alias rg="cat $HOME/help/regex.txt"
+alias rg="cat $HOME/help/manuals/regex.txt"
 
 # Find files, text, differences. 'Cat' files, echo text {{{1
 f() { if (($# == 1)); then find . -iname "*$1*"; else find "$@"; fi; }
