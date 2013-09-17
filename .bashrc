@@ -742,9 +742,11 @@ alias gd='git diff'
 alias gf='git fetch'
 
 gsa() (
-echo "$HOME"/github/bash; command cd "$HOME"/github/bash && git status; echo
-echo "$HOME"/github/vim;  command cd "$HOME"/github/vim  && git status; echo
-echo "$HOME"/github/help; command cd "$HOME"/github/help && git status
+for repo in bash config help scripts vim; do
+   echo "$Bold=== $repo ===$Reset"
+   cd "$HOME"/github/"$repo" && git status
+   [[ $repo != vim ]] && echo
+done
 )
 
 complete -W 'HEAD add bisect branch checkout clone commit diff fetch grep init
