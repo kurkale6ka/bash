@@ -197,11 +197,10 @@ ir() { ifdown "$1" && ifup "$1" || echo "Couldn't do it." >&2; }
 complete -W 'eth0 eth1 lo' ir
 
 rs() {
-   (($# == 2)) || { echo 'Usage: rs USER SERVER' >&2; return 1; }
-   local home
-   [[ $1 == 'root' ]] && home='' || home=home/
+   (($# == 3)) || { echo 'Usage: rs USER SERVER DIR' >&2; return 1; }
+   [[ $1 == 'root' ]] && local home='' || local home=home/
    rsync -e "ssh -l $1" -v --recursive --links --stats --progress --exclude-from \
-      "$HOME"/config/dotfiles/.rsync_exclude "$HOME"/github/ "$2":/"$home$1"/github
+      "$HOME"/config/dotfiles/.rsync_exclude "${3%/}"/ "$2:/$home$1/${3%/}"
 }
 
 # Permissions + debug + netstat, w {{{1
