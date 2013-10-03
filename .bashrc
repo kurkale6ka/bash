@@ -597,7 +597,7 @@ bakrm() { find . -name '*~' -a ! -name '*.un~' -exec command rm -i -- {} +; }
 alias dump='dump -u'
 
 # Disk: df, du, hdparm, mount {{{1
-df() { command df -h "$@" | sort -k5r; }
+df() { command df -hT "$@" | sort -k6r; }
 
 # todo + change name?
 # Fails with \n in filenames!? Try this instead:
