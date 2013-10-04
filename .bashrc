@@ -158,13 +158,13 @@ _cd() {
 complete -A directory -F _cd cd
 
 # Networking: ip | mac, ping, (ir?). Processes and jobs {{{1
-i() {
+mac() {
    (($#)) && { eix -I "$@"; return 0; }
    local mac_ip_regex='((hw|ll)addr|inet)\s+(addr:)?'
    ifconfig eth0 | command grep -oiE "$mac_ip_regex[^[:space:]]+" |
                    command sed  -r   "s/$mac_ip_regex//i"
 }
-alias ii='curl ifconfig.me/ip'
+alias i='curl ifconfig.me/ip'
 alias ia='curl ifconfig.me/all 2>/dev/null | column -t'
 
 alias dig='dig +noall +answer'
