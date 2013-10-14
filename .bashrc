@@ -371,6 +371,10 @@ m() {
 }
 alias mm='man -k'
 
+doc() {
+   curl -s https://raw.github.com/kurkale6ka/help/master/"$1".txt
+}
+
 complete -A helptopic help m # Currently, same as builtin
 complete -A command   man m which whereis type ? tpye sudo
 
