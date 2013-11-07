@@ -167,7 +167,8 @@ mac() {
 alias i='curl ifconfig.me/ip'
 alias ia='curl ifconfig.me/all 2>/dev/null | column -t'
 
-alias dig='dig +noall +answer'
+dig() { command dig +noall +answer "${@#*//}"; }
+dg() { dig -x $(dig +noall +answer +short "${@#*//}"); }
 
 ppfields=pid,ppid,pgid,sid,tname,tpgid,stat,euser,start_time,cmd
 pfields=pid,stat,euser,start_time,cmd
