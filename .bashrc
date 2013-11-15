@@ -531,7 +531,10 @@ else
 fi
 
 # uname {{{1
-alias u='uname -rmpi'
+u() {
+   uname -r
+   echo "$(uname -mpi) (machine, proc, platform)"
+}
 alias os='tail -n99 /etc/*{release,version} 2>/dev/null | cat -s'
 
 # Backups {{{1
