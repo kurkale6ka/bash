@@ -666,7 +666,7 @@ complete -f -o default -X '!*.rb' ruby   rb
 
 weechat() {
    flamethrower >/dev/null 2>&1 &
-   weechat-curses
+   TERM=xterm-256color weechat-curses
    kill %?flamethrower
 }
 
