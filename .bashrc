@@ -530,47 +530,9 @@ else
    alias call='env LC_TIME=bg_BG.utf8 cal -my'
 fi
 
-# unzip or uname {{{1
-u() {
-   if (($#)); then
-      local arg
-      for arg in "$@"; do
-         if [[ -f $arg ]]; then
-            case "$arg" in
-               *.tar.gz  | *.tgz          ) tar zxvf      "$arg";;
-               *.tar.bz2 | *.tbz2 | *.tbz ) tar jxvf      "$arg";;
-                                    *.tar ) tar xvf       "$arg";;
-                                    *.bz2 ) bunzip2    -- "$arg";;
-                                    *.gz  ) gunzip     -- "$arg";;
-                                    *.zip ) unzip      -- "$arg";;
-                                    *.rar ) unrar x    -- "$arg";;
-                                    *.Z   ) uncompress -- "$arg";;
-                                    *.7z  ) 7z x       -- "$arg";;
-               *) echo "$arg cannot be extracted!" >&2
-            esac
-         else
-            echo "$arg is not a valid file" >&2
-         fi
-      done
-   else
-      local i
-      printf %23s 'Distribution: '
-      for i in /etc/*{-release,_version}
-      do command sed -n '/\S/{p;q}' "$i"; break
-      done
-      printf %23s 'Network node hostname: '; uname -n
-      printf %23s 'Machine hardware name: '; uname -m
-      printf %23s 'Hardware platform: '    ; uname -i
-      printf %23s 'Processor type: '       ; uname -p
-      printf %23s 'Kernel name: '          ; uname -s
-      printf %23s 'Kernel release: '       ; uname -r
-      printf %23s 'Compiled on: '          ; uname -v
-      printf %23s 'Operating system: '     ; uname -o
-   fi
-}
-
-complete -f -o default -X '!*.@(tar.gz|tgz|tar.bz2|tbz2|tbz|tar|bz2|gz|zip|rar|Z|7z)' u
-complete -f -o default -X '!*.@(tar.gz|tgz|tar.bz2|tbz2|tbz|tar)' tar
+# uname {{{1
+alias u='uname -rmpi'
+alias os='tail -n99 /etc/*{release,version} 2>/dev/null | cat -s'
 
 # Backups {{{1
 bak() { local arg; for arg in "$@"; do command cp -i -- "$arg" "$arg".bak; done; }
