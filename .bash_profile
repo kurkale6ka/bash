@@ -33,8 +33,7 @@ export     HISTIGNORE="@(?|??|???|????)*( |$'\t'):*( |$'\t')"
 # export   HISTIGNORE='@(?|??|???|????)*([[:space:]]):*([[:space:]])'
 export HISTTIMEFORMAT='<%d %b %H:%M>  '
 
-export   PATH=$PATH:$HOME/bin
-export CDPATH=$HOME:..:../..
+export PATH=$PATH:$HOME/bin
 
 # todo: LANGUAGE ?
 export       LANG=en_GB.UTF-8
