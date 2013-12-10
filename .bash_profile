@@ -41,6 +41,12 @@ export LC_COLLATE=C
 
 export LIBVIRT_DEFAULT_URI=qemu:///system
 
+# Needs installing x11-ssh-askpass
+# TODO: fix keyboard layout issue
+if [[ $SSH_ASKPASS ]]; then
+   eval $(keychain --eval --agents ssh -Q --quiet id_rsa id_rsa_git)
+fi
+
 [[ -r $HOME/.dir_colors ]] && eval "$(dircolors $HOME/.dir_colors)"
 
 [[ -r $HOME/.bashrc ]] && . "$HOME"/.bashrc
