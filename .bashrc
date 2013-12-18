@@ -19,7 +19,29 @@ HISTTIMEFORMAT='<%d %b %H:%M>  '
 FIGNORE='~:.swp:.o'
 HOSTFILE="$HOME"/.hosts # hostnames completion (same format as /etc/hosts)
 
-. "$HOME"/github/bash/colors
+# These can't reside in .profile since there is no terminal for tput
+     Bold="$(tput bold)"
+Underline="$(tput smul)"
+   Purple="$(tput setaf 5)"
+   LGreen="$(printf %s "$Bold"; tput setaf 2)"
+    LBlue="$(printf %s "$Bold"; tput setaf 4)"
+     LRed="$(printf %s "$Bold"; tput setaf 1)"
+    Reset="$(tput sgr0)"
+
+# Colored man pages
+export LESS_TERMCAP_mb="$LGreen" # begin blinking
+export LESS_TERMCAP_md="$LBlue"  # begin bold
+export LESS_TERMCAP_me="$Reset"  # end mode
+
+# so -> stand out - info box
+export LESS_TERMCAP_so="$(printf %s "$Bold"; tput setaf 3; tput setab 4)"
+# se -> stand out end
+export LESS_TERMCAP_se="$(tput rmso; printf %s "$Reset")"
+
+# us -> underline start
+export LESS_TERMCAP_us="$(printf %s%s "$Bold$Underline"; tput setaf 5)"
+# ue -> underline end
+export LESS_TERMCAP_ue="$(tput rmul; printf %s "$Reset")"
 
 # Vim, sudoedit, sed {{{1
 alias       v="command vim -u $HOME/.vimrc"
