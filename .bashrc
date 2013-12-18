@@ -1,10 +1,23 @@
-# Author: Dimitar Dimitrov: mitkofr@yahoo.fr, kurkale6ka
+#! /usr/bin/env bash
+# Author: Dimitar Dimitrov, kurkale6ka
 
-# todo: keep part of the file ?
 [[ -t 1 ]] || return
 
-set   -o notify
-shopt -s cdspell extglob nocaseglob nocasematch
+set -o notify
+shopt -s cdspell extglob nocaseglob nocasematch histappend
+
+HISTFILESIZE=3000
+HISTSIZE=3000 # size allowed in memory
+HISTCONTROL=ignorespace:ignoredups:erasedups
+HISTIGNORE="@(?|??|???)*( |$'\t'):*( |$'\t')"
+# HISTIGNORE='@(?|??|???)*([[:space:]]):*([[:space:]])'
+HISTTIMEFORMAT='<%d %b %H:%M>  '
+
+# <tab> completion.
+#  ls: ls -B to ignore backup files (~) in listings
+# Vim: set wildignore+=*~,*.swp
+FIGNORE='~:.swp:.o'
+HOSTFILE="$HOME"/.hosts # hostnames completion (same format as /etc/hosts)
 
      Bold=$(tput bold)
 Underline=$(tput smul)

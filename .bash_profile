@@ -1,9 +1,17 @@
-# todo: clear
-# todo: move to .bashrc?
-[[ -t 1 ]] && hash fortune >/dev/null 2>&1 && fortune
+#! /bin/sh
+# Author: Dimitar Dimitrov
+#         kurkale6ka
 
-# file default 666 (-rw-rw-rw-) => 640 (-rw-r--r--)
-# directory default 777 (drwxrwxrwx) => 750 (drwxr-xr-x)
+export SHELL=/bin/bash
+
+export PATH="$PATH":"$HOME"/bin
+
+export LANG=en_GB.UTF-8
+export LC_COLLATE=C
+
+# Remove w permissions for group and others
+# file      default: 666 (-rw-rw-rw-) => 644 (-rw-r--r--)
+# directory default: 777 (drwxrwxrwx) => 755 (drwxr-xr-x)
 umask 022
 
 export EDITOR="vim -u $HOME/.vimrc"
@@ -15,41 +23,17 @@ export MYGVIMRC="$HOME"/.gvimrc
 # ?test--true--:--false--. The dot ends the test
 export LESS='-r -i -M -F -PM?f%f - :.?L%L lines, :.?ltL\:%lt:.?pB, %pB\% : .?e(Bottom)%t'
 
-export    SHELL=/bin/bash
-# <tab> completion.
-#  ls: ls -B to ignore backup files (~) in listings
-# Vim: set wildignore+=*~,*.swp
-export  FIGNORE='~:.swp:.o'
-export HOSTFILE=$HOME/.hosts
-
-shopt -s histappend
-
-export       HISTFILE=$HOME/.bash_history
-export   HISTFILESIZE=11000
-export       HISTSIZE=11000 # size allowed in memory
-export    HISTCONTROL=ignorespace:ignoredups:erasedups
-# TODO: exclude cd ??
-export     HISTIGNORE="@(?|??|???|????)*( |$'\t'):*( |$'\t')"
-# export   HISTIGNORE='@(?|??|???|????)*([[:space:]]):*([[:space:]])'
-export HISTTIMEFORMAT='<%d %b %H:%M>  '
-
-export PATH=$PATH:$HOME/bin
-
-# todo: LANGUAGE ?
-export       LANG=en_GB.UTF-8
-export LC_COLLATE=C
-
 export LIBVIRT_DEFAULT_URI=qemu:///system
 
 # Needs installing x11-ssh-askpass
 # TODO: fix keyboard layout issue
-if [[ $SSH_ASKPASS ]]; then
-   eval $(keychain --eval --agents ssh -Q --quiet id_rsa id_rsa_git)
+if [ -n "$SSH_ASKPASS" ] && test -x "$(command -v keychain)"; then
+   [ -t 1 ] && eval "$(keychain --eval --agents ssh -Q --quiet id_rsa id_rsa_git)"
 fi
 
-[[ -r $HOME/.dir_colors ]] && eval "$(dircolors $HOME/.dir_colors)"
-
-[[ -r $HOME/.bashrc ]] && . "$HOME"/.bashrc
+[ -r "$HOME"/.dir_colors ] && eval "$(dircolors $HOME/.dir_colors)"
 
 # Business specific or system dependant stuff
-[[ -r $HOME/.bash_profile_after ]] && . "$HOME"/.bash_profile_after
+[ -r "$HOME"/.bash_profile_after ] && . "$HOME"/.bash_profile_after
+
+[ -r "$HOME"/.bashrc ] && . "$HOME"/.bashrc
