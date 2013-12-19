@@ -35,6 +35,7 @@ export LIBVIRT_DEFAULT_URI=qemu:///system
 # Needs installing x11-ssh-askpass
 # TODO: fix keyboard layout issue
 if [ -n "$SSH_ASKPASS" ] && test -x "$(command -v keychain)"; then
+   setxkbmap -layout gb
    eval "$(keychain --eval --agents ssh -Q --quiet id_rsa id_rsa_git)"
 fi
 
