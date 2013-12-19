@@ -37,8 +37,6 @@ if [ -n "$SSH_ASKPASS" ] && test -x "$(command -v keychain)"; then
    eval "$(keychain --eval --agents ssh -Q --quiet id_rsa id_rsa_git)"
 fi
 
-[ -r "$HOME"/.dir_colors ] && eval "$(dircolors "$HOME"/.dir_colors)"
-
 # Business specific or system dependant stuff
 [ -r "$HOME"/.bash_profile_after ] && . "$HOME"/.bash_profile_after
 

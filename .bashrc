@@ -19,6 +19,7 @@ HISTTIMEFORMAT='<%d %b %H:%M>  '
 FIGNORE='~:.swp:.o'
 HOSTFILE="$HOME"/.hosts # hostnames completion (same format as /etc/hosts)
 
+# Colors {{{1
 # These can't reside in .profile since there is no terminal for tput
      Bold="$(tput bold)"
 Underline="$(tput smul)"
@@ -42,6 +43,8 @@ export LESS_TERMCAP_se="$(tput rmso; printf %s "$Reset")"
 export LESS_TERMCAP_us="$(printf %s%s "$Bold$Underline"; tput setaf 5)"
 # ue -> underline end
 export LESS_TERMCAP_ue="$(tput rmul; printf %s "$Reset")"
+
+[[ -r $HOME/.dir_colors ]] && eval "$(dircolors "$HOME"/.dir_colors)"
 
 # Vim, sudoedit, sed {{{1
 alias       v="command vim -u $HOME/.vimrc"
