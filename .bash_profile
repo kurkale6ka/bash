@@ -19,15 +19,16 @@ export VISUAL="vim -u $HOME/.vimrc"
 export MYVIMRC="$HOME"/.vimrc
 export MYGVIMRC="$HOME"/.gvimrc
 
-# -r  : --raw-control-chars
-# -i  : ignore case
-# -M  : ruler
-# -F  : quit if 1 screen
-# -PM : long prompt
+# -i   : ignore case
+# -r/R : raw control characters
+# -s   : Squeeze multiple blank lines
+# -W   : Highlight first new line after any forward movement
+# -M   : very verbose prompt
+# -PM  : customize the very verbose prompt (there is also -Ps and -Pm)
 # ?letterCONTENT. - if test true display CONTENT (the dot ends the test) OR
 # ?letterTRUE:FALSE.
 # ex: ?L%L lines, . - if number of lines known: display %L lines,
-export LESS='-r -i -M -F -PM?f%f - :.?L%L lines, .?ltL\:%lt:.?pB, %pB\% : .?e(Bottom)%t'
+export LESS='-i -r -s -W -M -PM?f%f - :.?L%L lines, .?ltL\:%lt:.?pB, %pB\% : .?e(Bottom)%t'
 
 export LIBVIRT_DEFAULT_URI=qemu:///system
 
