@@ -202,6 +202,12 @@ alias ia='curl ifconfig.me/all 2>/dev/null | column -t'
 dig() { command dig +noall +answer "${@#*//}"; }
 dg() { dig -x $(dig +noall +answer +short "${@#*//}"); }
 
+pm() {
+   for i in "$@"; do
+      printf '%s: ' "$i"; pmap -d "$(command pgrep "$i")" | tail -n1
+   done | column -t | sort -k4
+}
+
 ppfields=pid,ppid,pgid,sid,tname,tpgid,stat,euser,start_time,cmd
 pfields=pid,stat,euser,start_time,cmd
 
