@@ -459,6 +459,8 @@ alias rg="cat $HOME/github/help/regex.txt"
 
 # Find files, text, differences. 'Cat' files, echo text {{{1
 f() { if (($# == 1)); then find . -iname "*$1*"; else find "$@"; fi; }
+alias parallel='parallel --no-notice'
+
 alias gr='command grep -nIriE --color=auto --exclude="*~" --exclude tags'
 grr() {
    find "${2:-.}" -type f ! -name '*~' ! -name tags -exec grep -nIriE --color=auto "$1" {} +
