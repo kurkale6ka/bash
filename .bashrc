@@ -214,8 +214,8 @@ pfields=pid,stat,euser,start_time,cmd
 p() { if (($#)); then ping -c3 "$@"; else ps fww o "$ppfields" --headers; fi; }
 
 alias pp="ps faxww o $ppfields --headers"
-alias pg="ps o $pfields --headers | head -1 && ps faxww o $pfields | command grep -v grep | command grep -iEC1 --color=auto"
-alias ppg="ps o $ppfields --headers | head -1 && ps faxww o $ppfields | command grep -v grep | command grep -iEC1 --color=auto"
+alias pg="ps o $pfields --headers | head -1 && ps faxww o $pfields | command grep -v grep | command grep -iEB1 --color=auto"
+alias ppg="ps o $ppfields --headers | head -1 && ps faxww o $ppfields | command grep -v grep | command grep -iEB1 --color=auto"
 alias pgrep='pgrep -l'
 
 alias  k=kill
