@@ -30,8 +30,6 @@ export MYGVIMRC="$HOME"/.gvimrc
 # ex: ?L%L lines, . - if number of lines known: display %L lines,
 export LESS='-i -r -s -W -M -PM?f%f - :.?L%L lines, .?ltL\:%lt:.?pB, %pB\% : .?e(Bottom)%t'
 
-export LIBVIRT_DEFAULT_URI=qemu:///system
-
 # Needs installing x11-ssh-askpass
 # TODO: fix keyboard layout issue
 if [ -n "$SSH_ASKPASS" ] && test -x "$(command -v keychain)"; then
