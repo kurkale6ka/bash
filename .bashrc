@@ -455,7 +455,7 @@ mp() { pe-man puppet-"${1:-help}"; }
 mpp() { puppet describe "$@" | mo; }
 mg() { man git-"${1:-help}"; }
 
-alias rg="cat $HOME/github/help/regex.txt"
+alias rg="cat $HOME/github/help/it/regex.txt"
 
 alias wgetpaste='wgetpaste -s dpaste -n kurkale6ka -Ct'
 
