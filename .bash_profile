@@ -5,6 +5,7 @@
 export SHELL=/bin/bash
 
 export PATH="$PATH":"$HOME"/bin
+export PYTHONSTARTUP="$HOME"/.pyrc
 
 export LANG=en_GB.UTF-8
 export LC_COLLATE=C
