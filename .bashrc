@@ -648,7 +648,6 @@ alias      cmd=command
 alias builtins='enable -a | cut -d" " -f2  | column'
 
 alias pl=perl
-alias py='python -i -c "from math import *"'
 alias rb=irb
 
 complete -f -o default -X '!*.pl' perl   prel pl
