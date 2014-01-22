@@ -428,11 +428,11 @@ _type() {
    whereis -b "$@"
    echo
 
-   echo "${Bold}file -bL (brief, deref):$Reset"
+   echo "${Bold}file -L (deref):$Reset"
    local f
    for f in "$@"
    do
-      file -bL "$(type -P -- "$f")"
+      file -L "$(type -P -- "$f")"
    done
 }
 alias ?=_type
