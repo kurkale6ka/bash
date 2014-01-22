@@ -419,11 +419,20 @@ complete -A command   man m which whereis type ? tpye sudo
 
 _type() {
    (($#)) || { type -a -- "$FUNCNAME"; return; }
-   local i path parameter
-   for parameter in "$@"; do
-      type -a -- "$parameter"
-      path=$(type -P -- "$parameter"); [[ $path ]] && file -bL "$path"
-      (($# != ++i)) && echo
+
+   echo "${Bold}type -a (exe, alias, builtin, func):$Reset"
+   type -a -- "$@" 2>/dev/null
+   echo
+
+   echo "${Bold}whereis -b (bin):$Reset"
+   whereis -b "$@"
+   echo
+
+   echo "${Bold}file -bL (brief, deref):$Reset"
+   local f
+   for f in "$@"
+   do
+      file -bL "$(type -P -- "$f")"
    done
 }
 alias ?=_type
