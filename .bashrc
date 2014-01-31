@@ -224,6 +224,7 @@ tunnel() {
    fi
 }
 
+# Process memory map
 pm() {
    for i in "$@"; do
       printf '%s: ' "$i"; pmap -d "$(command pgrep "$i")" | tail -n1
