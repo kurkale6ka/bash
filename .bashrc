@@ -646,6 +646,7 @@ alias      use=unset
 alias      msg=dmesg
 alias      cmd=command
 alias builtins='enable -a | cut -d" " -f2  | column'
+alias open=xdg-open
 
 alias pl=perl
 alias rb=irb
