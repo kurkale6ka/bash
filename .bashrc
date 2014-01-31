@@ -735,6 +735,41 @@ alias gb='git branch'
 alias gd='git diff'
 alias gf='git fetch'
 
+gh() {
+   if [[ $1 == -@(h|-h)* ]]
+   then
+      echo 'Usage: gh [origin|-b|-i|-p|-c]'; return 0
+   fi
+
+   local origin
+   [[ $1 != -* ]] && origin="${1}"
+   local remote=remote."${origin:-origin}".url
+
+   local giturl="$(git config --get "$remote")"
+   [[ $giturl ]] || {
+      echo "Not a git repository or no $remote set"
+      return 1
+   }
+
+   local branch
+   branch="$(git symbolic-ref HEAD 2>/dev/null)" || branch='(unnamed branch)'
+   branch="${branch#refs/heads/}"
+
+   giturl=https://github.com/"${giturl#*:}"
+
+   local path
+   case "$1" in
+      -b) path=branches;;
+      -i) path=issues;;
+      -p) path=pulls;;
+      -c) path=commits/"$branch";;
+       *) path=tree/"$branch";;
+   esac
+   giturl="${giturl%.git}"/"$path"
+
+   xdg-open "$giturl" 2>/dev/null
+}
+
 gsa() (
 for repo in bash config help scripts vim; do
    echo "$Bold=== $repo ===$Reset"
