@@ -231,8 +231,8 @@ pm() {
    done | column -t | sort -k4
 }
 
-ppfields=pid,ppid,pgid,sid,tname,tpgid,stat,euser,start_time,cmd
-pfields=pid,stat,euser,start_time,cmd
+ppfields=pid,ppid,pgid,sid,tname,tpgid,stat,euser,egroup,start_time,cmd
+pfields=pid,stat,euser,egroup,start_time,cmd
 
 p() { if (($#)); then ping -c3 "$@"; else ps fww o "$ppfields" --headers; fi; }
 
