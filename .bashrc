@@ -474,13 +474,19 @@ db() {
 alias y='cp -i --'
 alias d='rm -i --preserve-root --'
 
+# Delete based on inodes (use ls -li first)
 di() {
-   local i=0 file inodes=()
-   for file in "$@"; do
-      ((++i < $#)) && inodes+=(-inum "$file" -o)
-   done
-   inodes+=(-inum "$file")
-   find . \( "${inodes[@]}" \) -exec command rm -i -- {} +
+   local inodes=()
+   if (($# > 1)); then
+      # skip the last inode
+      for inode in "${@:1:$#-1}"; do
+         inodes+=(-inum "$inode" -o)
+      done
+   fi
+   # last inode
+   inodes+=(-inum "${@:$#}")
+   # -inum 38 -o -inum 73
+   find . \( "${inodes[@]}" \) -exec rm -i -- {} +
 }
 
 mp() { pe-man puppet-"${1:-help}"; }
