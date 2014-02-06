@@ -476,13 +476,12 @@ alias d='rm -i --preserve-root --'
 
 # Delete based on inodes (use ls -li first)
 di() {
-   local inodes=()
-   if (($# > 1)); then
-      # skip the last inode
-      for inode in "${@:1:$#-1}"; do
-         inodes+=(-inum "$inode" -o)
-      done
-   fi
+   (($#)) || return 1
+   local inode inodes=()
+   # skip the last inode
+   for inode in "${@:1:$#-1}"; do
+      inodes+=(-inum "$inode" -o)
+   done
    # last inode
    inodes+=(-inum "${@:$#}")
    # -inum 38 -o -inum 73
