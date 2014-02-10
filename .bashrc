@@ -526,7 +526,7 @@ alias  t=tail
 alias tf=tailf
 
 catall() {
-   find . -maxdepth 1 ! -name '*~' -type f -exec tail -n99 {} + |
+   find . -maxdepth 1 ! -name '*~' ! -name '*.swp' -type f -exec tail -n99 {} + |
    v -c "se fdl=0 fdm=expr fde=getline(v\:lnum)=~'==>'?'>1'\:'='" -
 }
 
