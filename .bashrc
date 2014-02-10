@@ -525,6 +525,11 @@ sq() { command grep -v '^[[:space:]]*#\|^[[:space:]]*$' -- "$@"; }
 alias  t=tail
 alias tf=tailf
 
+catall() {
+   find . -maxdepth 1 ! -name '*~' -type f -exec tail -n99 {} + |
+   v -c "se fdl=0 fdm=expr fde=getline(v\:lnum)=~'==>'?'>1'\:'='" -
+}
+
 # Convert to dec, bin, oct, hex + bc {{{1
 cv() {
    (($#)) || { echo 'Usage: cv digit ...' >&2; return 1; }
