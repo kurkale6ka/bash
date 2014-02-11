@@ -684,6 +684,20 @@ alias      cmd=command
 alias builtins='enable -a | cut -d" " -f2  | column'
 alias open=xdg-open
 
+urlencode() {
+   local str="$*"
+   local length="${#str}"
+   for (( i = 0 ; i < length ; i++ )); do
+      local char="${str:i:1}"
+      case "$char" in
+         [a-zA-Z0-9.~_-]) printf "$char" ;;
+                     ' ') printf + ;;
+                       *) printf '%%%X' "'$char"
+      esac
+   done
+}
+gg() { sudo -umitko xdg-open https://www.google.co.uk/search?q="$(urlencode "$@")"; }
+
 alias pl=perl
 alias rb=irb
 
