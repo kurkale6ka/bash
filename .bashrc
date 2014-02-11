@@ -529,7 +529,7 @@ alias tf=tailf
 catall() {
    (($#)) && local filter=(-iname "$1*")
    find . -maxdepth 1 "${filter[@]}" ! -name '*~' -type f -print0 |
-   xargs -0 file | grep ASCII | cut -d: -f1 | cut -c3- | xargs head -n98 |
+   xargs -0 file | grep text | cut -d: -f1 | cut -c3- | xargs head -n98 |
    command vim -u "$HOME"/.vimrc -c "se fdl=0 fdm=expr fde=getline(v\:lnum)=~'==>'?'>1'\:'='" -
 }
 
