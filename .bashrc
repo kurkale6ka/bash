@@ -525,11 +525,12 @@ sq() { command grep -v '^[[:space:]]*#\|^[[:space:]]*$' -- "$@"; }
 alias  t=tail
 alias tf=tailf
 
+# Display the first 98 lines of all (or filtered) files in . Ex: catall .ba
 catall() {
    (($#)) && local filter=(-iname "$1*")
    find . -maxdepth 1 "${filter[@]}" ! -name '*~' -type f -print0 |
-   xargs -0 file | grep ASCII | cut -d: -f1 | xargs head -n98 |
-   v -c "se fdl=0 fdm=expr fde=getline(v\:lnum)=~'==>'?'>1'\:'='" -
+   xargs -0 file | grep ASCII | cut -d: -f1 | cut -c3- | xargs head -n98 |
+   command vim -u "$HOME"/.vimrc -c "se fdl=0 fdm=expr fde=getline(v\:lnum)=~'==>'?'>1'\:'='" -
 }
 
 # Convert to dec, bin, oct, hex + bc {{{1
