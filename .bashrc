@@ -696,7 +696,9 @@ urlencode() {
       esac
    done
 }
-gg() { sudo -umitko xdg-open https://www.google.co.uk/search?q="$(urlencode "$@")"; }
+gg() {
+   sudo -umitko xdg-open https://www.google.co.uk/search?q="$(urlencode "$@")" >/dev/null 2>&1
+}
 
 alias pl=perl
 alias rb=irb
