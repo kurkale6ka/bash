@@ -685,10 +685,10 @@ alias builtins='enable -a | cut -d" " -f2  | column'
 alias open=xdg-open
 
 urlencode() {
+   local char
    local str="$*"
-   local length="${#str}"
-   for (( i = 0 ; i < length ; i++ )); do
-      local char="${str:i:1}"
+   for ((i = 0; i < ${#str}; i++)); do
+      char="${str:i:1}"
       case "$char" in
          [a-zA-Z0-9.~_-]) printf "$char" ;;
                      ' ') printf + ;;
