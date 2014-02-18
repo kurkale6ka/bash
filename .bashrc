@@ -787,6 +787,7 @@ alias ga='git add'
 alias gb='git branch'
 alias gd='git diff'
 alias gf='git fetch'
+alias gl='git log -1 -U1 --word-diff'
 
 gh() {
    if [[ $1 == -@(h|-h)* ]]
