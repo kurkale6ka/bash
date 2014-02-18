@@ -196,8 +196,7 @@ mac() {
    ifconfig eth0 | command grep -oiE "$mac_ip_regex[^[:space:]]+" |
                    command sed  -r   "s/$mac_ip_regex//i"
 }
-alias i='curl ifconfig.me/ip'
-alias ia='curl ifconfig.me/all 2>/dev/null | column -t'
+alias myip='curl icanhazip.com'
 
 dig() { command dig +noall +answer "${@#*//}"; }
 dg() { dig -x $(dig +noall +answer +short "${@#*//}"); }
