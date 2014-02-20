@@ -24,6 +24,9 @@ HOSTFILE="$HOME"/.hosts # hostnames completion (same format as /etc/hosts)
      Bold="$(tput bold)"
 Underline="$(tput smul)"
    Purple="$(tput setaf 5)"
+    Green="$(tput setaf 2)"
+     Blue="$(tput setaf 4)"
+      Red="$(tput setaf 1)"
    LGreen="$(printf %s "$Bold"; tput setaf 2)"
     LBlue="$(printf %s "$Bold"; tput setaf 4)"
      LRed="$(printf %s "$Bold"; tput setaf 1)"
@@ -630,29 +633,28 @@ alias dump='dump -u'
 # Disk: df, du, hdparm, mount {{{1
 df() { command df -hT "$@" | sort -k6r; }
 
-# todo + change name?
-# Fails with \n in filenames!? Try this instead:
-# for file in *; do read size _ < <(du -sk "$file");...
 duu() {
-   local args=(); (($#)) && args=("$@") || args=(*)
-   if sort -h /dev/null 2>/dev/null
-   then
-      du -sh -- "${args[@]}" | sort -hr
-   else
-      local unit size file
-      du -sk -- "${args[@]}" | sort -nr | while read -r size file
+   local args=()
+   (($#)) && args=("$@") || args=(*)
+   du -sk -- "${args[@]}" | sort -nr | while read -r size f
+   do
+      for u in K M G T P E Z Y
       do
-         for unit in K M G T P E Z Y
-         do
-            if ((size < 1024))
-            then
-               printf '%3d%s\t%s\n' "$size" "$unit" "$file"
-               break
-            fi
-            ((size = size / 1024))
-         done
+         if ((size < 1024))
+         then
+            case "$u" in
+               K) unit="${Green}$u${Reset}";;
+               M) unit="${Blue}$u${Reset}";;
+               G) unit="${Red}$u${Reset}";;
+               *) unit="${LRed}$u${Reset}"
+            esac
+            [[ -d $f ]] && file="${LBlue}$f${Reset}" || file="$f"
+            printf '%5d%s\t%s\n' "$size" "$unit" "$file"
+            break
+         fi
+         ((size = size / 1024))
       done
-   fi
+   done
 }
 
 hd() { if ((1 == $#)); then hdparm -I -- "$1"; else hdparm "$@"; fi; }
