@@ -30,6 +30,7 @@ Underline="$(tput smul)"
    LGreen="$(printf %s "$Bold"; tput setaf 2)"
     LBlue="$(printf %s "$Bold"; tput setaf 4)"
      LRed="$(printf %s "$Bold"; tput setaf 1)"
+    LCyan="$(printf %s "$Bold"; tput setaf 6)"
     Reset="$(tput sgr0)"
 
 # Colored man pages
@@ -648,7 +649,13 @@ duu() {
                G) unit="${Red}$u${Reset}";;
                *) unit="${LRed}$u${Reset}"
             esac
-            [[ -d $f ]] && file="${LBlue}$f${Reset}" || file="$f"
+            if [[ -h $f ]]; then
+               file="${LCyan}$f${Reset}"
+            elif [[ -d $f ]]; then
+               file="${LBlue}$f${Reset}"
+            else
+               file="$f"
+            fi
             printf '%5d%s\t%s\n' "$size" "$unit" "$file"
             break
          fi
