@@ -804,7 +804,7 @@ gh() {
    fi
 
    local origin
-   [[ $1 != -* ]] && origin="${1}"
+   [[ $1 != -* ]] && origin="$1"
    local remote=remote."${origin:-origin}".url
 
    local giturl="$(git config --get "$remote")"
@@ -813,11 +813,14 @@ gh() {
       return 1
    }
 
-   local branch
-   branch="$(git symbolic-ref HEAD 2>/dev/null)" || branch='(unnamed branch)'
-   branch="${branch#refs/heads/}"
+   local user_tmp="${giturl%/*}"
+   local user_tmp="${user_tmp##*/}"
+   local user="${user_tmp#*:}"
+   local repo="${giturl##*/}"
+   giturl=https://github.com/"$user"/"$repo"
 
-   giturl=https://github.com/"${giturl#*:}"
+   local branch="$(git symbolic-ref HEAD 2>/dev/null)"
+   [[ $branch ]] && branch="${branch#refs/heads/}" || branch=master
 
    local path
    case "$1" in
