@@ -715,11 +715,7 @@ complete -f -o default -X '!*.pl' perl   prel pl
 complete -f -o default -X '!*.py' python py
 complete -f -o default -X '!*.rb' ruby   rb
 
-weechat() {
-   flamethrower >/dev/null 2>&1 &
-   TERM=xterm-256color weechat-curses
-   kill %?flamethrower
-}
+alias weechat='TERM=xterm-256color weechat'
 
 rc() {
    if (($#)); then
