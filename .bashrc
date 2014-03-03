@@ -496,6 +496,7 @@ mpp() { puppet describe "$@" | mo; }
 mg() { man git-"${1:-help}"; }
 
 alias rg="cat $HOME/github/help/it/regex.txt"
+alias pf="$HOME/github/help/it/printf.sh"
 
 alias wgetpaste='wgetpaste -s dpaste -n kurkale6ka -Ct'
 
@@ -519,7 +520,6 @@ diff() {
 }
 alias _=combine
 
-alias pf=printf
  e() { local status=$?; (($#)) && echo "$@" || echo "$status"; }
 cn() { if [[ -t 1 ]]; then command cat -n -- "$@"; else command cat "$@"; fi; }
  n() { command sed -n "$1{p;q}" -- "$2"; }
