@@ -6,8 +6,8 @@
 set -o notify
 shopt -s cdspell extglob nocaseglob nocasematch histappend
 
-HISTFILESIZE=3000
-HISTSIZE=3000 # size allowed in memory
+HISTFILESIZE=7000
+HISTSIZE=7000 # size allowed in memory
 HISTCONTROL=ignorespace:ignoredups:erasedups
 HISTIGNORE="@(?|??|???)*( |$'\t'):*( |$'\t')"
 # HISTIGNORE='@(?|??|???)*([[:space:]]):*([[:space:]])'
