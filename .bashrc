@@ -842,6 +842,9 @@ done
 complete -W 'HEAD add bisect branch checkout clone commit diff fetch grep init
 log merge mv pull push rebase revert reset rm show status tag' git
 
+# Run multiple versions of ruby side-by-side
+eval "$(rbenv init -)"
+
 # Gentoo
 alias exi=eix
 
