@@ -142,17 +142,21 @@ PS1
 PS2='↪ '; export PS3='Choose an entry: '; PS4='+ '
 
 # cd, mkdir | touch, rmdir, pwd {{{1
-alias  cd-='c -'
-alias -- -='c -'
-alias    1='c ..'
-alias    2='c ../..'
-alias    3='c ../../..'
-alias    4='c ../../../..'
-alias cd..='c ..'
-alias   ..='c ..'
-alias   to=touch
+if [[ -r $HOME/github/bash/scripts/cd/cd.bash ]]
+then
+   . "$HOME"/github/bash/scripts/cd/cd.bash
+   cd_alias=c
+fi
 
-[[ -r $HOME/github/bash/scripts/cd/cd.bash ]] && . "$HOME"/github/bash/scripts/cd/cd.bash
+alias  cd-="${cd_alias:-cd} -"
+alias -- -="${cd_alias:-cd} -"
+alias    1="${cd_alias:-cd} .."
+alias    2="${cd_alias:-cd} ../.."
+alias    3="${cd_alias:-cd} ../../.."
+alias    4="${cd_alias:-cd} ../../../.."
+alias cd..="${cd_alias:-cd} .."
+alias   ..="${cd_alias:-cd} .."
+alias   to=touch
 
 pw() {
    if (($#))
