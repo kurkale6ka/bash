@@ -641,7 +641,7 @@ df() { command df -hT "$@" | sort -k6r; }
 duu() {
    local args=()
    (($#)) && args=("$@") || args=(*)
-   du -sk -- "${args[@]}" | sort -n | while read -r size f
+   du -xsk -- "${args[@]}" | sort -n | while read -r size f
    do
       for u in K M G T P E Z Y
       do
