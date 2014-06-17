@@ -58,7 +58,7 @@ alias    view="command vim -u $HOME/.vimrc -R"
 alias      vd="command vim -u $HOME/.vimrc -d"
 alias vimdiff="command vim -u $HOME/.vimrc -d"
 alias    vish='sudo vipw -s'
-alias      lv="command ls -B | vim -u $HOME/.vimrc -"
+alias      vl="command ls -B | vim -u $HOME/.vimrc -"
 alias      mo="command vim -u $HOME/.vimrc -"
 
 rvd() {
