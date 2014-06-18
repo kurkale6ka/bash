@@ -1,5 +1,5 @@
 #! /usr/bin/env bash
-# Author: Dimitar Dimitrov, kurkale6ka
+# Author: kurkale6ka <Dimitar Dimitrov>
 
 [[ -t 1 ]] || return
 
