@@ -122,6 +122,7 @@ if sudo -V |
 then alias sudo="sudo -p 'Password for %p: ' ";       sudo_version_ok=1
 else alias sudo="sudo -p 'Password for %u: ' "; unset sudo_version_ok
 fi
+
 alias  sd=sudo
 alias sde=sudoedit
 
@@ -138,7 +139,9 @@ PS1() {
       PS1="\n\[$LGreen\]\u \[$LBlue\]@ \[$LGreen\]\h \[$LBlue\]\w\[$Reset\] \A"'$(((\j>0)) && echo , %\j)'"\n\\$ "
    fi
 }
+
 PS1
+
 PS2='↪ '; export PS3='Choose an entry: '; PS4='+ '
 
 # cd, mkdir | touch, rmdir, pwd {{{1
@@ -173,7 +176,9 @@ rd() {
    read -r
    [[ $REPLY == @(y|yes) ]] && command rm -rf -- "$@"
 }
+
 alias md='command mkdir -p --'
+
 complete -A directory mkdir md rmdir rd
 
 # Completion of user names
@@ -195,6 +200,7 @@ _cd() {
       fi
    fi
 }
+
 complete -A directory -F _cd cd
 
 # Networking: ip | mac, ping, (ir?). Processes and jobs {{{1
@@ -204,6 +210,7 @@ mac() {
    ifconfig eth0 | command grep -oiE "$mac_ip_regex[^[:space:]]+" |
                    command sed  -r   "s/$mac_ip_regex//i"
 }
+
 alias myip='curl icanhazip.com'
 
 dig() { command dig +noall +answer "${@#*//}"; }
@@ -263,6 +270,7 @@ complete -A stopped -P '%' bg
 
 # todo: keep?
 ir() { ifdown "$1" && ifup "$1" || echo "Couldn't do it." >&2; }
+
 complete -W 'eth0 eth1 lo' ir
 
 rs() {
@@ -275,12 +283,6 @@ rs() {
 # Permissions + debug + netstat, w {{{1
 r() { if [[ -d $1 || -f $1 ]]; then chmod u+r -- "$@"; else netstat -rn; fi; }
 w() { if [[ -d $1 || -f $1 ]]; then chmod u+w -- "$@"; else command w "$@"; fi; }
-alias    setuid='chmod u+s'
-alias    setgid='chmod g+s'
-alias setsticky='chmod  +t'
-alias        cg=chgrp
-alias        co=chown
-alias        cm=chmod
 
 x() {
    (($#)) && { chmod u+x -- "$@"; return; }
@@ -289,7 +291,16 @@ x() {
    else echo 'debug ON' ; set -o xtrace
    fi
 } 2>/dev/null
+
 alias bx='bash -x'
+
+alias    setuid='chmod u+s'
+alias    setgid='chmod g+s'
+alias setsticky='chmod  +t'
+
+alias cg=chgrp
+alias co=chown
+alias cm=chmod
 
 # Info: pa, usersee {{{1
 pa() {
@@ -341,6 +352,7 @@ ldot() {
       (($# != ++i)) && echo
    done
 }
+
 .() {
    if (($#))
    then source "$@"
@@ -373,6 +385,7 @@ lm() {
    [[ -t 1 ]] && echo "$Purple${Underline}Sorted by modification date:$Reset"
    command ls -FBtr --color=auto "$@"
 }
+
 llm() {
    [[ -t 1 ]] && echo "$Purple${Underline}Sorted by modification date:$Reset"
    command ls -FBhltr --color=auto --time-style='+(%d %b %Y - %H:%M)' "$@"
@@ -387,6 +400,7 @@ _lx() {
       command ls -FBhl --color=auto --time-style='+(%d %b %Y - %H:%M)' "${exes[@]}"
    fi
 }
+
  lx() { _lx "$@"; }
 llx() { _lx "$@"; }
 
@@ -438,6 +452,7 @@ m() {
       fi
    done
 }
+
 alias mm='man -k'
 
 doc() {
@@ -465,6 +480,7 @@ _type() {
       file -L "$(type -P -- "$f")"
    done
 }
+
 alias ?=_type
 
 db() {
@@ -506,15 +522,17 @@ alias wgetpaste='wgetpaste -s dpaste -n kurkale6ka -Ct'
 
 # Find files, text, differences. 'Cat' files, echo text {{{1
 f() { if (($# == 1)); then find . -iname "*$1*"; else find "$@"; fi; }
+
+alias lo='command locate -i'
+alias ldapsearch='ldapsearch -x -LLL'
 alias parallel='parallel --no-notice'
 
+alias g='command grep -niE --color=auto --exclude="*~" --exclude tags'
 alias gr='command grep -nIriE --color=auto --exclude="*~" --exclude tags'
+
 grr() {
    find "${2:-.}" -type f ! -name '*~' ! -name tags -exec grep -nIriE --color=auto "$1" {} +
 }
-alias          g='command grep -niE --color=auto --exclude="*~" --exclude tags'
-alias         lo='command locate -i'
-alias ldapsearch='ldapsearch -x -LLL'
 
 diff() {
    if [[ -t 1 ]] && command -v colordiff >/dev/null 2>&1
@@ -522,6 +540,7 @@ diff() {
    else command      diff "$@"
    fi
 }
+
 alias _=combine
 
  e() { local status=$?; (($#)) && echo "$@" || echo "$status"; }
@@ -529,6 +548,7 @@ cn() { if [[ -t 1 ]]; then command cat -n -- "$@"; else command cat "$@"; fi; }
  n() { command sed -n "$1{p;q}" -- "$2"; }
 sq() { command grep -v '^[[:space:]]*#\|^[[:space:]]*$' -- "$@"; }
  h() { if (($#)) || [[ ! -t 0 ]]; then head "$@"; else history; fi; }
+
 alias  t=tail
 alias tf=tailf
 
@@ -582,6 +602,7 @@ cv() {
       esac
    done
 }
+
 alias bc='bc -ql'
 
 # Date and calendar {{{1
@@ -591,6 +612,7 @@ date() {
    else command date '+%A %d %B %Y, %H:%M %Z (%d/%m/%Y)'
    fi
 }
+
 if command -v ncal >/dev/null 2>&1; then
    alias  cal='env LC_TIME=bg_BG.utf8 ncal -3 -M -C'
    alias call='env LC_TIME=bg_BG.utf8 ncal -y -M -C'
@@ -604,6 +626,7 @@ u() {
    uname -r
    echo "$(uname -mpi) (machine, proc, platform)"
 }
+
 alias os='tail -n99 /etc/*{release,version} 2>/dev/null | cat -s'
 
 # Backups {{{1
@@ -676,8 +699,9 @@ mn() {
    else command mount | cut -d" " -f1,3,5,6 | column -t
    fi
 }
+
 alias umn=umount
-alias  fu='sudo fuser -mv'
+alias fu='sudo fuser -mv'
 
 # Misc: weechat, .inputrc, s(fc, services, sudo bash), figlet, service + aliases {{{1
 alias  a=alias
@@ -708,6 +732,7 @@ urlencode() {
       esac
    done
 }
+
 gg() {
    sudo -umitko xdg-open https://www.google.co.uk/search?q="$(urlencode "$@")" >/dev/null 2>&1
 }
@@ -751,6 +776,7 @@ s() {
       fi
    fi
 }
+
 alias hg='history | command grep -iE --color=auto'
 
 if ! command -v service >/dev/null 2>&1
@@ -781,12 +807,14 @@ autoclean changelog download reinstall why why-not' ap aptitude
 
 # Git
 alias git='LESS="-r -i -M -PM?f%f - :.?L%L lines, :.?ltL\:%lt:.?pB, %pB\% : .?e(Bottom)%t" command git'
+
 gc() {
    if (($#))
    then git commit -v "$@"
    else git commit -va
    fi
 }
+
 alias gp='git push origin master'
 alias gs='git status'
 alias go='git checkout'
@@ -836,11 +864,12 @@ gh() {
 }
 
 gsa() (
-for repo in bash config help scripts vim; do
-   echo "$Bold=== $repo ===$Reset"
-   cd "$HOME"/github/"$repo" && git status
-   [[ $repo != vim ]] && echo
-done
+   for repo in bash config help scripts vim
+   do
+      echo "$Bold=== $repo ===$Reset"
+      cd "$HOME"/github/"$repo" && git status
+      [[ $repo != vim ]] && echo
+   done
 )
 
 complete -W 'HEAD add bisect branch checkout clone commit diff fetch grep init
