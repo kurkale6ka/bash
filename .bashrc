@@ -531,7 +531,7 @@ alias lo='command locate -i'
 alias ldapsearch='ldapsearch -x -LLL'
 alias parallel='parallel --no-notice'
 
-if command -v ag; then
+if command -v ag >/dev/null 2>&1; then
    alias g='ag -S --color-line-number="00;32" --color-path="00;35" --color-match="01;31"'
    alias gr='ag -S --color-line-number="00;32" --color-path="00;35" --color-match="01;31"'
    alias ag='ag -S --color-line-number="00;32" --color-path="00;35" --color-match="01;31"'
