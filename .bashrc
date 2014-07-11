@@ -531,9 +531,14 @@ alias lo='command locate -i'
 alias ldapsearch='ldapsearch -x -LLL'
 alias parallel='parallel --no-notice'
 
-alias g='ag -S --color-line-number="00;32" --color-path="00;35" --color-match="01;31"'
-alias gr='ag -S --color-line-number="00;32" --color-path="00;35" --color-match="01;31"'
-alias ag='ag -S --color-line-number="00;32" --color-path="00;35" --color-match="01;31"'
+if command -v ag; then
+   alias g='ag -S --color-line-number="00;32" --color-path="00;35" --color-match="01;31"'
+   alias gr='ag -S --color-line-number="00;32" --color-path="00;35" --color-match="01;31"'
+   alias ag='ag -S --color-line-number="00;32" --color-path="00;35" --color-match="01;31"'
+else
+   alias g='command grep -niE --color=auto --exclude="*~" --exclude tags'
+   alias gr='command grep -nIriE --color=auto --exclude="*~" --exclude tags'
+fi
 
 grr() {
    find "${2:-.}" -type f ! -name '*~' ! -name tags -exec grep -nIriE --color=auto "$1" {} +
