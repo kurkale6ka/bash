@@ -131,6 +131,10 @@ alias sed='sed -r'
 # PS1 + title (\e]2; ---- \a) {{{1
 PS1() {
    if ((EUID == 0)); then
+      # Use PROMPT_COMMAND to aggregate users' history into a single file
+      # /var/log/user-history.log                                    whoami | bash PID |         history 1        |  $?
+      #                                                              oge    | [21118]: | 2013-09-09_10:46:34 su - | [1]
+      # export PROMPT_COMMAND='RETRN_VAL=$?; logger -p local6.debug "$LOGNAME [$$]: $(history 1 | command sed "s/^[ ]*[0-9]\+[ ]*//" ) [$RETRN_VAL]"; ...'
       [[ $TERM != linux ]] && export PROMPT_COMMAND='printf "\e]2;%s @ %s # %s\a" "$USER" "${HOSTNAME%%.*}" "${PWD/#$HOME/~}"'
       PS1="\n\[$LRed\]\u \[$LBlue\]@ \[$LRed\]\h \[$LBlue\]\w\[$Reset\] \A"'$(((\j>0)) && echo , %\j)'"\n# "
       PATH=$PATH:/sbin:/usr/sbin:/usr/local/sbin:/root/bin:$HOME/bin
