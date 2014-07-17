@@ -307,10 +307,7 @@ alias co=chown
 alias cm=chmod
 
 # Info: pa, usersee {{{1
-pa() {
-   local paths
-   IFS=: read -ra paths <<< "$PATH"; printf '%s\n' "${paths[@]}" | awk '!_[$0]++'
-}
+pa() { awk '!_[$0]++' <<< "${PATH//:/$'\n'}"; }
 
 usersee() {
    if (($#)); then
