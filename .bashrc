@@ -58,7 +58,7 @@ alias    view="command vim -u $HOME/.vimrc -R"
 alias      vd="command vim -u $HOME/.vimrc -d"
 alias vimdiff="command vim -u $HOME/.vimrc -d"
 alias    vish='sudo vipw -s'
-alias      vl="command ls -B | vim -u $HOME/.vimrc -"
+alias      vl="command ls -FB1 | vim -u $HOME/.vimrc -"
 alias      vm="command vim -u $HOME/.vimrc -"
 
 rvd() {
@@ -369,6 +369,7 @@ ll.() { ldot "$@"; }
 
 alias   l='command ls -FB    --color=auto'
 alias  ll='command ls -FBhl  --color=auto --time-style="+(%d %b %Y - %H:%M)"'
+alias  l1='command ls -FB1   --color=auto'
 
 alias  la='command ls -FBA   --color=auto'
 alias lla='command ls -FBAhl --color=auto --time-style="+(%d %b %Y - %H:%M)"'
