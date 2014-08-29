@@ -55,15 +55,15 @@ alias       v="command vim -u $HOME/.vimrc"
 alias      vi="command vim -u $HOME/.vimrc"
 alias     vim="command vim -u $HOME/.vimrc"
 alias    view="command vim -u $HOME/.vimrc -R"
-alias      vd="command vim -u $HOME/.vimrc -d"
 alias vimdiff="command vim -u $HOME/.vimrc -d"
 alias    vish='sudo vipw -s'
 alias      vl="command ls -FB1 | vim -u $HOME/.vimrc -"
 alias      vm="command vim -u $HOME/.vimrc -"
+alias      vd="command vim -u $HOME/.vimrc -d"
 
-rvd() {
+vdr() {
    if (($# < 2)); then
-      printf '%s\n' '  Usage: rvd {host} {file1} [file2]' \
+      printf '%s\n' '  Usage: rvd {host} {file1 (local & remote)} [alt rfile]' \
                     "example: rvd qa1 ~/.bashrc '~/.bashrc'" >&2
       return 1
    fi
