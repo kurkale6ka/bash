@@ -70,7 +70,7 @@ vdr() {
    command vim -u "$HOME"/.vimrc -d "$2" <(ssh "$1" cat "${3:-$2}")
 }
 
-if   command -v vimx; then
+if command -v vimx; then
    my_gvim=vimx
 elif command -v gvim; then
    my_gvim=gvim
