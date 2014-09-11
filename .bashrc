@@ -557,8 +557,8 @@ cn() { if [[ -t 1 ]]; then command cat -n -- "$@"; else command cat "$@"; fi; }
 sq() { command grep -v '^[[:space:]]*#\|^[[:space:]]*$' -- "$@"; }
  h() { if (($#)) || [[ ! -t 0 ]]; then head "$@"; else history; fi; }
 
-alias  t=tail
-alias tf=tailf
+alias t=tail
+alias tf='tail -f -n0'
 
 # Display the first 98 lines of all (or filtered) files in . Ex: catall .ba
 catall() {
