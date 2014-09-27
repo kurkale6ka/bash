@@ -51,15 +51,20 @@ export LESS_TERMCAP_ue="$(tput rmul; printf %s "$Reset")"
 [[ -r $HOME/.dir_colors ]] && eval "$(dircolors "$HOME"/.dir_colors)"
 
 # Vim, sudoedit, sed {{{1
-alias       v="command vim -u $HOME/.vimrc"
-alias      vi="command vim -u $HOME/.vimrc"
-alias     vim="command vim -u $HOME/.vimrc"
-alias    view="command vim -u $HOME/.vimrc -R"
-alias vimdiff="command vim -u $HOME/.vimrc -d"
+if command -v nvim
+then nvim=nvim
+else nvim=vim
+fi
+
+alias       v="command $nvim -u $HOME/.vimrc"
+alias      vi="command $nvim -u $HOME/.vimrc"
+alias     vim="command $nvim -u $HOME/.vimrc"
+alias    view="command $nvim -u $HOME/.vimrc -R"
+alias vimdiff="command $nvim -u $HOME/.vimrc -d"
+alias      vm="command $nvim -u $HOME/.vimrc -"
+alias      vd="command $nvim -u $HOME/.vimrc -d"
+alias      vl="command ls -FB1 | $nvim -u $HOME/.vimrc -"
 alias    vish='sudo vipw -s'
-alias      vl="command ls -FB1 | vim -u $HOME/.vimrc -"
-alias      vm="command vim -u $HOME/.vimrc -"
-alias      vd="command vim -u $HOME/.vimrc -d"
 
 vdr() {
    if (($# < 2)); then
@@ -67,7 +72,7 @@ vdr() {
                     "example: rvd qa1 ~/.bashrc '~/.bashrc'" >&2
       return 1
    fi
-   command vim -u "$HOME"/.vimrc -d "$2" <(ssh "$1" cat "${3:-$2}")
+   command $nvim -u "$HOME"/.vimrc -d "$2" <(ssh "$1" cat "${3:-$2}")
 }
 
 if command -v vimx; then
@@ -83,16 +88,16 @@ if [[ $my_gvim ]]; then
 fi
 
 vn() {
-   (($#)) && { command vim -NX -u NONE "$@"; return; }
+   (($#)) && { command $nvim -NX -u NONE "$@"; return; }
    local opt opts
-   local vim="${Bold} vim$Reset"
+   local vim="${Bold}$nvim$Reset"
    local gvi="${Bold}gvim$Reset"
    local  vimrc="${LGreen}.vimrc$Reset"   _vimrc="$HOME"/.vimrc
    local gvimrc="${LGreen}.gvimrc$Reset" _gvimrc="$HOME"/.gvimrc
    local plugin="${LGreen}plugins$Reset"
     opts=("$vim no .vimrc,           , no plugins")
-   opts+=(" vim no .vimrc,           ,    $plugin")
-   opts+=(" vim    $vimrc,           , no plugins")
+   opts+=("$nvim no .vimrc,           ,    $plugin")
+   opts+=("$nvim    $vimrc,           , no plugins")
    opts+=("$gvi no .vimrc, no .gvimrc, no plugins")
    opts+=("gvim no .vimrc,    $gvimrc,    $plugin")
    opts+=("gvim    $vimrc, no .gvimrc,    $plugin")
@@ -102,9 +107,9 @@ vn() {
    opts+=("gvim    $vimrc,    $gvimrc, no plugins")
    select opt in "${opts[@]}"; do
       case "$opt" in
-         "${opts[0]}") command       vim  -nNX  -u NONE                              ; break;;
+         "${opts[0]}") command     $nvim  -nNX  -u NONE                              ; break;;
          "${opts[1]}") command "$my_gvim" -nNXv -u NORC                              ; break;;
-         "${opts[2]}") command       vim  -nNX  -u "$_vimrc"               --noplugin; break;;
+         "${opts[2]}") command     $nvim  -nNX  -u "$_vimrc"               --noplugin; break;;
          "${opts[3]}") command "$my_gvim" -nN   -u NONE                              ; break;;
          "${opts[4]}") command "$my_gvim" -nN   -u /dev/null -U "$_gvimrc"           ; break;;
          "${opts[5]}") command "$my_gvim" -nN   -u "$_vimrc" -U NONE                 ; break;;
@@ -565,7 +570,7 @@ catall() {
    (($#)) && local filter=(-iname "$1*")
    find . -maxdepth 1 "${filter[@]}" ! -name '*~' -type f -print0 |
    xargs -0 file | grep text | cut -d: -f1 | cut -c3- | xargs head -n98 |
-   command vim -u "$HOME"/.vimrc -c "se fdl=0 fdm=expr fde=getline(v\:lnum)=~'==>'?'>1'\:'='" -
+   command $nvim -u "$HOME"/.vimrc -c "se fdl=0 fdm=expr fde=getline(v\:lnum)=~'==>'?'>1'\:'='" -
 }
 
 # Convert to dec, bin, oct, hex + bc {{{1
