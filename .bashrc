@@ -51,7 +51,7 @@ export LESS_TERMCAP_ue="$(tput rmul; printf %s "$Reset")"
 [[ -r $HOME/.dir_colors ]] && eval "$(dircolors "$HOME"/.dir_colors)"
 
 # Vim, sudoedit, sed {{{1
-if command -v nvim
+if command -v >/dev/null 2>&1 nvim
 then nvim=nvim
 else nvim=vim
 fi
