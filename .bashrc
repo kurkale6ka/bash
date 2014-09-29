@@ -895,6 +895,7 @@ command -v rbenv >/dev/null 2>&1 && eval "$(rbenv init -)"
 alias exi=eix
 
 # Typos {{{1
+alias cta=cat
 alias ecex=exec
 alias akw=awk
 alias rmp=rpm
