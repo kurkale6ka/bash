@@ -392,7 +392,18 @@ alias rg="cat $HOME/github/help/it/regex.txt"
 alias pf="$HOME/github/help/it/printf.sh"
 
 doc() {
-   curl -s https://raw.github.com/kurkale6ka/help/master/"$1".txt
+   local matches=()
+   while read -r
+   do
+      matches+=("$REPLY")
+   done < <(ag -lS --ignore 'README*' "$1" "$HOME"/help/)
+   if (( ${#matches[@]} == 1 ))
+   then
+      command nvim -u "$HOME"/.vimrc "${matches[@]}" -c"0/$1" -c'noh|norm zv<cr>'
+   else
+      ag -S --color-line-number="00;32" --color-path="00;35" --color-match="01;31" \
+         "$1" "${matches[@]}"
+   fi
 }
 
 complete -A helptopic help m # Currently, same as builtin
