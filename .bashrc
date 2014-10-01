@@ -51,11 +51,17 @@ export LESS_TERMCAP_ue="$(tput rmul; printf %s "$Reset")"
 
 [[ -r $HOME/.dir_colors ]] && eval "$(dircolors "$HOME"/.dir_colors)"
 
-# Vim, sudoedit, sed {{{1
-if command -v >/dev/null 2>&1 nvim
+# Vim {{{1
+if command -v nvim
 then nvim=nvim
 else nvim=vim
-fi
+fi >/dev/null 2>&1
+
+if command -v vimx; then
+   my_gvim=vimx
+elif command -v gvim; then
+   my_gvim=gvim
+fi >/dev/null 2>&1
 
 alias    v="command $nvim -u $HOME/.vimrc"
 alias  vim="command $nvim -u $HOME/.vimrc"
@@ -72,12 +78,6 @@ vdr() {
    fi
    command $nvim -u "$HOME"/.vimrc -d "$2" <(ssh "$1" cat "${3:-$2}")
 }
-
-if command -v vimx; then
-   my_gvim=vimx
-elif command -v gvim; then
-   my_gvim=gvim
-fi >/dev/null 2>&1
 
 if [[ $my_gvim ]]; then
    alias  gv="command $my_gvim -u $HOME/.vimrc -U $HOME/.gvimrc"
@@ -113,6 +113,7 @@ vn() {
    done
 }
 
+# sudo and s() {{{1
 if sudo -V |
    { read -r _ _ ver; ver="${ver%.*}"; ((${ver%.*} > 0 && ${ver#*.} > 6)); }
 then alias sudo="sudo -p 'Password for %p: ' ";       sudo_version_ok=1
@@ -122,7 +123,27 @@ fi
 alias  sd=sudo
 alias sde=sudoedit
 
-alias sed='sed -r'
+# s///
+# /etc/services lookup (ex: s ftp)
+# sudo bash
+s() {
+   if (($# == 2)); then
+      # s old new [number|cmd]
+      fc -s "$1"="$2" "$3"
+   elif (($# == 1)); then
+      # s ftp|21
+      if [[ $1 == [[:digit:]]* ]]
+      then command grep -w -iE --color=auto -- "$1" /etc/services
+      else command grep    -iE --color=auto -- "$1" /etc/services
+      fi
+   else
+      history -a
+      if [[ $sudo_version_ok ]]
+      then sudo -E /bin/bash
+      else sudo    /bin/bash
+      fi
+   fi
+}
 
 # PS1 + title (\e]2; ---- \a) {{{1
 PS1() {
@@ -140,11 +161,12 @@ PS1() {
    fi
 }
 
-PS1
+       PS1 # call function above
+       PS2='↪ '
+export PS3='Choose an entry: '
+       PS4='+ '
 
-PS2='↪ '; export PS3='Choose an entry: '; PS4='+ '
-
-# cd, mkdir | touch, rmdir, pwd {{{1
+# Directory functions and aliases: cd, md, rd, pw {{{1
 if [[ -r $HOME/github/bash/scripts/cd/cd.bash ]]
 then
    . "$HOME"/github/bash/scripts/cd/cd.bash
@@ -159,14 +181,9 @@ alias    3="${cd_alias:-cd} ../../.."
 alias    4="${cd_alias:-cd} ../../../.."
 alias cd..="${cd_alias:-cd} .."
 alias   ..="${cd_alias:-cd} .."
-alias   to=touch
 
-pw() {
-   if (($#))
-   then pws --seconds 25 get "$1"
-   else command pwd -P
-   fi
-}
+alias md='command mkdir -p --'
+alias to=touch
 
 rd() {
    echo -n 'rd: remove directories '
@@ -177,11 +194,16 @@ rd() {
    [[ $REPLY == @(y|yes) ]] && command rm -rf -- "$@"
 }
 
-alias md='command mkdir -p --'
-
 complete -A directory mkdir md rmdir rd
 
-# Networking {{{1
+pw() {
+   if (($#))
+   then pws --seconds 25 get "$1"
+   else command pwd -P
+   fi
+}
+
+# Networking: myip, dig, tunnel {{{1
 alias myip='curl icanhazip.com'
 
 dig() { command dig +noall +answer "${@#*//}"; }
@@ -209,7 +231,8 @@ tunnel() {
    fi
 }
 
-# Process memory map
+# Processes and jobs {{{1
+# memory map
 pm() {
    for i in "$@"; do
       printf '%s: ' "$i"; pmap -d "$(command pgrep "$i")" | tail -n1
@@ -233,16 +256,18 @@ alias kg='kill -- -'
 alias pk=pkill
 complete -A signal kill k
 
+# jobs
 alias     j='jobs -l'
 alias     z=fg
 alias -- --='fg %-'
 complete -A job     -P '%' fg z jobs j disown
 complete -A stopped -P '%' bg
 
+# Copy a user dir to a remote server using rsync {{{1
 rs() {
    (($# == 3)) || { echo 'Usage: rs USER SERVER DIR' >&2; return 1; }
    [[ $1 == 'root' ]] && local home='' || local home=home/
-   rsync -e "ssh -l $1" -v --recursive --links --stats --progress --exclude-from \
+   rsync -e "ssh -q -l $1" -v --recursive --links --stats --progress --exclude-from \
       "$HOME"/config/dotfiles/.rsync_exclude "${3%/}"/ "$2:/$home$1/${3%/}"
 }
 
@@ -353,7 +378,7 @@ sl() {
    stat -c "%8i %A (%4a) %3h %4u %4g %10s (%10Y) %n" -- "${args[@]}"
 }
 
-# Help, mv, cp ,rm {{{1
+# Help {{{1
 m() {
    local choice
    (($#)) || {
@@ -388,9 +413,7 @@ alias mm='man -k'
 
 mg() { man git-"${1:-help}"; }
 
-alias rg="cat $HOME/github/help/it/regex.txt"
-alias pf="$HOME/github/help/it/printf.sh"
-
+# Search for help topics in my personal documentation
 doc() {
    local matches=()
    while read -r
@@ -406,9 +429,13 @@ doc() {
    fi
 }
 
+alias rg="cat $HOME/github/help/it/regex.txt" # Regex  help
+alias pf="$HOME/github/help/it/printf.sh"     # printf help
+
 complete -A helptopic help m # Currently, same as builtin
 complete -A command   man m which whereis type ? tpye sudo
 
+# which-like function
 _type() {
    (($#)) || { type -a -- "$FUNCNAME"; return; }
 
@@ -430,49 +457,39 @@ _type() {
 
 alias ?=_type
 
-_usersee() {
-   local header
-   case "$1" in
-      -g)
-         header=GROUP:PASSWORD:GID:USERS
-         sort -k4 -t: /etc/group | command sed "1i$header" | column -ts:;;
-      -s)
-         header=LOGIN:PASSWORD:LAST:MIN:MAX:WARN:INACTIVITY:EXPIRATION:RESERVED
-         sudo sort -k2 -t: /etc/shadow |\
-            awk -F: '{print $1":"substr($2,1,3)":"$3":"$4":"$5":"$6":"$7":"$8":"$9}' |\
-            command sed -e "1i$header" -e 's/::/:-:/g' | column -ts:;;
-       *)
-         header=LOGIN:PASSWORD:UID:GID:GECOS:HOME:SHELL
-         sort -k7 -t: /etc/passwd | command sed -e "1i$header" -e 's/::/:-:/g' |\
-            column -ts:;;
-   esac
-}
-
+# Display /etc/passwd, ..group and ..shadow with some formatting {{{1
 db() {
-   if (($#))
-   then
-      # passwd, group, shadow
-      case "$1" in
-         -g) _usersee -g;;
-         -s) _usersee -s;;
-          *) _usersee -p;;
+   local options[0]='/etc/passwd'
+         options[1]='/etc/group'
+         options[2]='/etc/shadow'
+
+   select choice in "${options[@]}"; do
+
+      case "$choice" in
+
+         "${options[0]}")
+            header=LOGIN:PASSWORD:UID:GID:GECOS:HOME:SHELL
+            sort -k7 -t: /etc/passwd | command sed -e "1i$header" -e 's/::/:-:/g' |\
+               column -ts:
+            break;;
+
+         "${options[1]}")
+            header=GROUP:PASSWORD:GID:USERS
+            sort -k4 -t: /etc/group | command sed "1i$header" | column -ts:
+            break;;
+
+         "${options[2]}")
+            header=LOGIN:PASSWORD:LAST:MIN:MAX:WARN:INACTIVITY:EXPIRATION:RESERVED
+            sudo sort -k2 -t: /etc/shadow |\
+               awk -F: '{print $1":"substr($2,1,3)":"$3":"$4":"$5":"$6":"$7":"$8":"$9}' |\
+               command sed -e "1i$header" -e 's/::/:-:/g' | column -ts:
+            break;;
       esac
-   else
-      # locate, apropos
-      local prgm PS3='Choose a database to update: '
-      select prgm in locate 'apropos, man -k'; do
-         case "$prgm" in
-              locate) printf 'updatedb...\n'  ; updatedb   & return;;
-            apropos*) printf 'makewhatis...\n'; makewhatis & return;;
-                   *) echo '*** Wrong choice ***' >&2
-         esac
-      done
-   fi
+      echo '*** Wrong choice ***'
+   done
 }
 
-alias y='cp -i --'
-alias d='rm -i --preserve-root --'
-
+# rm and cp like functions and aliases {{{1
 # Delete based on inodes (use ls -li first)
 di() {
    (($#)) || return 1
@@ -487,15 +504,23 @@ di() {
    find . \( "${inodes[@]}" \) -exec rm -i -- {} +
 }
 
-alias wgetpaste='wgetpaste -s dpaste -n kurkale6ka -Ct'
+alias y='cp -i --'
+alias d='rm -i --preserve-root --'
 
-# Find files, text, differences. 'Cat' files, echo text {{{1
-f() { if (($# == 1)); then find . -iname "*$1*"; else find "$@"; fi; }
+# Find stuff and diffs {{{1
+f() {
+   if (($# == 1))
+   then
+      find . -iname "*$1*" -printf '%P\n'
+   else
+      find "$@"
+   fi
+}
 
 alias lo='command locate -i'
 alias ldapsearch='ldapsearch -x -LLL'
-alias parallel='parallel --no-notice'
 
+# Grep or silver searcher aliases
 if command -v ag >/dev/null 2>&1; then
    alias g='ag -S --color-line-number="00;32" --color-path="00;35" --color-match="01;31"'
    alias gr='ag -S --color-line-number="00;32" --color-path="00;35" --color-match="01;31"'
@@ -514,38 +539,7 @@ diff() {
 
 alias _=combine
 
-# Run multiple versions of ruby side-by-side
-command -v rbenv >/dev/null 2>&1 && eval "$(rbenv init -)"
-
-# Cleaner PATH display
-pa() { awk '!_[$0]++' <<< "${PATH//:/$'\n'}"; }
-
-# Echo
-e() { local status=$?; (($#)) && echo "$@" || echo "$status"; }
-
-# Print nth line in a file: n 11 /my/file
-n() { command sed -n "$1{p;q}" -- "$2"; }
-
-# Display non-empty lines in a file
-sq() { command grep -v '^[[:space:]]*#\|^[[:space:]]*$' -- "$@"; }
-
-# Head and tail
-h() { if (($#)) || [[ ! -t 0 ]]; then head "$@"; else history; fi; }
-
-alias t=tail
-alias tf='tail -f -n0'
-
-# Display the first 98 lines of all (or filtered) files in . Ex: catall .ba
-catall() {
-   (($#)) && local filter=(-iname "$1*")
-   find . -maxdepth 1 "${filter[@]}" ! -name '*~' -type f -print0 |
-   xargs -0 file | grep text | cut -d: -f1 | cut -c3- | xargs head -n98 |
-   command $nvim -u "$HOME"/.vimrc -c "se fdl=0 fdm=expr fde=getline(v\:lnum)=~'==>'?'>1'\:'='" -
-}
-
-cn() { if [[ -t 1 ]]; then command cat -n -- "$@"; else command cat "$@"; fi; }
-
-# Convert to dec, bin, oct, hex + bc {{{1
+# Convert to dec, bin, oct, hex {{{1
 cv() {
    (($#)) || { echo 'Usage: cv digit ...' >&2; return 1; }
    cvs[0]='Decimal to binary'
@@ -588,8 +582,6 @@ cv() {
    done
 }
 
-alias bc='bc -ql'
-
 # Date and calendar {{{1
 date() {
    if (($#))
@@ -606,7 +598,7 @@ else
    alias call='env LC_TIME=bg_BG.utf8 cal -my'
 fi
 
-# uname {{{1
+# uname + os {{{1
 u() {
    uname -r
    echo "$(uname -mpi) (machine, proc, platform)"
@@ -614,7 +606,7 @@ u() {
 
 alias os='tail -n99 /etc/*{release,version} 2>/dev/null | cat -s'
 
-# Backups {{{1
+# Backup functions and aliases {{{1
 bak() { local arg; for arg in "$@"; do command cp -i -- "$arg" "$arg".bak; done; }
 
 rmbak() {
@@ -622,7 +614,7 @@ rmbak() {
    then
       find . \( -name '*~' -o -name '.*~' \) -a ! -name '*.un~' -delete
    else
-      find . \( -name '*~' -o -name '.*~' \) -a ! -name '*.un~' -printf '%f\n'
+      find . \( -name '*~' -o -name '.*~' \) -a ! -name '*.un~' -printf '%P\n'
    fi
 }
 
@@ -673,75 +665,86 @@ mn() {
 alias umn=umount
 alias fu='sudo fuser -mv'
 
-# Misc: weechat, .inputrc, s(fc, services, sudo bash), figlet, service + aliases {{{1
+# Misc: options, app aliases, rc(), b(), e() {{{1
+# Options
 alias  a=alias
 alias ua=unalias
+
 complete -A alias alias a unalias ua
 
 alias  o='set -o'
 alias oo=shopt
-complete -A setopt set   o
-complete -A  shopt shopt oo
 
-alias       se=set
-alias      use=unset
-alias      msg=dmesg
-alias      cmd=command
-alias builtins='enable -a | cut -d" " -f2  | column'
+complete -A setopt set   o
+complete -A shopt  shopt oo
+
+# Application aliases
 alias open=xdg-open
+alias weechat='TERM=xterm-256color weechat'
+alias wgetpaste='wgetpaste -s dpaste -n kurkale6ka -Ct'
+alias parallel='parallel --no-notice'
+alias bc='bc -ql'
+
+# More aliases
+alias msg=dmesg
+alias cmd=command
+alias builtins='enable -a | cut -d" " -f2  | column'
+alias hg='history | command grep -iE --color=auto'
 
 alias pl=perl
+alias py=python
 alias rb=irb
 
 complete -f -o default -X '!*.pl' perl   prel pl
 complete -f -o default -X '!*.py' python py
 complete -f -o default -X '!*.rb' ruby   rb
 
-alias weechat='TERM=xterm-256color weechat'
+# rbenv: run multiple versions of ruby side-by-side
+command -v rbenv >/dev/null 2>&1 && eval "$(rbenv init -)"
 
+# Helper for creating a minimal .inputrc file
 rc() {
-   if (($#)); then
-      local rcfile=$HOME/.inputrc
-      xclip -f <(echo "command cat >> $rcfile <<'EOF'") "$rcfile" <(echo EOF)
-   else
-      local inputrc="printf '%s\n' "
-      inputrc+="'\"\e[A\": history-search-backward' "
-      inputrc+="'\"\e[B\": history-search-forward' >> $HOME/.inputrc"
-      xclip -f <<< "$inputrc"
-   fi
+   local inputrc="printf '%s\n' "
+         inputrc+="'\"\e[A\": history-search-backward' "
+         inputrc+="'\"\e[B\": history-search-forward' >> $HOME/.inputrc"
+   xclip -f <<< "$inputrc"
 }
 
-s() {
-   if (($# == 2)); then
-      # s old new [number|cmd]
-      fc -s "$1"="$2" "$3"
-   elif (($# == 1)); then
-      # s ftp|21
-      if [[ $1 == [[:digit:]]* ]]
-      then command grep -w -iE --color=auto -- "$1" /etc/services
-      else command grep    -iE --color=auto -- "$1" /etc/services
-      fi
-   else
-      history -a
-      if [[ $sudo_version_ok ]]
-      then sudo -E /bin/bash
-      else sudo    /bin/bash
-      fi
-   fi
-}
-
-alias hg='history | command grep -iE --color=auto'
-
-if ! command -v service >/dev/null 2>&1
-then service() { /etc/init.d/"$1" "${2:-start}"; }
-fi
-
+# Banners using figlet
 b() {
    if   (($# == 1)); then figlet -f smslant -- "$1"
    elif (($# == 2)); then figlet -f "$1"    -- "${@:2}"
    else                   figlist | column -c"$COLUMNS"
    fi
 }
+
+# Echo
+e() { local status=$?; (($#)) && echo "$@" || echo "$status"; }
+
+# Head/tail + cat-like functions {{{1
+h() { if (($#)) || [[ ! -t 0 ]]; then head "$@"; else history; fi; }
+
+alias t=tail
+alias tf='tail -f -n0'
+
+# Display the first 98 lines of all (or filtered) files in . Ex: catall .ba
+catall() {
+   (($#)) && local filter=(-iname "$1*")
+   find . -maxdepth 1 "${filter[@]}" ! -name '*~' -type f -print0 |
+   xargs -0 file | grep text | cut -d: -f1 | cut -c3- | xargs head -n98 |
+   command $nvim -u "$HOME"/.vimrc -c "se fdl=0 fdm=expr fde=getline(v\:lnum)=~'==>'?'>1'\:'='" -
+}
+
+cn() { if [[ -t 1 ]]; then command cat -n -- "$@"; else command cat "$@"; fi; }
+
+# Print nth line in a file: n 11 /my/file
+n() { command sed -n "$1{p;q}" -- "$2"; }
+
+# Display non-empty lines in a file
+sq() { command grep -v '^[[:space:]]*#\|^[[:space:]]*$' -- "$@"; }
+
+# Cleaner PATH display
+pa() { awk '!_[$0]++' <<< "${PATH//:/$'\n'}"; }
 
 # Git {{{1
 alias git='LESS="-r -i -M -PM?f%f - :.?L%L lines, :.?ltL\:%lt:.?pB, %pB\% : .?e(Bottom)%t" command git'
@@ -854,9 +857,6 @@ cl() { column <(compgen -A "$1"); }
 complete -W 'alias arrayvar binding builtin command directory disabled enabled
 export file function group helptopic hostname job keyword running service
 setopt shopt signal stopped user variable' cl compgen complete
-
-complete -o default -W 'apply notify resource file package service exec cron
-user group' mp mpp pu puppet
 
 # enable bash completion in non posix shells
 if ! shopt -oq posix; then
