@@ -751,7 +751,7 @@ alias git='LESS="-r -i -M -PM?f%f - :.?L%L lines, :.?ltL\:%lt:.?pB, %pB\% : .?e(
 
 gc() {
    if (($#))
-   then git commit -v "$@"
+   then git add "$@" && git commit -v "$@"
    else git commit -va
    fi
 }
@@ -769,9 +769,14 @@ alias gl='git log -1 -U1 --word-diff'
 gsa() (
    for repo in bash config help scripts vim
    do
-      echo "$Bold=== $repo ===$Reset"
-      cd "$HOME"/github/"$repo" && git status
-      [[ $repo != vim ]] && echo
+      cd "$HOME"/github/"$repo" && {
+         echo "$Bold=== $repo ===$Reset"
+         if (($#)) # -f to fetch if branch ahead of remote
+         then git fetch
+         else git status
+         fi
+         [[ $repo != vim ]] && echo
+      }
    done
 )
 
