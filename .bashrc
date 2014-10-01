@@ -181,28 +181,6 @@ alias md='command mkdir -p --'
 
 complete -A directory mkdir md rmdir rd
 
-# # Completion of user names
-# _cd() {
-#
-#    local cur=${COMP_WORDS[COMP_CWORD]}
-#    local userlist
-#
-#    # ex: ~user, not ~/dev
-#    if [[ $2 == ~[!/]* || $2 == '~' ]]; then
-#
-#       # the default delimiter is \n, IFS '' - read reads several lines
-#       # [dir1 \n dir2 \n ... dirn \0 ]      - read reads one line
-#       IFS=$'\n' read -r -d $'\0' -a userlist < <(compgen -A user -- "$cur")
-#
-#       if [[ $userlist ]]; then
-#
-#          IFS=$'\n' read -r -d $'\0' -a COMPREPLY < <(printf '%q\n' "${userlist[@]}")
-#       fi
-#    fi
-# }
-#
-# complete -A directory -F _cd cd
-
 # Networking {{{1
 alias myip='curl icanhazip.com'
 
@@ -268,12 +246,10 @@ rs() {
       "$HOME"/config/dotfiles/.rsync_exclude "${3%/}"/ "$2:/$home$1/${3%/}"
 }
 
-# Permissions + debug + netstat, w {{{1
-r() { if [[ -d $1 || -f $1 ]]; then chmod u+r -- "$@"; else netstat -rn; fi; }
-w() { if [[ -d $1 || -f $1 ]]; then chmod u+w -- "$@"; else command w "$@"; fi; }
-
+# Permissions + debug {{{1
 x() {
    (($#)) && { chmod u+x -- "$@"; return; }
+
    if [[ $- == *x* ]]
    then echo 'debug OFF'; set +o xtrace
    else echo 'debug ON' ; set -o xtrace
@@ -289,9 +265,6 @@ alias setsticky='chmod  +t'
 alias cg=chgrp
 alias co=chown
 alias cm=chmod
-
-# Info: pa, usersee {{{1
-pa() { awk '!_[$0]++' <<< "${PATH//:/$'\n'}"; }
 
 # ls {{{1
 ldot() {
@@ -413,6 +386,11 @@ m() {
 
 alias mm='man -k'
 
+mg() { man git-"${1:-help}"; }
+
+alias rg="cat $HOME/github/help/it/regex.txt"
+alias pf="$HOME/github/help/it/printf.sh"
+
 doc() {
    curl -s https://raw.github.com/kurkale6ka/help/master/"$1".txt
 }
@@ -441,7 +419,7 @@ _type() {
 
 alias ?=_type
 
-usersee() {
+_usersee() {
    local header
    case "$1" in
       -g)
@@ -464,9 +442,9 @@ db() {
    then
       # passwd, group, shadow
       case "$1" in
-         -g) usersee -g;;
-         -s) usersee -s;;
-          *) usersee -p;;
+         -g) _usersee -g;;
+         -s) _usersee -s;;
+          *) _usersee -p;;
       esac
    else
       # locate, apropos
@@ -498,11 +476,6 @@ di() {
    find . \( "${inodes[@]}" \) -exec rm -i -- {} +
 }
 
-mg() { man git-"${1:-help}"; }
-
-alias rg="cat $HOME/github/help/it/regex.txt"
-alias pf="$HOME/github/help/it/printf.sh"
-
 alias wgetpaste='wgetpaste -s dpaste -n kurkale6ka -Ct'
 
 # Find files, text, differences. 'Cat' files, echo text {{{1
@@ -521,10 +494,6 @@ else
    alias gr='command grep -nIriE --color=auto --exclude="*~" --exclude tags'
 fi
 
-grr() {
-   find "${2:-.}" -type f ! -name '*~' ! -name tags -exec grep -nIriE --color=auto "$1" {} +
-}
-
 diff() {
    if [[ -t 1 ]] && command -v colordiff >/dev/null 2>&1
    then         colordiff "$@"
@@ -533,6 +502,12 @@ diff() {
 }
 
 alias _=combine
+
+# Run multiple versions of ruby side-by-side
+command -v rbenv >/dev/null 2>&1 && eval "$(rbenv init -)"
+
+# Cleaner PATH display
+pa() { awk '!_[$0]++' <<< "${PATH//:/$'\n'}"; }
 
 # Echo
 e() { local status=$?; (($#)) && echo "$@" || echo "$status"; }
@@ -631,29 +606,14 @@ alias os='tail -n99 /etc/*{release,version} 2>/dev/null | cat -s'
 # Backups {{{1
 bak() { local arg; for arg in "$@"; do command cp -i -- "$arg" "$arg".bak; done; }
 
-# Usage: sw file1 [file2]. If file2 is omitted, file1 is swapped with file1.bak
-sw() {
-   if (($# == 1)); then
-      [[ ! -e $1.bak ]] && { echo "file $1.bak does not exist" >&2; return 2; }
-      local tmpfile
-      tmpfile=$(mktemp tmp.XXXXXXXXXXX) ||
-         { echo "Temporary file creation failure" >&2; return 11; }
-      command mv -- "$1"       "$tmpfile" &&
-              mv -- "$1".bak   "$1"       &&
-              mv -- "$tmpfile" "$1".bak
-   elif (($# == 2));then
-      [[ ! -e $2 ]] && { echo "file $2 does not exist" >&2; return 3; }
-      local tmpfile
-      tmpfile=$(mktemp tmp.XXXXXXXXXXX) ||
-         { echo "Temporary file creation failure" >&2; return 12; }
-      command mv -- "$1"       "$tmpfile" &&
-              mv -- "$2"       "$1"       &&
-              mv -- "$tmpfile" "$2"
+rmbak() {
+   if (($#))
+   then
+      find . \( -name '*~' -o -name '.*~' \) -a ! -name '*.un~' -delete
+   else
+      find . \( -name '*~' -o -name '.*~' \) -a ! -name '*.un~' -printf '%f\n'
    fi
 }
-
-# todo: 'rm' not 'rm' -i + cron job ?!
-bakrm() { find . -name '*~' -a ! -name '*.un~' -exec command rm -i -- {} +; }
 
 alias dump='dump -u'
 
@@ -719,23 +679,6 @@ alias      cmd=command
 alias builtins='enable -a | cut -d" " -f2  | column'
 alias open=xdg-open
 
-urlencode() {
-   local char
-   local str="$*"
-   for ((i = 0; i < ${#str}; i++)); do
-      char="${str:i:1}"
-      case "$char" in
-         [a-zA-Z0-9.~_-]) printf "$char" ;;
-                     ' ') printf + ;;
-                       *) printf '%%%X' "'$char"
-      esac
-   done
-}
-
-gg() {
-   sudo -umitko xdg-open https://www.google.co.uk/search?q="$(urlencode "$@")" >/dev/null 2>&1
-}
-
 alias pl=perl
 alias rb=irb
 
@@ -789,22 +732,7 @@ b() {
    fi
 }
 
-alias pu=puppet
-
-# Debian
-alias ap='sudo aptitude'
-
-complete -W 'update upgrade install remove autoremove purge source build-dep
-dist-upgrade dselect-upgrade clean autoclean check' apt-get
-
-complete -W 'add gencaches showpkg showsrc stats dump dumpavail unmet search
-show depends rdepends pkgnames dotty xvcg policy' apt-cache
-
-complete -W 'install remove purge hold unhold markauto unmarkauto
-forbid-version update safe-upgrade full-upgrade forget-new search show clean
-autoclean changelog download reinstall why why-not' ap aptitude
-
-# Git
+# Git {{{1
 alias git='LESS="-r -i -M -PM?f%f - :.?L%L lines, :.?ltL\:%lt:.?pB, %pB\% : .?e(Bottom)%t" command git'
 
 gc() {
@@ -824,6 +752,16 @@ alias gd='git diff'
 alias gf='git fetch'
 alias gl='git log -1 -U1 --word-diff'
 
+gsa() (
+   for repo in bash config help scripts vim
+   do
+      echo "$Bold=== $repo ===$Reset"
+      cd "$HOME"/github/"$repo" && git status
+      [[ $repo != vim ]] && echo
+   done
+)
+
+# GitHub: open the repo corresponding to the current pwd in a browser {{{1
 gh() {
    if [[ $1 == -@(h|-h)* ]]
    then
@@ -862,23 +800,23 @@ gh() {
    xdg-open "$giturl" 2>/dev/null
 }
 
-gsa() (
-   for repo in bash config help scripts vim
-   do
-      echo "$Bold=== $repo ===$Reset"
-      cd "$HOME"/github/"$repo" && git status
-      [[ $repo != vim ]] && echo
+# Google search: gg term {{{1
+urlencode() {
+   local char
+   local str="$*"
+   for ((i = 0; i < ${#str}; i++)); do
+      char="${str:i:1}"
+      case "$char" in
+         [a-zA-Z0-9.~_-]) printf "$char" ;;
+                     ' ') printf + ;;
+                       *) printf '%%%X' "'$char"
+      esac
    done
-)
+}
 
-complete -W 'HEAD add bisect branch checkout clone commit diff fetch grep init
-log merge mv pull push rebase revert reset rm show status tag' git
-
-# Run multiple versions of ruby side-by-side
-command -v rbenv >/dev/null 2>&1 && eval "$(rbenv init -)"
-
-# Gentoo
-alias exi=eix
+gg() {
+   sudo -umitko xdg-open https://www.google.co.uk/search?q="$(urlencode "$@")" >/dev/null 2>&1
+}
 
 # Typos {{{1
 alias cta=cat
