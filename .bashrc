@@ -534,11 +534,17 @@ diff() {
 
 alias _=combine
 
- e() { local status=$?; (($#)) && echo "$@" || echo "$status"; }
-cn() { if [[ -t 1 ]]; then command cat -n -- "$@"; else command cat "$@"; fi; }
- n() { command sed -n "$1{p;q}" -- "$2"; }
+# Echo
+e() { local status=$?; (($#)) && echo "$@" || echo "$status"; }
+
+# Print nth line in a file: n 11 /my/file
+n() { command sed -n "$1{p;q}" -- "$2"; }
+
+# Display non-empty lines in a file
 sq() { command grep -v '^[[:space:]]*#\|^[[:space:]]*$' -- "$@"; }
- h() { if (($#)) || [[ ! -t 0 ]]; then head "$@"; else history; fi; }
+
+# Head and tail
+h() { if (($#)) || [[ ! -t 0 ]]; then head "$@"; else history; fi; }
 
 alias t=tail
 alias tf='tail -f -n0'
@@ -550,6 +556,8 @@ catall() {
    xargs -0 file | grep text | cut -d: -f1 | cut -c3- | xargs head -n98 |
    command $nvim -u "$HOME"/.vimrc -c "se fdl=0 fdm=expr fde=getline(v\:lnum)=~'==>'?'>1'\:'='" -
 }
+
+cn() { if [[ -t 1 ]]; then command cat -n -- "$@"; else command cat "$@"; fi; }
 
 # Convert to dec, bin, oct, hex + bc {{{1
 cv() {
