@@ -181,36 +181,29 @@ alias md='command mkdir -p --'
 
 complete -A directory mkdir md rmdir rd
 
-# Completion of user names
-_cd() {
+# # Completion of user names
+# _cd() {
+#
+#    local cur=${COMP_WORDS[COMP_CWORD]}
+#    local userlist
+#
+#    # ex: ~user, not ~/dev
+#    if [[ $2 == ~[!/]* || $2 == '~' ]]; then
+#
+#       # the default delimiter is \n, IFS '' - read reads several lines
+#       # [dir1 \n dir2 \n ... dirn \0 ]      - read reads one line
+#       IFS=$'\n' read -r -d $'\0' -a userlist < <(compgen -A user -- "$cur")
+#
+#       if [[ $userlist ]]; then
+#
+#          IFS=$'\n' read -r -d $'\0' -a COMPREPLY < <(printf '%q\n' "${userlist[@]}")
+#       fi
+#    fi
+# }
+#
+# complete -A directory -F _cd cd
 
-   local cur=${COMP_WORDS[COMP_CWORD]}
-   local userlist
-
-   # ex: ~user, not ~/dev
-   if [[ $2 == ~[!/]* || $2 == '~' ]]; then
-
-      # the default delimiter is \n, IFS '' - read reads several lines
-      # [dir1 \n dir2 \n ... dirn \0 ]      - read reads one line
-      IFS=$'\n' read -r -d $'\0' -a userlist < <(compgen -A user -- "$cur")
-
-      if [[ $userlist ]]; then
-
-         IFS=$'\n' read -r -d $'\0' -a COMPREPLY < <(printf '%q\n' "${userlist[@]}")
-      fi
-   fi
-}
-
-complete -A directory -F _cd cd
-
-# Networking: ip | mac, ping, (ir?). Processes and jobs {{{1
-mac() {
-   (($#)) && { eix -I "$@"; return 0; }
-   local mac_ip_regex='((hw|ll)addr|inet)\s+(addr:)?'
-   ifconfig eth0 | command grep -oiE "$mac_ip_regex[^[:space:]]+" |
-                   command sed  -r   "s/$mac_ip_regex//i"
-}
-
+# Networking {{{1
 alias myip='curl icanhazip.com'
 
 dig() { command dig +noall +answer "${@#*//}"; }
@@ -268,11 +261,6 @@ alias -- --='fg %-'
 complete -A job     -P '%' fg z jobs j disown
 complete -A stopped -P '%' bg
 
-# todo: keep?
-ir() { ifdown "$1" && ifup "$1" || echo "Couldn't do it." >&2; }
-
-complete -W 'eth0 eth1 lo' ir
-
 rs() {
    (($# == 3)) || { echo 'Usage: rs USER SERVER DIR' >&2; return 1; }
    [[ $1 == 'root' ]] && local home='' || local home=home/
@@ -304,34 +292,6 @@ alias cm=chmod
 
 # Info: pa, usersee {{{1
 pa() { awk '!_[$0]++' <<< "${PATH//:/$'\n'}"; }
-
-usersee() {
-   if (($#)); then
-      local header user
-      case "$1" in
-         -p)
-            header=LOGIN:PASSWORD:UID:GID:GECOS:HOME:SHELL
-            sort -k7 -t: /etc/passwd | command sed -e "1i$header" -e 's/::/:-:/g' |\
-            column -ts:;;
-         -g)
-            header=GROUP:PASSWORD:GID:USERS
-            sort -k4 -t: /etc/group | command sed "1i$header" | column -ts:;;
-         -s)
-            header=LOGIN:PASSWORD:LAST:MIN:MAX:WARN:INACTIVITY:EXPIRATION:RESERVED
-            sudo sort -k2 -t: /etc/shadow |\
-            awk -F: '{print $1":"substr($2,1,3)":"$3":"$4":"$5":"$6":"$7":"$8":"$9}' |\
-            command sed -e "1i$header" -e 's/::/:-:/g' | column -ts:;;
-          *)
-            for user in "$@"; do
-               sudo grep -iE --color=auto "$user" /etc/{passwd,shadow}
-               sort -k4 -t: /etc/group | column -ts: | command grep -iE --color=auto "$user"
-            done
-      esac
-   else
-      sudo grep -iE --color=auto "$USER" /etc/{passwd,shadow}
-      sort -k4 -t: /etc/group | column -ts: | command grep -iE --color=auto "$USER"
-   fi
-}
 
 # ls {{{1
 ldot() {
@@ -481,15 +441,44 @@ _type() {
 
 alias ?=_type
 
+usersee() {
+   local header
+   case "$1" in
+      -g)
+         header=GROUP:PASSWORD:GID:USERS
+         sort -k4 -t: /etc/group | command sed "1i$header" | column -ts:;;
+      -s)
+         header=LOGIN:PASSWORD:LAST:MIN:MAX:WARN:INACTIVITY:EXPIRATION:RESERVED
+         sudo sort -k2 -t: /etc/shadow |\
+            awk -F: '{print $1":"substr($2,1,3)":"$3":"$4":"$5":"$6":"$7":"$8":"$9}' |\
+            command sed -e "1i$header" -e 's/::/:-:/g' | column -ts:;;
+       *)
+         header=LOGIN:PASSWORD:UID:GID:GECOS:HOME:SHELL
+         sort -k7 -t: /etc/passwd | command sed -e "1i$header" -e 's/::/:-:/g' |\
+            column -ts:;;
+   esac
+}
+
 db() {
-   local prgm PS3='Choose a database to update: '
-   select prgm in locate 'apropos, man -k'; do
-      case "$prgm" in
-           locate) printf 'updatedb...\n'  ; updatedb   & return;;
-         apropos*) printf 'makewhatis...\n'; makewhatis & return;;
-                *) echo '*** Wrong choice ***' >&2
+   if (($#))
+   then
+      # passwd, group, shadow
+      case "$1" in
+         -g) usersee -g;;
+         -s) usersee -s;;
+          *) usersee -p;;
       esac
-   done
+   else
+      # locate, apropos
+      local prgm PS3='Choose a database to update: '
+      select prgm in locate 'apropos, man -k'; do
+         case "$prgm" in
+              locate) printf 'updatedb...\n'  ; updatedb   & return;;
+            apropos*) printf 'makewhatis...\n'; makewhatis & return;;
+                   *) echo '*** Wrong choice ***' >&2
+         esac
+      done
+   fi
 }
 
 alias y='cp -i --'
@@ -509,8 +498,6 @@ di() {
    find . \( "${inodes[@]}" \) -exec rm -i -- {} +
 }
 
-mp() { pe-man puppet-"${1:-help}"; }
-mpp() { puppet describe "$@" | mo; }
 mg() { man git-"${1:-help}"; }
 
 alias rg="cat $HOME/github/help/it/regex.txt"
