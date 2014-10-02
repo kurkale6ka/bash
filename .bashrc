@@ -607,7 +607,7 @@ u() {
 alias os='tail -n99 /etc/*{release,version} 2>/dev/null | cat -s'
 
 # Backup functions and aliases {{{1
-bak() {
+b() {
    (($#)) || { echo 'Usage: bak {file} ...' 1>&2; return 1; }
    local arg
    for arg in "$@"
@@ -617,7 +617,7 @@ bak() {
 }
 
 # Usage: sw file [file.bak]. file.bak is assumed by default so it can be omitted
-sw() {
+bs() {
    if [[ $1 == -@(h|-h)* ]] || (($# != 1 && $# != 2)); then
       info='Usage: sw file [file.bak]'
       if (($#))
@@ -644,7 +644,7 @@ sw() {
    fi
 }
 
-rmbak() {
+br() {
    if (($#))
    then
       find . \( -name '*~' -o -name '.*~' \) -a ! -name '*.un~' -delete
@@ -746,7 +746,7 @@ rc() {
 }
 
 # Banners using figlet
-b() {
+bn() {
    if   (($# == 1)); then figlet -f smslant -- "$1"
    elif (($# == 2)); then figlet -f "$1"    -- "${@:2}"
    else                   figlist | column -c"$COLUMNS"
