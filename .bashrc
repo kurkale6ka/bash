@@ -607,7 +607,42 @@ u() {
 alias os='tail -n99 /etc/*{release,version} 2>/dev/null | cat -s'
 
 # Backup functions and aliases {{{1
-bak() { local arg; for arg in "$@"; do command cp -i -- "$arg" "$arg".bak; done; }
+bak() {
+   (($#)) || { echo 'Usage: bak {file} ...' 1>&2; return 1; }
+   local arg
+   for arg in "$@"
+   do
+      command cp -i -- "$arg" "$arg".bak
+   done
+}
+
+# Usage: sw file [file.bak]. file.bak is assumed by default so it can be omitted
+sw() {
+   if [[ $1 == -@(h|-h)* ]] || (($# != 1 && $# != 2)); then
+      info='Usage: sw file [file.bak]'
+      if (($#))
+      then echo "$info"    ; return 0
+      else echo "$info" >&2; return 1
+      fi
+   fi
+   file1="$1"
+   if (($# == 1))
+   then file2="$1".bak
+   else file2="$2"
+   fi
+   if [[ -e $file1 && -e $file2 ]]
+   then
+      local tmpfile=$(mktemp)
+      if [[ $tmpfile ]]
+      then
+         'mv' -- "$file1"   "$tmpfile" &&
+         'mv' -- "$file2"   "$file1"   &&
+         'mv' -- "$tmpfile" "$file2"
+      fi
+   else
+      head -n2 "$file1" "$file2" # to get an error message
+   fi
+}
 
 rmbak() {
    if (($#))
