@@ -182,16 +182,13 @@ alias    4="${cd_alias:-cd} ../../../.."
 alias cd..="${cd_alias:-cd} .."
 alias   ..="${cd_alias:-cd} .."
 
-alias md='command mkdir -p --'
 alias to=touch
+alias md='command mkdir -p --'
 
 rd() {
-   echo -n 'rd: remove directories '
-   local warning
-   printf -v warning "'%s', " "$@"
-   warning="${warning%??}"; echo -n "$warning? "
-   read -r
-   [[ $REPLY == @(y|yes) ]] && command rm -rf -- "$@"
+   printf 'rd: remove directory ‘%s’?\n' "$@"
+   read -p '(y/n) '
+   [[ $REPLY == @(y|yes) ]] && command rm -r -- "$@"
 }
 
 complete -A directory mkdir md rmdir rd
