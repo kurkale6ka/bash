@@ -63,8 +63,8 @@ elif command -v gvim; then
    my_gvim=gvim
 fi >/dev/null 2>&1
 
+alias  vim="command vim -u $HOME/.vimrc"
 alias    v="command $nvim -u $HOME/.vimrc"
-alias  vim="command $nvim -u $HOME/.vimrc"
 alias   vm="command $nvim -u $HOME/.vimrc -"
 alias   vd="command $nvim -u $HOME/.vimrc -d"
 alias   vl="command ls -FB1 | $nvim -u $HOME/.vimrc -"
