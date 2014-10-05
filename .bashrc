@@ -67,6 +67,7 @@ alias  vim="command vim -u $HOME/.vimrc"
 alias    v="command $nvim -u $HOME/.vimrc"
 alias   vm="command $nvim -u $HOME/.vimrc -"
 alias   vd="command $nvim -u $HOME/.vimrc -d"
+alias   vt="command $nvim -u $HOME/.vimrc -t"
 alias   vl="command ls -FB1 | $nvim -u $HOME/.vimrc -"
 alias vish='sudo vipw -s'
 
