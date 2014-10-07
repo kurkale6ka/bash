@@ -81,8 +81,9 @@ vdr() {
 }
 
 if [[ $my_gvim ]]; then
-   alias  gv="command $my_gvim -u $HOME/.vimrc -U $HOME/.gvimrc"
-   alias gvd="command $my_gvim -u $HOME/.vimrc -U $HOME/.gvimrc -d"
+   alias gvim="command $my_gvim -u $HOME/.vimrc -U $HOME/.gvimrc"
+   alias   gv="command $my_gvim -u $HOME/.vimrc -U $HOME/.gvimrc"
+   alias  gvd="command $my_gvim -u $HOME/.vimrc -U $HOME/.gvimrc -d"
 fi
 
 vn() {
@@ -94,13 +95,13 @@ vn() {
    local  vimrc="${LGreen}.vimrc$Reset"   _vimrc="$HOME"/.vimrc
    local gvimrc="${LGreen}.gvimrc$Reset" _gvimrc="$HOME"/.gvimrc
    local plugin="${LGreen}plugins$Reset"
-    opts=("$nvi no .vimrc,           , no plugins ( -nNX -u NONE                             )")
-   opts+=("$nvm    $vimrc,           , no plugins ( -nNX -u ~/.vimrc --noplugin              )")
-   opts+=("$gvi no .vimrc, no .gvimrc, no plugins ( -nN -u NONE                              )")
-   opts+=("gvim    $vimrc, no .gvimrc,    $plugin ( -nN -u ~/.vimrc -U NONE                  )")
-   opts+=("gvim no .vimrc,    $gvimrc, no plugins ( -nN -u /dev/null -U ~/.gvimrc --noplugin )")
-   opts+=("gvim    $vimrc, no .gvimrc, no plugins ( -nN -u ~/.vimrc -U NONE --noplugin       )")
-   opts+=("gvim    $vimrc,    $gvimrc, no plugins ( -nN -u ~/.vimrc -U ~/.gvimrc --noplugin  )")
+    opts=("$nvi no .vimrc,           , no plugins ( \vim -nNX -u NONE                              )")
+   opts+=("$nvm    $vimrc,           , no plugins ( \vim -nNX -u ~/.vimrc --noplugin               )")
+   opts+=("$gvi no .vimrc, no .gvimrc, no plugins ( \gvim -nN -u NONE                              )")
+   opts+=("gvim    $vimrc, no .gvimrc,    $plugin ( \gvim -nN -u ~/.vimrc -U NONE                  )")
+   opts+=("gvim no .vimrc,    $gvimrc, no plugins ( \gvim -nN -u /dev/null -U ~/.gvimrc --noplugin )")
+   opts+=("gvim    $vimrc, no .gvimrc, no plugins ( \gvim -nN -u ~/.vimrc -U NONE --noplugin       )")
+   opts+=("gvim    $vimrc,    $gvimrc, no plugins ( \gvim -nN -u ~/.vimrc -U ~/.gvimrc --noplugin  )")
    select opt in "${opts[@]}"; do
       case "$opt" in
          "${opts[0]}") command     $nvim  -nNX -u NONE                              ; break;;
