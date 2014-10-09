@@ -116,6 +116,33 @@ vn() {
    done
 }
 
+# Arch Linux {{{1
+ps () {
+   if (($#))
+   then command ps "$@"
+   else pacman -Syu
+   fi
+}
+
+alias pu='pacman -U'
+
+complete -f -o default -X '!*.pkg.tar.xz' pu
+
+# Update Neovim
+nu () (
+   cd /usr/local/src/neovim-git || exit 1
+   shopt -s nullglob
+   local latest file
+   for file in *
+   do
+      [[ $file -nt $latest ]] && latest="$file"
+   done
+   if makepkg -s
+   then
+      sudo pacman -U "$latest"
+   fi
+)
+
 # sudo and s() {{{1
 if sudo -V |
    { read -r _ _ ver; ver="${ver%.*}"; ((${ver%.*} > 0 && ${ver#*.} > 6)); }
