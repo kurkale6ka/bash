@@ -131,14 +131,14 @@ complete -f -o default -X '!*.pkg.tar.xz' pu
 # Update Neovim
 nu () (
    cd /usr/local/src/neovim-git || exit 1
-   shopt -s nullglob
-   local latest file
-   for file in *.pkg.tar.xz
-   do
-      [[ $file -nt $latest ]] && latest="$file"
-   done
    if makepkg -s
    then
+      shopt -s nullglob
+      local latest file
+      for file in *.pkg.tar.xz
+      do
+         [[ $file -nt $latest ]] && latest="$file"
+      done
       sudo pacman -U "$latest"
    fi
 )
