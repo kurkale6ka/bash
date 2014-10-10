@@ -133,7 +133,7 @@ nu () (
    cd /usr/local/src/neovim-git || exit 1
    shopt -s nullglob
    local latest file
-   for file in *
+   for file in *.pkg.tar.xz
    do
       [[ $file -nt $latest ]] && latest="$file"
    done
