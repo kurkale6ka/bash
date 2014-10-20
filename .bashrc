@@ -117,16 +117,36 @@ vn() {
 }
 
 # Arch Linux {{{1
+# Search (or sync)
 ps () {
    if (($#))
-   then command ps "$@"
+   then
+      if [[ $1 == @(-|aux|fax|faux)* ]]
+      then command ps "$@"
+      else pacman -Ss "$@"
+      fi
+   else
+      pacman -Syu
+   fi
+}
+
+# Install
+pi() {
+   if [[ $1 == *.pkg.tar.xz ]]
+   then pacman -U "$@"
+   else pacman -S "$@"
+   fi
+}
+
+# Update (or install)
+pu() {
+   if (($#))
+   then pacman -U "$@"
    else pacman -Syu
    fi
 }
 
-alias pu='pacman -U'
-
-complete -f -o default -X '!*.pkg.tar.xz' pu
+complete -f -o default -X '!*.pkg.tar.xz' pi pu
 
 # Update Neovim
 nu () (
