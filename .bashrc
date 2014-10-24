@@ -118,7 +118,7 @@ vn() {
 
 # Arch Linux {{{1
 # Search (or sync)
-ps () {
+ps() {
    if (($#))
    then
       if [[ $1 == @(-|aux|fax|faux)* ]]
@@ -291,9 +291,9 @@ pfields=pid,stat,euser,egroup,start_time,cmd
 
 p() { if (($#)); then ping -c3 "$@"; else ps fww o "$ppfields" --headers; fi; }
 
-alias pp="ps faxww o $ppfields --headers"
-alias pg="ps o $pfields --headers | head -1 && ps faxww o $pfields | command grep -v grep | command grep -iEB1 --color=auto"
-alias ppg="ps o $ppfields --headers | head -1 && ps faxww o $ppfields | command grep -v grep | command grep -iEB1 --color=auto"
+alias pp="command ps faxww o $ppfields --headers"
+alias pg="command ps o $pfields --headers | head -1 && ps faxww o $pfields | command grep -v grep | command grep -iEB1 --color=auto"
+alias ppg="command ps o $ppfields --headers | head -1 && ps faxww o $ppfields | command grep -v grep | command grep -iEB1 --color=auto"
 alias pgrep='pgrep -l'
 
 alias  k=kill
@@ -945,8 +945,8 @@ complete -W 'alias arrayvar binding builtin command directory disabled enabled
 export file function group helptopic hostname job keyword running service
 setopt shopt signal stopped user variable' cl compgen complete
 
-complete -W '$(tmux ls | cut -d: -f1)' tmux
-complete -W "$(screen -ls | grep -E '^\s+[0-9].*\.' | awk {print\ \$1})" screen
+complete -W '$(tmux ls 2>/dev/null | cut -d: -f1)' tmux
+complete -W "$(screen -ls 2>/dev/null | grep -E '^\s+[0-9].*\.' | awk {print\ \$1})" screen
 
 # enable bash completion in non posix shells
 if ! shopt -oq posix; then
