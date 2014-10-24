@@ -945,6 +945,9 @@ complete -W 'alias arrayvar binding builtin command directory disabled enabled
 export file function group helptopic hostname job keyword running service
 setopt shopt signal stopped user variable' cl compgen complete
 
+complete -W '$(tmux ls | cut -d: -f1)' tmux
+complete -W "$(screen -ls | grep -E '^\s+[0-9].*\.' | awk {print\ \$1})" screen
+
 # enable bash completion in non posix shells
 if ! shopt -oq posix; then
    if [[ -f /etc/profile.d/bash-completion.sh ]]; then
