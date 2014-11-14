@@ -28,6 +28,7 @@ Underline="$(tput smul)"
     Green="$(tput setaf 2)"
      Blue="$(tput setaf 4)"
       Red="$(tput setaf 1)"
+  LPurple="$(printf %s "$Bold"; tput setaf 5)"
    LGreen="$(printf %s "$Bold"; tput setaf 2)"
     LBlue="$(printf %s "$Bold"; tput setaf 4)"
      LRed="$(printf %s "$Bold"; tput setaf 1)"
@@ -203,11 +204,20 @@ PS1() {
       #                                                              oge    | [21118]: | 2013-09-09_10:46:34 su - | [1]
       # export PROMPT_COMMAND='RETRN_VAL=$?; logger -p local6.debug "$LOGNAME [$$]: $(history 1 | command sed "s/^[ ]*[0-9]\+[ ]*//" ) [$RETRN_VAL]"; ...'
       [[ $TERM != linux ]] && export PROMPT_COMMAND='printf "\e]2;%s @ %s # %s\a" "$USER" "${HOSTNAME%%.*}" "${PWD/#$HOME/~}"'
-      PS1="\n\[$LRed\]\u \[$LBlue\]@ \[$LRed\]\h \[$LBlue\]\w\[$Reset\] \A"'$(((\j>0)) && echo , %\j)'"\n# "
-      PATH=$PATH:/sbin:/usr/sbin:/usr/local/sbin:/root/bin:$HOME/bin
+      if [[ $SSH_CONNECTION ]]
+      then
+         PS1="\n\[$LRed\]\u \[$LBlue\]@ \[$LPurple\]\h \[$LBlue\]\w\[$Reset\] \A"'$(((\j>0)) && echo , %\j)'"\n# "
+      else
+         PS1="\n\[$LRed\]\u \[$LBlue\]@ \[$LGreen\]\h \[$LBlue\]\w\[$Reset\] \A"'$(((\j>0)) && echo , %\j)'"\n# "
+      fi
    else
       [[ $TERM != linux ]] && export PROMPT_COMMAND='printf "\e]2;%s @ %s $ %s\a" "$USER" "${HOSTNAME%%.*}" "${PWD/#$HOME/~}"'
-      PS1="\n\[$LGreen\]\u \[$LBlue\]@ \[$LGreen\]\h \[$LBlue\]\w\[$Reset\] \A"'$(((\j>0)) && echo , %\j)'"\n\\$ "
+      if [[ $SSH_CONNECTION ]]
+      then
+         PS1="\n\[$LGreen\]\u \[$LBlue\]@ \[$LPurple\]\h \[$LBlue\]\w\[$Reset\] \A"'$(((\j>0)) && echo , %\j)'"\n\\$ "
+      else
+         PS1="\n\[$LGreen\]\u \[$LBlue\]@ \[$LGreen\]\h \[$LBlue\]\w\[$Reset\] \A"'$(((\j>0)) && echo , %\j)'"\n\\$ "
+      fi
    fi
 }
 
@@ -314,7 +324,7 @@ complete -A stopped -P '%' bg
 rs() {
    (($# == 3)) || { echo 'Usage: rs USER SERVER DIR' >&2; return 1; }
    [[ $1 == 'root' ]] && local home='' || local home=home/
-   rsync -e "ssh -q -l $1" -v --recursive --links --stats --progress --exclude-from \
+   rsync -e "ssh -v -l $1" -v --recursive --links --stats --progress --exclude-from \
       "$HOME"/config/dotfiles/.rsync_exclude "${3%/}"/ "$2:/$home$1/${3%/}"
 }
 
