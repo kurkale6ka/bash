@@ -854,9 +854,9 @@ alias go='git checkout'
 alias gm='git checkout master'
 alias ga='git add'
 alias gb='git branch'
-alias gd='git diff'
+alias gd='git diff --word-diff=color'
 alias gf='git fetch'
-alias gl='git log -1 -U1 --word-diff'
+alias gl='git log -1 -U1 --word-diff=color'
 
 gsa() (
    for repo in bash config help scripts vim
