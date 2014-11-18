@@ -206,17 +206,17 @@ PS1() {
       [[ $TERM != linux ]] && export PROMPT_COMMAND='printf "\e]2;%s @ %s # %s\a" "$USER" "${HOSTNAME%%.*}" "${PWD/#$HOME/~}"'
       if [[ $SSH_CONNECTION ]]
       then
-         PS1="\n\[$LRed\]\u \[$LBlue\]@ \[$LPurple\]\h \[$LBlue\]\w\[$Reset\] \A"'$(((\j>0)) && echo \ ❭ %\j)'"\n# "
+         PS1="\n\[$LRed\]\u \[$LBlue\]@ \[$LPurple\]\h \[$LBlue\]\w\[$Reset\] \A"'$(((\j>0)) && echo \ ❭ \[$LRed\]%\j\[$Reset\])'"\n# "
       else
-         PS1="\n\[$LRed\]\u \[$LBlue\]@ \[$LGreen\]\h \[$LBlue\]\w\[$Reset\] \A"'$(((\j>0)) && echo \ ❭ %\j)'"\n# "
+         PS1="\n\[$LRed\]\u \[$LBlue\]@ \[$LGreen\]\h \[$LBlue\]\w\[$Reset\] \A"'$(((\j>0)) && echo \ ❭ \[$LRed\]%\j\[$Reset\])'"\n# "
       fi
    else
       [[ $TERM != linux ]] && export PROMPT_COMMAND='printf "\e]2;%s @ %s $ %s\a" "$USER" "${HOSTNAME%%.*}" "${PWD/#$HOME/~}"'
       if [[ $SSH_CONNECTION ]]
       then
-         PS1="\n\[$LGreen\]\u \[$LBlue\]@ \[$LPurple\]\h \[$LBlue\]\w\[$Reset\] \A"'$(((\j>0)) && echo \ ❭ %\j)'"\n\\$ "
+         PS1="\n\[$LGreen\]\u \[$LBlue\]@ \[$LPurple\]\h \[$LBlue\]\w\[$Reset\] \A"'$(((\j>0)) && echo \ ❭ \[$LRed\]%\j\[$Reset\])'"\n\\$ "
       else
-         PS1="\n\[$LGreen\]\u \[$LBlue\]@ \[$LGreen\]\h \[$LBlue\]\w\[$Reset\] \A"'$(((\j>0)) && echo \ ❭ %\j)'"\n\\$ "
+         PS1="\n\[$LGreen\]\u \[$LBlue\]@ \[$LGreen\]\h \[$LBlue\]\w\[$Reset\] \A"'$(((\j>0)) && echo \ ❭ \[$LRed\]%\j\[$Reset\])'"\n\\$ "
       fi
    fi
 }
