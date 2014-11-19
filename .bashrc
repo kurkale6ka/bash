@@ -480,7 +480,8 @@ doc() {
    if (( ${#matches[@]} == 1 ))
    then
       command nvim -u "$HOME"/.vimrc "${matches[@]}" -c"0/$1" -c'noh|norm zv<cr>'
-   else
+   elif (( ${#matches[@]} > 1 ))
+   then
       ag -S --color-line-number="00;32" --color-path="00;35" --color-match="01;31" \
          "$1" "${matches[@]}"
    fi
