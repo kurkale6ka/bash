@@ -850,7 +850,7 @@ gc() {
 }
 
 alias gp='git push origin master'
-alias gs='git status'
+alias gs='git status -s'
 alias go='git checkout'
 alias gm='git checkout master'
 alias ga='git add'
@@ -866,7 +866,7 @@ gsa() (
          echo "$Bold=== $repo ===$Reset"
          if (($#)) # -f to fetch if branch ahead of remote
          then git fetch
-         else git status
+         else git status -s
          fi
          [[ $repo != vim ]] && echo
       }
