@@ -840,15 +840,7 @@ sq() { command grep -v '^[[:space:]]*#\|^[[:space:]]*$' -- "$@"; }
 pa() { awk '!_[$0]++' <<< "${PATH//:/$'\n'}"; }
 
 # Git {{{1
-alias git='LESS="-r -i -M -PM?f%f - :.?L%L lines, :.?ltL\:%lt:.?pB, %pB\% : .?e(Bottom)%t" command git'
-
-gc() {
-   if (($#))
-   then git add "$@" && git commit -v "$@"
-   else git commit -va
-   fi
-}
-
+alias gc='git commit -v'
 alias gp='git push origin master'
 alias gs='git status -s'
 alias go='git checkout'
@@ -864,9 +856,11 @@ gsa() (
    do
       cd "$HOME"/github/"$repo" && {
          echo "$Bold=== $repo ===$Reset"
-         if (($#)) # -f to fetch if branch ahead of remote
-         then git fetch
-         else git status -s
+         if (($#)) # fetch if branch ahead of remote
+         then
+            git fetch
+         else
+            git status -s
          fi
          [[ $repo != vim ]] && echo
       }
