@@ -243,12 +243,12 @@ fi
 
 alias  cd-="${cd_alias:-cd} - >/dev/null"
 alias -- -="${cd_alias:-cd} - >/dev/null"
-alias    1="${cd_alias:-cd} .. >/dev/null"
-alias    2="${cd_alias:-cd} ../.. >/dev/null"
-alias    3="${cd_alias:-cd} ../../.. >/dev/null"
-alias    4="${cd_alias:-cd} ../../../.. >/dev/null"
-alias cd..="${cd_alias:-cd} .. >/dev/null"
-alias   ..="${cd_alias:-cd} .. >/dev/null"
+alias    1="${cd_alias:-cd} .."
+alias    2="${cd_alias:-cd} ../.."
+alias    3="${cd_alias:-cd} ../../.."
+alias    4="${cd_alias:-cd} ../../../.."
+alias cd..="${cd_alias:-cd} .."
+alias   ..="${cd_alias:-cd} .."
 
 alias to=touch
 alias md='command mkdir -p --'
