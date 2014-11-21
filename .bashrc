@@ -197,6 +197,14 @@ s() {
 }
 
 # PS1 + title (\e]2; ---- \a) {{{1
+_git_branch() {
+   local gb="$(git rev-parse --abbrev-ref HEAD 2>/dev/null)"
+   if [[ $gb ]]
+   then echo "$gb "
+   else echo ''
+   fi
+}
+
 PS1() {
    if ((EUID == 0)); then
       # Use PROMPT_COMMAND to aggregate users' history into a single file
@@ -206,17 +214,17 @@ PS1() {
       [[ $TERM != linux ]] && export PROMPT_COMMAND='printf "\e]2;%s @ %s # %s\a" "$USER" "${HOSTNAME%%.*}" "${PWD/#$HOME/~}"'
       if [[ $SSH_CONNECTION ]]
       then
-         PS1="\n\[$LRed\]\u \[$LBlue\]@ \[$LPurple\]\h\[$Reset\] "'$(git rev-parse --abbrev-ref HEAD 2>/dev/null) '"\[$LBlue\]\w\[$Reset\] \A"'$(((\j>0)) && echo \ ❭ \[$LRed\]%\j\[$Reset\])'"\n# "
+         PS1="\n\[$LRed\]\u \[$LBlue\]@ \[$LPurple\]\h\[$Reset\]\[$Bold\] \$(_git_branch)\[$LBlue\]\w\[$Reset\] \A"'$(((\j>0)) && echo \ ❭ \[$LRed\]%\j\[$Reset\])'"\n# "
       else
-         PS1="\n\[$LRed\]\u \[$LBlue\]@ \[$LGreen\]\h\[$Reset\] "'$(git rev-parse --abbrev-ref HEAD 2>/dev/null) '"\[$LBlue\]\w\[$Reset\] \A"'$(((\j>0)) && echo \ ❭ \[$LRed\]%\j\[$Reset\])'"\n# "
+         PS1="\n\[$LRed\]\u \[$LBlue\]@ \[$LGreen\]\h\[$Reset\]\[$Bold\] \$(_git_branch)\[$LBlue\]\w\[$Reset\] \A"'$(((\j>0)) && echo \ ❭ \[$LRed\]%\j\[$Reset\])'"\n# "
       fi
    else
       [[ $TERM != linux ]] && export PROMPT_COMMAND='printf "\e]2;%s @ %s $ %s\a" "$USER" "${HOSTNAME%%.*}" "${PWD/#$HOME/~}"'
       if [[ $SSH_CONNECTION ]]
       then
-         PS1="\n\[$LGreen\]\u \[$LBlue\]@ \[$LPurple\]\h\[$Reset\] "'$(git rev-parse --abbrev-ref HEAD 2>/dev/null) '"\[$LBlue\]\w\[$Reset\] \A"'$(((\j>0)) && echo \ ❭ \[$LRed\]%\j\[$Reset\])'"\n\\$ "
+         PS1="\n\[$LGreen\]\u \[$LBlue\]@ \[$LPurple\]\h\[$Reset\]\[$Bold\] \$(_git_branch)\[$LBlue\]\w\[$Reset\] \A"'$(((\j>0)) && echo \ ❭ \[$LRed\]%\j\[$Reset\])'"\n\\$ "
       else
-         PS1="\n\[$LGreen\]\u \[$LBlue\]@ \[$LGreen\]\h\[$Reset\] "'$(git rev-parse --abbrev-ref HEAD 2>/dev/null) '"\[$LBlue\]\w\[$Reset\] \A"'$(((\j>0)) && echo \ ❭ \[$LRed\]%\j\[$Reset\])'"\n\\$ "
+         PS1="\n\[$LGreen\]\u \[$LBlue\]@ \[$LGreen\]\h\[$Reset\]\[$Bold\] \$(_git_branch)\[$LBlue\]\w\[$Reset\] \A"'$(((\j>0)) && echo \ ❭ \[$LRed\]%\j\[$Reset\])'"\n\\$ "
       fi
    fi
 }
