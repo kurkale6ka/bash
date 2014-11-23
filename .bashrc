@@ -117,6 +117,8 @@ vn() {
    done
 }
 
+tags() { ctags --languages="$1"; }
+
 # Arch Linux {{{1
 # Search (or sync)
 ps() {
