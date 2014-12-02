@@ -870,7 +870,8 @@ gsa() (
          then
             git fetch
          else
-            git status -sb
+            git -c color.ui=false status -sb | head -n1
+            git status -s
          fi
          [[ $repo != vim ]] && echo
       }
