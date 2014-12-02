@@ -852,7 +852,7 @@ pa() { awk '!_[$0]++' <<< "${PATH//:/$'\n'}"; }
 # Git {{{1
 alias gc='git commit -v'
 alias gp='git push origin master'
-alias gs='git status -s'
+alias gs='git status -sb'
 alias go='git checkout'
 alias gm='git checkout master'
 alias ga='git add'
@@ -870,7 +870,7 @@ gsa() (
          then
             git fetch
          else
-            git status -s
+            git status -sb
          fi
          [[ $repo != vim ]] && echo
       }
