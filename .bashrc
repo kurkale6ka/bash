@@ -486,7 +486,7 @@ doc() {
    while read -r
    do
       matches+=("$REPLY")
-   done < <(ag -lS --ignore 'README*' "$1" "$HOME"/help/)
+   done < <(ag -lS --ignore '*install*' --ignore '*readme*' "$1" "$HOME"/help/)
    if (( ${#matches[@]} == 1 ))
    then
       command nvim -u "$HOME"/.vimrc "${matches[@]}" -c"0/$1" -c'noh|norm zv<cr>'
