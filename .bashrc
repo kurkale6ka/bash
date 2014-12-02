@@ -859,7 +859,8 @@ alias ga='git add'
 alias gb='git branch'
 alias gd='git diff --word-diff=color'
 alias gf='git fetch'
-alias gl='git log -U1 --abbrev-commit --word-diff=color' # -U1: 1 line of context (-p implied)
+alias gl='git log --oneline --decorate'
+alias gll='git log -U1 --word-diff=color' # -U1: 1 line of context (-p implied)
 
 gsa() (
    for repo in bash config help scripts vim
