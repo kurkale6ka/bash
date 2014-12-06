@@ -298,6 +298,10 @@ tunnel() {
    fi
 }
 
+# Security
+alias il='iptables -nvL --line-numbers'
+alias nn=netstat
+
 # Processes and jobs {{{1
 # memory map
 pm() {
