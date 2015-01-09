@@ -20,7 +20,7 @@ FIGNORE='~:.swp:.o' # <tab> completion
 
 HOSTFILE="$HOME"/.hosts # hostnames completion (same format as /etc/hosts)
 
-# Colors {{{1
+## Colors
 # These can't reside in .profile since there is no terminal for tput
      Bold="$(tput bold)"
 Underline="$(tput smul)"
@@ -52,7 +52,7 @@ export LESS_TERMCAP_ue="$(tput rmul; printf %s "$Reset")"
 
 [[ -r $HOME/.dir_colors ]] && eval "$(dircolors "$HOME"/.dir_colors)"
 
-# Vim {{{1
+## Vim
 if command -v nvim
 then nvim=nvim
 else nvim=vim
@@ -119,7 +119,7 @@ vn() {
 
 tags() { ctags --languages="$1"; }
 
-# Arch Linux {{{1
+## Arch Linux
 # Search (or sync)
 ps() {
    if (($#))
@@ -166,7 +166,7 @@ nu () (
    fi
 )
 
-# sudo and s() {{{1
+## sudo and s()
 if sudo -V |
    { read -r _ _ ver; ver="${ver%.*}"; ((${ver%.*} > 0 && ${ver#*.} > 6)); }
 then alias sudo="sudo -p 'Password for %p: ' ";       sudo_version_ok=1
@@ -198,7 +198,7 @@ s() {
    fi
 }
 
-# PS1 + title (\e]2; ---- \a) {{{1
+## PS1 + title (\e]2; ---- \a)
 _git_branch() {
    local gb="$(git rev-parse --abbrev-ref HEAD 2>/dev/null)"
    if [[ $gb ]]
@@ -239,7 +239,7 @@ PS1() {
 export PS3='Choose an entry: '
        PS4='+ '
 
-# Directory functions and aliases: cd, md, rd, pw {{{1
+## Directory functions and aliases: cd, md, rd, pw
 if [[ -r $HOME/github/bash/scripts/cd/cd.bash ]]
 then
    . "$HOME"/github/bash/scripts/cd/cd.bash
@@ -273,7 +273,7 @@ pw() {
    fi
 }
 
-# Networking: myip, dig, tunnel {{{1
+## Networking: myip, dig, tunnel
 alias myip='curl icanhazip.com'
 
 dig() { command dig +noall +answer "${@#*//}"; }
@@ -305,7 +305,7 @@ tunnel() {
 alias il='iptables -nvL --line-numbers'
 alias nn=netstat
 
-# Processes and jobs {{{1
+## Processes and jobs
 # memory map
 pm() {
    for i in "$@"; do
@@ -337,7 +337,7 @@ alias -- --='fg %-'
 complete -A job     -P '%' fg z jobs j disown
 complete -A stopped -P '%' bg
 
-# Copy a user dir to a remote server using rsync {{{1
+## Copy a user dir to a remote server using rsync
 rs() {
    (($# == 3)) || { echo 'Usage: rs USER SERVER DIR' >&2; return 1; }
    [[ $1 == 'root' ]] && local home='' || local home=home/
@@ -345,7 +345,7 @@ rs() {
       "$HOME"/config/dotfiles/.rsync_exclude "${3%/}"/ "$2:/$home$1/${3%/}"
 }
 
-# Permissions + debug {{{1
+## Permissions + debug
 x() {
    (($#)) && { chmod u+x -- "$@"; return; }
 
@@ -365,7 +365,7 @@ alias cg=chgrp
 alias co=chown
 alias cm=chmod
 
-# ls {{{1
+## ls
 ldot() {
    local ls
    if [[ ${FUNCNAME[1]} == 'l.' ]]
@@ -452,7 +452,7 @@ sl() {
    stat -c "%8i %A (%4a) %3h %4u %4g %10s (%10Y) %n" -- "${args[@]}"
 }
 
-# Help {{{1
+## Help
 m() {
    local choice
    (($#)) || {
@@ -549,7 +549,7 @@ _type() {
 
 alias ?=_type
 
-# Display /etc/passwd, ..group and ..shadow with some formatting {{{1
+## Display /etc/passwd, ..group and ..shadow with some formatting
 db() {
    local options[0]='/etc/passwd'
          options[1]='/etc/group'
@@ -581,7 +581,7 @@ db() {
    done
 }
 
-# rm and cp like functions and aliases {{{1
+## rm and cp like functions and aliases
 # Delete based on inodes (use ls -li first)
 di() {
    (($#)) || return 1
@@ -599,7 +599,7 @@ di() {
 alias y='cp -i --'
 alias d='rm -i --preserve-root --'
 
-# Find stuff and diffs {{{1
+## Find stuff and diffs
 f() {
    if (($# == 1))
    then
@@ -631,7 +631,7 @@ diff() {
 
 alias _=combine
 
-# Convert to dec, bin, oct, hex {{{1
+## Convert to dec, bin, oct, hex
 cv() {
    (($#)) || { echo 'Usage: cv digit ...' >&2; return 1; }
    cvs[0]='Decimal to binary'
@@ -674,7 +674,7 @@ cv() {
    done
 }
 
-# Date and calendar {{{1
+## Date and calendar
 date() {
    if (($#))
    then command date "$@"
@@ -690,7 +690,7 @@ else
    alias call='env LC_TIME=bg_BG.utf8 cal -my'
 fi
 
-# uname + os {{{1
+## uname + os
 u() {
    uname -r
    echo "$(uname -mpi) (machine, proc, platform)"
@@ -698,7 +698,7 @@ u() {
 
 alias os='tail -n99 /etc/*{release,version} 2>/dev/null | cat -s'
 
-# Backup functions and aliases {{{1
+## Backup functions and aliases
 b() {
    (($#)) || { echo 'Usage: bak {file} ...' 1>&2; return 1; }
    local arg
@@ -747,7 +747,7 @@ br() {
 
 alias dump='dump -u'
 
-# Disk: df, du, hdparm, mount {{{1
+## Disk: df, du, hdparm, mount
 df() { command df -hT "$@" | sort -k6r; }
 
 duu() {
@@ -792,7 +792,7 @@ mn() {
 alias umn=umount
 alias fu='sudo fuser -mv'
 
-# Misc: options, app aliases, rc(), b(), e() {{{1
+## Misc: options, app aliases, rc(), b(), e()
 # Options
 alias  a=alias
 alias ua=unalias
@@ -848,7 +848,7 @@ bn() {
 # Echo
 e() { local status=$?; (($#)) && echo "$@" || echo "$status"; }
 
-# Head/tail + cat-like functions {{{1
+## Head/tail + cat-like functions
 h() { if (($#)) || [[ ! -t 0 ]]; then head "$@"; else history; fi; }
 
 alias t=tail
@@ -873,7 +873,7 @@ sq() { command grep -v '^[[:space:]]*#\|^[[:space:]]*$' -- "$@"; }
 # Cleaner PATH display
 pa() { awk '!_[$0]++' <<< "${PATH//:/$'\n'}"; }
 
-# Git {{{1
+## Git
 alias gc='git commit -v'
 alias gp='git push origin master'
 alias gs='git status -sb'
@@ -903,7 +903,7 @@ gsa() (
    done
 )
 
-# GitHub: open the repo corresponding to the current pwd in a browser {{{1
+## GitHub: open the repo corresponding to the current pwd in a browser
 gh() {
    if [[ $1 == -@(h|-h)* ]]
    then
@@ -942,7 +942,7 @@ gh() {
    xdg-open "$giturl" 2>/dev/null
 }
 
-# Google search: gg term {{{1
+## Google search: gg term
 urlencode() {
    local char
    local str="$*"
@@ -960,7 +960,7 @@ gg() {
    sudo -umitko xdg-open https://www.google.co.uk/search?q="$(urlencode "$@")" >/dev/null 2>&1
 }
 
-# Typos {{{1
+## Typos
 alias cta=cat
 alias ecex=exec
 alias akw=awk
@@ -968,7 +968,7 @@ alias rmp=rpm
 alias shh=ssh
 alias xlcip=xclip
 
-# Programmable completion {{{1
+## Programmable completion
 complete -A enabled  builtin
 complete -A disabled enable
 complete -A export   printenv
@@ -1003,5 +1003,7 @@ if ! shopt -oq posix; then
    fi >/dev/null 2>&1
 fi
 
-# Business specific or system dependant stuff {{{1
+## Business specific or system dependant stuff
 [[ -r $HOME/.bashrc_after ]] && . "$HOME"/.bashrc_after
+
+# vim: fdm=expr fde=getline(v\:lnum)=~'^##'?'>'.(matchend(getline(v\:lnum),'###*')-1)\:'='
