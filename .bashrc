@@ -209,6 +209,9 @@ _git_branch() {
 
 PS1() {
    if ((EUID == 0)); then
+      # Add root's PATH because I am simply running a root bash, so haven't
+      # sourced any of root's files (as it happens with su - root)
+      PATH=/sbin:/usr/sbin:/usr/local/sbin:/root/bin:"$PATH"
       # Use PROMPT_COMMAND to aggregate users' history into a single file
       # /var/log/user-history.log                                    whoami | bash PID |         history 1        |  $?
       #                                                              oge    | [21118]: | 2013-09-09_10:46:34 su - | [1]

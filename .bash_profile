@@ -4,7 +4,11 @@
 
 export SHELL=/bin/bash
 
-export PATH="$PATH":"$HOME"/bin
+if ! grep "$HOME"/bin <<< "$PATH" >/dev/null
+then
+   export PATH="$HOME"/bin:"$PATH"
+fi
+
 export PYTHONSTARTUP="$HOME"/.pyrc
 
 export LANG=en_GB.UTF-8
