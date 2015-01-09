@@ -24,6 +24,9 @@ export VISUAL="vim -u $HOME/.vimrc"
 export MYVIMRC="$HOME"/.vimrc
 export MYGVIMRC="$HOME"/.gvimrc
 
+export PS_PERSONALITY=bsd
+export PS_FORMAT=pid,ppid,pgid,sid,tname,tpgid,stat,euser,egroup,start_time,cmd
+
 # -i   : ignore case
 # -r/R : raw control characters
 # -s   : Squeeze multiple blank lines
