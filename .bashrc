@@ -72,6 +72,8 @@ alias   vt="command $nvim -u $HOME/.vimrc -t"
 alias   vl="command ls -FB1 | $nvim -u $HOME/.vimrc -"
 alias vish='sudo vipw -s'
 
+alias ed='ed -v -p:'
+
 vdr() {
    if (($# < 2)); then
       printf '%s\n' '  Usage: rvd {host} {file1 (local & remote)} [alt rfile]' \
