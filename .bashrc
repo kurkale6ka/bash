@@ -510,7 +510,7 @@ doc() {
    while read -r
    do
       matches+=("$REPLY")
-   done < <(ag -lS --ignore '*install*' --ignore '*readme*' "$1" "$HOME"/help/)
+   done < <(ag -lS --ignore '*install*' --ignore '*readme*' --ignore '*license*' "$1" "$HOME"/help/it)
 
    # For a single match, open the help file
    if (( ${#matches[@]} == 1 ))
