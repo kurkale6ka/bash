@@ -372,7 +372,7 @@ ldot() {
    local ls
    if [[ ${FUNCNAME[1]} == 'l.' ]]
    then ls=(ls -FB   --color=auto)
-   else ls=(ls -FBhl --color=auto --time-style='+(%d %b %Y - %H:%M)')
+   else ls=(ls -FBhl --color=auto --time-style="+${Blue}@$Reset %d-%b-%y %H:%M")
    fi
    (($# == 0)) && {             "${ls[@]}" -d .[^.]* ; return; }
    (($# == 1)) && { (cd "$1" && "${ls[@]}" -d .[^.]*); return; }
@@ -398,20 +398,20 @@ unalias l. ll. l ld la lr lk lx ll lld lla llr llk llx lm lc lu llm llc llu ln \
 ll.() { ldot "$@"; }
 
 alias   l='command ls -FB    --color=auto'
-alias  ll='command ls -FBhl  --color=auto --time-style="+(%d %b %Y - %H:%M)"'
+alias  ll='command ls -FBhl  --color=auto --time-style="+${Blue}@$Reset %d-%b-%y %H:%M"'
 alias  l1='command ls -FB1   --color=auto'
 
 alias  la='command ls -FBA   --color=auto'
-alias lla='command ls -FBAhl --color=auto --time-style="+(%d %b %Y - %H:%M)"'
+alias lla='command ls -FBAhl --color=auto --time-style="+${Blue}@$Reset %d-%b-%y %H:%M"'
 
 alias  ld='command ls -FBd   --color=auto'
-alias lld='command ls -FBdhl --color=auto --time-style="+(%d %b %Y - %H:%M)"'
+alias lld='command ls -FBdhl --color=auto --time-style="+${Blue}@$Reset %d-%b-%y %H:%M"'
 
 alias  lk='command ls -FBS   --color=auto'
-alias llk='command ls -FBShl --color=auto --time-style="+(%d %b %Y - %H:%M)"'
+alias llk='command ls -FBShl --color=auto --time-style="+${Blue}@$Reset %d-%b-%y %H:%M"'
 
 alias  lr="tree -AC -I '*~' --noreport"
-alias llr='command ls -FBRhl --color=auto --time-style="+(%d %b %Y - %H:%M)"'
+alias llr='command ls -FBRhl --color=auto --time-style="+${Blue}@$Reset %d-%b-%y %H:%M"'
 
 lm() {
    [[ -t 1 ]] && echo "$Purple${Underline}Sorted by modification date:$Reset"
@@ -420,7 +420,7 @@ lm() {
 
 llm() {
    [[ -t 1 ]] && echo "$Purple${Underline}Sorted by modification date:$Reset"
-   command ls -FBhltr --color=auto --time-style='+(%d %b %Y - %H:%M)' "$@"
+   command ls -FBhltr --color=auto --time-style="+${Blue}@$Reset %d-%b-%y %H:%M" "$@"
 }
 
 _lx() {
@@ -429,7 +429,7 @@ _lx() {
    if [[ ${FUNCNAME[1]} == 'lx' ]]; then
       command ls -FB   --color=auto                                    "${exes[@]}"
    else
-      command ls -FBhl --color=auto --time-style='+(%d %b %Y - %H:%M)' "${exes[@]}"
+      command ls -FBhl --color=auto --time-style="+${Blue}@$Reset %d-%b-%y %H:%M" "${exes[@]}"
    fi
 }
 
@@ -442,7 +442,7 @@ ln() {
    else
       if (( $(find . -maxdepth 1 -type l -print -quit | wc -l) == 1 )); then
          find . -maxdepth 1 -type l -printf '%P\0' |
-         xargs -0 'ls' -FBAhl --color=auto --time-style="+(%d %b %Y - %H:%M)" --
+         xargs -0 'ls' -FBAhl --color=auto --time-style="+${Blue}@$Reset %d-%b-%y %H:%M" --
       fi
    fi
 }
