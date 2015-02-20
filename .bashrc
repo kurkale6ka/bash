@@ -988,14 +988,6 @@ complete -W 'alias arrayvar binding builtin command directory disabled enabled
 export file function group helptopic hostname job keyword running service
 setopt shopt signal stopped user variable' cl compgen complete
 
-alias tmux='tmux -2'
-alias tm='tmux -2'
-alias tl='tmux ls'
-alias ta='tmux attach-session'
-alias tn='tmux new -s'
-complete -W '$(tmux ls 2>/dev/null | cut -d: -f1)' tmux
-complete -W "$(screen -ls 2>/dev/null | grep -E '^\s+[0-9].*\.' | awk {print\ \$1})" screen
-
 # enable bash completion in non posix shells
 if ! shopt -oq posix; then
    if [[ -f /etc/profile.d/bash-completion.sh ]]; then
@@ -1004,6 +996,16 @@ if ! shopt -oq posix; then
       . /etc/bash_completion
    fi >/dev/null 2>&1
 fi
+
+## tmux
+alias tmux='tmux -2'
+alias tm='tmux -2'
+alias tl='tmux ls'
+alias ta='tmux attach-session'
+alias tn='tmux new -s'
+
+complete -W '$(tmux ls 2>/dev/null | cut -d: -f1)' tmux
+complete -W "$(screen -ls 2>/dev/null | grep -E '^\s+[0-9].*\.' | awk {print\ \$1})" screen
 
 ## Business specific or system dependant stuff
 [[ -r $HOME/.bashrc_after ]] && . "$HOME"/.bashrc_after
