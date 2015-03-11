@@ -2,8 +2,6 @@
 # Author: Dimitar Dimitrov
 #         kurkale6ka
 
-export SHELL=/bin/bash
-
 if ! grep "$HOME"/bin <<< "$PATH" >/dev/null
 then
    export PATH="$HOME"/bin:"$PATH"
