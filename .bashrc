@@ -410,7 +410,7 @@ alias lld='command ls -FBdhl --color=auto --time-style="+${Blue}@$Reset %d-%b-%y
 alias  lk='command ls -FBS   --color=auto'
 alias llk='command ls -FBShl --color=auto --time-style="+${Blue}@$Reset %d-%b-%y %H:%M"'
 
-alias  lr="tree -AC -I '*~' --noreport"
+alias  lr="tree -AC -I '*~|*.swp' --noreport"
 alias llr='command ls -FBRhl --color=auto --time-style="+${Blue}@$Reset %d-%b-%y %H:%M"'
 
 lm() {
