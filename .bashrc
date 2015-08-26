@@ -26,6 +26,7 @@ HOSTFILE="$HOME"/.hosts # hostnames completion (same format as /etc/hosts)
 Underline="$(tput smul)"
    Purple="$(tput setaf 5)"
     Green="$(tput setaf 2)"
+   Yellow="$(tput setaf 3)"
      Blue="$(tput setaf 4)"
       Red="$(tput setaf 1)"
   LPurple="$(printf %s "$Bold"; tput setaf 5)"
@@ -204,7 +205,7 @@ s() {
 _gbr() {
    local gb="$(git rev-parse --abbrev-ref HEAD 2>/dev/null)"
    if [[ $gb ]]
-   then echo "$gb "
+   then echo " λ-$gb"
    else echo ''
    fi
 }
@@ -221,17 +222,17 @@ PS1() {
       [[ $TERM != linux ]] && export PROMPT_COMMAND='printf "\e]2;%s @ %s # %s\a" "$USER" "${HOSTNAME%%.*}" "${PWD/#$HOME/~}"'
       if [[ $SSH_CONNECTION ]]
       then
-         PS1="\n\[$LRed\]\u \[$LBlue\]@ \[$LPurple\]\h\[$Reset\]\[$Bold\] \$(_gbr)\[$LBlue\]\w\[$Reset\] \A"'$(((\j>0)) && echo \ ❭ \[$LRed\]%\j\[$Reset\])'"\n# "
+         PS1="\n[\[$LRed\]\w\[$Reset\]]\$(_gbr) \[$Purple\]\h\[$Reset\] \A"'$(((\j>0)) && echo \ ❭ \[$LRed\]%\j\[$Reset\])'"\n\[$Yellow\]\u\[$Reset\] # "
       else
-         PS1="\n\[$LRed\]\u \[$LBlue\]@ \[$LGreen\]\h\[$Reset\]\[$Bold\] \$(_gbr)\[$LBlue\]\w\[$Reset\] \A"'$(((\j>0)) && echo \ ❭ \[$LRed\]%\j\[$Reset\])'"\n# "
+         PS1="\n[\[$LRed\]\w\[$Reset\]]\$(_gbr) \[$Yellow\]\h\[$Reset\] \A"'$(((\j>0)) && echo \ ❭ \[$LRed\]%\j\[$Reset\])'"\n\[$Yellow\]\u\[$Reset\] # "
       fi
    else
       [[ $TERM != linux ]] && export PROMPT_COMMAND='printf "\e]2;%s @ %s $ %s\a" "$USER" "${HOSTNAME%%.*}" "${PWD/#$HOME/~}"'
       if [[ $SSH_CONNECTION ]]
       then
-         PS1="\n\[$LGreen\]\u \[$LBlue\]@ \[$LPurple\]\h\[$Reset\]\[$Bold\] \$(_gbr)\[$LBlue\]\w\[$Reset\] \A"'$(((\j>0)) && echo \ ❭ \[$LRed\]%\j\[$Reset\])'"\n\\$ "
+         PS1="\n[\[$LBlue\]\w\[$Reset\]]\$(_gbr) \[$Purple\]\h\[$Reset\] \A"'$(((\j>0)) && echo \ ❭ \[$LRed\]%\j\[$Reset\])'"\n\[$Yellow\]\u\[$Reset\] \\$ "
       else
-         PS1="\n\[$LGreen\]\u \[$LBlue\]@ \[$LGreen\]\h\[$Reset\]\[$Bold\] \$(_gbr)\[$LBlue\]\w\[$Reset\] \A"'$(((\j>0)) && echo \ ❭ \[$LRed\]%\j\[$Reset\])'"\n\\$ "
+         PS1="\n[\[$LBlue\]\w\[$Reset\]]\$(_gbr) \[$Yellow\]\h\[$Reset\] \A"'$(((\j>0)) && echo \ ❭ \[$LRed\]%\j\[$Reset\])'"\n\[$Yellow\]\u\[$Reset\] \\$ "
       fi
    fi
 }
