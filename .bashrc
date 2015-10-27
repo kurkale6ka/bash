@@ -29,6 +29,7 @@ Underline="$(tput smul)"
     Green="$(tput setaf 2)"
      Blue="$(tput setaf 4)"
       Red="$(tput setaf 1)"
+     RRed="$(tput setaf 9)"
    LGreen="$(printf %s "$Bold"; tput setaf 2)"
     LBlue="$(printf %s "$Bold"; tput setaf 4)"
      LRed="$(printf %s "$Bold"; tput setaf 1)"
@@ -221,17 +222,17 @@ PS1() {
       [[ $TERM != linux ]] && export PROMPT_COMMAND='printf "\e]2;%s @ %s # %s\a" "$USER" "${HOSTNAME%%.*}" "${PWD/#$HOME/~}"'
       if [[ $SSH_CONNECTION ]]
       then
-         PS1="\n[\[$LRed\]\w\[$Reset\]]\$(_gbr) \[$Purple\]\h\[$Reset\] \A"'$(((\j>0)) && echo \ ❭ \[$LRed\]%\j\[$Reset\])'"\n\[$Yellow\]\u\[$Reset\] # "
+         PS1="\n[\[$LBlue\]\w\[$Reset\]]\$(_gbr) \[$Purple\]\h\[$Reset\] \A"'$(((\j>0)) && echo \ ❭ \[$RRed\]%\j\[$Reset\])'"\n\[$RRed\]\u\[$Reset\] # "
       else
-         PS1="\n[\[$LRed\]\w\[$Reset\]]\$(_gbr) \[$Yellow\]\h\[$Reset\] \A"'$(((\j>0)) && echo \ ❭ \[$LRed\]%\j\[$Reset\])'"\n\[$Yellow\]\u\[$Reset\] # "
+         PS1="\n[\[$LBlue\]\w\[$Reset\]]\$(_gbr) \[$Yellow\]\h\[$Reset\] \A"'$(((\j>0)) && echo \ ❭ \[$RRed\]%\j\[$Reset\])'"\n\[$RRed\]\u\[$Reset\] # "
       fi
    else
       [[ $TERM != linux ]] && export PROMPT_COMMAND='printf "\e]2;%s @ %s $ %s\a" "$USER" "${HOSTNAME%%.*}" "${PWD/#$HOME/~}"'
       if [[ $SSH_CONNECTION ]]
       then
-         PS1="\n[\[$LBlue\]\w\[$Reset\]]\$(_gbr) \[$Purple\]\h\[$Reset\] \A"'$(((\j>0)) && echo \ ❭ \[$LRed\]%\j\[$Reset\])'"\n\[$Yellow\]\u\[$Reset\] \\$ "
+         PS1="\n[\[$LBlue\]\w\[$Reset\]]\$(_gbr) \[$Purple\]\h\[$Reset\] \A"'$(((\j>0)) && echo \ ❭ \[$RRed\]%\j\[$Reset\])'"\n\[$Yellow\]\u\[$Reset\] \\$ "
       else
-         PS1="\n[\[$LBlue\]\w\[$Reset\]]\$(_gbr) \[$Yellow\]\h\[$Reset\] \A"'$(((\j>0)) && echo \ ❭ \[$LRed\]%\j\[$Reset\])'"\n\[$Yellow\]\u\[$Reset\] \\$ "
+         PS1="\n[\[$LBlue\]\w\[$Reset\]]\$(_gbr) \[$Yellow\]\h\[$Reset\] \A"'$(((\j>0)) && echo \ ❭ \[$RRed\]%\j\[$Reset\])'"\n\[$Yellow\]\u\[$Reset\] \\$ "
       fi
    fi
 }
