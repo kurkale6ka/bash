@@ -754,33 +754,87 @@ alias dump='dump -u'
 df() { command df -hT "$@" | sort -k6r; }
 
 duu() {
-   local args=()
-   (($#)) && args=("$@") || args=(*)
-   du -xsk -- "${args[@]}" | sort -n | while read -r size f
+   # Colors
+   local _res="$Reset"
+
+   local _grn="$Green"
+   local _blu="$Blue"
+   local _red="$Red"
+
+   local _Cya="$LCyan"
+   local _Blu="$LBlue"
+   local _Red="$LRed"
+
+   old_sort=1
+
+   if sort --help | grep -q human-numeric
+   then
+      old_sort=0
+      _du_arg=h
+      _sort_arg=h
+   else
+      _du_arg=
+      _sort_arg=n
+   fi
+
+   _align=0
+   _files=()
+
+   # du's output
+   while read -r size file
    do
-      for u in K M G T P E Z Y
-      do
-         if ((size < 1024))
+
+      if (( ! old_sort ))
+      then
+         # ex: 3.7M
+         if [[ ${size%?} ]]
          then
-            case "$u" in
-               K) unit="${Green}$u${Reset}";;
-               M) unit="${Blue}$u${Reset}";;
-               G) unit="${Red}$u${Reset}";;
-               *) unit="${LRed}$u${Reset}"
-            esac
-            if [[ -h $f ]]; then
-               file="${LCyan}$f${Reset}"
-            elif [[ -d $f ]]; then
-               file="${LBlue}$f${Reset}"
-            else
-               file="$f"
-            fi
-            printf '%5d%s\t%s\n' "$size" "$unit" "$file"
-            break
+            _size="${size%?}"                   # 3.7
+            unit="$(egrep -o '.$' <<< "$size")" # M
+         # ex: 0
+         else
+            _size="$size"
+            unit=K
          fi
-         ((size = size / 1024))
-      done
-   done
+
+         case "$unit" in
+            K) unit="${_grn}${unit}${_res}" ;;
+            M) unit="${_blu}${unit}${_res}" ;;
+            G) unit="${_red}${unit}${_res}" ;;
+            *) unit="${_Red}${unit}${_res}"
+         esac
+      fi
+
+      _file="${file#./}"
+
+      # Not needed when not using du's -a switch since only folders are displayed
+      if [[ -h $_file ]]
+      then
+         _file="${_Cya}$_file${_res}"
+      elif [[ -d $_file ]]
+      then
+         _file="${_Blu}$_file${_res}"
+      fi
+
+      if (( ! old_sort ))
+      then
+         _len="${#_size}"
+         _files+=("$_size" "$unit" "$_file")
+      else
+         _len="${#size}"
+         _files+=("$size" "$_file")
+      fi
+
+      (( _len > _align )) && _align="$_len"
+
+   done < <(du -S"${_du_arg}"x --exclude='.git' --exclude='vendor/bundle' --exclude='shared/bundle' "$@" | sort -"${_sort_arg}"r | head -n11)
+
+   if (( ! old_sort ))
+   then
+      printf "%${_align}s%s %s\n" "${_files[@]}"
+   else
+      printf "%${_align}s %s\n" "${_files[@]}"
+   fi
 }
 
 hd() { if ((1 == $#)); then hdparm -I -- "$1"; else hdparm "$@"; fi; }
