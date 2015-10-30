@@ -754,16 +754,92 @@ alias dump='dump -u'
 df() { command df -hT "$@" | sort -k6r; }
 
 duu() {
+   local info
+   local _only_files
+   local _du_all_opt
+   local _nb_lines
+   local opt
+   local old_sort
+   local _du_arg
+   local _sort_arg
+   local _align
+   local _files
+   local size
+   local _size
+   local date
+   local hour
+   local file
+   local _file
+   local _len
+
    # Colors
+   local _bld="$Bold"
    local _res="$Reset"
 
    local _grn="$Green"
    local _blu="$Blue"
    local _red="$Red"
 
-   local _Cya="$LCyan"
    local _Blu="$LBlue"
    local _Red="$LRed"
+
+   _help() {
+
+# NB:
+#    To get files only, a mixed output of both files and directories (du
+#    -a) gets filtered. So with -f -n3, if the biggest 3 inodes are 2
+#    directories and one file, we get a single file despite using -n3
+read -r -d $'\0' info << HELP
+Usage:
+${_bld}duu${_res}     ${_grn}# files & directories${_res}
+${_bld}duu${_res} -f  ${_grn}# files only${_res}
+${_bld}duu${_res} -d  ${_grn}# directories only${_res}
+${_bld}duu${_res} -n${_bld}N${_res} ${_grn}# lines of output (${_bld}15${_res} ${_grn}by default)${_res}
+
+Note: ${_bld}.${_res} is used by default but a different directory can also be specified
+HELP
+
+      if (($1 == 0))
+      then echo "$info"
+      else echo "$info" >&2
+      fi
+   }
+
+   # Options
+
+   _nb_lines=15
+   _du_all_opt=a
+
+   OPTIND=1
+
+   while getopts ':hfdn:' opt
+   do
+      case "$opt" in
+         h)
+            _help 0
+            return 0
+            ;;
+         f)
+            _only_files=1
+            _du_all_opt=a
+            ;;
+         d)
+            _only_files=
+            _du_all_opt=
+            ;;
+         n)
+            _nb_lines="$OPTARG"
+            ;;
+         \?)
+            echo "Invalid option: -$OPTARG" >&2
+            return 1
+            ;;
+      esac
+   done
+
+   shift $((OPTIND-1))
+
+   # Main
 
    old_sort=1
 
@@ -781,13 +857,19 @@ duu() {
    _files=()
 
    # du's output
-   while read -r size file
+   while read -r size date hour file
    do
+
+      # Directories only
+      [[ -z $_du_all_opt ]] && [[ ! -d $file ]] && continue
+
+      # Files only
+      [[ -n $_only_files ]] && [[ -d $file ]] && continue
 
       if (( ! old_sort ))
       then
          # ex: 3.7M
-         if [[ ${size%?} ]]
+         if [[ -n ${size%?} ]]
          then
             _size="${size%?}"                   # 3.7
             unit="$(egrep -o '.$' <<< "$size")" # M
@@ -807,33 +889,39 @@ duu() {
 
       _file="${file#./}"
 
-      # Not needed when not using du's -a switch since only folders are displayed
-      if [[ -h $_file ]]
-      then
-         _file="${_Cya}$_file${_res}"
-      elif [[ -d $_file ]]
-      then
-         _file="${_Blu}$_file${_res}"
-      fi
-
       if (( ! old_sort ))
       then
          _len="${#_size}"
-         _files+=("$_size" "$unit" "$_file")
+         _files+=("$_size" "$unit" "$date" "$hour" "$_file")
       else
          _len="${#size}"
-         _files+=("$size" "$_file")
+         _files+=("$size" "$date" "$hour" "$_file")
       fi
 
       (( _len > _align )) && _align="$_len"
 
-   done < <(du -S"${_du_arg}"x --exclude='.git' --exclude='vendor/bundle' --exclude='shared/bundle' "$@" | sort -"${_sort_arg}"r | head -n11)
+   done < <(du -S"${_du_arg}${_du_all_opt}"x --time --time-style=+'%d-%b-%y %H:%M' --exclude='.git' --exclude='vendor/bundle' --exclude='shared/bundle' -- "$@" | sort -"${_sort_arg}"r | head -n"$_nb_lines")
 
    if (( ! old_sort ))
    then
-      printf "%${_align}s%s %s\n" "${_files[@]}"
+      for ((i = 0; i < ${#_files[@]}; i=i+5))
+      do
+         # size unit date hour file
+         printf "%${_align}s" "${_files[i]}"
+         echo -n "${_files[i+1]} "
+         echo -n "${_files[i+2]} "
+         echo -n "${_files[i+3]} "
+         ls -d --color -- "${_files[i+4]}"
+      done
    else
-      printf "%${_align}s %s\n" "${_files[@]}"
+      for ((i = 0; i < ${#_files[@]}; i=i+4))
+      do
+         # size date hour file
+         printf "%${_align}s " "${_files[i]}"
+         echo -n "${_files[i+1]} "
+         echo -n "${_files[i+2]} "
+         ls -d --color -- "${_files[i+3]}"
+      done
    fi
 }
 
