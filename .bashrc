@@ -276,6 +276,35 @@ pw() {
    fi
 }
 
+## Fuzzy
+fd() {
+   local dir
+
+   if [[ $1 ]]
+   then
+      # if a path contains /., that's a folder staring with dot
+      dir="$(find "${1}" \( -type d -path '*/\.*' -prune \) -o -type d -print | fzf -0 +m)"
+   else
+      dir="$(find . \( -type d -path '*/\.*' -prune \) -o -type d -printf '%P\n' | tail -n+2 | fzf -0 +m)"
+   fi
+
+   [[ -d $dir ]] && cd "$dir"
+}
+
+fda() {
+   local dir
+
+   if [[ $1 ]]
+   then
+      # Todo: exclude more directories (.svn, ...)
+      dir="$(find "${1}" \( -type d -path '*/\.git*' -prune \) -o -type d -print | fzf -0 +m)"
+   else
+      dir="$(find . \( -type d -path '*/\.git*' -prune \) -o -type d -printf '%P\n' | tail -n+2 | fzf -0 +m)"
+   fi
+
+   [[ -d $dir ]] && cd "$dir"
+}
+
 ## Networking: myip, dig, tunnel
 alias myip='curl icanhazip.com'
 
