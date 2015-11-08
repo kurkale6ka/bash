@@ -635,7 +635,7 @@ alias d='rm -i --preserve-root --'
 f() {
    if (($# == 1))
    then
-      find . -iname "*$1*" -printf '%P\n'
+      find . -name .git -prune -o -iname "*$2*" -printf '%M %u %g %P\n' | grep -vE '~$'
    else
       find "$@"
    fi
