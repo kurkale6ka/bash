@@ -1179,6 +1179,9 @@ alias tn='tmux new -s'
 complete -W '$(tmux ls 2>/dev/null | cut -d: -f1)' tmux
 complete -W "$(screen -ls 2>/dev/null | grep -E '^\s+[0-9].*\.' | awk {print\ \$1})" screen
 
+## fzf
+[[ -f ~/.fzf.bash ]] && . ~/.fzf.bash
+
 ## Business specific or system dependant stuff
 [[ -r $HOME/.bashrc_after ]] && . "$HOME"/.bashrc_after
 
