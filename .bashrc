@@ -820,10 +820,10 @@ duu() {
 #    directories and one file, we get a single file despite using -n3
 read -r -d $'\0' info << HELP
 Usage:
-${_bld}duu${_res}     ${_grn}# files & directories${_res}
-${_bld}duu${_res} -f  ${_grn}# files only${_res}
-${_bld}duu${_res} -d  ${_grn}# directories only${_res}
-${_bld}duu${_res} -n${_bld}N${_res} ${_grn}# lines of output (${_bld}15${_res} ${_grn}by default)${_res}
+   ${_bld}duu${_res}     ${_grn}# files only${_res}
+   ${_bld}duu${_res} -d  ${_grn}# directories only${_res}
+   ${_bld}duu${_res} -a  ${_grn}# files & directories${_res}
+   ${_bld}duu${_res} -n${_bld}N${_res} ${_grn}# lines of output (${_bld}20${_res} ${_grn}by default)${_res}
 
 Note: ${_bld}.${_res} is used by default but a different directory can also be specified
 HELP
@@ -836,20 +836,23 @@ HELP
 
    # Options
 
-   _nb_lines=15
+   _nb_lines=20
+
+   # Show files only by default
+   _only_files=1
    _du_all_opt=a
 
    OPTIND=1
 
-   while getopts ':hfdn:' opt
+   while getopts ':hadn:' opt
    do
       case "$opt" in
          h)
             _help 0
             return 0
             ;;
-         f)
-            _only_files=1
+         a)
+            _only_files=
             _du_all_opt=a
             ;;
          d)
@@ -929,7 +932,7 @@ HELP
 
       (( _len > _align )) && _align="$_len"
 
-   done < <(du -S"${_du_arg}${_du_all_opt}"x --time --time-style=+'%d-%b-%y %H:%M' --exclude='.git' --exclude='vendor/bundle' --exclude='shared/bundle' -- "$@" | sort -"${_sort_arg}"r | head -n"$_nb_lines")
+   done < <(du -S"${_du_arg}${_du_all_opt}"x --time --time-style=+'%d-%b-%y %H:%M' --exclude='.git' --exclude='.hg' --exclude='.svn' --exclude='vendor/bundle' --exclude='shared/bundle' -- "$@" | sort -"${_sort_arg}"r | head -n"$_nb_lines")
 
    if (( ! old_sort ))
    then
@@ -941,7 +944,7 @@ HELP
          echo -n "${_files[i+2]} "
          echo -n "${_files[i+3]} "
          ls -d --color -- "${_files[i+4]}"
-      done
+      done | tee /tmp/duu
    else
       for ((i = 0; i < ${#_files[@]}; i=i+4))
       do
@@ -950,7 +953,7 @@ HELP
          echo -n "${_files[i+1]} "
          echo -n "${_files[i+2]} "
          ls -d --color -- "${_files[i+3]}"
-      done
+      done | tee /tmp/duu
    fi
 }
 
