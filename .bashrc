@@ -650,8 +650,8 @@ if command -v ag >/dev/null 2>&1; then
    alias gr='ag -S --color-line-number="00;32" --color-path="00;35" --color-match="01;31"'
    alias ag='ag -S --color-line-number="00;32" --color-path="00;35" --color-match="01;31"'
 else
-   alias g='command grep -niE --color=auto --exclude="*~" --exclude tags'
-   alias gr='command grep -nIriE --color=auto --exclude="*~" --exclude tags'
+   alias g='command grep -iE --color=auto --exclude="*~" --exclude tags'
+   alias gr='command grep -IriE --color=auto --exclude="*~" --exclude tags'
 fi
 
 diff() {
