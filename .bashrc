@@ -524,15 +524,15 @@ doc() {
 
    case "$1" in
       rg|regex)
-         cat /home/mitko/github/help/it/regex.txt
+         cat /home/mitko/github/help/regex.txt
          return ;;
 
       pf|printf)
-         /home/mitko/github/help/it/printf.sh
+         /home/mitko/github/help/printf.sh
          return ;;
 
       sort)
-         cat /home/mitko/github/help/it/sort.txt
+         cat /home/mitko/github/help/sort.txt
          return ;;
    esac
 
@@ -553,8 +553,8 @@ doc() {
    fi
 }
 
-alias rg="cat $HOME/github/help/it/regex.txt" # Regex  help
-alias pf="$HOME/github/help/it/printf.sh"     # printf help
+alias rg="cat $HOME/github/help/regex.txt" # Regex  help
+alias pf="$HOME/github/help/printf.sh"     # printf help
 
 complete -A helptopic help m # Currently, same as builtin
 complete -A command   man m which whereis type ? tpye sudo
