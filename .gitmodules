@@ -1,3 +1,0 @@
-[submodule "scripts/cd"]
-	path = scripts/cd
-	url = git@github.com:kurkale6ka/bash-cd.git
