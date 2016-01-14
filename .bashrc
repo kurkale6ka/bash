@@ -987,7 +987,7 @@ HELP
          echo -n "${_files[i+1]} "
          echo -n "${_files[i+2]} "
          echo -n "${_files[i+3]} "
-         ls -d --color -- "${_files[i+4]}"
+         ls -d --color=auto -- "${_files[i+4]}"
       done | tee /tmp/duu
    else
       for ((i = 0; i < ${#_files[@]}; i=i+4))
@@ -996,7 +996,7 @@ HELP
          printf "%${_align}s " "${_files[i]}"
          echo -n "${_files[i+1]} "
          echo -n "${_files[i+2]} "
-         ls -d --color -- "${_files[i+3]}"
+         ls -d --color=auto -- "${_files[i+3]}"
       done | tee /tmp/duu
    fi
 }
