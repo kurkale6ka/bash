@@ -840,24 +840,6 @@ alias dump='dump -u'
 df() { command df -hT "$@" | sort -k6r; }
 
 duu() {
-   local info
-   local _only_files
-   local _du_all_opt
-   local _nb_lines
-   local opt
-   local old_sort
-   local _du_arg
-   local _sort_arg
-   local _align
-   local _files
-   local size
-   local _size
-   local date
-   local hour
-   local file
-   local _file
-   local _len
-
    # Colors
    local _bld="$Bold"
    local _res="$Reset"
@@ -871,18 +853,19 @@ duu() {
 
    _help() {
 
+local info
 # NB:
 #    To get files only, a mixed output of both files and directories (du
 #    -a) gets filtered. So with -f -n3, if the biggest 3 inodes are 2
 #    directories and one file, we get a single file despite using -n3
 read -r -d $'\0' info << HELP
 Usage:
-   ${_bld}duu${_res}     ${_grn}# files only${_res}
-   ${_bld}duu${_res} -d  ${_grn}# directories only${_res}
-   ${_bld}duu${_res} -a  ${_grn}# files & directories${_res}
-   ${_bld}duu${_res} -n${_bld}N${_res} ${_grn}# lines of output (${_bld}20${_res} ${_grn}by default)${_res}
+   duu     ${_grn}# files only${_res}
+   duu -d  ${_grn}# directories only${_res}
+   duu -a  ${_grn}# files & directories${_res}
+   duu -n${_bld}N${_res} ${_grn}# lines of output (${_bld}20${_res} ${_grn}by default)${_res}
 
-Note: ${_bld}.${_res} is used by default but a different directory can also be specified
+Note: ${_Blu}.${_res} is used by default but a different directory can also be specified
 HELP
 
       if (($1 == 0))
@@ -893,14 +876,15 @@ HELP
 
    # Options
 
-   _nb_lines=20
+   local _nb_lines=20
 
    # Show files only by default
-   _only_files=1
-   _du_all_opt=a
+   local _only_files=1
+   local _du_all_opt=a
 
    OPTIND=1
 
+   local opt
    while getopts ':hadn:' opt
    do
       case "$opt" in
@@ -930,7 +914,8 @@ HELP
 
    # Main
 
-   old_sort=1
+   local old_sort=1
+   local _du_arg _sort_arg
 
    if sort --help | grep -q human-numeric
    then
@@ -942,9 +927,11 @@ HELP
       _sort_arg=n
    fi
 
-   _align=0
-   _files=()
+   local _align=0
+   local _size unit _len _file
+   local _files=()
 
+   local size date hour file
    # du's output
    while read -r size date hour file
    do
