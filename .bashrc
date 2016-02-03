@@ -426,12 +426,12 @@ alias -- --='fg %-'
 complete -A job     -P '%' fg z jobs j disown
 complete -A stopped -P '%' bg
 
-## Copy a user dir to a remote server using rsync
+## rsync with git excludes
 rs() {
-   (($# == 3)) || { echo 'Usage: rs USER SERVER DIR' >&2; return 1; }
-   [[ $1 == 'root' ]] && local home='' || local home=home/
-   rsync -e "ssh -v -l $1" -v --recursive --links --stats --progress --exclude-from \
-      "$HOME"/config/dotfiles/.rsync_exclude "${3%/}"/ "$2:/$home$1/${3%/}"
+rsync -f".- $HOME/.gitignore" \
+      -f':- .gitignore'       \
+      -f'- .git'              \
+      "$@"
 }
 
 ## Permissions + debug
