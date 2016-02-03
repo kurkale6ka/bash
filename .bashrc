@@ -1091,6 +1091,18 @@ n() { command sed -n "$1{p;q}" -- "$2"; }
 # Display non-empty lines in a file
 sq() { command grep -v '^[[:space:]]*#\|^[[:space:]]*$' -- "$@"; }
 
+if [[ $(uname) == Darwin ]]
+then
+   PATH=/usr/local/bin:"$PATH"
+   PATH="$(brew --prefix coreutils)"/libexec/gnubin:"$PATH"
+
+   MANPATH="$(brew --prefix coreutils)"{/libexec/gnuman,/share/man}:"$MANPATH"
+   for pkg in ed findutils ag ctags tree gnu-sed homebrew/dupes/grep vim
+   do
+      MANPATH="$(brew --prefix $pkg)"/share/man:"$MANPATH"
+   done
+fi
+
 # Cleaner PATH display
 pa() { awk '!_[$0]++' <<< "${PATH//:/$'\n'}"; }
 
