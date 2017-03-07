@@ -839,165 +839,68 @@ alias dump='dump -u'
 ## Disk: df, du, hdparm, mount
 df() { command df -hT "$@" | sort -k6r; }
 
-duu() {
-   # Colors
-   local _bld="$Bold"
-   local _res="$Reset"
-
-   local _grn="$Green"
-   local _blu="$Blue"
-   local _red="$Red"
-
-   local _Blu="$LBlue"
-   local _Red="$LRed"
-
-   _help() {
-
-local info
-# NB:
-#    To get files only, a mixed output of both files and directories (du
-#    -a) gets filtered. So with -f -n3, if the biggest 3 inodes are 2
-#    directories and one file, we get a single file despite using -n3
-read -r -d $'\0' info << HELP
-Usage:
-   duu     ${_grn}# files only${_res}
-   duu -d  ${_grn}# directories only${_res}
-   duu -a  ${_grn}# files & directories${_res}
-   duu -n${_bld}N${_res} ${_grn}# lines of output (${_bld}20${_res} ${_grn}by default)${_res}
-
-Note: ${_Blu}.${_res} is used by default but a different directory can also be specified
-HELP
-
-      if (($1 == 0))
-      then echo "$info"
-      else echo "$info" >&2
-      fi
+# Display largest files/directories
+# ds
+# ds -[fdt]
+ds() {
+   [[ $1 == -h || $1 == --help ]] && {
+      cat <<- HELP
+		Usage:
+		ds
+		ds -[fdt] (files, directories, total)
+		HELP
+      return 0
    }
 
-   # Options
-
-   local _nb_lines=20
-
-   # Show files only by default
-   local _only_files=1
-   local _du_all_opt=a
-
-   OPTIND=1
-
-   local opt
-   while getopts ':hadn:' opt
-   do
-      case "$opt" in
-         h)
-            _help 0
-            return 0
-            ;;
-         a)
-            _only_files=
-            _du_all_opt=a
-            ;;
-         d)
-            _only_files=
-            _du_all_opt=
-            ;;
-         n)
-            _nb_lines="$OPTARG"
-            ;;
-         \?)
-            echo "Invalid option: -$OPTARG" >&2
-            return 1
-            ;;
-      esac
-   done
-
-   shift $((OPTIND-1))
-
-   # Main
-
-   local old_sort=1
-   local _du_arg _sort_arg
-
-   if sort --help | grep -q human-numeric
+   # Files
+   if (($# == 0)) || [[ -d $1 ]] || { [[ $1 == -f ]] && [[ -d $2 || -z $2 ]]; }
    then
-      old_sort=0
-      _du_arg=h
-      _sort_arg=h
-   else
-      _du_arg=
-      _sort_arg=n
+      if [[ $1 != -f ]]
+      then
+         local start="${1:-.}"
+      else
+         local start="${2:-.}"
+      fi
+
+      local file
+      local files=()
+      while read -r _ file
+      do
+         files+=("$file")
+      done < <(find "$start" -xdev \( -name .git -o -path '*vendor/bundle' -o -path '*shared/bundle' \) -prune -o -type f -printf '%p\0' | xargs -0 du -h | sort -hr | head -n15)
+
+      if [[ -n $files ]]
+      then
+         ls -FBShl --color --time-style='+%d-%b-%y %H:%M' -- "${files[@]#./}" | tee /tmp/ds_files
+      else
+         return 1
+      fi
    fi
 
-   local _align=0
-   local _size unit _len _file
-   local _files=()
-
-   local size date hour file
-   # du's output
-   while read -r size date hour file
-   do
-
-      # Directories only
-      [[ -z $_du_all_opt ]] && [[ ! -d $file ]] && continue
-
-      # Files only
-      [[ -n $_only_files ]] && [[ -d $file ]] && continue
-
-      if (( ! old_sort ))
-      then
-         # ex: 3.7M
-         if [[ -n ${size%?} ]]
-         then
-            _size="${size%?}"                   # 3.7
-            unit="$(egrep -o '.$' <<< "$size")" # M
-         # ex: 0
-         else
-            _size="$size"
-            unit=K
-         fi
-
-         case "$unit" in
-            K) unit="${_grn}${unit}${_res}" ;;
-            M) unit="${_blu}${unit}${_res}" ;;
-            G) unit="${_red}${unit}${_res}" ;;
-            *) unit="${_Red}${unit}${_res}"
-         esac
-      fi
-
-      _file="${file#./}"
-
-      if (( ! old_sort ))
-      then
-         _len="${#_size}"
-         _files+=("$_size" "$unit" "$date" "$hour" "$_file")
-      else
-         _len="${#size}"
-         _files+=("$size" "$date" "$hour" "$_file")
-      fi
-
-      (( _len > _align )) && _align="$_len"
-
-   done < <(du -S"${_du_arg}${_du_all_opt}"x --time --time-style=+'%d-%b-%y %H:%M' --exclude='.git' --exclude='.hg' --exclude='.svn' --exclude='vendor/bundle' --exclude='shared/bundle' -- "$@" | sort -"${_sort_arg}"r | head -n"$_nb_lines")
-
-   if (( ! old_sort ))
+   # Directories
+   if (($# == 0)) || [[ -d $1 ]] || { [[ $1 == -d ]] && [[ -d $2 || -z $2 ]]; }
    then
-      for ((i = 0; i < ${#_files[@]}; i=i+5))
+      if [[ $1 != -d ]]
+      then
+         local start="${1:-.}"
+      else
+         local start="${2:-.}"
+      fi
+
+      { (($# == 0)) || [[ -d $1 ]]; } && echo
+
+      local size folder
+      while read -r size folder
       do
-         # size unit date hour file
-         printf "%${_align}s" "${_files[i]}"
-         echo -n "${_files[i+1]} "
-         echo -n "${_files[i+2]} "
-         echo -n "${_files[i+3]} "
-         ls -d --color=auto -- "${_files[i+4]}"
-      done | tee /tmp/duu
-   else
-      for ((i = 0; i < ${#_files[@]}; i=i+4))
-      do
-         # size date hour file
-         printf "%${_align}s " "${_files[i]}"
-         echo -n "${_files[i+1]} "
-         echo -n "${_files[i+2]} "
-         ls -d --color=auto -- "${_files[i+3]}"
-      done | tee /tmp/duu
+         echo -n "$size "
+         ls -d --color -- "${folder#./}"
+      done < <(du -xh "$start" | sort -hr | head -n15) | tee /tmp/ds_dirs
+   fi
+
+   # Folder total
+   if [[ $1 == -t ]] && [[ -d $2 || -z $2 ]]
+   then
+      du -sxh --time --time-style=+'%d-%b-%y %H:%M' "${2:-.}"
    fi
 }
 
