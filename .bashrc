@@ -123,19 +123,6 @@ vn() {
 tags() { ctags --languages="$1"; }
 
 ## Arch Linux
-# Search (or sync)
-ps() {
-   if (($#))
-   then
-      if [[ $1 == @(-|aux|fax|faux)* ]]
-      then command ps "$@"
-      else pacman -Ss "$@"
-      fi
-   else
-      pacman -Syu
-   fi
-}
-
 # Install
 pi() {
    if [[ $1 == *.pkg.tar.xz ]]
@@ -144,30 +131,7 @@ pi() {
    fi
 }
 
-# Update (or install)
-pu() {
-   if (($#))
-   then pacman -U "$@"
-   else pacman -Syu
-   fi
-}
-
-complete -f -o default -X '!*.pkg.tar.xz' pi pu
-
-# Update Neovim
-nu () (
-   cd /usr/local/src/neovim-git || exit 1
-   if makepkg -s
-   then
-      shopt -s nullglob
-      local latest file
-      for file in *.pkg.tar.xz
-      do
-         [[ $file -nt $latest ]] && latest="$file"
-      done
-      sudo pacman -U "$latest"
-   fi
-)
+complete -f -o default -X '!*.pkg.tar.xz' pi
 
 ## sudo and s()
 if sudo -V |
@@ -402,15 +366,41 @@ pm() {
    done | column -t | sort -k4
 }
 
-ppfields=pid,ppid,pgid,sid,tname,tpgid,stat,euser,egroup,start_time,cmd
-pfields=pid,stat,euser,egroup,start_time,cmd
+pg() {
+   (($# == 0)) || [[ $1 == -h || $1 == --help ]] && {
+      cat <<- HELP
+		Usage:
+		  pg [-lz] pattern
+		    -l: PID PPID PGID SID TTY TPGID STAT EUSER EGROUP START CMD
+		    -z: squeeze! no context lines.
+		HELP
+      return 0
+   }
 
-p() { if (($#)); then ping -c3 "$@"; else ps fww o "$ppfields" --headers; fi; }
+   [[ $1 == -* ]] && { [[ $1 == @(-l|-z|-lz|-zl) ]] || return 1; }
 
-alias pp="command ps faxww o $ppfields --headers"
-alias pg="command ps o $pfields --headers | head -1 && ps faxww o $pfields | command grep -v grep | command grep -iEB1 --color=auto"
-alias ppg="command ps o $ppfields --headers | head -1 && ps faxww o $ppfields | command grep -v grep | command grep -iEB1 --color=auto"
-alias pgrep='pgrep -l'
+   # fields
+   if [[ $1 != -*l* ]]
+   then
+      # PID STAT EUSER EGROUP START CMD
+      local fields=pid,stat,euser,egroup,start_time,cmd
+   else
+      local fields=pid,ppid,pgid,sid,tname,tpgid,stat,euser,egroup,start_time,cmd
+   fi
+
+   # Display headers:
+   ps o "$fields" | head -n1
+
+   # Squeeze! No context lines
+   if [[ $1 == -*z* ]]
+   then
+      ps  axww o "$fields" | grep -v grep | grep -iE   --color=auto "${@:2}"
+   elif [[ $1 == -* ]]; then
+      ps faxww o "$fields" | grep -v grep | grep -iEB1 --color=auto "${@:2}"
+   else
+      ps faxww o "$fields" | grep -v grep | grep -iEB1 --color=auto "$@"
+   fi
+}
 
 alias  k=kill
 alias kl='kill -l'
