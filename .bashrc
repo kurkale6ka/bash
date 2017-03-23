@@ -1,13 +1,10 @@
-#! /usr/bin/env bash
-# Author: kurkale6ka <Dimitar Dimitrov>
-
 [[ -t 1 ]] || return
 
 set -o notify
 shopt -s cdspell extglob nocaseglob nocasematch histappend
 
-HISTFILESIZE=7000
-HISTSIZE=7000 # size allowed in memory
+HISTFILESIZE=11000
+HISTSIZE=11000 # size allowed in memory
 HISTCONTROL=ignorespace:ignoredups:erasedups
 HISTIGNORE="@(?|??|???)*( |$'\t'):*( |$'\t')"
 # HISTIGNORE='@(?|??|???)*([[:space:]]):*([[:space:]])'
