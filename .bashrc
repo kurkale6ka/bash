@@ -19,34 +19,30 @@ HOSTFILE="$HOME"/.hosts # hostnames completion (same format as /etc/hosts)
 
 ## Colors
 # These can't reside in .profile since there is no terminal for tput
-     Bold="$(tput bold)"
-Underline="$(tput smul)"
-   Purple="$(tput setaf 140)"
-   Yellow="$(tput setaf 221)"
-    Green="$(tput setaf 2)"
-     Blue="$(tput setaf 4)"
-      Red="$(tput setaf 1)"
-     RRed="$(tput setaf 9)"
-   LGreen="$(printf %s "$Bold"; tput setaf 2)"
-    LBlue="$(printf %s "$Bold"; tput setaf 4)"
-     LRed="$(printf %s "$Bold"; tput setaf 1)"
-    LCyan="$(printf %s "$Bold"; tput setaf 6)"
-    Reset="$(tput sgr0)"
+_bld="$(tput bold)"
+_udl="$(tput smul)"
+Purple="$(tput setaf 140)"
+Yellow="$(tput setaf 221)"
+Blue="$(tput setaf 4)"
+RRed="$(tput setaf 9)"
+_lgrn="$(printf %s "$_bld"; tput setaf 2)"
+_lblu="$(printf %s "$_bld"; tput setaf 4)"
+_res="$(tput sgr0)"
 
 # Colored man pages
-export LESS_TERMCAP_mb="$LGreen" # begin blinking
-export LESS_TERMCAP_md="$LBlue"  # begin bold
-export LESS_TERMCAP_me="$Reset"  # end mode
+export LESS_TERMCAP_mb="$_lgrn" # begin blinking
+export LESS_TERMCAP_md="$_lblu"  # begin bold
+export LESS_TERMCAP_me="$_res"  # end mode
 
 # so -> stand out - info box
-export LESS_TERMCAP_so="$(printf %s "$Bold"; tput setaf 3; tput setab 4)"
+export LESS_TERMCAP_so="$(printf %s "$_bld"; tput setaf 3; tput setab 4)"
 # se -> stand out end
-export LESS_TERMCAP_se="$(tput rmso; printf %s "$Reset")"
+export LESS_TERMCAP_se="$(tput rmso; printf %s "$_res")"
 
 # us -> underline start
-export LESS_TERMCAP_us="$(printf %s%s "$Bold$Underline"; tput setaf 5)"
+export LESS_TERMCAP_us="$(printf %s%s "$_bld$_udl"; tput setaf 5)"
 # ue -> underline end
-export LESS_TERMCAP_ue="$(tput rmul; printf %s "$Reset")"
+export LESS_TERMCAP_ue="$(tput rmul; printf %s "$_res")"
 
 [[ -r $HOME/.dir_colors ]] && eval "$(dircolors "$HOME"/.dir_colors)"
 
@@ -142,17 +138,17 @@ PS1() {
       [[ $TERM != linux ]] && export PROMPT_COMMAND='printf "\e]2;%s @ %s # %s\a" "$USER" "${HOSTNAME%%.*}" "${PWD/#$HOME/~}"'
       if [[ $SSH_CONNECTION ]]
       then
-         PS1="\n[\[$LBlue\]\w\[$Reset\]]\$(_gbr) \[$Purple\]\h\[$Reset\] \A"'$(((\j>0)) && echo \ ❭ \[$RRed\]%\j\[$Reset\])'"\n\[$RRed\]\u\[$Reset\] # "
+         PS1="\n[\[$_lblu\]\w\[$_res\]]\$(_gbr) \[$Purple\]\h\[$_res\] \A"'$(((\j>0)) && echo \ ❭ \[$RRed\]%\j\[$_res\])'"\n\[$RRed\]\u\[$_res\] # "
       else
-         PS1="\n[\[$LBlue\]\w\[$Reset\]]\$(_gbr) \[$Yellow\]\h\[$Reset\] \A"'$(((\j>0)) && echo \ ❭ \[$RRed\]%\j\[$Reset\])'"\n\[$RRed\]\u\[$Reset\] # "
+         PS1="\n[\[$_lblu\]\w\[$_res\]]\$(_gbr) \[$Yellow\]\h\[$_res\] \A"'$(((\j>0)) && echo \ ❭ \[$RRed\]%\j\[$_res\])'"\n\[$RRed\]\u\[$_res\] # "
       fi
    else
       [[ $TERM != linux ]] && export PROMPT_COMMAND='printf "\e]2;%s @ %s $ %s\a" "$USER" "${HOSTNAME%%.*}" "${PWD/#$HOME/~}"'
       if [[ $SSH_CONNECTION ]]
       then
-         PS1="\n[\[$LBlue\]\w\[$Reset\]]\$(_gbr) \[$Purple\]\h\[$Reset\] \A"'$(((\j>0)) && echo \ ❭ \[$RRed\]%\j\[$Reset\])'"\n\[$Yellow\]\u\[$Reset\] \\$ "
+         PS1="\n[\[$_lblu\]\w\[$_res\]]\$(_gbr) \[$Purple\]\h\[$_res\] \A"'$(((\j>0)) && echo \ ❭ \[$RRed\]%\j\[$_res\])'"\n\[$Yellow\]\u\[$_res\] \\$ "
       else
-         PS1="\n[\[$LBlue\]\w\[$Reset\]]\$(_gbr) \[$Yellow\]\h\[$Reset\] \A"'$(((\j>0)) && echo \ ❭ \[$RRed\]%\j\[$Reset\])'"\n\[$Yellow\]\u\[$Reset\] \\$ "
+         PS1="\n[\[$_lblu\]\w\[$_res\]]\$(_gbr) \[$Yellow\]\h\[$_res\] \A"'$(((\j>0)) && echo \ ❭ \[$RRed\]%\j\[$_res\])'"\n\[$Yellow\]\u\[$_res\] \\$ "
       fi
    fi
 }
@@ -341,7 +337,7 @@ ldot() {
    local ls
    if [[ ${FUNCNAME[1]} == 'l.' ]]
    then ls=(ls -FB   --color=auto)
-   else ls=(ls -FBhl --color=auto --time-style="+${Blue}@$Reset %d-%b-%y %H:%M")
+   else ls=(ls -FBhl --color=auto --time-style="+${Blue}@$_res %d-%b-%y %H:%M")
    fi
    (($# == 0)) && {             "${ls[@]}" -d .[^.]* ; return; }
    (($# == 1)) && { (cd "$1" && "${ls[@]}" -d .[^.]*); return; }
@@ -367,29 +363,29 @@ unalias l. ll. l ld la lr lk lx ll lld lla llr llk llx lm lc lu llm llc llu ln \
 ll.() { ldot "$@"; }
 
 alias   l='command ls -FB    --color=auto'
-alias  ll='command ls -FBhl  --color=auto --time-style="+${Blue}@$Reset %d-%b-%y %H:%M"'
+alias  ll='command ls -FBhl  --color=auto --time-style="+${Blue}@$_res %d-%b-%y %H:%M"'
 alias  l1='command ls -FB1   --color=auto'
 
 alias  la='command ls -FBA   --color=auto'
-alias lla='command ls -FBAhl --color=auto --time-style="+${Blue}@$Reset %d-%b-%y %H:%M"'
+alias lla='command ls -FBAhl --color=auto --time-style="+${Blue}@$_res %d-%b-%y %H:%M"'
 
 alias  ld='command ls -FBd   --color=auto'
-alias lld='command ls -FBdhl --color=auto --time-style="+${Blue}@$Reset %d-%b-%y %H:%M"'
+alias lld='command ls -FBdhl --color=auto --time-style="+${Blue}@$_res %d-%b-%y %H:%M"'
 
 alias  lk='command ls -FBS   --color=auto'
-alias llk='command ls -FBShl --color=auto --time-style="+${Blue}@$Reset %d-%b-%y %H:%M"'
+alias llk='command ls -FBShl --color=auto --time-style="+${Blue}@$_res %d-%b-%y %H:%M"'
 
 alias  lr="tree -FAC -I '*~|*.swp' --noreport"
-alias llr='command ls -FBRhl --color=auto --time-style="+${Blue}@$Reset %d-%b-%y %H:%M"'
+alias llr='command ls -FBRhl --color=auto --time-style="+${Blue}@$_res %d-%b-%y %H:%M"'
 
 lm() {
-   [[ -t 1 ]] && echo "$Purple${Underline}Sorted by modification date:$Reset"
+   [[ -t 1 ]] && echo "$Purple${_udl}Sorted by modification date:$_res"
    command ls -FBtr --color=auto "$@"
 }
 
 llm() {
-   [[ -t 1 ]] && echo "$Purple${Underline}Sorted by modification date:$Reset"
-   command ls -FBhltr --color=auto --time-style="+${Blue}@$Reset %d-%b-%y %H:%M" "$@"
+   [[ -t 1 ]] && echo "$Purple${_udl}Sorted by modification date:$_res"
+   command ls -FBhltr --color=auto --time-style="+${Blue}@$_res %d-%b-%y %H:%M" "$@"
 }
 
 _lx() {
@@ -398,7 +394,7 @@ _lx() {
    if [[ ${FUNCNAME[1]} == 'lx' ]]; then
       command ls -FB   --color=auto                                    "${exes[@]}"
    else
-      command ls -FBhl --color=auto --time-style="+${Blue}@$Reset %d-%b-%y %H:%M" "${exes[@]}"
+      command ls -FBhl --color=auto --time-style="+${Blue}@$_res %d-%b-%y %H:%M" "${exes[@]}"
    fi
 }
 
@@ -411,7 +407,7 @@ ln() {
    else
       if (( $(find . -maxdepth 1 -type l -print -quit | wc -l) == 1 )); then
          find . -maxdepth 1 -type l -printf '%P\0' |
-         xargs -0 'ls' -FBAhl --color=auto --time-style="+${Blue}@$Reset %d-%b-%y %H:%M" --
+         xargs -0 'ls' -FBAhl --color=auto --time-style="+${Blue}@$_res %d-%b-%y %H:%M" --
       fi
    fi
 }
@@ -465,15 +461,15 @@ complete -A command   man m which whereis type ? tpye sudo
 _type() {
    (($#)) || { type -a -- "$FUNCNAME"; return; }
 
-   echo "${Bold}type -a (exe, alias, builtin, func):$Reset"
+   echo "${_bld}type -a (exe, alias, builtin, func):$_res"
    type -a -- "$@" 2>/dev/null
    echo
 
-   echo "${Bold}whereis -b (bin):$Reset"
+   echo "${_bld}whereis -b (bin):$_res"
    whereis -b "$@"
    echo
 
-   echo "${Bold}file -L (deref):$Reset"
+   echo "${_bld}file -L (deref):$_res"
    local f
    for f in "$@"
    do
