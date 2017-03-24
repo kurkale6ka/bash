@@ -867,87 +867,9 @@ alias gf='git fetch'
 alias gl='git log --oneline --decorate'
 alias gll='git log -U1 --word-diff=color' # -U1: 1 line of context (-p implied)
 
-gsa() (
-   for repo in bash config help scripts vim
-   do
-      cd "$HOME"/github/"$repo" && {
-         echo "$Bold=== $repo ===$Reset"
-         if (($#)) # fetch if branch ahead of remote
-         then
-            git fetch
-         else
-            git -c color.ui=false status -sb | head -n1
-            git status -s
-         fi
-         [[ $repo != vim ]] && echo
-      }
-   done
-)
-
-## GitHub: open the repo corresponding to the current pwd in a browser
-gh() {
-   if [[ $1 == -@(h|-h)* ]]
-   then
-      echo 'Usage: gh [origin|-b|-i|-p|-c]'; return 0
-   fi
-
-   local origin
-   [[ $1 != -* ]] && origin="$1"
-   local remote=remote."${origin:-origin}".url
-
-   local giturl="$(git config --get "$remote")"
-   [[ $giturl ]] || {
-      echo "Not a git repository or no $remote set"
-      return 1
-   }
-
-   local user_tmp="${giturl%/*}"
-   local user_tmp="${user_tmp##*/}"
-   local user="${user_tmp#*:}"
-   local repo="${giturl##*/}"
-   giturl=https://github.com/"$user"/"$repo"
-
-   local branch="$(git symbolic-ref HEAD 2>/dev/null)"
-   [[ $branch ]] && branch="${branch#refs/heads/}" || branch=master
-
-   local path
-   case "$1" in
-      -b) path=branches;;
-      -i) path=issues;;
-      -p) path=pulls;;
-      -c) path=commits/"$branch";;
-       *) path=tree/"$branch";;
-   esac
-   giturl="${giturl%.git}"/"$path"
-
-   xdg-open "$giturl" 2>/dev/null
-}
-
-## Google search: gg term
-urlencode() {
-   local char
-   local str="$*"
-   for ((i = 0; i < ${#str}; i++)); do
-      char="${str:i:1}"
-      case "$char" in
-         [a-zA-Z0-9.~_-]) printf "$char" ;;
-                     ' ') printf + ;;
-                       *) printf '%%%X' "'$char"
-      esac
-   done
-}
-
-gg() {
-   sudo -umitko xdg-open https://www.google.co.uk/search?q="$(urlencode "$@")" >/dev/null 2>&1
-}
-
 ## Typos
 alias cta=cat
-alias ecex=exec
-alias akw=awk
 alias rmp=rpm
-alias shh=ssh
-alias xlcip=xclip
 
 ## Programmable completion
 complete -A enabled  builtin
@@ -958,7 +880,7 @@ complete -A function function
 complete -A binding  bind
 complete -A user     chage chfn finger groups mail passwd slay su userdel \
                      usermod w write
-complete -A hostname dig nslookup snlookup host p ping pnig ssh shh
+complete -A hostname dig nslookup host ping ssh
 
 # Usage: cl arg - computes a completion list for arg
 cl() { column <(compgen -A "$1"); }
