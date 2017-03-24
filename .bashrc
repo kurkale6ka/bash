@@ -818,38 +818,26 @@ bn() {
 e() { local status=$?; (($#)) && echo "$@" || echo "$status"; }
 
 ## Head/tail + cat-like functions
-h() { if (($#)) || [[ ! -t 0 ]]; then head "$@"; else history; fi; }
+alias h=head
 
 alias t=tail
 alias tf='tail -f -n0'
+
+alias cn='cat -n'
 
 # Display the first 98 lines of all (or filtered) files in . Ex: catall .ba
 catall() {
    (($#)) && local filter=(-iname "$1*")
    find . -maxdepth 1 "${filter[@]}" ! -name '*~' -type f -print0 |
    xargs -0 file | grep text | cut -d: -f1 | cut -c3- | xargs head -n98 |
-   command $nvim -u "$HOME"/.vimrc -c "se fdl=0 fdm=expr fde=getline(v\:lnum)=~'==>'?'>1'\:'='" -
+   v -c "se fdl=0 fdm=expr fde=getline(v\:lnum)=~'==>'?'>1'\:'='" -
 }
-
-cn() { if [[ -t 1 ]]; then command cat -n -- "$@"; else command cat "$@"; fi; }
 
 # Print nth line in a file: n 11 /my/file
 n() { command sed -n "$1{p;q}" -- "$2"; }
 
 # Display non-empty lines in a file
 sq() { command grep -v '^[[:space:]]*#\|^[[:space:]]*$' -- "$@"; }
-
-if [[ $(uname) == Darwin ]]
-then
-   PATH=/usr/local/bin:"$PATH"
-   PATH="$(brew --prefix coreutils)"/libexec/gnubin:"$PATH"
-
-   MANPATH="$(brew --prefix coreutils)"{/libexec/gnuman,/share/man}:"$MANPATH"
-   for pkg in ed findutils ag ctags tree gnu-sed homebrew/dupes/grep vim
-   do
-      MANPATH="$(brew --prefix $pkg)"/share/man:"$MANPATH"
-   done
-fi
 
 # Cleaner PATH display
 pa() { awk '!_[$0]++' <<< "${PATH//:/$'\n'}"; }
