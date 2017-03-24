@@ -565,64 +565,13 @@ diff() {
 
 alias _=combine
 
-## Convert to dec, bin, oct, hex
-cv() {
-   (($#)) || { echo 'Usage: cv digit ...' >&2; return 1; }
-   cvs[0]='Decimal to binary'
-   cvs[1]='Decimal to octal'
-   cvs[2]='Decimal to hexadecimal'
-   cvs[3]='Binary to decimal'
-   cvs[4]='Octal to decimal'
-   cvs[5]='Hexadecimal to decimal'
-   local cv PS3='.? '
-   select cv in "${cvs[@]}"; do
-      case "$cv" in
-         "${cvs[0]}")
-            while read -r; do
-               printf '%d -> %d\n' "$1" "$REPLY"; shift
-            done < <(IFS=';'; command bc -q <<< "obase=2; $*") |\
-            command sed '1iDec -> Bin' | column -t
-            break;;
-         "${cvs[1]}")
-            while (($#)); do printf '%d -> %o\n' "$1" "$1"; shift; done |\
-            command sed '1iDec -> Oct' | column -t
-            break;;
-         "${cvs[2]}")
-            while (($#)); do printf '%d -> %x\n' "$1" "$1"; shift; done |\
-            command sed '1iDec -> Hex' | column -t
-            break;;
-         "${cvs[3]}")
-            while (($#)); do printf '%d -> %d\n' "$1" "$((2#$1))"; shift; done |\
-            command sed '1iBin -> Dec' | column -t
-            break;;
-         "${cvs[4]}")
-            while (($#)); do printf '%d -> %d\n' "$1" "$((8#$1))"; shift; done |\
-            command sed '1iOct -> Dec' | column -t
-            break;;
-         "${cvs[5]}")
-            while (($#)); do printf '%s -> %d\n' "$1" "$((16#$1))"; shift; done |\
-            command sed '1iHex -> Dec' | column -t
-            break;;
-                   *) printf '\nInvalid choice!\n' >&2
-      esac
-   done
-}
-
-## Date and calendar
+## Date
 date() {
    if (($#))
    then command date "$@"
    else command date '+%A %d %B %Y, %H:%M %Z (%d/%m/%Y)'
    fi
 }
-
-if command -v ncal >/dev/null 2>&1; then
-   alias  cal='env LC_TIME=bg_BG.utf8 ncal -3 -M -C'
-   alias call='env LC_TIME=bg_BG.utf8 ncal -y -M -C'
-else
-   alias  cal='env LC_TIME=bg_BG.utf8 cal -m3'
-   alias call='env LC_TIME=bg_BG.utf8 cal -my'
-fi
 
 ## uname + os
 u() {
