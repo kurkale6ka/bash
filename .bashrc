@@ -977,11 +977,8 @@ if ! shopt -oq posix; then
 fi
 
 ## tmux
-alias tmux='tmux -2'
-alias tm='tmux -2'
 alias tl='tmux ls'
 alias ta='tmux attach-session'
-alias tn='tmux new -s'
 
 complete -W '$(tmux ls 2>/dev/null | cut -d: -f1)' tmux
 complete -W "$(screen -ls 2>/dev/null | grep -E '^\s+[0-9].*\.' | awk {print\ \$1})" screen
