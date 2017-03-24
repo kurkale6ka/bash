@@ -60,48 +60,9 @@ fi >/dev/null 2>&1
 
 alias ed='ed -v -p:'
 
-## Arch Linux
-# Install
-pi() {
-   if [[ $1 == *.pkg.tar.xz ]]
-   then pacman -U "$@"
-   else pacman -S "$@"
-   fi
-}
-
-complete -f -o default -X '!*.pkg.tar.xz' pi
-
-## sudo and s()
-if sudo -V |
-   { read -r _ _ ver; ver="${ver%.*}"; ((${ver%.*} > 0 && ${ver#*.} > 6)); }
-then alias sudo="sudo -p 'Password for %p: ' ";       sudo_version_ok=1
-else alias sudo="sudo -p 'Password for %u: ' "; unset sudo_version_ok
-fi
-
+## sudo
 alias  sd=sudo
 alias sde=sudoedit
-
-# s///
-# /etc/services lookup (ex: s ftp)
-# sudo bash
-s() {
-   if (($# == 2)); then
-      # s old new [number|cmd]
-      fc -s "$1"="$2" "$3"
-   elif (($# == 1)); then
-      # s ftp|21
-      if [[ $1 == [[:digit:]]* ]]
-      then command grep -w -iE --color=auto -- "$1" /etc/services
-      else command grep    -iE --color=auto -- "$1" /etc/services
-      fi
-   else
-      history -a
-      if [[ $sudo_version_ok ]]
-      then sudo -E /bin/bash
-      else sudo    /bin/bash
-      fi
-   fi
-}
 
 ## PS1 + title (\e]2; ---- \a)
 _gbr() {
