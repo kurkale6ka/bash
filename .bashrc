@@ -162,39 +162,32 @@ PS1() {
 export PS3='Choose an entry: '
        PS4='+ '
 
-## Directory functions and aliases: cd, md, rd, pw
-if [[ -r $HOME/github/bash/scripts/cd/cd.bash ]]
-then
-   . "$HOME"/github/bash/scripts/cd/cd.bash
-   cd_alias=c
-fi
+## cd
+alias -- -='cd - >/dev/null'
 
-alias  cd-="${cd_alias:-cd} - >/dev/null"
-alias -- -="${cd_alias:-cd} - >/dev/null"
-alias    1="${cd_alias:-cd} .."
-alias    2="${cd_alias:-cd} ../.."
-alias    3="${cd_alias:-cd} ../../.."
-alias    4="${cd_alias:-cd} ../../../.."
-alias cd..="${cd_alias:-cd} .."
-alias   ..="${cd_alias:-cd} .."
+alias 1='cd ..'
+alias 2='cd ../..'
+alias 3='cd ../../..'
+alias 4='cd ../../../..'
+alias 5='cd ../../../../..'
+alias 6='cd ../../../../../..'
+alias 7='cd ../../../../../../..'
+alias 8='cd ../../../../../../../..'
+alias 9='cd ../../../../../../../../..'
 
+## File system operations
 alias to=touch
-alias md='command mkdir -p --'
+
+alias pw='pwd -P'
+alias md='mkdir -p'
 
 rd() {
    printf 'rd: remove directory ‘%s’?\n' "$@"
    read -p '(y/n) '
-   [[ $REPLY == @(y|yes) ]] && command rm -r -- "$@"
+   [[ $REPLY == @(y|yes) ]] && 'rm' -r -- "$@"
 }
 
 complete -A directory mkdir md rmdir rd
-
-pw() {
-   if (($#))
-   then pws --seconds 25 get "$1"
-   else command pwd -P
-   fi
-}
 
 ## Fuzzy
 fd() {
