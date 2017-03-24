@@ -294,18 +294,16 @@ pg() {
    fi
 }
 
-alias  k=kill
-alias kl='kill -l'
-alias ka=killall
+alias k=kill
 alias kg='kill -- -'
-alias pk=pkill
+
 complete -A signal kill k
 
 # jobs
-alias     j='jobs -l'
-alias     z=fg
+alias z=fg
 alias -- --='fg %-'
-complete -A job     -P '%' fg z jobs j disown
+
+complete -A job     -P '%' fg z jobs disown
 complete -A stopped -P '%' bg
 
 ## rsync with git excludes
