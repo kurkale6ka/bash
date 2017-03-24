@@ -308,10 +308,12 @@ complete -A stopped -P '%' bg
 
 ## rsync with git excludes
 rs() {
-rsync -f".- $HOME/.gitignore" \
-      -f':- .gitignore'       \
-      -f'- .git'              \
-      "$@"
+   rsync --no-o --no-g --delete-excluded -e'ssh -q' \
+         -f".- $HOME/.gitignore"                    \
+         -f':- .gitignore'                          \
+         -f'- .gitignore'                           \
+         -f'- .git'                                 \
+         $@
 }
 
 ## Permissions + debug
