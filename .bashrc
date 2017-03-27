@@ -61,13 +61,6 @@ alias  sd=sudo
 alias sde=sudoedit
 
 ## PS1 + title (\e]2; ---- \a)
-_gbr() {
-   local gb="$(git rev-parse --abbrev-ref HEAD 2>/dev/null)"
-   if [[ $gb ]]
-   then echo " λ-$gb"
-   else echo ''
-   fi
-}
 
 # Helper for c (fuzzy bookmarked cd)
 
@@ -126,30 +119,27 @@ c() {
    fi
 }
 
+_gbr() {
+   local gb="$(git rev-parse --abbrev-ref HEAD 2>/dev/null)"
+   if [[ $gb ]]
+   then echo " λ-$gb"
+   else echo ''
+   fi
+}
+
 PS1() {
-   if ((EUID == 0)); then
-      # Add root's PATH because I am simply running a root bash, so haven't
-      # sourced any of root's files (as it happens with su - root)
+   if ((EUID == 0))
+   then
+      # Needed if running sudo -E bash vs su - (thus sourcing all root's rc files)
       PATH=/sbin:/usr/sbin:/usr/local/sbin:/root/bin:"$PATH"
-      # Use PROMPT_COMMAND to aggregate users' history into a single file
-      # /var/log/user-history.log                                    whoami | bash PID |         history 1        |  $?
-      #                                                              oge    | [21118]: | 2013-09-09_10:46:34 su - | [1]
-      # export PROMPT_COMMAND='RETRN_VAL=$?; logger -p local6.debug "$LOGNAME [$$]: $(history 1 | command sed "s/^[ ]*[0-9]\+[ ]*//" ) [$RETRN_VAL]"; ...'
-      [[ $TERM != linux ]] && export PROMPT_COMMAND='printf "\e]2;%s @ %s # %s\a" "$USER" "${HOSTNAME%%.*}" "${PWD/#$HOME/~}"'
-      if [[ $SSH_CONNECTION ]]
-      then
-         PS1="\n[\[$_lblu\]\w\[$_res\]]\$(_gbr) \[$Purple\]\h\[$_res\] \A"'$(((\j>0)) && echo \ ❭ \[$RRed\]%\j\[$_res\])'"\n\[$RRed\]\u\[$_res\] # "
-      else
-         PS1="\n[\[$_lblu\]\w\[$_res\]]\$(_gbr) \[$Yellow\]\h\[$_res\] \A"'$(((\j>0)) && echo \ ❭ \[$RRed\]%\j\[$_res\])'"\n\[$RRed\]\u\[$_res\] # "
-      fi
+
+      PS1="\n[\A \[$_lblu\]\w\[$_res\]]\$(_gbr)"'$(((\j>0)) && echo \ ❭ \[$RRed\]%\j\[$_res\])'"\n\[$RRed\]\u\[$_res\]@\[$RRed\]\h\[$_res\] # "
    else
-      [[ $TERM != linux ]] && export PROMPT_COMMAND='printf "\e]2;%s @ %s $ %s\a" "$USER" "${HOSTNAME%%.*}" "${PWD/#$HOME/~}"'
-      if [[ $SSH_CONNECTION ]]
-      then
-         PS1="\n[\[$_lblu\]\w\[$_res\]]\$(_gbr) \[$Purple\]\h\[$_res\] \A"'$(((\j>0)) && echo \ ❭ \[$RRed\]%\j\[$_res\])'"\n\[$Yellow\]\u\[$_res\] \\$ "
-      else
-         PS1="\n[\[$_lblu\]\w\[$_res\]]\$(_gbr) \[$Yellow\]\h\[$_res\] \A"'$(((\j>0)) && echo \ ❭ \[$RRed\]%\j\[$_res\])'"\n\[$Yellow\]\u\[$_res\] \\$ "
-      fi
+      PS1="\n[\A \[$_lblu\]\w\[$_res\]]\$(_gbr)"'$(((\j>0)) && echo \ ❭ \[$RRed\]%\j\[$_res\])'"\n\[$Yellow\]\u\[$_res\]@\[$Yellow\]\h\[$_res\] \\$ "
+   fi
+   if [[ $TERM != linux ]]
+   then
+      export PROMPT_COMMAND='printf "\e]2;[%s] %s\a" "${PWD/#$HOME/~}" "${HOSTNAME%%.*}"'
    fi
 }
 
