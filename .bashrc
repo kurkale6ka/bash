@@ -21,17 +21,16 @@ HOSTFILE="$HOME"/.hosts # hostnames completion (same format as /etc/hosts)
 # These can't reside in .profile since there is no terminal for tput
 _bld="$(tput bold)"
 _udl="$(tput smul)"
-Purple="$(tput setaf 140)"
-Yellow="$(tput setaf 221)"
-Blue="$(tput setaf 4)"
-RRed="$(tput setaf 9)"
+_ylw="$(tput setaf 221)"
+_blu="$(tput setaf 4)"
+_red="$(tput setaf 9)"
 _lgrn="$(printf %s "$_bld"; tput setaf 2)"
 _lblu="$(printf %s "$_bld"; tput setaf 4)"
 _res="$(tput sgr0)"
 
 # Colored man pages
 export LESS_TERMCAP_mb="$_lgrn" # begin blinking
-export LESS_TERMCAP_md="$_lblu"  # begin bold
+export LESS_TERMCAP_md="$_lblu" # begin bold
 export LESS_TERMCAP_me="$_res"  # end mode
 
 # so -> stand out - info box
@@ -133,9 +132,9 @@ PS1() {
       # Needed if running sudo -E bash vs su - (thus sourcing all root's rc files)
       PATH=/sbin:/usr/sbin:/usr/local/sbin:/root/bin:"$PATH"
 
-      PS1="\n[\A \[$_lblu\]\w\[$_res\]]\$(_gbr)"'$(((\j>0)) && echo \ ❭ \[$RRed\]%\j\[$_res\])'"\n\[$RRed\]\u\[$_res\]@\[$RRed\]\h\[$_res\] # "
+      PS1="\n[\A \[$_lblu\]\w\[$_res\]]\$(_gbr)"'$(((\j>0)) && echo \ ❭ \[$_red\]%\j\[$_res\])'"\n\[$_red\]\u\[$_res\]@\[$_red\]\h\[$_res\] # "
    else
-      PS1="\n[\A \[$_lblu\]\w\[$_res\]]\$(_gbr)"'$(((\j>0)) && echo \ ❭ \[$RRed\]%\j\[$_res\])'"\n\[$Yellow\]\u\[$_res\]@\[$Yellow\]\h\[$_res\] \\$ "
+      PS1="\n[\A \[$_lblu\]\w\[$_res\]]\$(_gbr)"'$(((\j>0)) && echo \ ❭ \[$_red\]%\j\[$_res\])'"\n\[$_ylw\]\u\[$_res\]@\[$_ylw\]\h\[$_res\] \\$ "
    fi
    if [[ $TERM != linux ]]
    then
@@ -323,11 +322,14 @@ alias co=chown
 alias cm=chmod
 
 ## ls
+_ls_date="${_blu}%d-%b-%y$_res"
+_ls_time="$(tput setaf 238)%H:%M$_res"
+
 ldot() {
    local ls
    if [[ ${FUNCNAME[1]} == 'l.' ]]
    then ls=(ls -FB   --color=auto)
-   else ls=(ls -FBhl --color=auto --time-style="+${Blue}@$_res %d-%b-%y %H:%M")
+   else ls=(ls -FBhl --color=auto --time-style="+$_ls_date $_ls_time")
    fi
    (($# == 0)) && {             "${ls[@]}" -d .[^.]* ; return; }
    (($# == 1)) && { (cd "$1" && "${ls[@]}" -d .[^.]*); return; }
@@ -352,39 +354,32 @@ unalias l. ll. l ld la lr lk lx ll lld lla llr llk llx lm lc lu llm llc llu ln \
  l.() { ldot "$@"; }
 ll.() { ldot "$@"; }
 
-alias   l='command ls -FB    --color=auto'
-alias  ll='command ls -FBhl  --color=auto --time-style="+${Blue}@$_res %d-%b-%y %H:%M"'
-alias  l1='command ls -FB1   --color=auto'
+alias   l='command ls -FB   --color=auto'
+alias  ll='command ls -FBhl --color=auto --time-style="+$_ls_date $_ls_time"'
+alias  l1='command ls -FB1  --color=auto'
 
 alias  la='command ls -FBA   --color=auto'
-alias lla='command ls -FBAhl --color=auto --time-style="+${Blue}@$_res %d-%b-%y %H:%M"'
+alias lla='command ls -FBAhl --color=auto --time-style="+$_ls_date $_ls_time"'
 
 alias  ld='command ls -FBd   --color=auto'
-alias lld='command ls -FBdhl --color=auto --time-style="+${Blue}@$_res %d-%b-%y %H:%M"'
+alias lld='command ls -FBdhl --color=auto --time-style="+$_ls_date $_ls_time"'
+
+alias  lm='command ls -FBtr   --color=auto'
+alias llm='command ls -FBhltr --color=auto --time-style="+$_ls_date $_ls_time"'
 
 alias  lk='command ls -FBS   --color=auto'
-alias llk='command ls -FBShl --color=auto --time-style="+${Blue}@$_res %d-%b-%y %H:%M"'
+alias llk='command ls -FBShl --color=auto --time-style="+$_ls_date $_ls_time"'
 
 alias  lr="tree -FAC -I '*~|*.swp' --noreport"
-alias llr='command ls -FBRhl --color=auto --time-style="+${Blue}@$_res %d-%b-%y %H:%M"'
-
-lm() {
-   [[ -t 1 ]] && echo "$Purple${_udl}Sorted by modification date:$_res"
-   command ls -FBtr --color=auto "$@"
-}
-
-llm() {
-   [[ -t 1 ]] && echo "$Purple${_udl}Sorted by modification date:$_res"
-   command ls -FBhltr --color=auto --time-style="+${Blue}@$_res %d-%b-%y %H:%M" "$@"
-}
+alias llr='command ls -FBRhl --color=auto --time-style="+$_ls_date $_ls_time"'
 
 _lx() {
    local exes=()
    for x in *; do [[ -x $x ]] && exes+=("$x"); done
    if [[ ${FUNCNAME[1]} == 'lx' ]]; then
-      command ls -FB   --color=auto                                    "${exes[@]}"
+      command ls -FB   --color=auto                                     "${exes[@]}"
    else
-      command ls -FBhl --color=auto --time-style="+${Blue}@$_res %d-%b-%y %H:%M" "${exes[@]}"
+      command ls -FBhl --color=auto --time-style="+$_ls_date $_ls_time" "${exes[@]}"
    fi
 }
 
@@ -397,7 +392,7 @@ ln() {
    else
       if (( $(find . -maxdepth 1 -type l -print -quit | wc -l) == 1 )); then
          find . -maxdepth 1 -type l -printf '%P\0' |
-         xargs -0 'ls' -FBAhl --color=auto --time-style="+${Blue}@$_res %d-%b-%y %H:%M" --
+         xargs -0 'ls' -FBAhl --color=auto --time-style="+$_ls_date $_ls_time" --
       fi
    fi
 }
