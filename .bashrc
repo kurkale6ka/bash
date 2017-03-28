@@ -75,37 +75,7 @@ s() {
    fi
 }
 
-## PS1 + title (\e]2; ---- \a)
-
-# Helper for c (fuzzy bookmarked cd)
-
-# mkdir -p $XDG_DATA_HOME/bmarks
-#
-# sqlite3 $XDG_DATA_HOME/bmarks/marks.sqlite << 'INIT'
-# CREATE TABLE marks (
-#   dir VARCHAR(200) UNIQUE,
-#   weight INTEGER
-# );
-#
-# CREATE INDEX _dir ON marks (dir);
-# INIT
-update_marks() {
-   local db="$XDG_DATA_HOME"/bmarks/marks.sqlite
-
-   # Get weight for the current directory
-   local weight="$(sqlite3 "$db" "SELECT weight FROM marks WHERE dir = '$(pwd -P)';")"
-
-   if [[ $weight ]]
-   then
-      ((weight++))
-   else
-      weight=1
-   fi
-
-   sqlite3 "$db" "INSERT or REPLACE into marks (dir, weight) values ('$(pwd -P)', '$weight');"
-}
-
-# Fuzzy cd based on visited locations only (bookmarks)
+## Fuzzy cd based on visited locations only (bookmarks)
 c() {
    local db="$XDG_DATA_HOME"/bmarks/marks.sqlite
 
@@ -134,6 +104,35 @@ c() {
    fi
 }
 
+# Helper for c
+
+# mkdir -p $XDG_DATA_HOME/bmarks
+#
+# sqlite3 $XDG_DATA_HOME/bmarks/marks.sqlite << 'INIT'
+# CREATE TABLE marks (
+#   dir VARCHAR(200) UNIQUE,
+#   weight INTEGER
+# );
+#
+# CREATE INDEX _dir ON marks (dir);
+# INIT
+update_marks() {
+   local db="$XDG_DATA_HOME"/bmarks/marks.sqlite
+
+   # Get weight for the current directory
+   local weight="$(sqlite3 "$db" "SELECT weight FROM marks WHERE dir = '$(pwd -P)';")"
+
+   if [[ $weight ]]
+   then
+      ((weight++))
+   else
+      weight=1
+   fi
+
+   sqlite3 "$db" "INSERT or REPLACE into marks (dir, weight) values ('$(pwd -P)', '$weight');"
+}
+
+## PS1 + title (\e]2; ---- \a)
 _gbr() {
    local gb="$(git rev-parse --abbrev-ref HEAD 2>/dev/null)"
    if [[ $gb ]]
