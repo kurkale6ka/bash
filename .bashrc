@@ -59,6 +59,22 @@ alias ed='ed -v -p:'
 alias  sd=sudo
 alias sde=sudoedit
 
+# s///
+# sudo bash
+s() {
+   if (($# == 2))
+   then
+      # s old new [number|cmd]
+      fc -s "$1"="$2" "$3"
+   else
+      history -a
+      if sudo -E echo -n 2>/dev/null # check if -E is available
+      then sudo -E /usr/bin/env bash
+      else sudo    /usr/bin/env bash
+      fi
+   fi
+}
+
 ## PS1 + title (\e]2; ---- \a)
 
 # Helper for c (fuzzy bookmarked cd)
