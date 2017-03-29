@@ -579,31 +579,14 @@ pa() { awk '!_[$0]++' <<< "${PATH//:/$'\n'}"; }
 
 ## Help
 m() {
-   local choice
-   (($#)) || {
-      select choice in help man; do
-         case "$choice" in
-            help) help help; return;;
-             man) man  man ; return;;
-               *) echo '*** Wrong choice ***' >&2
-         esac
-      done
-   }
-   (($# >= 2)) && [[ -f $1 ]] && { command mv -i -- "$@"; return; }
-   local topic arg
-   for topic in "$@"; do
-      ((arg++))
-      [[ $topic == [1-8]* ]] && { man "$topic" -- "${@:$((arg+1))}"; return; }
-      if [[ $(type -at -- $topic 2>/dev/null) == builtin*file ]]; then
-         select choice in "help $topic" "man $topic"; do
-            case "$choice" in
-               help*) help -- "$topic"; break;;
-                man*) man  -- "$topic"; break;;
-                   *) echo '*** Wrong choice ***' >&2
-            esac
-         done
-      else
-         { help -- "$topic" || man -- "$topic" || type -a -- "$topic"; } 2>/dev/null
+   (($# == 0)) && man man && return
+   man "$@"
+   local topic
+   for topic in "$@"
+   do
+      if [[ $(type -t "$topic" 2>/dev/null) == builtin ]]
+      then
+         echo "${_red}see also${_res}: help $topic"
       fi
    done
 }
