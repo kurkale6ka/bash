@@ -71,7 +71,7 @@ PS1() {
    if [[ $TERM != linux ]]
    then
       ## title: \e]2; ---- \a
-      export PROMPT_COMMAND='printf "\e]2;[%s] %s\a" "${PWD/#$HOME/~}" "${HOSTNAME%%.*}"'
+      export PROMPT_COMMAND='printf "\e]2;[%s] %s\a" "${PWD/#$HOME/\~}" "${HOSTNAME%%.*}"'
    fi
 }
 
