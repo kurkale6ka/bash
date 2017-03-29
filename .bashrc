@@ -17,6 +17,13 @@ FIGNORE='~:.swp:.o' # <tab> completion
 
 HOSTFILE="$HOME"/.hosts # hostnames completion (same format as /etc/hosts)
 
+## Paths
+if ((EUID == 0))
+then
+   # Needed if running sudo -E bash vs su - (thus sourcing all root's rc files)
+   PATH=/sbin:/usr/sbin:/usr/local/sbin:/root/bin:"$PATH"
+fi
+
 ## Colors
 # These can't reside in .profile since there is no terminal for tput
 _bld="$(tput bold)"
@@ -45,7 +52,118 @@ export LESS_TERMCAP_ue="$(tput rmul; printf %s "$_res")"
 
 [[ -r $HOME/.dir_colors ]] && eval "$(dircolors "$HOME"/.dir_colors)"
 
-## Vim
+## Prompts
+_gbr() {
+   local gb="$(git rev-parse --abbrev-ref HEAD 2>/dev/null)"
+   if [[ $gb ]]
+   then echo " λ-$gb"
+   else echo ''
+   fi
+}
+
+PS1() {
+   if ((EUID == 0))
+   then
+      PS1="\n[\A \[$_lblu\]\w\[$_res\]]\$(_gbr)"'$(((\j>0)) && echo \ ❭ \[$_red\]%\j\[$_res\])'"\n\[$_red\]\u\[$_res\]@\[$_red\]\h\[$_res\] # "
+   else
+      PS1="\n[\A \[$_lblu\]\w\[$_res\]]\$(_gbr)"'$(((\j>0)) && echo \ ❭ \[$_red\]%\j\[$_res\])'"\n\[$_ylw\]\u\[$_res\]@\[$_ylw\]\h\[$_res\] \\$ "
+   fi
+   if [[ $TERM != linux ]]
+   then
+      ## title: \e]2; ---- \a
+      export PROMPT_COMMAND='printf "\e]2;[%s] %s\a" "${PWD/#$HOME/~}" "${HOSTNAME%%.*}"'
+   fi
+}
+
+       PS1 # call function above
+       PS2='↪ '
+export PS3='Choose an entry: '
+       PS4='+ '
+
+## Processes and jobs
+# memory map
+pm() {
+   for i in "$@"; do
+      printf '%s: ' "$i"; pmap -d "$(command pgrep "$i")" | tail -n1
+   done | column -t | sort -k4
+}
+
+pg() {
+   (($# == 0)) || [[ $1 == -h || $1 == --help ]] && {
+      cat <<- HELP
+		Usage:
+		  pg [-lz] pattern
+		    -l: PID PPID PGID SID TTY TPGID STAT EUSER EGROUP START CMD
+		    -z: squeeze! no context lines.
+		HELP
+      return 0
+   }
+
+   [[ $1 == -* ]] && { [[ $1 == @(-l|-z|-lz|-zl) ]] || return 1; }
+
+   # fields
+   if [[ $1 != -*l* ]]
+   then
+      # PID STAT EUSER EGROUP START CMD
+      local fields=pid,stat,euser,egroup,start_time,cmd
+   else
+      local fields=pid,ppid,pgid,sid,tname,tpgid,stat,euser,egroup,start_time,cmd
+   fi
+
+   # Display headers:
+   ps o "$fields" | head -n1
+
+   # Squeeze! No context lines
+   if [[ $1 == -*z* ]]
+   then
+      ps  axww o "$fields" | grep -v grep | grep -iE   --color=auto "${@:2}"
+   elif [[ $1 == -* ]]; then
+      ps faxww o "$fields" | grep -v grep | grep -iEB1 --color=auto "${@:2}"
+   else
+      ps faxww o "$fields" | grep -v grep | grep -iEB1 --color=auto "$@"
+   fi
+}
+
+alias k=kill
+alias kg='kill -- -'
+
+complete -A signal kill k
+
+# jobs
+alias z=fg
+alias -- --='fg %-'
+
+complete -A job     -P '%' fg z jobs disown
+complete -A stopped -P '%' bg
+
+## Completion
+complete -A enabled  builtin
+complete -A disabled enable
+complete -A export   printenv
+complete -A variable export local readonly unset use
+complete -A function function
+complete -A binding  bind
+complete -A user     chage chfn finger groups mail passwd slay su userdel \
+                     usermod w write
+complete -A hostname dig nslookup host ping ssh
+
+# Usage: cl arg - computes a completion list for arg
+cl() { column <(compgen -A "$1"); }
+
+complete -W 'alias arrayvar binding builtin command directory disabled enabled
+export file function group helptopic hostname job keyword running service
+setopt shopt signal stopped user variable' cl compgen complete
+
+# enable bash completion in non posix shells
+if ! shopt -oq posix; then
+   if [[ -f /etc/profile.d/bash-completion.sh ]]; then
+      . /etc/profile.d/bash-completion.sh
+   elif [[ -f /etc/bash_completion ]]; then
+      . /etc/bash_completion
+   fi >/dev/null 2>&1
+fi
+
+## (n)Vim and ed
 if command -v nvim
 then
    alias v=nvim
@@ -74,6 +192,19 @@ s() {
       fi
    fi
 }
+
+## cd
+alias -- -='cd - >/dev/null'
+
+alias 1='cd ..'
+alias 2='cd ../..'
+alias 3='cd ../../..'
+alias 4='cd ../../../..'
+alias 5='cd ../../../../..'
+alias 6='cd ../../../../../..'
+alias 7='cd ../../../../../../..'
+alias 8='cd ../../../../../../../..'
+alias 9='cd ../../../../../../../../..'
 
 ## Fuzzy cd based on visited locations only (bookmarks)
 c() {
@@ -132,49 +263,6 @@ update_marks() {
    sqlite3 "$db" "INSERT or REPLACE into marks (dir, weight) values ('$(pwd -P)', '$weight');"
 }
 
-## PS1 + title (\e]2; ---- \a)
-_gbr() {
-   local gb="$(git rev-parse --abbrev-ref HEAD 2>/dev/null)"
-   if [[ $gb ]]
-   then echo " λ-$gb"
-   else echo ''
-   fi
-}
-
-PS1() {
-   if ((EUID == 0))
-   then
-      # Needed if running sudo -E bash vs su - (thus sourcing all root's rc files)
-      PATH=/sbin:/usr/sbin:/usr/local/sbin:/root/bin:"$PATH"
-
-      PS1="\n[\A \[$_lblu\]\w\[$_res\]]\$(_gbr)"'$(((\j>0)) && echo \ ❭ \[$_red\]%\j\[$_res\])'"\n\[$_red\]\u\[$_res\]@\[$_red\]\h\[$_res\] # "
-   else
-      PS1="\n[\A \[$_lblu\]\w\[$_res\]]\$(_gbr)"'$(((\j>0)) && echo \ ❭ \[$_red\]%\j\[$_res\])'"\n\[$_ylw\]\u\[$_res\]@\[$_ylw\]\h\[$_res\] \\$ "
-   fi
-   if [[ $TERM != linux ]]
-   then
-      export PROMPT_COMMAND='printf "\e]2;[%s] %s\a" "${PWD/#$HOME/~}" "${HOSTNAME%%.*}"'
-   fi
-}
-
-       PS1 # call function above
-       PS2='↪ '
-export PS3='Choose an entry: '
-       PS4='+ '
-
-## cd
-alias -- -='cd - >/dev/null'
-
-alias 1='cd ..'
-alias 2='cd ../..'
-alias 3='cd ../../..'
-alias 4='cd ../../../..'
-alias 5='cd ../../../../..'
-alias 6='cd ../../../../../..'
-alias 7='cd ../../../../../../..'
-alias 8='cd ../../../../../../../..'
-alias 9='cd ../../../../../../../../..'
-
 ## File system operations
 alias to=touch
 
@@ -218,7 +306,128 @@ fda() {
    [[ -d $dir ]] && cd "$dir"
 }
 
-## Networking: myip, dig, tunnel
+## Safer cp/mv + rm
+# problem with these is I don't usually check the destination
+alias cp='cp -i'
+alias mv='mv -i'
+
+alias d='rm -i --preserve-root'
+
+# Delete based on inodes (use ls -li first)
+di() {
+   (($#)) || return 1
+   local inode inodes=()
+   # skip the last inode
+   for inode in "${@:1:$#-1}"; do
+      inodes+=(-inum "$inode" -o)
+   done
+   # last inode
+   inodes+=(-inum "${@:$#}")
+   # -inum 38 -o -inum 73
+   find . \( "${inodes[@]}" \) -exec rm -i -- {} +
+}
+
+## Permissions + debug
+x() {
+   (($#)) && { chmod u+x -- "$@"; return; }
+
+   if [[ $- == *x* ]]
+   then echo 'debug OFF'; set +o xtrace
+   else echo 'debug ON' ; set -o xtrace
+   fi
+} 2>/dev/null
+
+alias bx='bash -x'
+
+alias    setuid='chmod u+s'
+alias    setgid='chmod g+s'
+alias setsticky='chmod  +t'
+
+alias cg=chgrp
+alias co=chown
+alias cm=chmod
+
+## Disk/partitions functions
+df() { command df -hT "$@" | sort -k6r; }
+
+# Display largest files/directories
+# ds
+# ds -[fdt]
+ds() {
+   [[ $1 == -h || $1 == --help ]] && {
+      cat <<- HELP
+		Usage:
+		ds
+		ds -[fdt] (files, directories, total)
+		HELP
+      return 0
+   }
+
+   # Files
+   if (($# == 0)) || [[ -d $1 ]] || { [[ $1 == -f ]] && [[ -d $2 || -z $2 ]]; }
+   then
+      if [[ $1 != -f ]]
+      then
+         local start="${1:-.}"
+      else
+         local start="${2:-.}"
+      fi
+
+      local file
+      local files=()
+      while read -r _ file
+      do
+         files+=("$file")
+      done < <(find "$start" -xdev \( -name .git -o -path '*vendor/bundle' -o -path '*shared/bundle' \) -prune -o -type f -printf '%p\0' | xargs -0 du -h | sort -hr | head -n15)
+
+      if [[ -n $files ]]
+      then
+         ls -FBShl --color --time-style='+%d-%b-%y %H:%M' -- "${files[@]#./}" | tee /tmp/ds_files
+      else
+         return 1
+      fi
+   fi
+
+   # Directories
+   if (($# == 0)) || [[ -d $1 ]] || { [[ $1 == -d ]] && [[ -d $2 || -z $2 ]]; }
+   then
+      if [[ $1 != -d ]]
+      then
+         local start="${1:-.}"
+      else
+         local start="${2:-.}"
+      fi
+
+      { (($# == 0)) || [[ -d $1 ]]; } && echo
+
+      local size folder
+      while read -r size folder
+      do
+         echo -n "$size "
+         ls -d --color -- "${folder#./}"
+      done < <(du -xh "$start" | sort -hr | head -n15) | tee /tmp/ds_dirs
+   fi
+
+   # Folder total
+   if [[ $1 == -t ]] && [[ -d $2 || -z $2 ]]
+   then
+      du -sxh --time --time-style=+'%d-%b-%y %H:%M' "${2:-.}"
+   fi
+}
+
+hd() { if ((1 == $#)); then hdparm -I -- "$1"; else hdparm "$@"; fi; }
+
+mn() {
+   if (($#))
+   then mount "$@"
+   else mount | cut -d" " -f1,3,5,6 | column -t
+   fi
+}
+
+alias umn=umount
+alias fu='sudo fuser -mv'
+
+## Networking
 alias myip='curl icanhazip.com'
 
 dig() { command dig +noall +answer "${@#*//}"; }
@@ -250,62 +459,6 @@ tunnel() {
 alias il='iptables -nvL --line-numbers'
 alias nn=netstat
 
-## Processes and jobs
-# memory map
-pm() {
-   for i in "$@"; do
-      printf '%s: ' "$i"; pmap -d "$(command pgrep "$i")" | tail -n1
-   done | column -t | sort -k4
-}
-
-pg() {
-   (($# == 0)) || [[ $1 == -h || $1 == --help ]] && {
-      cat <<- HELP
-		Usage:
-		  pg [-lz] pattern
-		    -l: PID PPID PGID SID TTY TPGID STAT EUSER EGROUP START CMD
-		    -z: squeeze! no context lines.
-		HELP
-      return 0
-   }
-
-   [[ $1 == -* ]] && { [[ $1 == @(-l|-z|-lz|-zl) ]] || return 1; }
-
-   # fields
-   if [[ $1 != -*l* ]]
-   then
-      # PID STAT EUSER EGROUP START CMD
-      local fields=pid,stat,euser,egroup,start_time,cmd
-   else
-      local fields=pid,ppid,pgid,sid,tname,tpgid,stat,euser,egroup,start_time,cmd
-   fi
-
-   # Display headers:
-   ps o "$fields" | head -n1
-
-   # Squeeze! No context lines
-   if [[ $1 == -*z* ]]
-   then
-      ps  axww o "$fields" | grep -v grep | grep -iE   --color=auto "${@:2}"
-   elif [[ $1 == -* ]]; then
-      ps faxww o "$fields" | grep -v grep | grep -iEB1 --color=auto "${@:2}"
-   else
-      ps faxww o "$fields" | grep -v grep | grep -iEB1 --color=auto "$@"
-   fi
-}
-
-alias k=kill
-alias kg='kill -- -'
-
-complete -A signal kill k
-
-# jobs
-alias z=fg
-alias -- --='fg %-'
-
-complete -A job     -P '%' fg z jobs disown
-complete -A stopped -P '%' bg
-
 ## rsync with git excludes
 rs() {
    rsync --no-o --no-g --delete-excluded -e'ssh -q' \
@@ -315,26 +468,6 @@ rs() {
          -f'- .git'                                 \
          $@
 }
-
-## Permissions + debug
-x() {
-   (($#)) && { chmod u+x -- "$@"; return; }
-
-   if [[ $- == *x* ]]
-   then echo 'debug OFF'; set +o xtrace
-   else echo 'debug ON' ; set -o xtrace
-   fi
-} 2>/dev/null
-
-alias bx='bash -x'
-
-alias    setuid='chmod u+s'
-alias    setgid='chmod g+s'
-alias setsticky='chmod  +t'
-
-alias cg=chgrp
-alias co=chown
-alias cm=chmod
 
 ## ls
 _ls_date="${_blu}%d-%b-%y$_res"
@@ -418,6 +551,31 @@ sl() {
    local args=(); (($#)) && args=("$@") || args=(*)
    stat -c "%8i %A (%4a) %3h %4u %4g %10s (%10Y) %n" -- "${args[@]}"
 }
+
+## Head/tail + cat-like functions
+alias h=head
+
+alias t=tail
+alias tf='tail -f -n0'
+
+alias cn='cat -n'
+
+# Display the first 98 lines of all (or filtered) files in . Ex: catall .ba
+catall() {
+   (($#)) && local filter=(-iname "$1*")
+   find . -maxdepth 1 "${filter[@]}" ! -name '*~' -type f -print0 |
+   xargs -0 file | grep text | cut -d: -f1 | cut -c3- | xargs head -n98 |
+   v -c "se fdl=0 fdm=expr fde=getline(v\:lnum)=~'==>'?'>1'\:'='" -
+}
+
+# Print nth line in a file: n 11 /my/file
+n() { command sed -n "$1{p;q}" -- "$2"; }
+
+# Display non-empty lines in a file
+sq() { command grep -v '^[[:space:]]*#\|^[[:space:]]*$' -- "$@"; }
+
+# Cleaner PATH display
+pa() { awk '!_[$0]++' <<< "${PATH//:/$'\n'}"; }
 
 ## Help
 m() {
@@ -511,24 +669,6 @@ db() {
    done
 }
 
-## rm and cp like functions and aliases
-# Delete based on inodes (use ls -li first)
-di() {
-   (($#)) || return 1
-   local inode inodes=()
-   # skip the last inode
-   for inode in "${@:1:$#-1}"; do
-      inodes+=(-inum "$inode" -o)
-   done
-   # last inode
-   inodes+=(-inum "${@:$#}")
-   # -inum 38 -o -inum 73
-   find . \( "${inodes[@]}" \) -exec rm -i -- {} +
-}
-
-alias y='cp -i --'
-alias d='rm -i --preserve-root --'
-
 ## Find stuff and diffs
 f() {
    if (($# == 1))
@@ -560,6 +700,82 @@ diff() {
 }
 
 alias _=combine
+
+## Misc: options, app aliases, rc(), b(), e()
+# Options
+alias  a=alias
+alias ua=unalias
+
+complete -A alias alias a unalias ua
+
+alias  o='set -o'
+alias oo=shopt
+
+complete -A setopt set   o
+complete -A shopt  shopt oo
+
+# Application aliases
+alias open=xdg-open
+alias weechat='TERM=xterm-256color weechat'
+alias wgetpaste='wgetpaste -s dpaste -n kurkale6ka -Ct'
+alias parallel='parallel --no-notice'
+alias bc='bc -ql'
+
+# More aliases
+alias msg=dmesg
+alias cmd=command
+alias builtins='enable -a | cut -d" " -f2  | column'
+alias hg='history | command grep -iE --color=auto'
+
+alias pl=perl
+alias py=python
+alias rb=irb
+
+complete -f -o default -X '!*.pl' perl   prel pl
+complete -f -o default -X '!*.py' python py
+complete -f -o default -X '!*.rb' ruby   rb
+
+# rbenv: run multiple versions of ruby side-by-side
+command -v rbenv >/dev/null 2>&1 && eval "$(rbenv init -)"
+
+# Helper for creating a minimal .inputrc file
+rc() {
+   local inputrc="printf '%s\n' "
+         inputrc+="'\"\e[A\": history-search-backward' "
+         inputrc+="'\"\e[B\": history-search-forward' >> $HOME/.inputrc"
+   xclip -f <<< "$inputrc"
+}
+
+# Banners using figlet
+bn() {
+   if   (($# == 1)); then figlet -f smslant -- "$1"
+   elif (($# == 2)); then figlet -f "$1"    -- "${@:2}"
+   else                   figlist | column -c"$COLUMNS"
+   fi
+}
+
+# Echo
+e() { local status=$?; (($#)) && echo "$@" || echo "$status"; }
+
+## Git
+alias gc='git commit -v'
+alias gp='git push origin master'
+alias gs='git status -sb'
+alias go='git checkout'
+alias gm='git checkout master'
+alias ga='git add'
+alias gb='git branch'
+alias gd='git diff --word-diff=color'
+alias gf='git fetch'
+alias gl='git log --oneline --decorate'
+alias gll='git log -U1 --word-diff=color' # -U1: 1 line of context (-p implied)
+
+## tmux
+alias tl='tmux ls'
+alias ta='tmux attach-session'
+
+complete -W '$(tmux ls 2>/dev/null | cut -d: -f1)' tmux
+complete -W "$(screen -ls 2>/dev/null | grep -E '^\s+[0-9].*\.' | awk {print\ \$1})" screen
 
 ## Date
 date() {
@@ -626,217 +842,9 @@ br() {
 
 alias dump='dump -u'
 
-## Disk: df, du, hdparm, mount
-df() { command df -hT "$@" | sort -k6r; }
-
-# Display largest files/directories
-# ds
-# ds -[fdt]
-ds() {
-   [[ $1 == -h || $1 == --help ]] && {
-      cat <<- HELP
-		Usage:
-		ds
-		ds -[fdt] (files, directories, total)
-		HELP
-      return 0
-   }
-
-   # Files
-   if (($# == 0)) || [[ -d $1 ]] || { [[ $1 == -f ]] && [[ -d $2 || -z $2 ]]; }
-   then
-      if [[ $1 != -f ]]
-      then
-         local start="${1:-.}"
-      else
-         local start="${2:-.}"
-      fi
-
-      local file
-      local files=()
-      while read -r _ file
-      do
-         files+=("$file")
-      done < <(find "$start" -xdev \( -name .git -o -path '*vendor/bundle' -o -path '*shared/bundle' \) -prune -o -type f -printf '%p\0' | xargs -0 du -h | sort -hr | head -n15)
-
-      if [[ -n $files ]]
-      then
-         ls -FBShl --color --time-style='+%d-%b-%y %H:%M' -- "${files[@]#./}" | tee /tmp/ds_files
-      else
-         return 1
-      fi
-   fi
-
-   # Directories
-   if (($# == 0)) || [[ -d $1 ]] || { [[ $1 == -d ]] && [[ -d $2 || -z $2 ]]; }
-   then
-      if [[ $1 != -d ]]
-      then
-         local start="${1:-.}"
-      else
-         local start="${2:-.}"
-      fi
-
-      { (($# == 0)) || [[ -d $1 ]]; } && echo
-
-      local size folder
-      while read -r size folder
-      do
-         echo -n "$size "
-         ls -d --color -- "${folder#./}"
-      done < <(du -xh "$start" | sort -hr | head -n15) | tee /tmp/ds_dirs
-   fi
-
-   # Folder total
-   if [[ $1 == -t ]] && [[ -d $2 || -z $2 ]]
-   then
-      du -sxh --time --time-style=+'%d-%b-%y %H:%M' "${2:-.}"
-   fi
-}
-
-hd() { if ((1 == $#)); then hdparm -I -- "$1"; else hdparm "$@"; fi; }
-
-mn() {
-   if (($#))
-   then command mount "$@"
-   else command mount | cut -d" " -f1,3,5,6 | column -t
-   fi
-}
-
-alias umn=umount
-alias fu='sudo fuser -mv'
-
-## Misc: options, app aliases, rc(), b(), e()
-# Options
-alias  a=alias
-alias ua=unalias
-
-complete -A alias alias a unalias ua
-
-alias  o='set -o'
-alias oo=shopt
-
-complete -A setopt set   o
-complete -A shopt  shopt oo
-
-# Application aliases
-alias open=xdg-open
-alias weechat='TERM=xterm-256color weechat'
-alias wgetpaste='wgetpaste -s dpaste -n kurkale6ka -Ct'
-alias parallel='parallel --no-notice'
-alias bc='bc -ql'
-
-# More aliases
-alias msg=dmesg
-alias cmd=command
-alias builtins='enable -a | cut -d" " -f2  | column'
-alias hg='history | command grep -iE --color=auto'
-
-alias pl=perl
-alias py=python
-alias rb=irb
-
-complete -f -o default -X '!*.pl' perl   prel pl
-complete -f -o default -X '!*.py' python py
-complete -f -o default -X '!*.rb' ruby   rb
-
-# rbenv: run multiple versions of ruby side-by-side
-command -v rbenv >/dev/null 2>&1 && eval "$(rbenv init -)"
-
-# Helper for creating a minimal .inputrc file
-rc() {
-   local inputrc="printf '%s\n' "
-         inputrc+="'\"\e[A\": history-search-backward' "
-         inputrc+="'\"\e[B\": history-search-forward' >> $HOME/.inputrc"
-   xclip -f <<< "$inputrc"
-}
-
-# Banners using figlet
-bn() {
-   if   (($# == 1)); then figlet -f smslant -- "$1"
-   elif (($# == 2)); then figlet -f "$1"    -- "${@:2}"
-   else                   figlist | column -c"$COLUMNS"
-   fi
-}
-
-# Echo
-e() { local status=$?; (($#)) && echo "$@" || echo "$status"; }
-
-## Head/tail + cat-like functions
-alias h=head
-
-alias t=tail
-alias tf='tail -f -n0'
-
-alias cn='cat -n'
-
-# Display the first 98 lines of all (or filtered) files in . Ex: catall .ba
-catall() {
-   (($#)) && local filter=(-iname "$1*")
-   find . -maxdepth 1 "${filter[@]}" ! -name '*~' -type f -print0 |
-   xargs -0 file | grep text | cut -d: -f1 | cut -c3- | xargs head -n98 |
-   v -c "se fdl=0 fdm=expr fde=getline(v\:lnum)=~'==>'?'>1'\:'='" -
-}
-
-# Print nth line in a file: n 11 /my/file
-n() { command sed -n "$1{p;q}" -- "$2"; }
-
-# Display non-empty lines in a file
-sq() { command grep -v '^[[:space:]]*#\|^[[:space:]]*$' -- "$@"; }
-
-# Cleaner PATH display
-pa() { awk '!_[$0]++' <<< "${PATH//:/$'\n'}"; }
-
-## Git
-alias gc='git commit -v'
-alias gp='git push origin master'
-alias gs='git status -sb'
-alias go='git checkout'
-alias gm='git checkout master'
-alias ga='git add'
-alias gb='git branch'
-alias gd='git diff --word-diff=color'
-alias gf='git fetch'
-alias gl='git log --oneline --decorate'
-alias gll='git log -U1 --word-diff=color' # -U1: 1 line of context (-p implied)
-
 ## Typos
 alias cta=cat
 alias rmp=rpm
-
-## Programmable completion
-complete -A enabled  builtin
-complete -A disabled enable
-complete -A export   printenv
-complete -A variable export local readonly unset use
-complete -A function function
-complete -A binding  bind
-complete -A user     chage chfn finger groups mail passwd slay su userdel \
-                     usermod w write
-complete -A hostname dig nslookup host ping ssh
-
-# Usage: cl arg - computes a completion list for arg
-cl() { column <(compgen -A "$1"); }
-
-complete -W 'alias arrayvar binding builtin command directory disabled enabled
-export file function group helptopic hostname job keyword running service
-setopt shopt signal stopped user variable' cl compgen complete
-
-# enable bash completion in non posix shells
-if ! shopt -oq posix; then
-   if [[ -f /etc/profile.d/bash-completion.sh ]]; then
-      . /etc/profile.d/bash-completion.sh
-   elif [[ -f /etc/bash_completion ]]; then
-      . /etc/bash_completion
-   fi >/dev/null 2>&1
-fi
-
-## tmux
-alias tl='tmux ls'
-alias ta='tmux attach-session'
-
-complete -W '$(tmux ls 2>/dev/null | cut -d: -f1)' tmux
-complete -W "$(screen -ls 2>/dev/null | grep -E '^\s+[0-9].*\.' | awk {print\ \$1})" screen
 
 ## fzf
 [[ -f ~/.fzf.bash ]] && . ~/.fzf.bash
