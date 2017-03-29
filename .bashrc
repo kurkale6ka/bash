@@ -168,7 +168,7 @@ if command -v nvim
 then
    alias v=nvim
 else
-   alias v='vim -u ~/.vimrc'
+   alias v='vim -u ~/vim/.vimrc'
 fi >/dev/null 2>&1
 
 alias ed='ed -v -p:'
