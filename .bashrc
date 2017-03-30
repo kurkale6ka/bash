@@ -53,6 +53,13 @@ export LESS_TERMCAP_ue="$(tput rmul; printf %s "$_res")"
 [[ -r $HOME/.dir_colors ]] && eval "$(dircolors "$HOME"/.dir_colors)"
 
 ## Prompts
+if [[ $TERM != linux ]]
+then
+   ## title: \e]2; ---- \a
+   _tilda=\~
+   export PROMPT_COMMAND='printf "\e]2;[%s] %s\a" "${PWD/#$HOME/$_tilda}" "${HOSTNAME%%.*}"'
+fi
+
 _gbr() {
    local gb="$(git rev-parse --abbrev-ref HEAD 2>/dev/null)"
    if [[ $gb ]]
@@ -67,11 +74,6 @@ PS1() {
       PS1="\n[\A \[$_lblu\]\w\[$_res\]]\$(_gbr)"'$(((\j>0)) && echo \ ❭ \[$_red\]%\j\[$_res\])'"\n\[$_red\]\u\[$_res\]@\[$_red\]\h\[$_res\] # "
    else
       PS1="\n[\A \[$_lblu\]\w\[$_res\]]\$(_gbr)"'$(((\j>0)) && echo \ ❭ \[$_red\]%\j\[$_res\])'"\n\[$_ylw\]\u\[$_res\]@\[$_ylw\]\h\[$_res\] \\$ "
-   fi
-   if [[ $TERM != linux ]]
-   then
-      ## title: \e]2; ---- \a
-      export PROMPT_COMMAND='printf "\e]2;[%s] %s\a" "${PWD/#$HOME/\~}" "${HOSTNAME%%.*}"'
    fi
 }
 
