@@ -206,62 +206,77 @@ alias 7='cd ../../../../../../..'
 alias 8='cd ../../../../../../../..'
 alias 9='cd ../../../../../../../../..'
 
-## Fuzzy cd based on visited locations only (bookmarks)
-c() {
-   local db="$XDG_DATA_HOME"/bmarks/marks.sqlite
+if [[ -w $XDG_DATA_HOME/marks/marks.sqlite ]]
+then
+   # Fuzzy cd based on bookmarks or 'updatedb' indexed files
+   # https://github.com/kurkale6ka/zsh/blob/master/README.md
+   c() {
+      local db="$XDG_DATA_HOME"/marks/marks.sqlite
 
-   # Statistics
-   if [[ $1 == -s ]]
-   then
-      sqlite3 "$db" 'SELECT * FROM marks ORDER BY weight DESC;' | column -t -s'|' | less
-      return 0
-   fi
+      # Statistics
+      if [[ $1 == -s ]]
+      then
+         sqlite3 "$db" 'SELECT * FROM marks ORDER BY weight DESC;' | column -t -s'|' | less
+         return 0
+      fi
 
-   if (($# > 0))
-   then
-      # Note: for more than 2 arguments, not all permutations are tried.
-      # So for c 1 2 3, %1%2%3% and %3%2%1% are only tried.
-      local _dirs
-      printf -v _dirs '%s%%' "$@"
-      # dir="$(sqlite3 "$db" "SELECT dir FROM marks WHERE dir LIKE '%${_dirs%\%}%' or dir LIKE '%${(j.%.)${(aO)@}}%' ORDER BY weight DESC;" | fzf +s -0 -1)"
-      local dir="$(sqlite3 "$db" "SELECT dir FROM marks WHERE dir LIKE '%${_dirs%\%}%' ORDER BY weight DESC;" | fzf +s -0 -1)"
-   else
-      local dir="$(sqlite3 "$db" "SELECT dir FROM marks ORDER BY weight DESC;" | fzf +s -0 -1)"
-   fi
+      if (($# > 0))
+      then
+         # the arguments order is significant. ex: for c 1 2 3, %1%2%3% is used.
+         local _dirs
+         printf -v _dirs '%s%%' "$@"
+         local dir="$(sqlite3 "$db" "SELECT dir FROM marks WHERE dir LIKE '%${_dirs%\%}%' ORDER BY weight DESC;" | fzf +s -0 -1 || echo "${PIPESTATUS[1]}")"
+      else
+         local dir="$(sqlite3 "$db" "SELECT dir FROM marks ORDER BY weight DESC;" | fzf +s -0 -1 || echo "${PIPESTATUS[1]}")"
+      fi
 
-   if [[ $dir ]]
-   then
-      cd -- "$dir"
-   fi
-}
+      if [[ -d $dir ]]
+      then
+         cd -- "$dir"
+      # Only use locate if there were no matches, not if 'Ctrl+c' was used for instance
+      elif ((dir == 1))
+      then
+         # 'updatedb' indexed files
+         local file="$(locate -Ai -0 "$@" | grep -z -vE '~$' | fzf --read0 -0 -1)"
+         if [[ -n $file ]]
+         then
+            if [[ -d $file ]]
+            then
+               cd -- "$file"
+            else
+               cd -- "${file%/*}"
+            fi
+         fi
+      fi
+   }
 
-# Helper for c
+   # Helper for c()
+   update_marks() {
+      local db="$XDG_DATA_HOME"/marks/marks.sqlite
 
-# mkdir -p $XDG_DATA_HOME/bmarks
-#
-# sqlite3 $XDG_DATA_HOME/bmarks/marks.sqlite << 'INIT'
-# CREATE TABLE marks (
-#   dir VARCHAR(200) UNIQUE,
-#   weight INTEGER
-# );
-#
-# CREATE INDEX _dir ON marks (dir);
-# INIT
-update_marks() {
-   local db="$XDG_DATA_HOME"/bmarks/marks.sqlite
+      # update_marks is executed whenever PWD changes => last command 'was' a cd $_
+      if [[ -d $_ ]]
+      then
+         local _cwd="$_"
+      else
+         local _cwd="$PWD"
+      fi
 
-   # Get weight for the current directory
-   local weight="$(sqlite3 "$db" "SELECT weight FROM marks WHERE dir = '$(pwd -P)';")"
+      # Get weight for the current directory
+      local weight="$(sqlite3 "$db" "SELECT weight FROM marks WHERE dir = '$_cwd';")"
 
-   if [[ $weight ]]
-   then
-      ((weight++))
-   else
-      weight=1
-   fi
+      if [[ -n $weight ]]
+      then
+         ((weight++))
+      else
+         weight=1
+      fi
 
-   sqlite3 "$db" "INSERT or REPLACE into marks (dir, weight) values ('$(pwd -P)', '$weight');"
-}
+      sqlite3 "$db" "INSERT or REPLACE into marks (dir, weight) values ('$_cwd', $weight);"
+   }
+
+   cd() { builtin cd "$@" && update_marks; }
+fi
 
 ## File system operations
 alias to=touch
