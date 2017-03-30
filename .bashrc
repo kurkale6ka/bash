@@ -225,13 +225,13 @@ then
       if (($# > 0))
       then
          # the arguments order is significant. ex: for c 1 2 3, %1%2%3% is used.
-         local _dirs
-         printf -v _dirs '%s%%' "$@"
+         local _patterns
+         printf -v _patterns '%s%%' "$@"
          if command -v fzf >/dev/null 2>&1
          then
-            local dir="$(sqlite3 "$db" "SELECT dir FROM marks WHERE dir LIKE '%${_dirs%\%}%' ORDER BY weight DESC;" | fzf +s -0 -1 || echo "${PIPESTATUS[1]}")"
+            local dir="$(sqlite3 "$db" "SELECT dir FROM marks WHERE dir LIKE '%${_patterns%\%}%' ORDER BY weight DESC;" | fzf +s -0 -1 || echo "${PIPESTATUS[1]}")"
          else
-            local dir="$(sqlite3 "$db" "SELECT dir FROM marks WHERE dir LIKE '%${_dirs%\%}%' ORDER BY weight DESC LIMIT 1;")"
+            local dir="$(sqlite3 "$db" "SELECT dir FROM marks WHERE dir LIKE '%${_patterns%\%}%' ORDER BY weight DESC LIMIT 1;")"
             [[ -z $dir ]] && dir=1
          fi
       else
@@ -292,6 +292,41 @@ then
    cd() { builtin cd "$@" && update_marks; }
 fi
 
+if command -v fzf >/dev/null 2>&1
+then
+   # Fuzzy cd under the current directory
+   # usage fd [pattern]
+   fd() {
+      if (($#))
+      then
+         local _patterns
+         printf -v _patterns '%s*' "$@"
+
+         # exclude dot folders: */.*
+         local dir="$(find . -xdev -type d -path '*/.*' -prune -o -type d -ipath "*$_patterns" -printf '%P\n' | fzf -0 -1 +m)"
+      else
+         local dir="$(find . -xdev -type d -path '*/.*' -prune -o -type d -printf '%P\n' | fzf -0 -1 +m)"
+      fi
+
+      [[ -d $dir ]] && cd "$dir"
+   }
+
+   # ...including dot folders
+   fda() {
+      if (($#))
+      then
+         local _patterns
+         printf -v _patterns '%s*' "$@"
+
+         local dir="$(find . -xdev -name .git -prune -o -type d -ipath "*$_patterns" -printf '%P\n' | fzf -0 -1 +m)"
+      else
+         local dir="$(find . -xdev -name .git -prune -o -type d -printf '%P\n' | fzf -0 -1 +m)"
+      fi
+
+      [[ -d $dir ]] && cd "$dir"
+   }
+fi
+
 ## File system operations
 alias to=touch
 
@@ -305,35 +340,6 @@ rd() {
 }
 
 complete -A directory mkdir md rmdir rd
-
-## Fuzzy
-fd() {
-   local dir
-
-   if [[ $1 ]]
-   then
-      # if a path contains /., that's a folder staring with dot
-      dir="$(find "${1}" \( -type d -path '*/\.*' -prune \) -o -type d -print | fzf -0 +m)"
-   else
-      dir="$(find . \( -type d -path '*/\.*' -prune \) -o -type d -printf '%P\n' | tail -n+2 | fzf -0 +m)"
-   fi
-
-   [[ -d $dir ]] && cd "$dir"
-}
-
-fda() {
-   local dir
-
-   if [[ $1 ]]
-   then
-      # Todo: exclude more directories (.svn, ...)
-      dir="$(find "${1}" \( -type d -path '*/\.git*' -prune \) -o -type d -print | fzf -0 +m)"
-   else
-      dir="$(find . \( -type d -path '*/\.git*' -prune \) -o -type d -printf '%P\n' | tail -n+2 | fzf -0 +m)"
-   fi
-
-   [[ -d $dir ]] && cd "$dir"
-}
 
 ## Safer cp/mv + rm
 # problem with these is I don't usually check the destination
