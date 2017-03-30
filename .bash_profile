@@ -1,7 +1,15 @@
-#! /bin/sh
-# Author: Dimitar Dimitrov
-#         kurkale6ka
+## XDG
+if [[ -z $XDG_CONFIG_HOME ]]
+then
+   export XDG_CONFIG_HOME="$HOME"/.config
+fi
 
+if [[ -z $XDG_DATA_HOME ]]
+then
+   export XDG_DATA_HOME="$HOME"/.local/share
+fi
+
+# PATH
 if ! grep "$HOME"/bin <<< "$PATH" >/dev/null
 then
    export PATH="$HOME"/bin:"$PATH"
@@ -17,11 +25,19 @@ export LC_COLLATE=C
 # directory default: 777 (drwxrwxrwx) => 755 (drwxr-xr-x)
 umask 022
 
-export EDITOR="vim -u $HOME/.vimrc"
-export VISUAL="vim -u $HOME/.vimrc"
+## Vim
+if command -v nvim
+then nvim=nvim
+else nvim=vim
+fi >/dev/null 2>&1
+
+export EDITOR="$nvim"
+export VISUAL="$nvim"
+
 export MYVIMRC="$HOME"/.vimrc
 export MYGVIMRC="$HOME"/.gvimrc
 
+## ps
 export PS_PERSONALITY=bsd
 export PS_FORMAT=pid,ppid,pgid,sid,tname,tpgid,stat,euser,egroup,start_time,cmd
 
@@ -38,12 +54,12 @@ export LESS='-i -r -s -W -M -PM?f%f - :.?L%L lines, .?ltL\:%lt:.?pB, %pB\% : .?e
 
 # Needs installing x11-ssh-askpass
 # TODO: fix keyboard layout issue
-if [ -n "$SSH_ASKPASS" ] && test -x "$(command -v keychain)"; then
+if [[ -n $SSH_ASKPASS && -x $(command -v keychain) ]]
+then
    setxkbmap -layout gb
    eval "$(keychain --eval --agents ssh -Q --quiet id_rsa id_rsa_git)"
 fi
 
 # Business specific or system dependant stuff
-[ -r "$HOME"/.bash_profile_after ] && . "$HOME"/.bash_profile_after
-
-[ -r "$HOME"/.bashrc ] && . "$HOME"/.bashrc
+[[ -r $HOME/.bash_profile_after ]] && . "$HOME"/.bash_profile_after
+[[ -r $HOME/.bashrc ]]             && . "$HOME"/.bashrc
