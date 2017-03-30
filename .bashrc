@@ -311,8 +311,6 @@ fda() {
 alias cp='cp -i'
 alias mv='mv -i'
 
-alias d='rm -i --preserve-root'
-
 # Delete based on inodes (use ls -li first)
 di() {
    (($#)) || return 1
