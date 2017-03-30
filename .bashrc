@@ -225,16 +225,28 @@ then
          # the arguments order is significant. ex: for c 1 2 3, %1%2%3% is used.
          local _dirs
          printf -v _dirs '%s%%' "$@"
-         local dir="$(sqlite3 "$db" "SELECT dir FROM marks WHERE dir LIKE '%${_dirs%\%}%' ORDER BY weight DESC;" | fzf +s -0 -1 || echo "${PIPESTATUS[1]}")"
+         if command -v fzf >/dev/null 2>&1
+         then
+            local dir="$(sqlite3 "$db" "SELECT dir FROM marks WHERE dir LIKE '%${_dirs%\%}%' ORDER BY weight DESC;" | fzf +s -0 -1 || echo "${PIPESTATUS[1]}")"
+         else
+            local dir="$(sqlite3 "$db" "SELECT dir FROM marks WHERE dir LIKE '%${_dirs%\%}%' ORDER BY weight DESC LIMIT 1;")"
+            [[ -z $dir ]] && dir=1
+         fi
       else
-         local dir="$(sqlite3 "$db" "SELECT dir FROM marks ORDER BY weight DESC;" | fzf +s -0 -1 || echo "${PIPESTATUS[1]}")"
+         if command -v fzf >/dev/null 2>&1
+         then
+            local dir="$(sqlite3 "$db" "SELECT dir FROM marks ORDER BY weight DESC;" | fzf +s -0 -1 || echo "${PIPESTATUS[1]}")"
+         else
+            local dir="$(sqlite3 "$db" "SELECT dir FROM marks ORDER BY weight DESC LIMIT 1;")"
+            [[ -z $dir ]] && dir=1
+         fi
       fi
 
       if [[ -d $dir ]]
       then
          cd -- "$dir"
       # Only use locate if there were no matches, not if 'Ctrl+c' was used for instance
-      elif ((dir == 1))
+      elif ((dir == 1)) && command -v fzf >/dev/null 2>&1
       then
          # 'updatedb' indexed files
          local file="$(locate -Ai -0 "$@" | grep -z -vE '~$' | fzf --read0 -0 -1)"
