@@ -694,8 +694,13 @@ db() {
 
 ## Find stuff and diffs
 f() {
-   (($# == 1)) || { echo 'Usage: f pattern' 1>&2; return 1; }
-   find . -xdev -name .git -prune -o -iname "*$1*" -printf '%M %u %g %P\n' | grep -vE '~$'
+   if (($# == 1))
+   then
+      find . -xdev -name .git -prune -o -iname "*$1*" ! -name '*~' -printf '%M %u %g %P\n'
+   elif (($# == 0)) && command -v fzf >/dev/null 2>&1
+   then
+      find . -xdev -name .git -prune -o -type f ! -name '*~' -printf '%P\0' | fzf --read0 -0 -1
+   fi
 }
 
 alias lo='command locate -i'
