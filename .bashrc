@@ -386,24 +386,8 @@ fi
 if command -v fzf >/dev/null 2>&1
 then
    # Fuzzy cd under the current directory
-   # usage fd [pattern]
-   fd() {
-      if (($#))
-      then
-         local _patterns
-         printf -v _patterns '%s*' "$@"
-
-         # exclude dot folders: */.*
-         local dir="$(find . -xdev -type d -path '*/.*' -prune -o -type d -ipath "*$_patterns" -printf '%P\n' | fzf -0 -1 +m)"
-      else
-         local dir="$(find . -xdev -type d -path '*/.*' -prune -o -type d -printf '%P\n' | fzf -0 -1 +m)"
-      fi
-
-      [[ -d $dir ]] && cd -- "$dir"
-   }
-
-   # ...including dot folders
-   fda() {
+   # usage cdf [pattern]
+   cdf() {
       if (($#))
       then
          local _patterns
