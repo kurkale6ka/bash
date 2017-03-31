@@ -176,6 +176,96 @@ fi >/dev/null 2>&1
 
 alias ed='ed -v -p:'
 
+## ls
+_ls_date_old="${_blu}%d %b${_res}"
+_ls_year="${_blk} %Y${_res}"
+
+_ls_date="${_blu}%d %b${_res}"
+_ls_time="${_blk}%H:%M${_res}"
+
+ldot() {
+   local ls
+   if [[ ${FUNCNAME[1]} == 'l.' ]]
+   then ls=(ls -FB   --color=auto)
+   else ls=(ls -FBhl --color=auto --time-style="+$_ls_date_old $_ls_year"$'\n'"$_ls_date $_ls_time")
+   fi
+   (($# == 0)) && {             "${ls[@]}" -d .[^.]* ; return; }
+   (($# == 1)) && { (cd "$1" && "${ls[@]}" -d .[^.]*); return; }
+   local i arg
+   for arg in "$@"; do
+      printf '%s:\n' "$arg"
+      (cd -- "$arg" && "${ls[@]}" -d .[^.]*)
+      (($# != ++i)) && echo
+   done
+}
+
+.() {
+   if (($#))
+   then source "$@"
+   else command ls -FB --color=auto -d .[^.]*
+   fi
+}
+
+unalias l. ll. l ld la lr lk lx ll lld lla llr llk llx lm lc lu llm llc llu ln \
+   2>/dev/null
+
+ l.() { ldot "$@"; }
+ll.() { ldot "$@"; }
+
+alias   l='command ls -FB   --color=auto'
+alias  ll="command ls -FBhl --color=auto --time-style=$'+$_ls_date_old $_ls_year\n$_ls_date $_ls_time'"
+alias  l1='command ls -FB1  --color=auto'
+
+alias  la='command ls -FBA   --color=auto'
+alias lla="command ls -FBAhl --color=auto --time-style=$'+$_ls_date_old $_ls_year\n$_ls_date $_ls_time'"
+
+alias  ld='command ls -FBd   --color=auto'
+alias lld="command ls -FBdhl --color=auto --time-style=$'+$_ls_date_old $_ls_year\n$_ls_date $_ls_time'"
+
+alias  lm='command ls -FBtr   --color=auto'
+alias llm="command ls -FBhltr --color=auto --time-style=$'+$_ls_date_old $_ls_year\n$_ls_date $_ls_time'"
+
+alias  lk='command ls -FBS   --color=auto'
+alias llk="command ls -FBShl --color=auto --time-style=$'+$_ls_date_old $_ls_year\n$_ls_date $_ls_time'"
+
+alias  lr="tree -FAC -I '*~|*.swp' --noreport"
+alias llr="command ls -FBRhl --color=auto --time-style=$'+$_ls_date_old $_ls_year\n$_ls_date $_ls_time'"
+
+_lx() {
+   local exes=()
+   for x in * .*
+   do
+      [[ -f $x && -x $x ]] && exes+=("$x")
+   done
+   if [[ ${FUNCNAME[1]} == 'lx' ]]
+   then
+      [[ -n ${exes[@]} ]] && ls -FB --color=auto "${exes[@]}"
+   else
+      [[ -n ${exes[@]} ]] && ls -FBhl --color=auto --time-style="+$_ls_date_old $_ls_year"$'\n'"$_ls_date $_ls_time" "${exes[@]}"
+   fi
+}
+
+ lx() { _lx "$@"; }
+llx() { _lx "$@"; }
+
+ln() {
+   if (($#)); then
+      command ln "$@"
+   else
+      if (( $(find . -maxdepth 1 -type l -print -quit | wc -l) == 1 )); then
+         find . -maxdepth 1 -type l -printf '%P\0' |
+         xargs -0 'ls' -FBAhl --color=auto --time-style="+$_ls_date_old $_ls_year"$'\n'"$_ls_date $_ls_time" --
+      fi
+   fi
+}
+
+sl() {
+   printf '%-8s %-17s %-3s %-4s %-4s %-10s %-12s %-s\n'\
+          'Inode' 'Permissions' 'ln' 'UID' 'GID' 'Size' 'Time' 'Name'
+   local args=(); (($#)) && args=("$@") || args=(*)
+   stat -c "%8i %A (%4a) %3h %4u %4g %10s (%10Y) %n" -- "${args[@]}"
+}
+
 ## sudo
 alias  sd=sudo
 alias sde=sudoedit
@@ -416,7 +506,7 @@ ds() {
 
       if [[ -n $files ]]
       then
-         ls -FBShl --color --time-style="+$_ls_date_old $_ls_year"$'\n'"$_ls_date $_ls_time" -- "${files[@]#./}" | tee /tmp/ds_files
+         llk --color -- "${files[@]#./}" | tee /tmp/ds_files
       else
          return 1
       fi
@@ -501,96 +591,6 @@ rs() {
          -f'- .gitignore'                           \
          -f'- .git'                                 \
          $@
-}
-
-## ls
-_ls_date_old="${_blu}%d %b${_res}"
-_ls_year="${_blk} %Y${_res}"
-
-_ls_date="${_blu}%d %b${_res}"
-_ls_time="${_blk}%H:%M${_res}"
-
-ldot() {
-   local ls
-   if [[ ${FUNCNAME[1]} == 'l.' ]]
-   then ls=(ls -FB   --color=auto)
-   else ls=(ls -FBhl --color=auto --time-style="+$_ls_date_old $_ls_year"$'\n'"$_ls_date $_ls_time")
-   fi
-   (($# == 0)) && {             "${ls[@]}" -d .[^.]* ; return; }
-   (($# == 1)) && { (cd "$1" && "${ls[@]}" -d .[^.]*); return; }
-   local i arg
-   for arg in "$@"; do
-      printf '%s:\n' "$arg"
-      (cd -- "$arg" && "${ls[@]}" -d .[^.]*)
-      (($# != ++i)) && echo
-   done
-}
-
-.() {
-   if (($#))
-   then source "$@"
-   else command ls -FB --color=auto -d .[^.]*
-   fi
-}
-
-unalias l. ll. l ld la lr lk lx ll lld lla llr llk llx lm lc lu llm llc llu ln \
-   2>/dev/null
-
- l.() { ldot "$@"; }
-ll.() { ldot "$@"; }
-
-alias   l='command ls -FB   --color=auto'
-alias  ll="command ls -FBhl --color=auto --time-style=$'+$_ls_date_old $_ls_year\n$_ls_date $_ls_time'"
-alias  l1='command ls -FB1  --color=auto'
-
-alias  la='command ls -FBA   --color=auto'
-alias lla="command ls -FBAhl --color=auto --time-style=$'+$_ls_date_old $_ls_year\n$_ls_date $_ls_time'"
-
-alias  ld='command ls -FBd   --color=auto'
-alias lld="command ls -FBdhl --color=auto --time-style=$'+$_ls_date_old $_ls_year\n$_ls_date $_ls_time'"
-
-alias  lm='command ls -FBtr   --color=auto'
-alias llm="command ls -FBhltr --color=auto --time-style=$'+$_ls_date_old $_ls_year\n$_ls_date $_ls_time'"
-
-alias  lk='command ls -FBS   --color=auto'
-alias llk="command ls -FBShl --color=auto --time-style=$'+$_ls_date_old $_ls_year\n$_ls_date $_ls_time'"
-
-alias  lr="tree -FAC -I '*~|*.swp' --noreport"
-alias llr="command ls -FBRhl --color=auto --time-style=$'+$_ls_date_old $_ls_year\n$_ls_date $_ls_time'"
-
-_lx() {
-   local exes=()
-   for x in * .*
-   do
-      [[ -f $x && -x $x ]] && exes+=("$x")
-   done
-   if [[ ${FUNCNAME[1]} == 'lx' ]]
-   then
-      [[ -n ${exes[@]} ]] && ls -FB --color=auto "${exes[@]}"
-   else
-      [[ -n ${exes[@]} ]] && ls -FBhl --color=auto --time-style="+$_ls_date_old $_ls_year"$'\n'"$_ls_date $_ls_time" "${exes[@]}"
-   fi
-}
-
- lx() { _lx "$@"; }
-llx() { _lx "$@"; }
-
-ln() {
-   if (($#)); then
-      command ln "$@"
-   else
-      if (( $(find . -maxdepth 1 -type l -print -quit | wc -l) == 1 )); then
-         find . -maxdepth 1 -type l -printf '%P\0' |
-         xargs -0 'ls' -FBAhl --color=auto --time-style="+$_ls_date_old $_ls_year"$'\n'"$_ls_date $_ls_time" --
-      fi
-   fi
-}
-
-sl() {
-   printf '%-8s %-17s %-3s %-4s %-4s %-10s %-12s %-s\n'\
-          'Inode' 'Permissions' 'ln' 'UID' 'GID' 'Size' 'Time' 'Name'
-   local args=(); (($#)) && args=("$@") || args=(*)
-   stat -c "%8i %A (%4a) %3h %4u %4g %10s (%10Y) %n" -- "${args[@]}"
 }
 
 ## Head/tail + cat-like functions
