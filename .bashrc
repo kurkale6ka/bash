@@ -503,14 +503,17 @@ rs() {
 }
 
 ## ls
-_ls_date="${_blu}%d-%b-%y$_res"
+_ls_date_old="${_blu}%d %b$_res"
+_ls_year="$(tput setaf 238) %Y$_res"
+
+_ls_date="${_blu}%d %b$_res"
 _ls_time="$(tput setaf 238)%H:%M$_res"
 
 ldot() {
    local ls
    if [[ ${FUNCNAME[1]} == 'l.' ]]
    then ls=(ls -FB   --color=auto)
-   else ls=(ls -FBhl --color=auto --time-style="+$_ls_date $_ls_time")
+   else ls=(ls -FBhl --color=auto --time-style="+$_ls_date_old $_ls_year"$'\n'"$_ls_date $_ls_time")
    fi
    (($# == 0)) && {             "${ls[@]}" -d .[^.]* ; return; }
    (($# == 1)) && { (cd "$1" && "${ls[@]}" -d .[^.]*); return; }
@@ -536,31 +539,35 @@ unalias l. ll. l ld la lr lk lx ll lld lla llr llk llx lm lc lu llm llc llu ln \
 ll.() { ldot "$@"; }
 
 alias   l='command ls -FB   --color=auto'
-alias  ll='command ls -FBhl --color=auto --time-style="+$_ls_date $_ls_time"'
+alias  ll="command ls -FBhl --color=auto --time-style=$'+$_ls_date_old $_ls_year\n$_ls_date $_ls_time'"
 alias  l1='command ls -FB1  --color=auto'
 
 alias  la='command ls -FBA   --color=auto'
-alias lla='command ls -FBAhl --color=auto --time-style="+$_ls_date $_ls_time"'
+alias lla="command ls -FBAhl --color=auto --time-style=$'+$_ls_date_old $_ls_year\n$_ls_date $_ls_time'"
 
 alias  ld='command ls -FBd   --color=auto'
-alias lld='command ls -FBdhl --color=auto --time-style="+$_ls_date $_ls_time"'
+alias lld="command ls -FBdhl --color=auto --time-style=$'+$_ls_date_old $_ls_year\n$_ls_date $_ls_time'"
 
 alias  lm='command ls -FBtr   --color=auto'
-alias llm='command ls -FBhltr --color=auto --time-style="+$_ls_date $_ls_time"'
+alias llm="command ls -FBhltr --color=auto --time-style=$'+$_ls_date_old $_ls_year\n$_ls_date $_ls_time'"
 
 alias  lk='command ls -FBS   --color=auto'
-alias llk='command ls -FBShl --color=auto --time-style="+$_ls_date $_ls_time"'
+alias llk="command ls -FBShl --color=auto --time-style=$'+$_ls_date_old $_ls_year\n$_ls_date $_ls_time'"
 
 alias  lr="tree -FAC -I '*~|*.swp' --noreport"
-alias llr='command ls -FBRhl --color=auto --time-style="+$_ls_date $_ls_time"'
+alias llr="command ls -FBRhl --color=auto --time-style=$'+$_ls_date_old $_ls_year\n$_ls_date $_ls_time'"
 
 _lx() {
    local exes=()
-   for x in *; do [[ -x $x ]] && exes+=("$x"); done
-   if [[ ${FUNCNAME[1]} == 'lx' ]]; then
-      command ls -FB   --color=auto                                     "${exes[@]}"
+   for x in * .*
+   do
+      [[ -f $x && -x $x ]] && exes+=("$x")
+   done
+   if [[ ${FUNCNAME[1]} == 'lx' ]]
+   then
+      [[ -n ${exes[@]} ]] && ls -FB --color=auto "${exes[@]}"
    else
-      command ls -FBhl --color=auto --time-style="+$_ls_date $_ls_time" "${exes[@]}"
+      [[ -n ${exes[@]} ]] && ls -FBhl --color=auto --time-style="+$_ls_date_old $_ls_year"$'\n'"$_ls_date $_ls_time" "${exes[@]}"
    fi
 }
 
@@ -573,7 +580,7 @@ ln() {
    else
       if (( $(find . -maxdepth 1 -type l -print -quit | wc -l) == 1 )); then
          find . -maxdepth 1 -type l -printf '%P\0' |
-         xargs -0 'ls' -FBAhl --color=auto --time-style="+$_ls_date $_ls_time" --
+         xargs -0 'ls' -FBAhl --color=auto --time-style="+$_ls_date_old $_ls_year"$'\n'"$_ls_date $_ls_time" --
       fi
    fi
 }
@@ -687,12 +694,8 @@ db() {
 
 ## Find stuff and diffs
 f() {
-   if (($# == 1))
-   then
-      find . -xdev -name .git -prune -o -iname "*$1*" -printf '%M %u %g %P\n' | grep -vE '~$'
-   else
-      find "$@"
-   fi
+   (($# == 1)) || { echo 'Usage: f pattern' 1>&2; return 1; }
+   find . -xdev -name .git -prune -o -iname "*$1*" -printf '%M %u %g %P\n' | grep -vE '~$'
 }
 
 alias lo='command locate -i'
