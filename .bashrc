@@ -358,7 +358,7 @@ rmi() {
    # last inode
    inodes+=(-inum "${@:$#}")
    # -inum 38 -o -inum 73
-   find . \( "${inodes[@]}" \) -exec rm -i -- {} +
+   find . -xdev \( "${inodes[@]}" \) -exec rm -i -- {} +
 }
 
 ## Permissions + debug
