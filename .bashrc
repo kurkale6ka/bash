@@ -848,13 +848,40 @@ bs() {
    fi
 }
 
-br() {
-   if (($#))
-   then
-      find . \( -name '*~' -o -name '.*~' \) -a ! -name '*.un~' -delete
-   else
-      find . \( -name '*~' -o -name '.*~' \) -a ! -name '*.un~' -printf '%P\n'
-   fi
+# Usage:
+#   bclean    : list backup~ files
+#   bclean -d : delete
+#   bclean -a : show all backup~ files on the system
+#
+# Note: I exclude vim undo files - .*.un~
+bclean() {
+   # Show backup~ files under current directory
+   (($# == 0)) && {
+      find . -xdev -type f \( -name '*~' -o -name '.*~' \) ! -name '*.un~' ! -name '.*.un~' -printf '%M %u %g %P\n'
+      return 0
+   }
+
+   case $1 in
+      -d)
+         find . -xdev -type f \( -name '*~' -o -name '.*~' \) ! -name '*.un~' ! -name '.*.un~' -delete ;;
+      -a)
+         if command -v fzf >/dev/null 2>&1
+         then
+            locate -0br '~$' | fzf --read0 -0 -1
+         else
+            locate -br '~$' | less
+         fi
+         ;;
+      -h|--help)
+         cat <<- 'HELP'
+			Usage:
+			  bclean    (list backup~ files)
+			  bclean -d (delete)
+			  bclean -a (list all backup~ files on the system)
+			HELP
+         ;;
+      *) echo 'Unknown option. Use -h for help' 1>&2 ;;
+   esac
 }
 
 alias dump='dump -u'
