@@ -33,6 +33,7 @@ _blu="$(tput setaf 4)"
 _red="$(tput setaf 9)"
 _lgrn="$(printf %s "$_bld"; tput setaf 2)"
 _lblu="$(printf %s "$_bld"; tput setaf 4)"
+_blk="$(tput setaf 238)"
 _res="$(tput sgr0)"
 
 # Colored man pages
@@ -63,7 +64,7 @@ fi
 _gbr() {
    local gb="$(git rev-parse --abbrev-ref HEAD 2>/dev/null)"
    if [[ $gb ]]
-   then echo " λ-$gb"
+   then echo " ${_blk}λ-${_res}$gb"
    else echo ''
    fi
 }
@@ -341,13 +342,13 @@ rd() {
 
 complete -A directory mkdir md rmdir rd
 
-## Safer cp/mv + rm
+## Safer cp/mv + inodes rm
 # problem with these is I don't usually check the destination
 alias cp='cp -i'
 alias mv='mv -i'
 
 # Delete based on inodes (use ls -li first)
-di() {
+rmi() {
    (($#)) || return 1
    local inode inodes=()
    # skip the last inode
@@ -503,11 +504,11 @@ rs() {
 }
 
 ## ls
-_ls_date_old="${_blu}%d %b$_res"
-_ls_year="$(tput setaf 238) %Y$_res"
+_ls_date_old="${_blu}%d %b${_res}"
+_ls_year="${_blk} %Y${_res}"
 
-_ls_date="${_blu}%d %b$_res"
-_ls_time="$(tput setaf 238)%H:%M$_res"
+_ls_date="${_blu}%d %b${_res}"
+_ls_time="${_blk}%H:%M${_res}"
 
 ldot() {
    local ls
@@ -768,14 +769,6 @@ rc() {
          inputrc+="'\"\e[A\": history-search-backward' "
          inputrc+="'\"\e[B\": history-search-forward' >> $HOME/.inputrc"
    xclip -f <<< "$inputrc"
-}
-
-# Banners using figlet
-bn() {
-   if   (($# == 1)); then figlet -f smslant -- "$1"
-   elif (($# == 2)); then figlet -f "$1"    -- "${@:2}"
-   else                   figlist | column -c"$COLUMNS"
-   fi
 }
 
 # Echo
