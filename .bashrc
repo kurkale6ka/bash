@@ -308,7 +308,7 @@ then
          local dir="$(find . -xdev -type d -path '*/.*' -prune -o -type d -printf '%P\n' | fzf -0 -1 +m)"
       fi
 
-      [[ -d $dir ]] && cd "$dir"
+      [[ -d $dir ]] && cd -- "$dir"
    }
 
    # ...including dot folders
@@ -323,7 +323,7 @@ then
          local dir="$(find . -xdev -name .git -prune -o -type d -printf '%P\n' | fzf -0 -1 +m)"
       fi
 
-      [[ -d $dir ]] && cd "$dir"
+      [[ -d $dir ]] && cd -- "$dir"
    }
 fi
 
