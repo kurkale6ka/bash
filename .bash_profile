@@ -9,7 +9,7 @@ then
    export XDG_DATA_HOME="$HOME"/.local/share
 fi
 
-# PATH
+# Put ~/bin in PATH
 if ! grep "$HOME"/bin <<< "$PATH" >/dev/null
 then
    export PATH="$HOME"/bin:"$PATH"
