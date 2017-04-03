@@ -174,6 +174,26 @@ else
    alias v='vim -u ~/vim/.vimrc'
 fi >/dev/null 2>&1
 
+# Open files found by grep in Vim
+# Usage:
+#   vr [-f] : filter results with fzf
+vr() {
+   { [[ $1 == @(-h|--help) ]] || (($# == 0)); } && {
+   cat <<- 'HELP'
+	Usage:
+	  vr [-f] : filter results with fzf
+	HELP
+   return 0
+   }
+
+   if [[ $1 == -f ]] && command -v fzf >/dev/null 2>&1
+   then
+      v $(gr -l -- "${@:2}" . | fzf -0 -1 -m)
+   else
+      v $(gr -l -- "$@" .)
+   fi
+}
+
 alias ed='ed -v -p:'
 
 ## ls
