@@ -416,9 +416,9 @@ then
          local _patterns
          printf -v _patterns '%s*' "$@"
 
-         local dir="$(find . -xdev -name .git -prune -o -type d -ipath "*$_patterns" -printf '%P\n' | fzf -0 -1 +m)"
+         local dir="$(find . -xdev \( -name ${cvs% -o -name } \) -prune -o -type d -ipath "*$_patterns" -printf '%P\0' | fzf --read0 -0 -1 +m)"
       else
-         local dir="$(find . -xdev -name .git -prune -o -type d -printf '%P\n' | fzf -0 -1 +m)"
+         local dir="$(find . -xdev \( -name ${cvs% -o -name } \) -prune -o -type d -printf '%P\0' | fzf --read0 -0 -1 +m)"
       fi
 
       [[ -d $dir ]] && cd -- "$dir"
