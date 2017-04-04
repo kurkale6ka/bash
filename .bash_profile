@@ -9,6 +9,9 @@ then
    export XDG_DATA_HOME="$HOME"/.local/share
 fi
 
+# readline
+export INPUTRC=~/github/config/dotfiles/.inputrc
+
 # Put ~/bin in PATH
 if ! grep "$HOME"/bin <<< "$PATH" >/dev/null
 then

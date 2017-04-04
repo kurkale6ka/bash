@@ -174,7 +174,7 @@ if command -v nvim
 then
    alias v=nvim
 else
-   alias v='vim -u ~/vim/.vimrc'
+   alias v='vim -u ~/github/vim/.vimrc'
 fi >/dev/null 2>&1
 
 # Open files found by grep in Vim
