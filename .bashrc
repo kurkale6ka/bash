@@ -501,12 +501,15 @@ ds() {
          local start="${2:-.}"
       fi
 
+      local _cvs=(.git .svn .hg) cvs
+      printf -v cvs '%s -o -name ' "${_cvs[@]}"
+
       local file
       local files=()
       while read -r _ file
       do
          files+=("$file")
-      done < <(find "$start" -xdev \( -name .git -o -path '*vendor/bundle' -o -path '*shared/bundle' \) -prune -o -type f -printf '%p\0' | xargs -0 du -h | sort -hr | head -n15)
+      done < <(find "$start" -xdev \( -name ${cvs% -o -name } -o -path '*vendor/bundle' -o -path '*shared/bundle' \) -prune -o -type f -printf '%p\0' | xargs -0 du -h | sort -hr | head -n15)
 
       if [[ -n $files ]]
       then
