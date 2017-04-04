@@ -720,12 +720,12 @@ alias ldapsearch='ldapsearch -x -LLL'
 
 # Grep or silver searcher aliases
 if command -v ag >/dev/null 2>&1; then
-   alias ag='ag -S --hidden --ignore=.git --ignore=.hg --ignore=.svn --color-line-number="00;32" --color-path="00;35" --color-match="01;31"'
+   alias ag='ag -S --hidden --ignore=.git --ignore=.svn --ignore=.hg --color-line-number="00;32" --color-path="00;35" --color-match="01;31"'
    alias gr=ag
    alias g=ag
 else
    alias g='command grep -iE --color=auto --exclude="*~" --exclude tags'
-   alias gr='command grep -IriE --exclude-dir=.git --exclude-dir=.hg --exclude-dir=.svn --color=auto --exclude="*~" --exclude tags'
+   alias gr='command grep -IriE --exclude-dir=.git --exclude-dir=.svn --exclude-dir=.hg --color=auto --exclude="*~" --exclude tags'
 fi
 
 diff() {
