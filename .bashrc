@@ -17,6 +17,9 @@ FIGNORE='~:.swp:.o' # <tab> completion
 
 HOSTFILE="$HOME"/.hosts # hostnames completion (same format as /etc/hosts)
 
+_cvs=(.git .svn .hg)
+printf -v cvs '%s -o -name ' "${_cvs[@]}"
+
 ## Paths
 if ((EUID == 0))
 then
@@ -501,9 +504,6 @@ ds() {
          local start="${2:-.}"
       fi
 
-      local _cvs=(.git .svn .hg) cvs
-      printf -v cvs '%s -o -name ' "${_cvs[@]}"
-
       local file
       local files=()
       while read -r _ file
@@ -708,10 +708,10 @@ db() {
 f() {
    if (($# == 1))
    then
-      find . -xdev -name .git -prune -o -iname "*$1*" ! -name '*~' -printf '%M %u %g %P\n'
+      find . -xdev \( -name ${cvs% -o -name } \) -prune -o -type f -iname "*$1*" ! -name '*~' -printf '%M %u %g %P\n'
    elif (($# == 0)) && command -v fzf >/dev/null 2>&1
    then
-      find . -xdev -name .git -prune -o -type f ! -name '*~' -printf '%P\0' | fzf --read0 -0 -1
+      find . -xdev \( -name ${cvs% -o -name } \) -prune -o -type f ! -name '*~' -printf '%P\0' | fzf --read0 -0 -1
    fi
 }
 
