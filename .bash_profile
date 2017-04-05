@@ -1,24 +1,17 @@
-## XDG
-if [[ -z $XDG_CONFIG_HOME ]]
-then
-   export XDG_CONFIG_HOME="$HOME"/.config
-fi
-
-if [[ -z $XDG_DATA_HOME ]]
-then
-   export XDG_DATA_HOME="$HOME"/.local/share
-fi
+# XDG
+[[ -z $XDG_CONFIG_HOME ]] && export XDG_CONFIG_HOME=~/.config
+[[ -z   $XDG_DATA_HOME ]] && export   XDG_DATA_HOME=~/.local/share
 
 # readline
 export INPUTRC=~/github/config/dotfiles/.inputrc
 
 # Put ~/bin in PATH
-if ! grep "$HOME"/bin <<< "$PATH" >/dev/null
+if ! grep ~/bin <<< "$PATH" >/dev/null
 then
-   export PATH="$HOME"/bin:"$PATH"
+   export PATH=~/bin:"$PATH"
 fi
 
-export PYTHONSTARTUP="$HOME"/.pyrc
+export PYTHONSTARTUP=~/.pyrc
 
 export LANG=en_GB.UTF-8
 export LC_COLLATE=C
@@ -28,7 +21,7 @@ export LC_COLLATE=C
 # directory default: 777 (drwxrwxrwx) => 755 (drwxr-xr-x)
 umask 022
 
-## Vim
+# Vim
 if command -v nvim
 then nvim=nvim
 else nvim=vim
@@ -37,10 +30,7 @@ fi >/dev/null 2>&1
 export EDITOR="$nvim"
 export VISUAL="$nvim"
 
-export MYVIMRC="$HOME"/.vimrc
-export MYGVIMRC="$HOME"/.gvimrc
-
-## ps
+# ps
 export PS_PERSONALITY=bsd
 export PS_FORMAT=pid,ppid,pgid,sid,tname,tpgid,stat,euser,egroup,start_time,cmd
 
@@ -64,5 +54,5 @@ then
 fi
 
 # Business specific or system dependant stuff
-[[ -r $HOME/.bash_profile_after ]] && . "$HOME"/.bash_profile_after
-[[ -r $HOME/.bashrc ]]             && . "$HOME"/.bashrc
+[[ -r ~/github/bash/.bash_profile_after ]] && . ~/github/bash/.bash_profile_after
+[[ -r ~/github/bash/.bashrc             ]] && . ~/github/bash/.bashrc
