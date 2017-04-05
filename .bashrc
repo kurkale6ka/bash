@@ -54,7 +54,8 @@ export LESS_TERMCAP_us="$(printf %s%s "$_bld$_udl"; tput setaf 5)"
 # ue -> underline end
 export LESS_TERMCAP_ue="$(tput rmul; printf %s "$_res")"
 
-[[ -r $HOME/.dir_colors ]] && eval "$(dircolors "$HOME"/.dir_colors)"
+# Set LS_COLORS
+eval "$(dircolors ~/github/config/dotfiles/.dir_colors)"
 
 ## Prompts
 if [[ $TERM != linux ]]
