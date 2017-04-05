@@ -3,8 +3,10 @@
 set -o notify
 shopt -s cdspell extglob nocaseglob nocasematch histappend
 
+HISTFILE=~/github/bash/.bash_history
 HISTFILESIZE=11000
 HISTSIZE=11000 # size allowed in memory
+
 HISTCONTROL=ignorespace:ignoredups:erasedups
 HISTIGNORE="@(?|??|???)*( |$'\t'):*( |$'\t')"
 # HISTIGNORE='@(?|??|???)*([[:space:]]):*([[:space:]])'
@@ -906,6 +908,6 @@ alias rmp=rpm
 [[ -f ~/.fzf.bash ]] && . ~/.fzf.bash
 
 ## Business specific or system dependant stuff
-[[ -r $HOME/.bashrc_after ]] && . "$HOME"/.bashrc_after
+[[ -r ~/github/bash/.bashrc_after ]] && . ~/github/bash/.bashrc_after
 
 # vim: fdm=expr fde=getline(v\:lnum)=~'^##'?'>'.(matchend(getline(v\:lnum),'###*')-1)\:'='
