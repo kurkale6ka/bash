@@ -3,7 +3,9 @@
 set -o notify
 shopt -s cdspell extglob nocaseglob nocasematch histappend
 
-HISTFILE=~/github/bash/.bash_history
+REPOS_BASE="${REPOS_BASE:-~/github}"
+
+HISTFILE="$REPOS_BASE"/bash/.bash_history
 HISTFILESIZE=11000
 HISTSIZE=11000 # size allowed in memory
 
@@ -57,7 +59,7 @@ export LESS_TERMCAP_us="$(printf %s%s "$_bld$_udl"; tput setaf 5)"
 export LESS_TERMCAP_ue="$(tput rmul; printf %s "$_res")"
 
 # Set LS_COLORS
-eval "$(dircolors ~/github/config/dotfiles/.dir_colors)"
+eval "$(dircolors "$REPOS_BASE"/config/dotfiles/.dir_colors)"
 
 ## Prompts
 if [[ $TERM != linux ]]
@@ -177,7 +179,7 @@ if command -v nvim
 then
    alias v=nvim
 else
-   alias v='vim -u ~/github/vim/.vimrc'
+   alias v="vim -u $REPOS_BASE/vim/.vimrc"
 fi >/dev/null 2>&1
 
 # Open files found by grep in Vim
@@ -908,6 +910,6 @@ alias rmp=rpm
 [[ -f ~/.fzf.bash ]] && . ~/.fzf.bash
 
 ## Business specific or system dependant stuff
-[[ -r ~/github/bash/.bashrc_after ]] && . ~/github/bash/.bashrc_after
+[[ -r $REPOS_BASE/bash/.bashrc_after ]] && . "$REPOS_BASE"/bash/.bashrc_after
 
 # vim: fdm=expr fde=getline(v\:lnum)=~'^##'?'>'.(matchend(getline(v\:lnum),'###*')-1)\:'='

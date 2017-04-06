@@ -2,8 +2,12 @@
 [[ -z $XDG_CONFIG_HOME ]] && export XDG_CONFIG_HOME=~/.config
 [[ -z   $XDG_DATA_HOME ]] && export   XDG_DATA_HOME=~/.local/share
 
+# Repos
+REPOS_BASE=~/github
+export REPOS_BASE="${REPOS_BASE%/}"
+
 # readline
-export INPUTRC=~/github/config/dotfiles/.inputrc
+export INPUTRC="$REPOS_BASE"/config/dotfiles/.inputrc
 
 # Put ~/bin in PATH
 if ! grep ~/bin <<< "$PATH" >/dev/null
@@ -54,5 +58,5 @@ then
 fi
 
 # Business specific or system dependant stuff
-[[ -r ~/github/bash/.bash_profile_after ]] && . ~/github/bash/.bash_profile_after
-[[ -r ~/github/bash/.bashrc             ]] && . ~/github/bash/.bashrc
+[[ -r $REPOS_BASE/bash/.bash_profile_after ]] && . "$REPOS_BASE"/bash/.bash_profile_after
+[[ -r $REPOS_BASE/bash/.bashrc             ]] && . "$REPOS_BASE"/bash/.bashrc
