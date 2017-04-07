@@ -597,15 +597,15 @@ alias nn=netstat
 
 ## rsync with CVS excludes
 rs() {
-   rsync --no-o --no-g --delete-excluded -e'ssh -q' \
-         -f".- $HOME/.gitignore"                    \
-         -f':- .gitignore'                          \
-         -f'- .gitignore'                           \
-         -f'- .git'                                 \
-         -f':- .hgignore'                           \
-         -f'- .hgignore'                            \
-         -f'- .hg'                                  \
-         -f'- .svn'                                 \
+   rsync --no-o --no-g --delete -e'ssh -q' \
+         -f".- $HOME/.gitignore"           \
+         -f':- .gitignore'                 \
+         -f'- .gitignore'                  \
+         -f'- .git'                        \
+         -f':- .hgignore'                  \
+         -f'- .hgignore'                   \
+         -f'- .hg'                         \
+         -f'- .svn'                        \
          "$@"
 }
 
