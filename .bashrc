@@ -1,4 +1,4 @@
-[[ -t 1 ]] || return
+[[ -t 1 ]] || return 1
 
 set -o notify
 shopt -s cdspell extglob nocaseglob nocasematch histappend
@@ -217,8 +217,8 @@ ldot() {
    then ls=(ls -FB   --color=auto)
    else ls=(ls -FBhl --color=auto --time-style="+$_ls_date_old $_ls_year"$'\n'"$_ls_date $_ls_time")
    fi
-   (($# == 0)) && {             "${ls[@]}" -d .[^.]* ; return; }
-   (($# == 1)) && { (cd "$1" && "${ls[@]}" -d .[^.]*); return; }
+   (($# == 0)) && {             "${ls[@]}" -d .[^.]* ; return 0; }
+   (($# == 1)) && { (cd "$1" && "${ls[@]}" -d .[^.]*); return 0; }
    local i arg
    for arg in "$@"; do
       printf '%s:\n' "$arg"
@@ -465,7 +465,7 @@ rmi() {
 
 ## Permissions + debug
 x() {
-   (($#)) && { chmod u+x -- "$@"; return; }
+   (($#)) && { chmod u+x -- "$@"; return 0; }
 
    if [[ $- == *x* ]]
    then echo 'debug OFF'; set +o xtrace
@@ -614,7 +614,7 @@ pa() { awk '!_[$0]++' <<< "${PATH//:/$'\n'}"; }
 
 ## Help
 m() {
-   (($# == 0)) && man man && return
+   (($# == 0)) && man man && return 0
    man "$@"
    local topic
    for topic in "$@"
@@ -635,25 +635,25 @@ complete -A command   man m which whereis type ? tpye sudo
 
 # which-like function
 _type() {
-   (($#)) || { type -a -- "$FUNCNAME"; return; }
+   (($#)) || { type -a -- "$FUNCNAME"; return 0; }
 
-   echo "${_bld}type -a (exe, alias, builtin, func):$_res"
-   type -a -- "$@" 2>/dev/null
-   echo
+   if [[ $(type -a -- "$@") == *function* ]]
+   then
+      type -a -- "$@" | less
+      return 0
+   fi
 
-   echo "${_bld}whereis -b (bin):$_res"
-   whereis -b "$@"
-   echo
-
-   echo "${_bld}file -L (deref):$_res"
-   local f
-   for f in "$@"
-   do
-      file -L "$(type -P -- "$f")"
-   done
+   if ! type -af -- "$@" 2>/dev/null
+   then
+      if ! which -- "$@" 2>/dev/null
+      then
+         whereis -b "$@"
+      fi
+   fi
 }
 
 alias ?=_type
+alias which=_type
 
 ## Display /etc/passwd, ..group and ..shadow with some formatting
 db() {
