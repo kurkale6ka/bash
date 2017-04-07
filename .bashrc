@@ -779,14 +779,6 @@ complete -f -o default -X '!*.rb' ruby   rb
 # rbenv: run multiple versions of ruby side-by-side
 command -v rbenv >/dev/null 2>&1 && eval "$(rbenv init -)"
 
-# Helper for creating a minimal .inputrc file
-rc() {
-   local inputrc="printf '%s\n' "
-         inputrc+="'\"\e[A\": history-search-backward' "
-         inputrc+="'\"\e[B\": history-search-forward' >> $HOME/.inputrc"
-   xclip -f <<< "$inputrc"
-}
-
 # Echo
 e() { local status=$?; (($#)) && echo "$@" || echo "$status"; }
 
