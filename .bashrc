@@ -38,9 +38,9 @@ _udl="$(tput smul)"
 _ylw="$(tput setaf 221)"
 _blu="$(tput setaf 4)"
 _red="$(tput setaf 9)"
+_blk="$(tput setaf 238)"
 _lgrn="$(printf %s "$_bld"; tput setaf 2)"
 _lblu="$(printf %s "$_bld"; tput setaf 4)"
-_blk="$(tput setaf 238)"
 _res="$(tput sgr0)"
 
 # Colored man pages
@@ -234,8 +234,7 @@ ldot() {
    fi
 }
 
-unalias l. ll. l ld la lr lk lx ll lld lla llr llk llx lm lc lu llm llc llu ln \
-   2>/dev/null
+unalias l. ll. l ld la lr lk lx ll lld lla llr llk llx lm lc lu llm llc llu ln 2>/dev/null
 
  l.() { ldot "$@"; }
 ll.() { ldot "$@"; }
@@ -645,7 +644,7 @@ _type() {
 
    if ! type -af -- "$@" 2>/dev/null
    then
-      if ! which -- "$@" 2>/dev/null
+      if ! 'which' -- "$@" 2>/dev/null
       then
          whereis -b "$@"
       fi
@@ -653,7 +652,6 @@ _type() {
 }
 
 alias ?=_type
-alias which=_type
 
 ## Display /etc/passwd, ..group and ..shadow with some formatting
 db() {
