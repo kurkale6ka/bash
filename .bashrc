@@ -742,7 +742,7 @@ diff() {
 
 alias _=combine
 
-## Misc: options, app aliases, rc(), b(), e()
+## Misc: options, app aliases, e()
 # Options
 alias  a=alias
 alias ua=unalias
