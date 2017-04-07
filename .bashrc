@@ -205,10 +205,10 @@ vr() {
 alias ed='ed -v -p:'
 
 ## ls
-_ls_date_old="${_blu}%d %b${_res}"
+_ls_date_old="${_blu}%e %b${_res}"
 _ls_year="${_blk} %Y${_res}"
 
-_ls_date="${_blu}%d %b${_res}"
+_ls_date="${_blu}%e %b${_res}"
 _ls_time="${_blk}%H:%M${_res}"
 
 ldot() {
