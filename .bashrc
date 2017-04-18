@@ -150,16 +150,12 @@ complete -A export   printenv
 complete -A variable export local readonly unset use
 complete -A function function
 complete -A binding  bind
-complete -A user     chage chfn finger groups mail passwd slay su userdel \
-                     usermod w write
+complete -A user     chage chfn finger groups mail passwd slay su userdel usermod w write
 complete -A hostname dig nslookup host ping ssh
-
-# Usage: cl arg - computes a completion list for arg
-cl() { column <(compgen -A "$1"); }
 
 complete -W 'alias arrayvar binding builtin command directory disabled enabled
 export file function group helptopic hostname job keyword running service
-setopt shopt signal stopped user variable' cl compgen complete
+setopt shopt signal stopped user variable' compgen complete
 
 # enable bash completion in non posix shells
 if ! shopt -oq posix; then
@@ -169,6 +165,10 @@ if ! shopt -oq posix; then
       . /etc/bash_completion
    fi >/dev/null 2>&1
 fi
+
+complete -f -o default -X '!*.pl' perl
+complete -f -o default -X '!*.py' python
+complete -f -o default -X '!*.rb' ruby
 
 ## (n)Vim and ed
 if command -v nvim
@@ -200,7 +200,7 @@ vr() {
 
 alias ed='ed -v -p:'
 
-## ls
+## ls and echo
 _ls_date_old="${_blu}%e %b${_res}"
 _ls_year="${_blk} %Y${_res}"
 
@@ -223,14 +223,8 @@ ldot() {
    done
 }
 
-.() {
-   if (($#))
-   then source "$@"
-   else command ls -FB --color=auto -d .[^.]*
-   fi
-}
-
-unalias l. ll. l ld la lr lk lx ll lld lla llr llk llx lm lc lu llm llc llu ln 2>/dev/null
+# Make sure existing aliases won't prevent function definitions
+unalias l. ll. lx llx ln sl 2>/dev/null
 
  l.() { ldot "$@"; }
 ll.() { ldot "$@"; }
@@ -288,6 +282,8 @@ sl() {
    local args=(); (($#)) && args=("$@") || args=(*)
    stat -c "%8i %A (%4a) %3h %4u %4g %10s (%10Y) %n" -- "${args[@]}"
 }
+
+alias e=echo
 
 ## sudo
 alias  sd=sudo
@@ -479,8 +475,6 @@ alias co=chown
 alias cm=chmod
 
 ## Disk/partitions functions
-df() { command df -hT "$@" | sort -k6r; }
-
 # Display largest files/directories
 # ds
 # ds -[fdt]
@@ -714,7 +708,7 @@ diff() {
 
 alias _=combine
 
-## Misc: options, app aliases, e()
+## Misc: options and aliases
 # Options
 alias  a=alias
 alias ua=unalias
@@ -727,25 +721,11 @@ alias oo=shopt
 complete -A setopt set   o
 complete -A shopt  shopt oo
 
-# Application aliases
+# aliases
 alias parallel='parallel --no-notice'
-
-# More aliases
 alias msg=dmesg
 alias cmd=command
-alias builtins='enable -a | cut -d" " -f2  | column'
-alias hg='history | command grep -iE --color=auto'
-
-alias pl=perl
-alias py=python
-alias rb=irb
-
-complete -f -o default -X '!*.pl' perl   prel pl
-complete -f -o default -X '!*.py' python py
-complete -f -o default -X '!*.rb' ruby   rb
-
-# Echo
-e() { local status=$?; (($#)) && echo "$@" || echo "$status"; }
+alias builtins='enable -a | cut -d" " -f2 | column'
 
 ## Git
 alias gc='git commit -v'
@@ -766,14 +746,6 @@ alias ta='tmux attach-session'
 
 complete -W '$(tmux ls 2>/dev/null | cut -d: -f1)' tmux
 complete -W "$(screen -ls 2>/dev/null | grep -E '^\s+[0-9].*\.' | awk {print\ \$1})" screen
-
-## Date
-date() {
-   if (($#))
-   then command date "$@"
-   else command date '+%A %d %B %Y, %H:%M %Z (%d/%m/%Y)'
-   fi
-}
 
 ## uname + os
 u() {
