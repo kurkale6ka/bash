@@ -11,13 +11,9 @@ HISTSIZE=11000 # size allowed in memory
 
 HISTCONTROL=ignorespace:ignoredups:erasedups
 HISTIGNORE="@(?|??|???)*( |$'\t'):*( |$'\t')"
-# HISTIGNORE='@(?|??|???)*([[:space:]]):*([[:space:]])'
 HISTTIMEFORMAT='<%d %b %H:%M>  '
 
 FIGNORE='~:.swp:.o' # <tab> completion
-# Equivalents:
-#    * ls -B to ignore backup files (~) in listings
-#    * :set wildignore+=*~,*.swp in Vim
 
 HOSTFILE="$HOME"/.hosts # hostnames completion (same format as /etc/hosts)
 
