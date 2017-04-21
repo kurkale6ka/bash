@@ -29,30 +29,28 @@ fi
 
 ## Colors
 # These can't reside in .profile since there is no terminal for tput
-_bld="$(tput bold)"
-_udl="$(tput smul)"
-_ylw="$(tput setaf 221)"
-_blu="$(tput setaf 4)"
-_red="$(tput setaf 9)"
-_blk="$(tput setaf 238)"
-_lgrn="$(printf %s "$_bld"; tput setaf 2)"
-_lblu="$(printf %s "$_bld"; tput setaf 4)"
-_res="$(tput sgr0)"
+_bld="$(tput bold || tput md)"
+_udl="$(tput smul || tput us)"
+_ylw="$(tput setaf 221 || tput AF 221)"
+_blu="$(tput setaf 4   || tput AF 4  )"
+_red="$(tput setaf 9   || tput AF 9  )"
+_blk="$(tput setaf 238 || tput AF 238)"
+_lgrn="$_bld$(tput setaf 2 || tput AF 2)"
+_lblu="$_bld$(tput setaf 4 || tput AF 4)"
+_res="$(tput sgr0 || tput me)"
 
 # Colored man pages
 export LESS_TERMCAP_mb="$_lgrn" # begin blinking
 export LESS_TERMCAP_md="$_lblu" # begin bold
 export LESS_TERMCAP_me="$_res"  # end mode
 
-# so -> stand out - info box
-export LESS_TERMCAP_so="$(printf %s "$_bld"; tput setaf 3; tput setab 4)"
-# se -> stand out end
-export LESS_TERMCAP_se="$(tput rmso; printf %s "$_res")"
+# Stand out (reverse) - info box (yellow on blue bg)
+export LESS_TERMCAP_so="$_bld$(tput setaf 3 || tput AF 3)$(tput setab 4 || tput AB 4)"
+export LESS_TERMCAP_se="$(tput rmso || tput se)$_res"
 
-# us -> underline start
-export LESS_TERMCAP_us="$(printf %s%s "$_bld$_udl"; tput setaf 5)"
-# ue -> underline end
-export LESS_TERMCAP_ue="$(tput rmul; printf %s "$_res")"
+# Underline
+export LESS_TERMCAP_us="$_bld$_udl$(tput setaf 5 || tput AF 5)" # purple
+export LESS_TERMCAP_ue="$(tput rmul || tput ue)$_res"
 
 # Set LS_COLORS
 eval "$(dircolors "$REPOS_BASE"/config/dotfiles/.dir_colors)"
@@ -202,7 +200,7 @@ alias ed='ed -v -p:'
 
 ## ls and echo
 _ls_date_old="${_blu}%e %b${_res}"
-_ls_year="${_blk} %Y${_res}"
+_ls_time_old="${_blk} %Y${_res}"
 
 _ls_date="${_blu}%e %b${_res}"
 _ls_time="${_blk}%H:%M${_res}"
@@ -211,7 +209,7 @@ ldot() {
    local ls
    if [[ ${FUNCNAME[1]} == 'l.' ]]
    then ls=(ls -FB   --color=auto)
-   else ls=(ls -FBhl --color=auto --time-style="+$_ls_date_old $_ls_year"$'\n'"$_ls_date $_ls_time")
+   else ls=(ls -FBhl --color=auto --time-style="+$_ls_date_old $_ls_time_old"$'\n'"$_ls_date $_ls_time")
    fi
    (($# == 0)) && {             "${ls[@]}" -d .[^.]* ; return 0; }
    (($# == 1)) && { (cd "$1" && "${ls[@]}" -d .[^.]*); return 0; }
@@ -230,23 +228,23 @@ unalias l. ll. lx llx ln sl 2>/dev/null
 ll.() { ldot "$@"; }
 
 alias   l='command ls -FB   --color=auto'
-alias  ll="command ls -FBhl --color=auto --time-style=$'+$_ls_date_old $_ls_year\n$_ls_date $_ls_time'"
+alias  ll="command ls -FBhl --color=auto --time-style=$'+$_ls_date_old $_ls_time_old\n$_ls_date $_ls_time'"
 alias  l1='command ls -FB1  --color=auto'
 
 alias  la='command ls -FBA   --color=auto'
-alias lla="command ls -FBAhl --color=auto --time-style=$'+$_ls_date_old $_ls_year\n$_ls_date $_ls_time'"
+alias lla="command ls -FBAhl --color=auto --time-style=$'+$_ls_date_old $_ls_time_old\n$_ls_date $_ls_time'"
 
 alias  ld='command ls -FBd   --color=auto'
-alias lld="command ls -FBdhl --color=auto --time-style=$'+$_ls_date_old $_ls_year\n$_ls_date $_ls_time'"
+alias lld="command ls -FBdhl --color=auto --time-style=$'+$_ls_date_old $_ls_time_old\n$_ls_date $_ls_time'"
 
 alias  lm='command ls -FBtr   --color=auto'
-alias llm="command ls -FBhltr --color=auto --time-style=$'+$_ls_date_old $_ls_year\n$_ls_date $_ls_time'"
+alias llm="command ls -FBhltr --color=auto --time-style=$'+$_ls_date_old $_ls_time_old\n$_ls_date $_ls_time'"
 
 alias  lk='command ls -FBS   --color=auto'
-alias llk="command ls -FBShl --color=auto --time-style=$'+$_ls_date_old $_ls_year\n$_ls_date $_ls_time'"
+alias llk="command ls -FBShl --color=auto --time-style=$'+$_ls_date_old $_ls_time_old\n$_ls_date $_ls_time'"
 
 alias  lr="tree -FAC -I '*~|*.swp' --noreport"
-alias llr="command ls -FBRhl --color=auto --time-style=$'+$_ls_date_old $_ls_year\n$_ls_date $_ls_time'"
+alias llr="command ls -FBRhl --color=auto --time-style=$'+$_ls_date_old $_ls_time_old\n$_ls_date $_ls_time'"
 
 _lx() {
    local exes=()
@@ -258,7 +256,7 @@ _lx() {
    then
       [[ -n ${exes[@]} ]] && ls -FB --color=auto "${exes[@]}"
    else
-      [[ -n ${exes[@]} ]] && ls -FBhl --color=auto --time-style="+$_ls_date_old $_ls_year"$'\n'"$_ls_date $_ls_time" "${exes[@]}"
+      [[ -n ${exes[@]} ]] && ls -FBhl --color=auto --time-style="+$_ls_date_old $_ls_time_old"$'\n'"$_ls_date $_ls_time" "${exes[@]}"
    fi
 }
 
@@ -271,7 +269,7 @@ ln() {
    else
       if (( $(find . -maxdepth 1 -type l -print -quit | wc -l) == 1 )); then
          find . -maxdepth 1 -type l -printf '%P\0' |
-         xargs -0 'ls' -FBAhl --color=auto --time-style="+$_ls_date_old $_ls_year"$'\n'"$_ls_date $_ls_time" --
+         xargs -0 'ls' -FBAhl --color=auto --time-style="+$_ls_date_old $_ls_time_old"$'\n'"$_ls_date $_ls_time" --
       fi
    fi
 }
