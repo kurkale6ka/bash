@@ -703,7 +703,7 @@ if command -v ag >/dev/null 2>&1; then
    alias g=ag
 else
    alias g='command grep -iE --color=auto --exclude="*~" --exclude tags'
-   alias gr='command grep -IriE --exclude-dir=.git --exclude-dir=.svn --exclude-dir=.hg --color=auto --exclude="*~" --exclude tags'
+   alias gr='command grep -IRiE --exclude-dir=.git --exclude-dir=.svn --exclude-dir=.hg --color=auto --exclude="*~" --exclude tags'
 fi
 
 diff() {
