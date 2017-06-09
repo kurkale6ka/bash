@@ -3,7 +3,7 @@
 [[ -z   $XDG_DATA_HOME ]] && export   XDG_DATA_HOME=~/.local/share
 
 # Repos
-REPOS_BASE=~/github
+((EUID > 0)) && REPOS_BASE=~/github
 export REPOS_BASE="${REPOS_BASE%/}"
 
 # readline
