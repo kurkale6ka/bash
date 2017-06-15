@@ -48,6 +48,7 @@ export PS_FORMAT=pid,ppid,pgid,sid,tname,tpgid,stat,euser,egroup,start_time,cmd
 # ?letterTRUE:FALSE.
 # ex: ?L%L lines, . - if number of lines known: display %L lines,
 export LESS='-i -r -s -W -M -PM?f%f - :.?L%L lines, .?ltL\:%lt:.?pB, %pB\% : .?e(Bottom)%t'
+export PAGER=less
 
 # Needs installing x11-ssh-askpass
 # TODO: fix keyboard layout issue
