@@ -3,7 +3,12 @@
 [[ -z   $XDG_DATA_HOME ]] && export   XDG_DATA_HOME=~/.local/share
 
 # Repos
-((EUID > 0)) && REPOS_BASE=~/github
+if ((EUID > 0))
+then
+   REPOS_BASE_LINK="$(find ~ -maxdepth 1 -lname github -printf '%p\n')"
+   REPOS_BASE="${REPOS_BASE_LINK:-~/github}"
+fi
+
 export REPOS_BASE="${REPOS_BASE%/}"
 
 # readline
