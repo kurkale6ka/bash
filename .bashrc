@@ -3,8 +3,6 @@
 set -o notify
 shopt -s cdspell extglob nocaseglob nocasematch histappend
 
-REPOS_BASE="${REPOS_BASE:-~/github}"
-
 HISTFILE="$REPOS_BASE"/bash/.bash_history
 HISTFILESIZE=11000
 HISTSIZE=11000 # size allowed in memory
