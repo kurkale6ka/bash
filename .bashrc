@@ -30,11 +30,10 @@ fi
 _bld="$(tput bold || tput md)"
 _udl="$(tput smul || tput us)"
 _ylw="$(tput setaf 221 || tput AF 221)"
-_blu="$(tput setaf 4   || tput AF 4  )"
 _red="$(tput setaf 9   || tput AF 9  )"
 _blk="$(tput setaf 238 || tput AF 238)"
 _lgrn="$_bld$(tput setaf 2 || tput AF 2)"
-_lblu="$_bld$(tput setaf 4 || tput AF 4)"
+_lblu="$(tput setaf 69 || tput AF 69)"
 _res="$(tput sgr0 || tput me)"
 
 # Colored man pages
@@ -206,10 +205,10 @@ vr() {
 alias ed='ed -v -p:'
 
 ## ls and echo
-_ls_date_old="${_blu}%e %b${_res}"
+_ls_date_old="$(tput setaf 242 || tput AF 242)%e %b${_res}"
 _ls_time_old="${_blk} %Y${_res}"
 
-_ls_date="${_blu}%e %b${_res}"
+_ls_date="$(tput setaf 242 || tput AF 242)%e %b${_res}"
 _ls_time="${_blk}%H:%M${_res}"
 
 ldot() {
