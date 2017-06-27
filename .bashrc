@@ -712,6 +712,7 @@ diff() {
    fi
 }
 
+alias vd='v -d'
 alias _=combine
 
 ## Misc: options and aliases
