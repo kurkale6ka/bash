@@ -182,6 +182,8 @@ else
    alias v="vim -u $REPOS_BASE/vim/.vimrc"
 fi >/dev/null 2>&1
 
+vt() { tail -n1000 "$1" | v -; }
+
 # Open files found by grep in Vim
 # Usage:
 #   vr [-f] : filter results with fzf
