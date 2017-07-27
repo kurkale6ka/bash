@@ -38,12 +38,13 @@ umask 022
 
 # Vim
 if command -v nvim
-then nvim=nvim
-else nvim=vim
+then
+   export EDITOR=nvim
+else
+   export EDITOR="vim -u $REPOS_BASE/vim/.vimrc"
 fi >/dev/null 2>&1
 
-export EDITOR="$nvim"
-export VISUAL="$nvim"
+export VISUAL="$EDITOR"
 
 # ps
 export PS_PERSONALITY=bsd
