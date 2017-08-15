@@ -182,7 +182,7 @@ else
    alias v="vim -u $REPOS_BASE/vim/.vimrc"
 fi >/dev/null 2>&1
 
-vt() { tail -n1000 "$1" | v -; }
+vt() { tail -n11000 "$1" | v - -c'setlocal buftype=nofile bufhidden=hide noswapfile | match | $'; }
 
 # Open files found by grep in Vim
 # Usage:
