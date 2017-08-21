@@ -775,8 +775,8 @@ b() {
 
 # Usage: sw file [file.bak]. file.bak is assumed by default so it can be omitted
 bs() {
-   if [[ $1 == -@(h|-h)* ]] || (($# != 1 && $# != 2)); then
-      info='Usage: sw file [file.bak]'
+   if [[ $1 == @(-h|--help) ]] || (($# != 1 && $# != 2)); then
+      local info='Usage: sw file [file.bak]'
       if (($#))
       then echo "$info"    ; return 0
       else echo "$info" >&2; return 1
