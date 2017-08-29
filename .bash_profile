@@ -20,10 +20,14 @@ fi
 # readline
 export INPUTRC="$REPOS_BASE"/config/dotfiles/.inputrc
 
-# Put ~/bin in PATH
-if ! grep ~/bin <<< "$PATH" >/dev/null
+# Put ~/bin and REPOS_BASE in PATH
+if ! grep -q ~/bin <<< "$PATH"
 then
    export PATH=~/bin:"$PATH"
+fi
+if ! grep -q "$REPOS_BASE" <<< "$PATH"
+then
+   export PATH="$REPOS_BASE":"$PATH"
 fi
 
 export PYTHONSTARTUP=~/.pyrc
