@@ -345,7 +345,7 @@ then
          printf -v _patterns '%s%%' "$@"
          if command -v fzf >/dev/null 2>&1
          then
-            local dir="$(sqlite3 "$db" "SELECT dir FROM marks WHERE dir LIKE '%${_patterns%\%}%' ORDER BY weight DESC;" | fzf +s -0 -1 || echo "${PIPESTATUS[1]}")"
+            local dir="$(sqlite3 "$db" "SELECT dir FROM marks ORDER BY weight DESC;" | fzf +s -0 -1 -q"$*" || echo "${PIPESTATUS[1]}")"
          else
             local dir="$(sqlite3 "$db" "SELECT dir FROM marks WHERE dir LIKE '%${_patterns%\%}%' ORDER BY weight DESC LIMIT 1;")"
             [[ -z $dir ]] && dir=1
