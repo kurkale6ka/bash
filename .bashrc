@@ -340,13 +340,13 @@ then
 
       if (($# > 0))
       then
-         # the arguments order is significant. ex: for c 1 2 3, %1%2%3% is used.
-         local _patterns
-         printf -v _patterns '%s%%' "$@"
          if command -v fzf >/dev/null 2>&1
          then
             local dir="$(sqlite3 "$db" "SELECT dir FROM marks ORDER BY weight DESC;" | fzf +s -0 -1 -q"$*" || echo "${PIPESTATUS[1]}")"
          else
+            # the arguments order is significant. ex: for c 1 2 3, %1%2%3% is used.
+            local _patterns
+            printf -v _patterns '%s%%' "$@"
             local dir="$(sqlite3 "$db" "SELECT dir FROM marks WHERE dir LIKE '%${_patterns%\%}%' ORDER BY weight DESC LIMIT 1;")"
             [[ -z $dir ]] && dir=1
          fi
@@ -367,7 +367,7 @@ then
       elif ((dir == 1)) && command -v fzf >/dev/null 2>&1
       then
          # 'updatedb' indexed files
-         local file="$(locate -0 / | grep -zv '/\.\(git\|svn\|hg\)\(/\|$\)\|~$' | fzf --read0 -0 -1 -q"$*" --print0)"
+         local file="$(locate -0 / | grep -zv '/\.\(git\|svn\|hg\)\(/\|$\)\|~$' | fzf --read0 -0 -1 -q"$*")"
          if [[ -n $file ]]
          then
             if [[ -d $file ]]
