@@ -367,7 +367,12 @@ then
       elif ((dir == 1)) && command -v fzf >/dev/null 2>&1
       then
          # 'updatedb' indexed files
-         local file="$(locate -0 / | grep -zv '/\.\(git\|svn\|hg\)\(/\|$\)\|~$' | fzf --read0 -0 -1 -q"$*")"
+         if (($# > 0))
+         then
+            local file="$(locate -0 / | grep -zv '/\.\(git\|svn\|hg\)\(/\|$\)\|~$' | fzf --read0 -0 -1 -q"$*")"
+         else
+            local file="$(locate -0 / | grep -zv '/\.\(git\|svn\|hg\)\(/\|$\)\|~$' | fzf --read0 -0 -1)"
+         fi
          if [[ -n $file ]]
          then
             if [[ -d $file ]]
