@@ -331,13 +331,14 @@ then
    c() {
       local db="$XDG_DATA_HOME"/marks/marks.sqlite
 
-      # Statistics
+      # Show statistics
       if [[ $1 == -s ]]
       then
          sqlite3 "$db" 'SELECT * FROM marks ORDER BY weight DESC;' | column -t -s'|' | less
          return 0
       fi
 
+      # Search bookmarks
       if (($# > 0))
       then
          if command -v fzf >/dev/null 2>&1
@@ -363,10 +364,10 @@ then
       if [[ -d $dir ]]
       then
          cd -- "$dir"
-      # Only use locate if there were no matches, not if 'Ctrl+c' was used for instance
+      # Try locate,
+      # only if there were no matches, not if 'Ctrl+c' (dir = 130) was used for instance
       elif ((dir == 1)) && command -v fzf >/dev/null 2>&1
       then
-         # 'updatedb' indexed files
          if (($# > 0))
          then
             local file="$(locate -0 / | grep -zv '/\.\(git\|svn\|hg\)\(/\|$\)\|~$' | fzf --read0 -0 -1 -q"$*")"
