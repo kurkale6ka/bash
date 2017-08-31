@@ -182,6 +182,52 @@ else
    alias v="vim -u $REPOS_BASE/vim/.vimrc"
 fi >/dev/null 2>&1
 
+if command -v fzf >/dev/null 2>&1
+then
+   # Use fuzzy (fzf) search to find a file and open it in Vim
+   # https://github.com/kurkale6ka/zsh/blob/master/autoload/fuzzy/vf
+   vf() {
+      declare -a files
+
+      # 1. try locate
+      if (($#))
+      then
+         while IFS= read -r -d $'\0'
+         do
+            files+=("$REPLY")
+         done < <(locate -0 / | grep -zv '/\.\(git\|svn\|hg\)\(/\|$\)\|~$' | fzf --read0 -0 -1 -m -q"$*" --print0 || echo "${pipestatus[2]}")
+      else
+         while IFS= read -r -d $'\0'
+         do
+            files+=("$REPLY")
+         done < <(locate -0 / | grep -zv '/\.\(git\|svn\|hg\)\(/\|$\)\|~$' | fzf --read0 -0 -1 -m --print0 || echo "${pipestatus[2]}")
+      fi
+
+      # 2. try fzf
+      if [[ -z $files || $files == 130 || $files == 1 ]]
+      then
+         printf "${_ylw}trying fzf${_res}...\n"
+         if (($#))
+         then
+            while IFS= read -r -d $'\0'
+            do
+               files+=("$REPLY")
+            done < <(fzf -0 -1 -m -q"$*" --print0)
+         else
+            while IFS= read -r -d $'\0'
+            do
+               files+=("$REPLY")
+            done < <(fzf -0 -1 -m --print0)
+         fi
+      fi
+
+      if [[ -n $files && $files != 130 && $files != 1 ]]
+      then
+         v -- "${files[@]}"
+      fi
+   }
+fi
+
 vt() { tail -n11000 "$1" | v - -c'setlocal buftype=nofile bufhidden=hide noswapfile | match | $'; }
 
 # Open files found by grep in Vim
