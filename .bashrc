@@ -486,17 +486,28 @@ alias pw='pwd -P'
 alias md='mkdir -p'
 
 rd() {
-   printf 'rd: remove directory ‘%s’?\n' "$@"
-   read -p '(y/n) '
-   [[ $REPLY == @(y|yes) ]] && 'rm' -r -- "$@"
+   local f
+
+   for f in "$@"
+   do
+      if [[ ! -d $f ]]
+      then
+         echo "${_red}Warning!$_res $f ${_red}isn't a directory$_res" 1>&2
+      else
+         (($# > 1)) && ld -1 "$f"
+      fi
+   done
+
+   'rm' -rI "$@"
 }
 
 complete -A directory mkdir md rmdir rd
 
 ## Safer cp/mv + inodes rm
-# problem with these is I don't usually check the destination
+# problem with cp/mv is I don't usually check the destination
 alias cp='cp -i'
 alias mv='mv -i'
+alias rm='rm -I'
 
 # Delete based on inodes (use ls -li first)
 rmi() {
