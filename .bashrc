@@ -57,7 +57,7 @@ if [[ $TERM != linux ]]
 then
    ## title: \e]2; ---- \a
    _tilda=\~
-   export PROMPT_COMMAND='printf "\e]2;[%s] %s\a" "${PWD/#$HOME/$_tilda}" "${HOSTNAME%%.*}"'
+   export PROMPT_COMMAND='printf "\e]2;[%s] %s\a" "${PWD/#$HOME/$_tilda}" "$HOSTNAME"'
 fi
 
 _gbr() {
@@ -80,9 +80,9 @@ fi
 PS1() {
    if ((EUID == 0))
    then
-      PS1="\n[\A \[$_lblu\]\w\[$_res\]]\$(_gbr)"'$(((\j>0)) && echo \ ❭ \[$_red\]%\j\[$_res\])'"\n\[$_red\]\u\[$_res\]@\[$_h_color\]\h\[$_res\] # "
+      PS1="\n[\[$_h_color\]\H\[$_res\] \A \[$_lblu\]\w\[$_res\]]\$(_gbr)"'$(((\j>0)) && echo \ ❭ \[$_red\]%\j\[$_res\])'"\n\[$_red\]\u\[$_res\] # "
    else
-      PS1="\n[\A \[$_lblu\]\w\[$_res\]]\$(_gbr)"'$(((\j>0)) && echo \ ❭ \[$_red\]%\j\[$_res\])'"\n\[$_ylw\]\u\[$_res\]@\[$_h_color\]\h\[$_res\] \\$ "
+      PS1="\n[\[$_h_color\]\H\[$_res\] \A \[$_lblu\]\w\[$_res\]]\$(_gbr)"'$(((\j>0)) && echo \ ❭ \[$_red\]%\j\[$_res\])'"\n\[$_ylw\]\u\[$_res\] \\$ "
    fi
 }
 
