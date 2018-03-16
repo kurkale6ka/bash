@@ -80,9 +80,9 @@ fi
 PS1() {
    if ((EUID == 0))
    then
-      PS1="\n[\[$_h_color\]\H\[$_res\] \A \[$_lblu\]\w\[$_res\]]\$(_gbr)"'$(((\j>0)) && echo \ ❭ \[$_red\]%\j\[$_res\])'"\n\[$_red\]\u\[$_res\] # "
+      PS1="\n\[$_h_color\]\H\[$_res\] \A [\[$_lblu\]\w\[$_res\]]\$(_gbr)"'$(((\j>0)) && echo \ ❭ \[$_red\]%\j\[$_res\])'"\n\[$_red\]\u\[$_res\] # "
    else
-      PS1="\n[\[$_h_color\]\H\[$_res\] \A \[$_lblu\]\w\[$_res\]]\$(_gbr)"'$(((\j>0)) && echo \ ❭ \[$_red\]%\j\[$_res\])'"\n\[$_ylw\]\u\[$_res\] \\$ "
+      PS1="\n\[$_h_color\]\H\[$_res\] \A [\[$_lblu\]\w\[$_res\]]\$(_gbr)"'$(((\j>0)) && echo \ ❭ \[$_red\]%\j\[$_res\])'"\n\[$_ylw\]\u\[$_res\] \\$ "
    fi
 }
 
