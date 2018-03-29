@@ -498,7 +498,7 @@ rd() {
       fi
    done
 
-   'rm' -rI "$@"
+   'rm' -rf "$@"
 }
 
 complete -A directory mkdir md rmdir rd
@@ -507,7 +507,6 @@ complete -A directory mkdir md rmdir rd
 # problem with cp/mv is I don't usually check the destination
 alias cp='cp -i'
 alias mv='mv -i'
-alias rm='rm -I'
 
 # Delete based on inodes (use ls -li first)
 rmi() {
