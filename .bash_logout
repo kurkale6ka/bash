@@ -4,7 +4,7 @@
 if [[ -w $HISTFILE ]]
 then
 
-   if command -v ed >/dev/null 2>&1
+   if type -P ed >/dev/null 2>&1
    then
       # First, remove all leading or trailing white spaces
       ed -s "$HISTFILE" <<< $',s/^[[:space:]]\+\|[[:space:]]\+$//g\nwq'
