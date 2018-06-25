@@ -192,12 +192,12 @@ then
       # 1. try locate
       if (($#))
       then
-         while IFS= read -r -d $'\0'
+         while IFS= read -r -d ''
          do
             files+=("$REPLY")
          done < <(locate -0 / | grep -zv '/\.\(git\|svn\|hg\)\(/\|$\)\|~$' | fzf --read0 -0 -1 -m -q"$*" --print0 || echo "${pipestatus[2]}")
       else
-         while IFS= read -r -d $'\0'
+         while IFS= read -r -d ''
          do
             files+=("$REPLY")
          done < <(locate -0 / | grep -zv '/\.\(git\|svn\|hg\)\(/\|$\)\|~$' | fzf --read0 -0 -1 -m --print0 || echo "${pipestatus[2]}")
@@ -209,12 +209,12 @@ then
          printf "${_ylw}trying fzf${_res}...\n"
          if (($#))
          then
-            while IFS= read -r -d $'\0'
+            while IFS= read -r -d ''
             do
                files+=("$REPLY")
             done < <(fzf -0 -1 -m -q"$*" --print0)
          else
-            while IFS= read -r -d $'\0'
+            while IFS= read -r -d ''
             do
                files+=("$REPLY")
             done < <(fzf -0 -1 -m --print0)
