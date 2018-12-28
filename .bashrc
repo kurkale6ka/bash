@@ -71,7 +71,7 @@ _gbr() {
 _h_color="$(tput setaf 140 || tput AF 140)" # purple for remote
 if [[ -z $SSH_CONNECTION ]]
 then
-   if ! who | 'grep' -v tmux | 'grep' -q '([0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\})'
+   if ! who | 'grep' -q '([0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\})'
    then
       _h_color="$_ylw"
    fi
