@@ -297,7 +297,13 @@ alias llm="command ls -FBhltr --color=auto --time-style=$'+$_ls_date_old $_ls_ti
 alias  lk='command ls -FBS   --color=auto'
 alias llk="command ls -FBShl --color=auto --time-style=$'+$_ls_date_old $_ls_time_old\n$_ls_date $_ls_time'"
 
-alias  lr="tree -FAC -I '*~|*.swp' --noreport"
+if command -v tree
+then
+   alias lr="tree -FAC -I '*~|*.swp' --noreport"
+else
+   alias lr="command ls -FBR --color=auto --time-style=$'+$_ls_date_old $_ls_time_old\n$_ls_date $_ls_time'"
+fi >/dev/null 2>&1
+
 alias llr="command ls -FBRhl --color=auto --time-style=$'+$_ls_date_old $_ls_time_old\n$_ls_date $_ls_time'"
 
 _lx() {
