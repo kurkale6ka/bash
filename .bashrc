@@ -627,7 +627,7 @@ alias umn=umount
 alias fu='sudo fuser -mv'
 
 ## Networking
-alias myip='curl icanhazip.com'
+alias myip='curl ipinfo.io/ip'
 
 dig() { command dig +noall +answer "${@#*//}"; }
 dg() { dig -x $(dig +noall +answer +short "${@#*//}"); }
