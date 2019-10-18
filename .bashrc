@@ -758,11 +758,6 @@ complete -W '$(tmux ls 2>/dev/null | cut -d: -f1)' tmux
 complete -W "$(screen -ls 2>/dev/null | grep -E '^\s+[0-9].*\.' | awk {print\ \$1})" screen
 
 ## uname + os
-u() {
-   uname -r
-   echo "$(uname -mpi) (machine, proc, platform)"
-}
-
 alias os='tail -n99 /etc/*{release,version} 2>/dev/null | cat -s'
 
 ## Backup functions and aliases
