@@ -347,20 +347,19 @@ alias e=echo
 alias  sd=sudo
 alias sde=sudoedit
 
-# s///
-# sudo bash
+# run a root shell
 s() {
-   if (($# == 2))
-   then
-      # s old new [number|cmd]
-      fc -s "$1"="$2" "$3"
-   else
-      history -a
-      if sudo -E echo -n 2>/dev/null # check if -E is available
-      then sudo -E /usr/bin/env bash
-      else sudo    /usr/bin/env bash
-      fi
+   history -a
+   if sudo -E echo -n 2>/dev/null # check for -E (preserve env vars) flag
+   then sudo -E /usr/bin/env bash
+   else sudo /usr/bin/env bash
    fi
+}
+
+# rerun (previous) command after replacing all occurrences of old with new
+sg() {
+   # sg old new [number|cmd]
+   fc -s "$1"="$2" "$3"
 }
 
 ## cd
