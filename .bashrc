@@ -528,15 +528,7 @@ rmi() {
 }
 
 ## Permissions + debug
-x() {
-   (($#)) && { chmod u+x -- "$@"; return 0; }
-
-   if [[ $- == *x* ]]
-   then echo 'debug OFF'; set +o xtrace
-   else echo 'debug ON' ; set -o xtrace
-   fi
-} 2>/dev/null
-
+alias x='chmod u+x'
 alias bx='bash -x'
 
 alias    setuid='chmod u+s'
