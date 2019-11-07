@@ -555,8 +555,7 @@ alias fu='sudo fuser -mv'
 ## Networking
 alias myip='curl ipinfo.io/ip'
 
-dig() { command dig +noall +answer "${@#*//}"; }
-dg() { dig -x $(dig +noall +answer +short "${@#*//}"); }
+dig() { command dig -4 +noall +answer "${@#*//}"; }
 
 # Security
 alias il='iptables -nvL --line-numbers'
