@@ -50,7 +50,7 @@ fi >/dev/null 2>&1
 
 export VISUAL="$EDITOR"
 
-export FZF_DEFAULT_COMMAND='ag -S --hidden --ignore=.git --ignore=.svn --ignore=.hg -g ""'
+export FZF_DEFAULT_OPTS='--height 40% --layout=reverse'
 
 # ps
 export PS_PERSONALITY=bsd
