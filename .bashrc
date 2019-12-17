@@ -688,14 +688,14 @@ f() {
 alias lo='command locate -i'
 alias ldapsearch='ldapsearch -x -LLL'
 
-# Grep or silver searcher aliases
-if command -v ag >/dev/null 2>&1; then
-   alias ag='ag -S --hidden --ignore=.git --ignore=.svn --ignore=.hg --color-line-number="00;32" --color-path="00;35" --color-match="01;31"'
-   alias gr=ag
-   alias g=ag
+# Grep, ripgrep aliases
+if command -v rg >/dev/null 2>&1; then
+   alias rg='rg -S --ignore-file ~/.gitignore'
+   alias gr=rg
+   alias g=rg
 else
-   alias g='command grep -iE --color=auto --exclude="*~" --exclude tags'
-   alias gr='command grep -IRiE --exclude-dir=.git --exclude-dir=.svn --exclude-dir=.hg --color=auto --exclude="*~" --exclude tags'
+   alias gr='grep -IRiE --exclude-dir=.git --exclude-dir=.svn --exclude-dir=.hg --color=auto --exclude="*~" --exclude tags'
+   alias g='grep -iE --color=auto --exclude="*~" --exclude tags'
 fi
 
 diff() {
