@@ -63,7 +63,7 @@ fi
 _gbr() {
    local gb="$(git rev-parse --abbrev-ref HEAD 2>/dev/null)"
    if [[ $gb ]]
-   then echo " ${_blk}λ-${_res}$gb"
+   then echo " ${_blk}$gb${_res}"
    else echo ''
    fi
 }
@@ -77,16 +77,14 @@ then
    fi
 fi
 
-PS1() {
-   if ((EUID == 0))
-   then
-      PS1="\n\[$_h_color\]\H\[$_res\] \A [\[$_lblu\]\w\[$_res\]]\$(_gbr)"'$(((\j>0)) && echo \ ❭ \[$_red\]%\j\[$_res\])'"\n\[$_red\]\u\[$_res\] # "
-   else
-      PS1="\n\[$_h_color\]\H\[$_res\] \A [\[$_lblu\]\w\[$_res\]]\$(_gbr)"'$(((\j>0)) && echo \ ❭ \[$_red\]%\j\[$_res\])'"\n\[$_ylw\]\u\[$_res\] \\$ "
-   fi
-}
+# PS1/2/3/4
+if ((EUID == 0))
+then
+   PS1="\n\[$_h_color\]\H\[$_res\] \A [\[$_lblu\]\w\[$_res\]]\$(_gbr)"'$(((\j>0)) && echo \ ❭ \[$_red\]%\j\[$_res\])'"\n\[$_red\]\u\[$_res\] # "
+else
+   PS1="\n\[$_h_color\]\H\[$_res\] \A [\[$_lblu\]\w\[$_res\]]\$(_gbr)"'$(((\j>0)) && echo \ ❭ \[$_red\]%\j\[$_res\])'"\n\[$_ylw\]\u\[$_res\] \\$ "
+fi
 
-       PS1 # call function above
        PS2='↪ '
 export PS3='Choose an entry: '
        PS4='+ '
