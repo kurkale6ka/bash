@@ -60,14 +60,6 @@ then
    export PROMPT_COMMAND='printf "\e]2;[%s] %s\a" "${PWD/#$HOME/$_tilda}" "$HOSTNAME"'
 fi
 
-_gbr() {
-   local gb="$(git rev-parse --abbrev-ref HEAD 2>/dev/null)"
-   if [[ $gb ]]
-   then echo " ${_blk}$gb${_res}"
-   else echo ''
-   fi
-}
-
 _h_color="$(tput setaf 140 || tput AF 140)" # purple for remote
 if [[ -z $SSH_CONNECTION ]]
 then
@@ -80,9 +72,9 @@ fi
 # PS1/2/3/4
 if ((EUID == 0))
 then
-   PS1="\n\[$_h_color\]\H\[$_res\] \A [\[$_lblu\]\w\[$_res\]]\$(_gbr)"'$(((\j>0)) && echo \ ❭ \[$_red\]%\j\[$_res\])'"\n\[$_red\]\u\[$_res\] # "
+   PS1="\n\[$_h_color\]\H\[$_res\] \A [\[$_lblu\]\w\[$_res\]]"'$(((\j>0)) && echo \ ❭ \[$_red\]%\j\[$_res\])'"\n\[$_red\]\u\[$_res\] # "
 else
-   PS1="\n\[$_h_color\]\H\[$_res\] \A [\[$_lblu\]\w\[$_res\]]\$(_gbr)"'$(((\j>0)) && echo \ ❭ \[$_red\]%\j\[$_res\])'"\n\[$_ylw\]\u\[$_res\] \\$ "
+   PS1="\n\[$_h_color\]\H\[$_res\] \A [\[$_lblu\]\w\[$_res\]]"'$(((\j>0)) && echo \ ❭ \[$_red\]%\j\[$_res\])'"\n\[$_ylw\]\u\[$_res\] \\$ "
 fi
 
        PS2='↪ '
@@ -614,8 +606,6 @@ m() {
 
 alias mm='man -k'
 
-mg() { man git-"${1:-help}"; }
-
 complete -A helptopic help m # Currently, same as builtin
 complete -A command   man m which whereis type ? tpye sudo
 
@@ -724,19 +714,6 @@ alias parallel='parallel --no-notice'
 alias msg=dmesg
 alias cmd=command
 alias builtins='enable -a | cut -d" " -f2 | column'
-
-## Git
-alias gc='git commit -v'
-alias gp='git push origin master'
-alias gs='git status -sb'
-alias go='git checkout'
-alias gm='git checkout master'
-alias ga='git add'
-alias gb='git branch'
-alias gd='git diff --word-diff=color'
-alias gf='git fetch'
-alias gl='git log --oneline --decorate'
-alias gll='git log -U1 --word-diff=color' # -U1: 1 line of context (-p implied)
 
 ## tmux
 alias tmux='tmux -2'
