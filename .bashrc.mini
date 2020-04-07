@@ -1,0 +1,55 @@
+set -o notify
+
+shopt -s cdspell extglob nocaseglob nocasematch histappend
+
+# ls
+alias   l='command ls -FB   --color=auto'
+alias  ll='command ls -FBhl --color=auto'
+
+alias  la='command ls -FBA   --color=auto'
+alias lla='command ls -FBAhl --color=auto'
+
+alias  ld='command ls -FBd   --color=auto'
+alias lld='command ls -FBdhl --color=auto'
+
+alias  lm='command ls -FBtr   --color=auto'
+alias llm='command ls -FBhltr --color=auto'
+
+# cd
+alias -- -='cd - >/dev/null'
+
+alias 1='cd ..'
+alias 2='cd ../..'
+alias 3='cd ../../..'
+alias 4='cd ../../../..'
+alias 5='cd ../../../../..'
+alias 6='cd ../../../../../..'
+alias 7='cd ../../../../../../..'
+alias 8='cd ../../../../../../../..'
+alias 9='cd ../../../../../../../../..'
+
+# interactive copy/move
+alias cp='cp -i'
+alias mv='mv -i'
+
+# vim
+if command -v vim >/dev/null 2>&1
+then
+  alias v=vim
+  alias vd=vimdiff
+else
+  alias v=vi
+fi
+
+# help
+alias m=man
+alias ?=type
+
+# grep
+alias gr='grep -RiIE --color=auto --exclude="*~"'
+
+pg() {
+  local fields=pid,stat,euser,egroup,start_time,cmd
+  ps o "$fields" | head -n1
+  ps axfww o "$fields" | \grep -v grep | \grep -iEB1 --color=auto "$@"
+}
