@@ -47,6 +47,7 @@ alias ?=type
 
 # grep
 alias gr='grep -RiIE --color=auto --exclude="*~"'
+alias g='grep -iE --color=auto --exclude="*~"'
 
 pg() {
   local fields=pid,stat,euser,egroup,start_time,cmd
