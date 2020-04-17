@@ -501,7 +501,17 @@ complete -A directory mkdir md rmdir rd
 ## Safer cp/mv + inodes rm
 # problem with cp/mv is I don't usually check the destination
 alias cp='cp -i'
-alias mv='mv -i'
+
+mv() {
+   if (($# != 1))
+   then
+      command mv -i "$@"
+      return
+   fi
+
+   read -rei "$1"
+   command mv -- "$1" "$REPLY"
+}
 
 # Delete based on inodes (use ls -li first)
 rmi() {
