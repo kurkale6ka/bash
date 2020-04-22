@@ -13,7 +13,7 @@ then
          [[ -L $REPOS_BASE_LINK ]] && REPOS_BASE="$REPOS_BASE_LINK"
       fi
    fi
-   REPOS_BASE=${REPOS_BASE:-~/github}
+   REPOS_BASE="${REPOS_BASE:-"$(cd "${BASH_SOURCE[0]%/*}/.." && pwd -P)"}"
    export REPOS_BASE="${REPOS_BASE%/}"
 fi
 
