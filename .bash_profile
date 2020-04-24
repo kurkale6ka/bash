@@ -1,21 +1,9 @@
 # XDG
 [[ -z $XDG_CONFIG_HOME ]] && export XDG_CONFIG_HOME=~/.config
-[[ -z   $XDG_DATA_HOME ]] && export   XDG_DATA_HOME=~/.local/share
+[[ -z $XDG_DATA_HOME ]] && export XDG_DATA_HOME=~/.local/share
 
 # Repos
-if [[ -z $REPOS_BASE ]]
-then
-   if [[ -z $SSH_CONNECTION ]]
-   then
-      if ! who | 'grep' -q '([0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\}\.[0-9]\{1,3\})'
-      then
-         REPOS_BASE_LINK="$(find ~ -maxdepth 1 -lname github -printf '%p\n')"
-         [[ -L $REPOS_BASE_LINK ]] && REPOS_BASE="$REPOS_BASE_LINK"
-      fi
-   fi
-   REPOS_BASE="${REPOS_BASE:-"$(cd "${BASH_SOURCE[0]%/*}/.." && pwd -P)"}"
-   export REPOS_BASE="${REPOS_BASE%/}"
-fi
+[[ -z $REPOS_BASE ]] && export REPOS_BASE=~/github
 
 # readline
 export INPUTRC="$REPOS_BASE"/config/dotfiles/.inputrc
@@ -73,5 +61,5 @@ export PAGER=less
 if [[ $SHELL == *bash ]]
 then
    [[ -r $REPOS_BASE/bash/.bash_profile_after ]] && . "$REPOS_BASE"/bash/.bash_profile_after
-   [[ -r $REPOS_BASE/bash/.bashrc             ]] && . "$REPOS_BASE"/bash/.bashrc
+   . "$REPOS_BASE"/bash/.bashrc
 fi
