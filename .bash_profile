@@ -1,18 +1,15 @@
 # Repos
-if [[ -z $REPOS_BASE ]]
+if [[ -z $REPOS_BASE && -d ~/github ]]
 then
-   if [[ -d ~/github ]]
-   then
-      export REPOS_BASE=~/github
-   elif [[ -d ~/dimitar/vim ]]
-   then
-      export REPOS_BASE=~/dimitar
-   fi
+   export REPOS_BASE=~/github
+   base="$HOME"
+else
+   base="$REPOS_BASE"
 fi
 
 # XDG
-[[ -z $XDG_CONFIG_HOME ]] && export XDG_CONFIG_HOME=~/.config
-[[ -z $XDG_DATA_HOME ]] && export XDG_DATA_HOME=~/.local/share
+export XDG_CONFIG_HOME="$base"/.config
+export   XDG_DATA_HOME="$base"/.local/share
 
 # readline
 export INPUTRC="$REPOS_BASE"/config/dotfiles/.inputrc
