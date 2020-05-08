@@ -341,8 +341,8 @@ alias sde=sudoedit
 s() {
    history -a
    if sudo -E echo -n 2>/dev/null # check for -E (preserve env vars) flag
-   then sudo -E /usr/bin/env bash
-   else sudo /usr/bin/env bash
+   then sudo -E bash
+   else sudo bash
    fi
 }
 
