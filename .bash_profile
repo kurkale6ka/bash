@@ -1,17 +1,31 @@
 # Repos
+# REPOS_BASE null:
+#   - local startup
+#   - command ssh or /usr/bin/ssh shared@... then . .bash_profile
+#   - ssh own@...
 if [[ -z $REPOS_BASE ]]
 then
    if [[ -d ~/github ]]
    then
+      # - bash starting locally
+      # - own remote user
       export REPOS_BASE=~/github
       base="$HOME"
    elif [[ -d ~/dimitar ]]
    then
+      # shared remote user
       export REPOS_BASE=~/dimitar
       base="$REPOS_BASE"
    fi
 else
-   base="$REPOS_BASE"
+   if [[ -d ~/github ]]
+   then
+      # sudo bash: REPOS_BASE github
+      base="$HOME"
+   else
+      # function ssh shared@...: REPOS_BASE dimitar
+      base="$REPOS_BASE"
+   fi
 fi
 
 # XDG
