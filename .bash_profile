@@ -1,7 +1,7 @@
 # Repos
 # REPOS_BASE null:
 #   - local startup
-#   - command ssh or /usr/bin/ssh shared@... then . .bash_profile
+#   - command ssh (or /usr/bin/ssh) shared@... (then . .bash_profile)
 #   - ssh own@...
 if [[ -z $REPOS_BASE ]]
 then
@@ -20,7 +20,7 @@ then
 else
    if [[ -d ~/github ]]
    then
-      # sudo bash: REPOS_BASE github
+      # local sudo bash: REPOS_BASE github
       base="$HOME"
    else
       # function ssh shared@...: REPOS_BASE dimitar
