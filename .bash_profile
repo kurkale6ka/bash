@@ -1,29 +1,21 @@
 # Repos
-if [[ -d ~dimitar ]]
-then
-   my_home=~dimitar
-elif [[ -d ~mitko ]]
-then
-   my_home=~mitko
-fi
-
 if [[ -z $REPOS_BASE ]]
 then
-   if [[ -d $my_home/github ]]
+   if [[ -d ~/github/vim ]]
    then
       # - bash local startup (or su -)
       # - ssh own@...
-      export REPOS_BASE="$my_home"/github
+      export REPOS_BASE=~/github
    else
-      # command ssh (or /usr/bin/ssh) shared@... (then . .bash_profile)
-      # REPOS_BASE set to ~shared/my_folder
+      # command ssh (or /usr/bin/ssh) shared@...
+      # . .bash_profile to set REPOS_BASE to ~shared/my_folder
       export REPOS_BASE="$(cd "${BASH_SOURCE[0]%/*}/.." && pwd -P)"
    fi
 fi
 
-if [[ -d $my_home/github ]]
+if [[ -d ~/github/vim ]]
 then
-   base="$my_home"
+   base="$HOME"
 else
    # REPOS_BASE non null for the above reasons or because set from my zsh function:
    # after/ssh.alt shared@...
