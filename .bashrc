@@ -89,42 +89,6 @@ pm() {
    done | column -t | sort -k4
 }
 
-pg() {
-   (($# == 0)) || [[ $1 == -h || $1 == --help ]] && {
-      cat <<- HELP
-		Usage:
-		  pg [-lz] pattern
-		    -l: PID PPID PGID SID TTY TPGID STAT EUSER EGROUP START CMD
-		    -z: squeeze! no context lines.
-		HELP
-      return 0
-   }
-
-   [[ $1 == -* ]] && { [[ $1 == @(-l|-z|-lz|-zl) ]] || return 1; }
-
-   # fields
-   if [[ $1 != -*l* ]]
-   then
-      # PID STAT EUSER EGROUP START CMD
-      local fields=pid,stat,euser,egroup,start_time,cmd
-   else
-      local fields=pid,ppid,pgid,sid,tname,tpgid,stat,euser,egroup,start_time,cmd
-   fi
-
-   # Display headers:
-   ps o "$fields" | head -n1
-
-   # Squeeze! No context lines
-   if [[ $1 == -*z* ]]
-   then
-      ps  axww o "$fields" | grep -v grep | grep -iE   --color=auto "${@:2}"
-   elif [[ $1 == -* ]]; then
-      ps faxww o "$fields" | grep -v grep | grep -iEB1 --color=auto "${@:2}"
-   else
-      ps faxww o "$fields" | grep -v grep | grep -iEB1 --color=auto "$@"
-   fi
-}
-
 alias k=kill
 alias kg='kill -- -'
 
