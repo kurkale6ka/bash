@@ -89,6 +89,8 @@ pm() {
    done | column -t | sort -k4
 }
 
+alias pg="$REPOS_BASE/scripts/pg.pl"
+
 alias k=kill
 alias kg='kill -- -'
 
