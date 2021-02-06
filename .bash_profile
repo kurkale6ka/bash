@@ -17,8 +17,8 @@ if [[ -d ~/github/vim ]]
 then
    base="$HOME"
 else
-   # REPOS_BASE non null for the above reasons or because set from my zsh function:
-   # after/ssh.alt shared@...
+   # REPOS_BASE non null for the above reasons or because set from ssh.pl:
+   # ssh shared@...
    base="$REPOS_BASE"
 fi
 
