@@ -517,7 +517,7 @@ mn() {
 
 alias umn=umount
 alias fu='sudo fuser -mv'
-alias df='df -hPTx{dev,}tmpfs'
+alias df='df -hPT -x{dev,}tmpfs'
 
 ## Networking
 alias myip='curl ipinfo.io/ip'
