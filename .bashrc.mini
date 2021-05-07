@@ -28,7 +28,7 @@ alias 7='cd ../../../../../../..'
 alias 8='cd ../../../../../../../..'
 alias 9='cd ../../../../../../../../..'
 
-# interactive copy/move
+# copy/move
 alias cp='cp -i'
 alias mv='mv -i'
 
@@ -46,8 +46,8 @@ alias m=man
 alias ?=type
 
 # grep
-alias gr='grep -RiIE --color=auto --exclude="*~"'
 alias g='grep -iE --color=auto --exclude="*~"'
+alias gr='grep -RiIE --color=auto --exclude="*~"'
 
 pg() {
   local fields=pid,stat,euser,egroup,start_time,cmd
