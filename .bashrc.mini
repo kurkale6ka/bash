@@ -35,6 +35,7 @@ alias mv='mv -i'
 # vim
 if command -v vim >/dev/null 2>&1
 then
+  export EDITOR=vim
   alias v=vim
   alias vd=vimdiff
 else
@@ -42,6 +43,7 @@ else
 fi
 
 # help
+export MANWIDTH=90
 alias m=man
 alias ?=type
 
