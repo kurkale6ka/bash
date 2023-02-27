@@ -1,11 +1,11 @@
 # Repos
 if [[ -z $REPOS_BASE ]]
 then
-   if [[ -d ~/github/vim ]]
+   if [[ -d ~/repos/github/vim ]]
    then
       # - bash local startup (or su -)
       # - ssh own@...
-      export REPOS_BASE=~/github
+      export REPOS_BASE=~/repos/github
    else
       # \ssh (or /usr/bin/ssh) shared@...
       # . .bash_profile to set REPOS_BASE to ~shared/my_folder
@@ -13,7 +13,7 @@ then
    fi
 fi
 
-if [[ -d ~/github/vim ]]
+if [[ -d ~/repos/github/vim ]]
 then
    base="$HOME"
 else
