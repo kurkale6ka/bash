@@ -3,7 +3,7 @@
 set -o notify
 shopt -s cdspell extglob nocaseglob nocasematch histappend
 
-HISTFILE="$REPOS_BASE"/bash/.bash_history
+HISTFILE="$REPOS_BASE"/github/bash/.bash_history # TODO: move to XDG
 HISTFILESIZE=11000
 HISTSIZE=11000 # size allowed in memory
 
@@ -50,7 +50,7 @@ export LESS_TERMCAP_us="$_bld$_udl$(tput setaf 5 || tput AF 5)" # purple
 export LESS_TERMCAP_ue="$(tput rmul || tput ue)$_res"
 
 # Set LS_COLORS
-eval "$(dircolors "$REPOS_BASE"/config/dotfiles/.dir_colors)"
+eval "$(dircolors "$REPOS_BASE"/github/config/dotfiles/.dir_colors)"
 
 ## Prompts
 if [[ $TERM != linux ]]
@@ -89,7 +89,7 @@ pm() {
    done | column -t | sort -k4
 }
 
-alias pg="$REPOS_BASE/scripts/pg.pl"
+alias pg="$REPOS_BASE/github/scripts/pg.pl"
 
 alias k=kill
 alias kg='kill -- -'
@@ -135,7 +135,7 @@ if command -v nvim
 then
    alias v=nvim
 else
-   alias v="vim -u $REPOS_BASE/vim/.vimrc"
+   alias v="vim -u $REPOS_BASE/github/vim/.vimrc"
 fi >/dev/null 2>&1
 
 if command -v fzf >/dev/null 2>&1
@@ -679,6 +679,6 @@ alias rmp=rpm
 [[ -f ~/.fzf.bash ]] && . ~/.fzf.bash
 
 ## Business specific or system dependant stuff
-[[ -r $REPOS_BASE/bash/.bashrc_after ]] && . "$REPOS_BASE"/bash/.bashrc_after
+[[ -r $REPOS_BASE/github/bash/.bashrc_after ]] && . "$REPOS_BASE"/github/bash/.bashrc_after
 
 # vim: fdm=expr fde=getline(v\:lnum)=~'^##'?'>'.(matchend(getline(v\:lnum),'###*')-1)\:'='

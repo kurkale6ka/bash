@@ -1,33 +1,14 @@
-# Repos
-if [[ -z $REPOS_BASE ]]
-then
-   if [[ -d ~/repos/github/vim ]]
-   then
-      # - bash local startup (or su -)
-      # - ssh own@...
-      export REPOS_BASE=~/repos/github
-   else
-      # \ssh (or /usr/bin/ssh) shared@...
-      # . .bash_profile to set REPOS_BASE to ~shared/my_folder
-      export REPOS_BASE="$(cd "${BASH_SOURCE[0]%/*}/.." && pwd -P)"
-   fi
-fi
-
-if [[ -d ~/repos/github/vim ]]
-then
-   base="$HOME"
-else
-   # REPOS_BASE non null for the above reasons or because set from ssh.pl:
-   # ssh shared@...
-   base="$REPOS_BASE"
-fi
+export REPOS_BASE=~/repos
 
 # XDG
-export XDG_CONFIG_HOME="$base"/.config
-export   XDG_DATA_HOME="$base"/.local/share
+if [[ -z $XDG_CONFIG_HOME ]]
+then
+    export XDG_CONFIG_HOME=~/.config
+    export XDG_DATA_HOME=~/.local/share
+fi
 
 # readline
-export INPUTRC="$REPOS_BASE"/config/dotfiles/.inputrc
+export INPUTRC="$REPOS_BASE"/github/config/dotfiles/.inputrc
 
 # Put ~/bin and REPOS_BASE in PATH
 if ! grep -q ~/bin <<< "$PATH"
@@ -54,7 +35,7 @@ if command -v nvim
 then
    export EDITOR=nvim
 else
-   export EDITOR="vim -u $REPOS_BASE/vim/.vimrc"
+   export EDITOR="vim -u $REPOS_BASE/github/vim/.vimrc"
 fi >/dev/null 2>&1
 
 export VISUAL="$EDITOR"
@@ -81,6 +62,6 @@ export PAGER=less
 # test needed when ~/.profile is a link to this file but the SHELL is zsh
 if [[ $SHELL == *bash ]]
 then
-   [[ -r $REPOS_BASE/bash/.bash_profile_after ]] && . "$REPOS_BASE"/bash/.bash_profile_after
-   . "$REPOS_BASE"/bash/.bashrc
+   [[ -r $REPOS_BASE/github/bash/.bash_profile_after ]] && . "$REPOS_BASE"/github/bash/.bash_profile_after
+   . "$REPOS_BASE"/github/bash/.bashrc
 fi
