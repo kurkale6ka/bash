@@ -50,7 +50,7 @@ if command -v fd
 then
    export FZF_DEFAULT_COMMAND='fd --strip-cwd-prefix -tf -up -E.git -E"*~"'
    export  FZF_CTRL_T_COMMAND='fd --strip-cwd-prefix     -up -E.git -E"*~"'
-   export   FZF_ALT_C_COMMAND='fd --strip-cwd-prefix -td -u -E.git -E"*~"'
+   export   FZF_ALT_C_COMMAND='fd --strip-cwd-prefix -td -u  -E.git -E"*~"'
 fi >/dev/null 2>&1
 
 # ps
