@@ -678,7 +678,7 @@ alias rmp=rpm
 ## fzf
 [[ -f ~/.fzf.bash ]] && . ~/.fzf.bash
 
-## Business specific or system dependant stuff
+## Local bashrc
 [[ -r $REPOS_BASE/github/bash/.bashrc_after ]] && . "$REPOS_BASE"/github/bash/.bashrc_after
 
 # vim: fdm=expr fde=getline(v\:lnum)=~'^##'?'>'.(matchend(getline(v\:lnum),'###*')-1)\:'='
